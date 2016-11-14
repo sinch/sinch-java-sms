@@ -1,0 +1,12 @@
+/.classpath
+/.factorypath
+/.project
+/.settings
+/buildNumber.properties
+/dependency-reduced-pom.xml
+/pom.xml.next
+/pom.xml.releaseBackup
+/pom.xml.tag
+/pom.xml.versionsBackup
+/release.properties
+/target
