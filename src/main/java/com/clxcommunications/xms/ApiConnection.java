@@ -110,6 +110,18 @@ public abstract class ApiConnection implements Closeable {
 
 	}
 
+	private final class BatchBinarySmsResultAsyncConsumer
+	        extends JsonApiAsyncConsumer<MtBatchBinarySmsResult> {
+
+		@Override
+		protected MtBatchBinarySmsResult buildSuccessResult(String str,
+		        HttpContext context) throws JsonParseException,
+		        JsonMappingException, IOException {
+			return json.readValue(str, MtBatchBinarySmsResult.class);
+		}
+
+	}
+
 	private final class PagedResultAsyncConsumer<P extends Page<T>, T>
 	        extends JsonApiAsyncConsumer<Page<T>> {
 
