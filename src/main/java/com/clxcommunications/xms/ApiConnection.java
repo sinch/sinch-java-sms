@@ -402,6 +402,56 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Asynchronously updates the text batch with the given batch ID. The batch
+	 * is updated to match the given update object.
+	 * 
+	 * @param batchId
+	 *            the batch that should be updated
+	 * @param sms
+	 *            description of the desired update
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the updated batch
+	 */
+	public Future<MtBatchTextSmsResult> updateBatchAsync(BatchId batchId,
+	        MtBatchTextSmsUpdate sms,
+	        FutureCallback<MtBatchTextSmsResult> callback) {
+		HttpPost httpPost = post(batchEndpoint(batchId), sms);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
+		        new BatchTextSmsResultAsyncConsumer();
+
+		return httpClient().execute(producer, consumer, callback);
+	}
+
+	/**
+	 * Asynchronously updates the binary batch with the given batch ID. The
+	 * batch is updated to match the given update object.
+	 * 
+	 * @param batchId
+	 *            the batch that should be updated
+	 * @param sms
+	 *            description of the desired update
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the updated batch
+	 */
+	public Future<MtBatchBinarySmsResult> updateBatchAsync(BatchId batchId,
+	        MtBatchBinarySmsUpdate sms,
+	        FutureCallback<MtBatchBinarySmsResult> callback) {
+		HttpPost httpPost = post(batchEndpoint(batchId), sms);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> consumer =
+		        new BatchBinarySmsResultAsyncConsumer();
+
+		return httpClient().execute(producer, consumer, callback);
+	}
+
+	/**
 	 * Fetches a batch with the given batch ID.
 	 * 
 	 * @param batchId

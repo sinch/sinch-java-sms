@@ -14,8 +14,16 @@ public final class ClxApi {
 		return ImmutableMtBatchTextSms.builder();
 	}
 
+	public static MtBatchTextSmsUpdate.Builder buildBatchTextSmsUpdate() {
+		return MtBatchTextSmsUpdate.builder();
+	}
+
 	public static ImmutableMtBatchBinarySms.Builder buildBatchBinarySms() {
 		return ImmutableMtBatchBinarySms.builder();
+	}
+
+	public static MtBatchBinarySmsUpdate.Builder buildBatchBinarySmsUpdate() {
+		return MtBatchBinarySmsUpdate.builder();
 	}
 
 	public static ImmutableParameterValues.Builder buildSubstitution() {

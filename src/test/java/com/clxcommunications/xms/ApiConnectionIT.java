@@ -15,6 +15,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.http.concurrent.FutureCallback;
 import org.junit.Rule;
 import org.junit.Test;
@@ -292,6 +295,143 @@ public class ApiConnectionIT {
 		} finally {
 			conn.close();
 		}
+	}
+
+	@Test
+	public void canUpdateSimpleTextBatch() throws Throwable {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime smsTime =
+		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
+		                ZoneOffset.UTC);
+
+		Set<String> tags = new TreeSet<String>();
+		tags.add("tag1");
+		tags.add("tag2");
+
+		MtBatchTextSmsUpdate sms =
+		        ClxApi.buildBatchTextSmsUpdate()
+		                .from("12345")
+		                .body("Hello, world!")
+		                .unsetDeliveryReport()
+		                .tags(UpdateValue.set(tags))
+		                .unsetExpireAt()
+		                .build();
+
+		String expectedRequest = json.writeValueAsString(sms);
+
+		MtBatchTextSmsResult expectedResponse =
+		        ImmutableMtBatchTextSmsResult.builder()
+		                .from(sms.from())
+		                .addTo("123")
+		                .body(sms.body())
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(smsTime)
+		                .modifiedAt(smsTime)
+		                .build();
+
+		String response = json.writeValueAsString(expectedResponse);
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+
+		wm.stubFor(post(urlEqualTo(path))
+		        .willReturn(aResponse()
+		                .withStatus(201)
+		                .withHeader("Content-Type",
+		                        "application/json; charset=UTF-8")
+		                .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			MtBatchTextSmsResult result =
+			        conn.updateBatchAsync(batchId, sms, null).get();
+			assertThat(result, is(expectedResponse));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(postRequestedFor(
+		        urlEqualTo(path))
+		                .withRequestBody(equalToJson(expectedRequest))
+		                .withHeader("Content-Type",
+		                        matching("application/json; charset=UTF-8"))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer toktok")));
+	}
+
+	@Test
+	public void canUpdateSimpleBinaryBatch() throws Throwable {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime smsTime =
+		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
+		                ZoneOffset.UTC);
+
+		Set<String> tags = new TreeSet<String>();
+		tags.add("tag1");
+		tags.add("tag2");
+
+		MtBatchBinarySmsUpdate sms =
+		        ClxApi.buildBatchBinarySmsUpdate()
+		                .from("12345")
+		                .body("howdy".getBytes(TestUtils.US_ASCII))
+		                .unsetExpireAt()
+		                .build();
+
+		String expectedRequest = json.writeValueAsString(sms);
+
+		MtBatchBinarySmsResult expectedResponse =
+		        ImmutableMtBatchBinarySmsResult.builder()
+		                .from(sms.from())
+		                .addTo("123")
+		                .body(sms.body())
+		                .udh((byte) 1, (byte) 0xff)
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(smsTime)
+		                .modifiedAt(smsTime)
+		                .build();
+
+		String response = json.writeValueAsString(expectedResponse);
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+
+		wm.stubFor(post(urlEqualTo(path))
+		        .willReturn(aResponse()
+		                .withStatus(201)
+		                .withHeader("Content-Type",
+		                        "application/json; charset=UTF-8")
+		                .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			MtBatchBinarySmsResult result =
+			        conn.updateBatchAsync(batchId, sms, null).get();
+			assertThat(result, is(expectedResponse));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(postRequestedFor(
+		        urlEqualTo(path))
+		                .withRequestBody(equalToJson(expectedRequest))
+		                .withHeader("Content-Type",
+		                        matching("application/json; charset=UTF-8"))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer toktok")));
 	}
 
 	@Test
