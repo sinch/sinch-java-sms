@@ -25,6 +25,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
 	</properties>
@@ -150,6 +152,18 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.pholser</groupId>
+			<artifactId>junit-quickcheck-core</artifactId>
+			<version>0.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.pholser</groupId>
+			<artifactId>junit-quickcheck-generators</artifactId>
+			<version>0.6.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

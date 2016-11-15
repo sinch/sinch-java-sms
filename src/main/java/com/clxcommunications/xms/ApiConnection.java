@@ -2,31 +2,28 @@ package com.clxcommunications.xms;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.http.Consts;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.protocol.BasicAsyncRequestProducer;
@@ -191,18 +188,42 @@ public abstract class ApiConnection implements Closeable {
 
 	public abstract HttpHost endpointHost();
 
+	/**
+	 * The endpoint base path. The default value is
+	 * <code>/xms/v1/{username}</code>.
+	 * 
+	 * @return the endpoint base path
+	 */
 	@Value.Default
 	public String endpointBasePath() {
-		return "/xms/v1/" + username();
+		try {
+			return "/xms/v1/" + URLEncoder.encode(username(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Value.Check
 	protected void check() {
+		if (!endpointBasePath().startsWith("/")) {
+			throw new IllegalStateException(
+			        "endpoint base path does not start with '/'");
+		}
+
+		if (endpointBasePath().contains("?")) {
+			throw new IllegalStateException("endpoint base path contains '?'");
+		}
+
 		/*
 		 * Attempt to create a plain endpoint URL. If it fails then something is
 		 * very wrong with the host or the endpoint base path. If it succeeds
 		 * then all endpoints generated in normal use of this class should
 		 * succeed since we validate the user input.
+		 * 
+		 * Note, this does not mean that the generated URL makes sense, it only
+		 * means that the code will not throw exceptions. For example, if the
+		 * user sets the endpoint base path, "/hello?world" then all bets are
+		 * off.
 		 */
 		endpoint("", null);
 	}
@@ -218,18 +239,16 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Nonnull
 	private URI endpoint(@Nonnull String subPath, @Nullable String query) {
-		try {
-			return new URI(
-			        endpointHost().getSchemeName(),
-			        null,
-			        endpointHost().getHostName(),
-			        endpointHost().getPort(),
-			        endpointBasePath() + subPath,
-			        query,
-			        null);
-		} catch (URISyntaxException e) {
-			throw new IllegalStateException(e);
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(endpointHost().toURI());
+		sb.append(endpointBasePath());
+		sb.append(subPath);
+		if (query != null) {
+			sb.append('?').append(query);
 		}
+
+		return URI.create(sb.toString());
 	}
 
 	/**
@@ -408,36 +427,7 @@ public abstract class ApiConnection implements Closeable {
 	private Future<Page<MtBatchSmsResult>> fetchBatches(int page,
 	        BatchFilter filter,
 	        FutureCallback<Page<MtBatchSmsResult>> callback) {
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(5);
-
-		params.add(new BasicNameValuePair("page", String.valueOf(page)));
-
-		if (filter.pageSize() > 0) {
-			params.add(new BasicNameValuePair("page_size",
-			        String.valueOf(filter.pageSize())));
-		}
-
-		if (filter.startDate() != null) {
-			params.add(new BasicNameValuePair("start_date",
-			        filter.startDate().toString()));
-		}
-
-		if (filter.endDate() != null) {
-			params.add(new BasicNameValuePair("end_date",
-			        filter.endDate().toString()));
-		}
-
-		if (!filter.originators().isEmpty()) {
-			params.add(new BasicNameValuePair("from",
-			        Utils.join(",", filter.originators())));
-		}
-
-		if (!filter.tags().isEmpty()) {
-			params.add(new BasicNameValuePair("tags",
-			        Utils.join(",", filter.tags())));
-		}
-
-		String query = URLEncodedUtils.format(params, Consts.UTF_8);
+		String query = filter.toUrlEncodedQuery(page);
 		URI url = endpoint("/batches", query);
 
 		HttpGet req = get(url);
