@@ -56,21 +56,6 @@ public class ApiConnectionIT {
 
 		String expectedRequest = json.writeValueAsString(sms);
 
-		String response = String.join("\n",
-		        "{",
-		        "  'to': [",
-		        "    '123456789',",
-		        "    '987654321'",
-		        "  ],",
-		        "  'body': 'Hello, world!',",
-		        "  'type' : 'mt_text',",
-		        "  'canceled': false,",
-		        "  'id': '" + batchId.id() + "',",
-		        "  'from': '12345',",
-		        "  'created_at': '2016-10-02T09:34:28.542Z',",
-		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
-		        "}").replace('\'', '"');
-
 		MtBatchTextSmsResult expectedResponse =
 		        ImmutableMtBatchTextSmsResult.builder()
 		                .from(sms.from())
@@ -81,6 +66,8 @@ public class ApiConnectionIT {
 		                .createdAt(smsTime)
 		                .modifiedAt(smsTime)
 		                .build();
+
+		String response = json.writeValueAsString(expectedResponse);
 
 		String path = "/xms/v1/" + username + "/batches";
 
