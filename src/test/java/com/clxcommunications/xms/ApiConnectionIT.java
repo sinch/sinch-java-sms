@@ -201,9 +201,8 @@ public class ApiConnectionIT {
 		                .body("Hello, world!")
 		                .build();
 
-		ImmutableApiError apiError =
-		        ImmutableApiError.of("syntax_constraint_violation",
-		                "The syntax constraint was violated");
+		ApiError apiError = ApiError.of("syntax_constraint_violation",
+		        "The syntax constraint was violated");
 		String response = json.writeValueAsString(apiError);
 
 		String path = "/xms/v1/" + username + "/batches";
