@@ -54,4 +54,8 @@ public final class ClxApi {
 		        .build();
 	}
 
+	public static ImmutableGroupFilter.Builder buildGroupFilter() {
+		return ImmutableGroupFilter.builder();
+	}
+
 }
