@@ -80,7 +80,7 @@ public abstract class GroupUpdate {
 	 * @return a non-null list of group IDs
 	 */
 	@JsonProperty("child_groups_add")
-	public abstract Set<String> childGroupsAdd();
+	public abstract Set<GroupId> childGroupsAdd();
 
 	/**
 	 * The child groups that should be removed from this group.
@@ -88,7 +88,7 @@ public abstract class GroupUpdate {
 	 * @return a non-null list of group IDs
 	 */
 	@JsonProperty("child_groups_remove")
-	public abstract Set<String> childGroupsRemove();
+	public abstract Set<GroupId> childGroupsRemove();
 
 	/**
 	 * Identifier of a group whose members should be added to this group.
@@ -97,7 +97,7 @@ public abstract class GroupUpdate {
 	 */
 	@Nullable
 	@JsonProperty("add_from_group")
-	public abstract String addFromGroup();
+	public abstract GroupId addFromGroup();
 
 	/**
 	 * Identifier of a group whose members should be removed to this group.
@@ -106,7 +106,7 @@ public abstract class GroupUpdate {
 	 */
 	@Nullable
 	@JsonProperty("remove_from_group")
-	public abstract String removeFromGroup();
+	public abstract GroupId removeFromGroup();
 
 	/**
 	 * Describes how this group should be auto updated. May be <code>null</code>

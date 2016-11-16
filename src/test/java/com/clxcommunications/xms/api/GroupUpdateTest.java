@@ -30,12 +30,16 @@ public class GroupUpdateTest {
 
 	@Test
 	public void canSerializeMaximalish() throws Exception {
+		GroupId groupId1 = TestUtils.freshGroupId();
+		GroupId groupId2 = TestUtils.freshGroupId();
+		GroupId groupId3 = TestUtils.freshGroupId();
+
 		GroupUpdate input = GroupUpdate.builder()
 		        .unsetName()
 		        .addMemberAdd("123456789")
 		        .addMemberRemove("987654321", "4242424242")
-		        .childGroupsAdd(Arrays.asList("group1", "group2"))
-		        .addChildGroupsRemove("group3")
+		        .childGroupsAdd(Arrays.asList(groupId1, groupId2))
+		        .addChildGroupsRemove(groupId3)
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
@@ -50,8 +54,9 @@ public class GroupUpdateTest {
 		        "  'name': null,",
 		        "  'add': [ '123456789' ],",
 		        "  'remove': [ '987654321', '4242424242' ],",
-		        "  'child_groups_add': [ 'group1', 'group2' ],",
-		        "  'child_groups_remove': [ 'group3' ],",
+		        "  'child_groups_add': [ '" + groupId1.id() + "', '"
+		                + groupId2.id() + "' ],",
+		        "  'child_groups_remove': [ '" + groupId3.id() + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add_keyword_first': 'kw0',",

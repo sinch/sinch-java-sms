@@ -23,7 +23,7 @@ public interface GroupResponse {
 	 * 
 	 * @return a non-null group ID
 	 */
-	String id();
+	GroupId id();
 
 	/**
 	 * The group name.
@@ -46,7 +46,7 @@ public interface GroupResponse {
 	 * @return a non-null list of child groups
 	 */
 	@JsonProperty("child_groups")
-	Set<String> childGroups();
+	Set<GroupId> childGroups();
 
 	@JsonProperty("auto_update")
 	@Nullable

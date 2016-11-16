@@ -20,19 +20,20 @@ public class GroupResponseTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
+		GroupId groupId = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
 		GroupResponse input = GroupResponseImpl.builder()
 		        .size(72)
-		        .id("groupid")
+		        .id(groupId)
 		        .createdAt(time)
 		        .modifiedAt(time)
 		        .build();
 
 		String expected = Utils.join("\n",
 		        "{",
-		        "  'id': 'groupid',",
+		        "  'id': '" + groupId.id() + "',",
 		        "  'size': 72,",
 		        "  'created_at': '2016-10-02T09:34:28.542Z',",
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
@@ -45,14 +46,18 @@ public class GroupResponseTest {
 
 	@Test
 	public void canSerializeMaximalish() throws Exception {
+		GroupId groupId = TestUtils.freshGroupId();
+		GroupId groupId1 = TestUtils.freshGroupId();
+		GroupId groupId2 = TestUtils.freshGroupId();
+
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
 		GroupResponse input = GroupResponseImpl.builder()
-		        .id("groupid")
+		        .id(groupId)
 		        .size(72)
 		        .name("mygroup")
-		        .childGroups(Arrays.asList("group1", "group2"))
+		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
@@ -66,10 +71,11 @@ public class GroupResponseTest {
 
 		String expected = Utils.join("\n",
 		        "{",
-		        "  'id': 'groupid',",
+		        "  'id': '" + groupId.id() + "',",
 		        "  'name': 'mygroup',",
 		        "  'size': 72,",
-		        "  'child_groups': [ 'group1', 'group2' ],",
+		        "  'child_groups': [ '" + groupId1.id() + "', '" + groupId2.id()
+		                + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add_keyword_first': 'kw0',",
@@ -88,11 +94,12 @@ public class GroupResponseTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
+		GroupId groupId = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
 		GroupResponse expected = GroupResponseImpl.builder()
 		        .size(72)
-		        .id("groupid")
+		        .id(groupId)
 		        .createdAt(time)
 		        .modifiedAt(time)
 		        .build();
@@ -106,13 +113,16 @@ public class GroupResponseTest {
 
 	@Test
 	public void canDeserializeMaximalish() throws Exception {
+		GroupId groupId = TestUtils.freshGroupId();
+		GroupId groupId1 = TestUtils.freshGroupId();
+		GroupId groupId2 = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
 		GroupResponse expected = GroupResponseImpl.builder()
-		        .id("groupid")
+		        .id(groupId)
 		        .name("mygroup")
 		        .size(72)
-		        .childGroups(Arrays.asList("group1", "group2"))
+		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")

@@ -8,6 +8,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.GroupId;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,6 +53,15 @@ public final class TestUtils {
 	 */
 	public static BatchId freshBatchId() {
 		return BatchId.of("batch" + uniqueCounter.incrementAndGet());
+	}
+
+	/**
+	 * Creates and returns a fresh group ID. Guaranteed unique for this run.
+	 * 
+	 * @return a unique, non-null, group ID.
+	 */
+	public static GroupId freshGroupId() {
+		return GroupId.of("group" + uniqueCounter.incrementAndGet());
 	}
 
 	/**

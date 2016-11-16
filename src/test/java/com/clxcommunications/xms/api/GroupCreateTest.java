@@ -30,11 +30,14 @@ public class GroupCreateTest {
 
 	@Test
 	public void canSerializeMaximalish() throws Exception {
+		GroupId groupId1 = TestUtils.freshGroupId();
+		GroupId groupId2 = TestUtils.freshGroupId();
+
 		GroupCreate input = GroupCreateImpl.builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
-		        .childGroups(Arrays.asList("group1", "group2"))
+		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .addTag("tag1", "tag2")
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
@@ -49,7 +52,8 @@ public class GroupCreateTest {
 		        "{",
 		        "  'name': 'mygroup',",
 		        "  'members': [ '123456789', '987654321', '4242424242' ],",
-		        "  'child_groups': [ 'group1', 'group2' ],",
+		        "  'child_groups': [ '" + groupId1.id() + "', '" + groupId2.id()
+		                + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add_keyword_first': 'kw0',",
@@ -78,11 +82,14 @@ public class GroupCreateTest {
 
 	@Test
 	public void canDeserializeMaximalish() throws Exception {
+		GroupId groupId1 = TestUtils.freshGroupId();
+		GroupId groupId2 = TestUtils.freshGroupId();
+
 		GroupCreate expected = GroupCreateImpl.builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
-		        .childGroups(Arrays.asList("group1", "group2"))
+		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .addTag("tag1", "tag2")
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")

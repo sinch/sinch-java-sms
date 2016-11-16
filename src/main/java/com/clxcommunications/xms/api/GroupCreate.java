@@ -41,7 +41,7 @@ public interface GroupCreate {
 	 */
 	@Nonnull
 	@JsonProperty("child_groups")
-	Set<String> childGroups();
+	Set<GroupId> childGroups();
 
 	/**
 	 * Describes how this group should be auto updated. May be <code>null</code>
