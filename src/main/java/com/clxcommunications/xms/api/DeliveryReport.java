@@ -2,14 +2,12 @@ package com.clxcommunications.xms.api;
 
 import org.immutables.value.Value;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 @Value.Immutable(builder = false, copy = false, intern = true)
 @ValueStylePackageDirect
-@JsonSerialize(using = JacksonUtils.DeliveryReportSerializer.class)
-@JsonDeserialize(using = JacksonUtils.DeliveryReportDeserializer.class)
-public interface DeliveryReport {
+public abstract class DeliveryReport {
 
 	/**
 	 * No delivery report is desired or available.
@@ -35,6 +33,12 @@ public interface DeliveryReport {
 	public static final DeliveryReport PER_RECIPIENT =
 	        ImmutableDeliveryReport.of("per_recipient");
 
-	String style();
+	@JsonValue
+	public abstract String style();
+
+	@JsonCreator
+	public static DeliveryReport of(String style) {
+		return ImmutableDeliveryReport.of(style);
+	}
 
 }
