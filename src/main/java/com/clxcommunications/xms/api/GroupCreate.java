@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePublic
-@JsonDeserialize(builder = ImmutableGroupCreate.Builder.class)
+@JsonDeserialize(builder = GroupCreateImpl.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupCreate {
 

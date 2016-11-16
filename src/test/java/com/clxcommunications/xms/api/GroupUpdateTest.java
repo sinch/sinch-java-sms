@@ -36,7 +36,7 @@ public class GroupUpdateTest {
 		        .addMemberRemove("987654321", "4242424242")
 		        .childGroupsAdd(Arrays.asList("group1", "group2"))
 		        .addChildGroupsRemove("group3")
-		        .autoUpdate(ImmutableAutoUpdate.builder()
+		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
 		                .addKeywordSecond("kw1")

@@ -23,7 +23,7 @@ public class TagsUpdateTest {
 	@Property
 	public void canSerializeJson(List<String> toAdd, List<String> toRemove)
 	        throws Exception {
-		TagsUpdate input = ImmutableTagsUpdate.builder()
+		TagsUpdate input = TagsUpdateImpl.builder()
 		        .newTag(toAdd)
 		        .removeTag(toRemove)
 		        .build();
@@ -53,7 +53,7 @@ public class TagsUpdateTest {
 	@Property
 	public void canDeserializeJson(List<String> toAdd, List<String> toRemove)
 	        throws Exception {
-		TagsUpdate expected = ImmutableTagsUpdate.builder()
+		TagsUpdate expected = TagsUpdateImpl.builder()
 		        .newTag(toAdd)
 		        .removeTag(toRemove)
 		        .build();

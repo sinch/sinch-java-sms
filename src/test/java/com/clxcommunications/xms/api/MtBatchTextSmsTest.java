@@ -137,7 +137,7 @@ public class MtBatchTextSmsTest {
 		assertThat(actual, is(expected));
 	}
 
-	private static ImmutableMtBatchTextSms.Builder minimalBatchBuilder() {
+	private static MtBatchTextSmsImpl.Builder minimalBatchBuilder() {
 		return ClxApi.buildBatchTextSms()
 		        .from("1234")
 		        .addTo("987654321")

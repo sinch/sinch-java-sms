@@ -24,7 +24,7 @@ public abstract class UpdateValue<T> {
 	/**
 	 * Marker object signifying that the field should be removed.
 	 */
-	private static final UpdateValue<?> UNSET = ImmutableUpdateValue.of(null);
+	private static final UpdateValue<?> UNSET = UpdateValueImpl.of(null);
 
 	@SuppressWarnings("unchecked")
 	@Nonnull
@@ -35,7 +35,7 @@ public abstract class UpdateValue<T> {
 	@JsonCreator
 	@Nonnull
 	public static <T> UpdateValue<T> set(@Nullable T value) {
-		return ImmutableUpdateValue.of(value);
+		return UpdateValueImpl.of(value);
 	}
 
 	/**

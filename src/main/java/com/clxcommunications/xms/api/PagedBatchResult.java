@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePublic
-@JsonDeserialize(builder = ImmutablePagedBatchResult.Builder.class)
+@JsonDeserialize(builder = PagedBatchResultImpl.Builder.class)
 public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
 
 	public abstract List<MtBatchSmsResult> batches();

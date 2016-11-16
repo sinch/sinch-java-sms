@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackageDirect
-@JsonDeserialize(as = ImmutableGroupMembers.class)
+@JsonDeserialize(as = GroupMembersImpl.class)
 public abstract class GroupMembers {
 
 	/**
@@ -19,7 +19,7 @@ public abstract class GroupMembers {
 	public abstract Set<String> members();
 
 	public static GroupMembers of(Iterable<String> members) {
-		return ImmutableGroupMembers.of(members);
+		return GroupMembersImpl.of(members);
 	}
 
 }

@@ -13,32 +13,32 @@ public abstract class DeliveryReport {
 	 * No delivery report is desired or available.
 	 */
 	public static final DeliveryReport NONE =
-	        ImmutableDeliveryReport.of("none");
+	        DeliveryReportImpl.of("none");
 
 	/**
 	 * A summary delivery report is desired or available.
 	 */
 	public static final DeliveryReport SUMMARY =
-	        ImmutableDeliveryReport.of("summary");
+	        DeliveryReportImpl.of("summary");
 
 	/**
 	 * A full delivery report is desired or available.
 	 */
 	public static final DeliveryReport FULL =
-	        ImmutableDeliveryReport.of("full");
+	        DeliveryReportImpl.of("full");
 
 	/**
 	 * A per recipient delivery report is desired or available.
 	 */
 	public static final DeliveryReport PER_RECIPIENT =
-	        ImmutableDeliveryReport.of("per_recipient");
+	        DeliveryReportImpl.of("per_recipient");
 
 	@JsonValue
 	public abstract String style();
 
 	@JsonCreator
 	public static DeliveryReport of(String style) {
-		return ImmutableDeliveryReport.of(style);
+		return DeliveryReportImpl.of(style);
 	}
 
 }

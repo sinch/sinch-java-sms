@@ -24,7 +24,7 @@ public class MoBinarySmsTest {
 		byte[] body = TestUtils.UTF_8.encode("Здравей, свят!").array();
 		byte[] udh = new byte[] { 0, 1, 2, 3 };
 
-		MoSms input = ImmutableMoBinarySms.builder()
+		MoSms input = MoBinarySmsImpl.builder()
 		        .to("12345")
 		        .from("987654321")
 		        .body(body)
@@ -76,7 +76,7 @@ public class MoBinarySmsTest {
 		byte[] body = new byte[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 		byte[] udh = new byte[] { 0, 1, 2, 3 };
 
-		MoSms expected = ImmutableMoBinarySms.builder()
+		MoSms expected = MoBinarySmsImpl.builder()
 		        .to("12345")
 		        .from("987654321")
 		        .body(body)

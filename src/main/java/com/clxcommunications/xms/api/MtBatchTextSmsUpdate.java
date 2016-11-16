@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
 @ValueStylePublic
-@JsonSerialize(as = ImmutableMtBatchTextSmsUpdate.class)
+@JsonSerialize(as = MtBatchTextSmsUpdateImpl.class)
 @JsonTypeName("mt_text")
 public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 
-	public static class Builder extends ImmutableMtBatchTextSmsUpdate.Builder {
+	public static class Builder extends MtBatchTextSmsUpdateImpl.Builder {
 
 		public Builder unsetDeliveryReport() {
 			return this.deliveryReport(UpdateValue.<DeliveryReport> unset());

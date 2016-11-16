@@ -23,7 +23,7 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = ImmutableGroupResponse.builder()
+		GroupResponse input = GroupResponseImpl.builder()
 		        .size(72)
 		        .id("groupid")
 		        .createdAt(time)
@@ -48,12 +48,12 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = ImmutableGroupResponse.builder()
+		GroupResponse input = GroupResponseImpl.builder()
 		        .id("groupid")
 		        .size(72)
 		        .name("mygroup")
 		        .childGroups(Arrays.asList("group1", "group2"))
-		        .autoUpdate(ImmutableAutoUpdate.builder()
+		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
 		                .addKeywordSecond("kw1")
@@ -90,7 +90,7 @@ public class GroupResponseTest {
 	public void canDeserializeMinimal() throws Exception {
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = ImmutableGroupResponse.builder()
+		GroupResponse expected = GroupResponseImpl.builder()
 		        .size(72)
 		        .id("groupid")
 		        .createdAt(time)
@@ -108,12 +108,12 @@ public class GroupResponseTest {
 	public void canDeserializeMaximalish() throws Exception {
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = ImmutableGroupResponse.builder()
+		GroupResponse expected = GroupResponseImpl.builder()
 		        .id("groupid")
 		        .name("mygroup")
 		        .size(72)
 		        .childGroups(Arrays.asList("group1", "group2"))
-		        .autoUpdate(ImmutableAutoUpdate.builder()
+		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
 		                .addKeywordSecond("kw1")

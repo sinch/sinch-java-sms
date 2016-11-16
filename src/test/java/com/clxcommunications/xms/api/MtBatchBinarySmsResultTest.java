@@ -44,8 +44,8 @@ public class MtBatchBinarySmsResultTest {
 		assertThat(actual, is(expected));
 	}
 
-	private static ImmutableMtBatchBinarySmsResult.Builder minimalBatchBuilder() {
-		return ImmutableMtBatchBinarySmsResult.builder()
+	private static MtBatchBinarySmsResultImpl.Builder minimalBatchBuilder() {
+		return MtBatchBinarySmsResultImpl.builder()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(as = ImmutableMoBinarySms.class)
+@JsonDeserialize(as = MoBinarySmsImpl.class)
 @JsonTypeName("mo_binary")
 public abstract class MoBinarySms extends MoSms {
 

@@ -19,7 +19,7 @@ public class ApiErrorTest {
 
 	@Property
 	public void canSerializeJson(String code, String text) throws Exception {
-		ApiError input = ImmutableApiError.of(code, text);
+		ApiError input = ApiError.of(code, text);
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -34,7 +34,7 @@ public class ApiErrorTest {
 
 	@Property
 	public void canDeserializeJson(String code, String text) throws Exception {
-		ApiError expected = ImmutableApiError.of(code, text);
+		ApiError expected = ApiError.of(code, text);
 
 		String input = json.writeValueAsString(expected);
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(as = ImmutableTags.class)
+@JsonDeserialize(as = TagsImpl.class)
 public interface Tags {
 
 	List<String> tags();

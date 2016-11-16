@@ -20,7 +20,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		GroupCreate input = ImmutableGroupCreate.builder().build();
+		GroupCreate input = GroupCreateImpl.builder().build();
 
 		String expected = "{}";
 		String actual = json.writeValueAsString(input);
@@ -30,13 +30,13 @@ public class GroupCreateTest {
 
 	@Test
 	public void canSerializeMaximalish() throws Exception {
-		GroupCreate input = ImmutableGroupCreate.builder()
+		GroupCreate input = GroupCreateImpl.builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
 		        .childGroups(Arrays.asList("group1", "group2"))
 		        .addTag("tag1", "tag2")
-		        .autoUpdate(ImmutableAutoUpdate.builder()
+		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
 		                .addKeywordSecond("kw1")
@@ -67,7 +67,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
-		GroupCreate expected = ImmutableGroupCreate.builder().build();
+		GroupCreate expected = GroupCreateImpl.builder().build();
 
 		String input = json.writeValueAsString(expected);
 
@@ -78,13 +78,13 @@ public class GroupCreateTest {
 
 	@Test
 	public void canDeserializeMaximalish() throws Exception {
-		GroupCreate expected = ImmutableGroupCreate.builder()
+		GroupCreate expected = GroupCreateImpl.builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
 		        .childGroups(Arrays.asList("group1", "group2"))
 		        .addTag("tag1", "tag2")
-		        .autoUpdate(ImmutableAutoUpdate.builder()
+		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
 		                .addKeywordFirst("kw0")
 		                .addKeywordSecond("kw1")

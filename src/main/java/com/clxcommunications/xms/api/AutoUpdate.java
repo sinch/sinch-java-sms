@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Immutable
 @ValueStylePublic
-@JsonDeserialize(builder = ImmutableAutoUpdate.Builder.class)
+@JsonDeserialize(builder = AutoUpdateImpl.Builder.class)
 public interface AutoUpdate {
 
 	/**

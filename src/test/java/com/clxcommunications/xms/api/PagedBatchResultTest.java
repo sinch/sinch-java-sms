@@ -18,7 +18,7 @@ public class PagedBatchResultTest {
 	@Test
 	public void canSerializeJsonWithEmptyBatches() throws Exception {
 		PagedBatchResult input =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(0)
 		                .numPages(0)
@@ -40,7 +40,7 @@ public class PagedBatchResultTest {
 	@Test
 	public void canDeserializeJsonWithEmptyBatches() throws Exception {
 		PagedBatchResult expected =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(0)
 		                .numPages(0)
@@ -62,7 +62,7 @@ public class PagedBatchResultTest {
 		String smsTimeString = json.writeValueAsString(smsTime);
 
 		MtBatchSmsResult batchResult1 =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
 		                .body("Hello, world!")
@@ -73,7 +73,7 @@ public class PagedBatchResultTest {
 		                .build();
 
 		MtBatchSmsResult batchResult2 =
-		        ImmutableMtBatchBinarySmsResult.builder()
+		        MtBatchBinarySmsResultImpl.builder()
 		                .using(batchResult1)
 		                .id(batchId2)
 		                .body("foobar".getBytes(TestUtils.US_ASCII))
@@ -81,7 +81,7 @@ public class PagedBatchResultTest {
 		                .build();
 
 		PagedBatchResult input =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(1)
 		                .numPages(0)
@@ -137,7 +137,7 @@ public class PagedBatchResultTest {
 		OffsetDateTime smsTime = OffsetDateTime.now(Clock.systemUTC());
 
 		MtBatchTextSmsResult batchResult1 =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
 		                .body("Hello, world!")
@@ -148,14 +148,14 @@ public class PagedBatchResultTest {
 		                .build();
 
 		MtBatchTextSmsResult batchResult2 =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .using(batchResult1)
 		                .id(batchId2)
 		                .body("Hello, again!")
 		                .build();
 
 		PagedBatchResult expected =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(1)
 		                .numPages(0)

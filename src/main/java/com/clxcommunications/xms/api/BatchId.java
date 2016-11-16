@@ -14,7 +14,7 @@ public abstract class BatchId {
 
 	@JsonCreator
 	public static BatchId of(String id) {
-		return ImmutableBatchId.of(id);
+		return BatchIdImpl.of(id);
 	}
 
 }

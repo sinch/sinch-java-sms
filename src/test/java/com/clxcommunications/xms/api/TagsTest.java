@@ -22,7 +22,7 @@ public class TagsTest {
 
 	@Property
 	public void canSerializeJson(List<String> tags) throws Exception {
-		Tags input = ImmutableTags.builder().tags(tags).build();
+		Tags input = TagsImpl.builder().tags(tags).build();
 
 		List<String> escapedTags = new ArrayList<String>();
 		for (String tag : tags) {
@@ -41,7 +41,7 @@ public class TagsTest {
 
 	@Property
 	public void canDeserializeJson(List<String> tags) throws Exception {
-		Tags expected = ImmutableTags.builder().tags(tags).build();
+		Tags expected = TagsImpl.builder().tags(tags).build();
 
 		String input = json.writeValueAsString(expected);
 

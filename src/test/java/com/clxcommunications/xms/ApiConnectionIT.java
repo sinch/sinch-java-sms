@@ -26,16 +26,16 @@ import org.threeten.bp.ZoneOffset;
 
 import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
-import com.clxcommunications.xms.api.ImmutableMtBatchBinarySmsResult;
-import com.clxcommunications.xms.api.ImmutableMtBatchTextSmsResult;
-import com.clxcommunications.xms.api.ImmutablePagedBatchResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
+import com.clxcommunications.xms.api.MtBatchBinarySmsResultImpl;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSms;
 import com.clxcommunications.xms.api.MtBatchTextSmsResult;
+import com.clxcommunications.xms.api.MtBatchTextSmsResultImpl;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
+import com.clxcommunications.xms.api.PagedBatchResultImpl;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -68,7 +68,7 @@ public class ApiConnectionIT {
 		String expectedRequest = json.writeValueAsString(sms);
 
 		MtBatchTextSmsResult expectedResponse =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
 		                .to(sms.to())
 		                .body(sms.body())
@@ -156,7 +156,7 @@ public class ApiConnectionIT {
 		        "}").replace('\'', '"');
 
 		MtBatchTextSmsResult expectedResponse =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
 		                .to(sms.to())
 		                .body(sms.body())
@@ -311,7 +311,7 @@ public class ApiConnectionIT {
 		String expectedRequest = json.writeValueAsString(sms);
 
 		MtBatchTextSmsResult expectedResponse =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
 		                .addTo("123")
 		                .body(sms.body())
@@ -377,7 +377,7 @@ public class ApiConnectionIT {
 		String expectedRequest = json.writeValueAsString(sms);
 
 		MtBatchBinarySmsResult expectedResponse =
-		        ImmutableMtBatchBinarySmsResult.builder()
+		        MtBatchBinarySmsResultImpl.builder()
 		                .from(sms.from())
 		                .addTo("123")
 		                .body(sms.body())
@@ -447,7 +447,7 @@ public class ApiConnectionIT {
 		        "}").replace('\'', '"');
 
 		final MtBatchTextSmsResult expected =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
 		                .body("Hello, world!")
@@ -516,7 +516,7 @@ public class ApiConnectionIT {
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
 		MtBatchTextSmsResult expected =
-		        ImmutableMtBatchTextSmsResult.builder()
+		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
 		                .body("Hello, world!")
@@ -560,10 +560,10 @@ public class ApiConnectionIT {
 	public void canListBatchesWithEmpty() throws Exception {
 		String username = TestUtils.freshUsername();
 		String path = "/xms/v1/" + username + "/batches?page=0";
-		BatchFilter filter = ImmutableBatchFilter.builder().build();
+		BatchFilter filter = BatchFilterImpl.builder().build();
 
 		final Page<MtBatchSmsResult> expected =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(0)
 		                .numPages(0)
@@ -627,13 +627,13 @@ public class ApiConnectionIT {
 	@Test
 	public void canListBatchesWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		BatchFilter filter = ImmutableBatchFilter.builder().build();
+		BatchFilter filter = BatchFilterImpl.builder().build();
 
 		// Prepare first page.
 		String path1 = "/xms/v1/" + username + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(0)
 		                .size(0)
 		                .numPages(2)
@@ -652,7 +652,7 @@ public class ApiConnectionIT {
 		String path2 = "/xms/v1/" + username + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
-		        ImmutablePagedBatchResult.builder()
+		        PagedBatchResultImpl.builder()
 		                .page(1)
 		                .size(0)
 		                .numPages(2)

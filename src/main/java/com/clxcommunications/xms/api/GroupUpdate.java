@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
 @ValueStylePublic
-@JsonSerialize(as = ImmutableGroupUpdate.class)
+@JsonSerialize(as = GroupUpdateImpl.class)
 @JsonInclude(Include.NON_EMPTY)
 public abstract class GroupUpdate {
 
-	public static class Builder extends ImmutableGroupUpdate.Builder {
+	public static class Builder extends GroupUpdateImpl.Builder {
 
 		public Builder unsetName() {
 			return this.name(UpdateValue.<String> unset());

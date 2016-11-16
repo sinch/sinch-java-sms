@@ -75,8 +75,7 @@ public class JacksonUtils {
 		@Override
 		public ParameterValues convert(JsonNode root,
 		        DeserializationContext ctxt) throws IOException {
-			ImmutableParameterValues.Builder builder =
-			        ImmutableParameterValues.builder();
+			ParameterValuesImpl.Builder builder = ParameterValuesImpl.builder();
 
 			if (root.has("default")) {
 				builder.defaultValue(root.get("default").asText());

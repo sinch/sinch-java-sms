@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(as = ImmutableTagsUpdate.class)
+@JsonDeserialize(as = TagsUpdateImpl.class)
 public interface TagsUpdate {
 
 	/**

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Immutable
 @ValueStylePackageDirect
-@JsonDeserialize(as = ImmutableApiError.class)
+@JsonDeserialize(as = ApiErrorImpl.class)
 public abstract class ApiError {
 
 	public static final String SYNTAX_INVALID_JSON = "syntax_invalid_json";
@@ -30,7 +30,7 @@ public abstract class ApiError {
 	public abstract String text();
 
 	public static ApiError of(String code, String text) {
-		return ImmutableApiError.of(code, text);
+		return ApiErrorImpl.of(code, text);
 	}
 
 }
