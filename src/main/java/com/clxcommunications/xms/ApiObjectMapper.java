@@ -32,7 +32,17 @@ public class ApiObjectMapper extends ObjectMapper {
 		setSerializationInclusion(Include.NON_NULL);
 		disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+
+		/*
+		 * From jackson-datatype-threetenbp README.md:
+		 * 
+		 * "Most JSR-310 types are serialized as numbers (integers or decimals
+		 * as appropriate) if the SerializationFeature#WRITE_DATES_AS_TIMESTAMPS
+		 * feature is enabled, and otherwise are serialized in standard ISO-8601
+		 * string representation."
+		 */
 		disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
 		configure(SerializationFeature.INDENT_OUTPUT, prettyPrint);
 	}
 
