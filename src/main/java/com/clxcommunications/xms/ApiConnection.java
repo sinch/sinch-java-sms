@@ -193,7 +193,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @return true if pretty printing is enabled; false otherwise
 	 */
 	@Value.Default
-	boolean prettyPrintJson() {
+	public boolean prettyPrintJson() {
 		return false;
 	}
 
@@ -205,7 +205,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a non-null HTTP client
 	 */
 	@Value.Default
-	CloseableHttpAsyncClient httpClient() {
+	public CloseableHttpAsyncClient httpClient() {
 		return HttpAsyncClients.createMinimal();
 	}
 
@@ -289,28 +289,29 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	@Nonnull
-	public URI batchesEndpoint() {
+	private URI batchesEndpoint() {
 		return endpoint("/batches", null);
 	}
 
 	@Nonnull
-	public URI batchEndpoint(BatchId batchId) {
+	private URI batchEndpoint(BatchId batchId) {
 		return endpoint("/batches/" + batchId.id());
 	}
 
 	@Nonnull
-	public URI batchDeliveryReportEndpoint(BatchId batchId, String type) {
+	private URI batchDeliveryReportEndpoint(BatchId batchId, String type) {
 		return endpoint(
 		        "/batches/" + batchId.id() + "/delivery_report",
 		        "type=" + type);
 	}
 
-	public URI batchDryRunEndpoint() {
+	@Nonnull
+	private URI batchDryRunEndpoint() {
 		return endpoint("/batches/dry_run");
 	}
 
 	@Nonnull
-	public URI batchRecipientDeliveryReportEndpoint(BatchId batchId,
+	private URI batchRecipientDeliveryReportEndpoint(BatchId batchId,
 	        String recipient) {
 		return endpoint(
 		        "/batches/" + batchId.id() + "/delivery_report/" + recipient);
