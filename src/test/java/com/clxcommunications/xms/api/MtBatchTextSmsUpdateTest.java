@@ -43,7 +43,7 @@ public class MtBatchTextSmsUpdateTest {
 
 		MtBatchSmsUpdate input = ClxApi.buildBatchTextSmsUpdate()
 		        .from("1234")
-		        .addTo("987654321")
+		        .addToAdd("987654321")
 		        .body("Hello, world!")
 		        .parameters(UpdateValue.set(params))
 		        .build();
@@ -52,7 +52,7 @@ public class MtBatchTextSmsUpdateTest {
 		        "{",
 		        "  'type': 'mt_text',",
 		        "  'from': '1234',",
-		        "  'to': [ '987654321' ],",
+		        "  'to_add': [ '987654321' ],",
 		        "  'body': 'Hello, world!',",
 		        "  'parameters': { 'newparam': { 'key1': 'value1' } }",
 		        "}").replace('\'', '"');
@@ -66,7 +66,7 @@ public class MtBatchTextSmsUpdateTest {
 	public void canSerializeWithUnsetParameters() throws Exception {
 		MtBatchSmsUpdate input = ClxApi.buildBatchTextSmsUpdate()
 		        .from("1234")
-		        .addTo("987654321")
+		        .addToAdd("987654321")
 		        .body("Hello, world!")
 		        .unsetParameters()
 		        .build();
@@ -75,7 +75,7 @@ public class MtBatchTextSmsUpdateTest {
 		        "{",
 		        "  'type': 'mt_text',",
 		        "  'from': '1234',",
-		        "  'to': [ '987654321' ],",
+		        "  'to_add': [ '987654321' ],",
 		        "  'body': 'Hello, world!',",
 		        "  'parameters': null",
 		        "}").replace('\'', '"');

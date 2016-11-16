@@ -25,16 +25,48 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 			return this.deliveryReport(UpdateValue.<DeliveryReport> unset());
 		}
 
+		public Builder deliveryReport(DeliveryReport deliveryReport) {
+			if (deliveryReport == null) {
+				return this.unsetDeliveryReport();
+			} else {
+				return this.deliveryReport(UpdateValue.set(deliveryReport));
+			}
+		}
+
 		public Builder unsetSendAt() {
 			return this.sendAt(UpdateValue.<OffsetDateTime> unset());
+		}
+
+		public Builder sendAt(OffsetDateTime time) {
+			if (time == null) {
+				return this.unsetSendAt();
+			} else {
+				return this.sendAt(UpdateValue.set(time));
+			}
 		}
 
 		public Builder unsetExpireAt() {
 			return this.expireAt(UpdateValue.<OffsetDateTime> unset());
 		}
 
+		public Builder expireAt(OffsetDateTime time) {
+			if (time == null) {
+				return this.unsetExpireAt();
+			} else {
+				return this.expireAt(UpdateValue.set(time));
+			}
+		}
+
 		public Builder unsetCallbackUrl() {
 			return this.callbackUrl(UpdateValue.<URI> unset());
+		}
+
+		public Builder callbackUrl(URI url) {
+			if (url == null) {
+				return this.unsetCallbackUrl();
+			} else {
+				return this.callbackUrl(UpdateValue.set(url));
+			}
 		}
 
 	}

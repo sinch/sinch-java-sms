@@ -30,12 +30,22 @@ public abstract class MtBatchSmsUpdate {
 	}
 
 	/**
-	 * The message destinations.
+	 * The message destinations to add to the batch.
 	 * 
 	 * @return a list of MSISDNs or group IDs
 	 */
 	@Nullable
-	public abstract List<String> to();
+	@JsonProperty("to_add")
+	public abstract List<String> toAdd();
+
+	/**
+	 * The message destinations to remove from the batch.
+	 * 
+	 * @return a list of MSISDNs or group IDs
+	 */
+	@Nullable
+	@JsonProperty("to_remove")
+	public abstract List<String> toRemove();
 
 	/**
 	 * The message originator.
@@ -63,9 +73,6 @@ public abstract class MtBatchSmsUpdate {
 
 	@OverridingMethodsMustInvokeSuper
 	protected void check() {
-		if (to() != null && to().isEmpty()) {
-			throw new IllegalStateException("no destination");
-		}
 	}
 
 }

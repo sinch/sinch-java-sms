@@ -2,7 +2,6 @@ package com.clxcommunications.xms.api;
 
 import java.net.URI;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -25,25 +24,61 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 			return this.deliveryReport(UpdateValue.<DeliveryReport> unset());
 		}
 
+		public Builder deliveryReport(DeliveryReport deliveryReport) {
+			if (deliveryReport == null) {
+				return this.unsetDeliveryReport();
+			} else {
+				return this.deliveryReport(UpdateValue.set(deliveryReport));
+			}
+		}
+
 		public Builder unsetSendAt() {
 			return this.sendAt(UpdateValue.<OffsetDateTime> unset());
+		}
+
+		public Builder sendAt(OffsetDateTime time) {
+			if (time == null) {
+				return this.unsetSendAt();
+			} else {
+				return this.sendAt(UpdateValue.set(time));
+			}
 		}
 
 		public Builder unsetExpireAt() {
 			return this.expireAt(UpdateValue.<OffsetDateTime> unset());
 		}
 
+		public Builder expireAt(OffsetDateTime time) {
+			if (time == null) {
+				return this.unsetExpireAt();
+			} else {
+				return this.expireAt(UpdateValue.set(time));
+			}
+		}
+
 		public Builder unsetCallbackUrl() {
 			return this.callbackUrl(UpdateValue.<URI> unset());
 		}
 
-		public Builder unsetTags() {
-			return this.tags(UpdateValue.<Set<String>> unset());
+		public Builder callbackUrl(URI url) {
+			if (url == null) {
+				return this.unsetCallbackUrl();
+			} else {
+				return this.callbackUrl(UpdateValue.set(url));
+			}
 		}
 
 		public Builder unsetParameters() {
 			return this.parameters(
 			        UpdateValue.<Map<String, ParameterValues>> unset());
+		}
+
+		public Builder parameters(Map<String, ParameterValues> params) {
+			if (params == null) {
+				return this.unsetParameters();
+			} else {
+				return this.parameters(UpdateValue.set(params));
+			}
 		}
 
 	}
@@ -54,9 +89,6 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 
 	@Nullable
 	public abstract String body();
-
-	@Nullable
-	public abstract UpdateValue<Set<String>> tags();
 
 	@Nullable
 	public abstract UpdateValue<Map<String, ParameterValues>> parameters();

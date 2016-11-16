@@ -303,16 +303,11 @@ public class ApiConnectionIT {
 		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
 		                ZoneOffset.UTC);
 
-		Set<String> tags = new TreeSet<String>();
-		tags.add("tag1");
-		tags.add("tag2");
-
 		MtBatchTextSmsUpdate sms =
 		        ClxApi.buildBatchTextSmsUpdate()
 		                .from("12345")
 		                .body("Hello, world!")
 		                .unsetDeliveryReport()
-		                .tags(UpdateValue.set(tags))
 		                .unsetExpireAt()
 		                .build();
 

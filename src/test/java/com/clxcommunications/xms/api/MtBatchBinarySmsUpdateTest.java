@@ -33,7 +33,7 @@ public class MtBatchBinarySmsUpdateTest {
 	public void canSerializeWithUpdatedFields() throws Exception {
 		MtBatchSmsUpdate input = ClxApi.buildBatchBinarySmsUpdate()
 		        .from("1234")
-		        .addTo("987654321")
+		        .addToAdd("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))
 		        .udh(new byte[] { 1, 2, 3, 4 })
 		        .deliveryReport(UpdateValue.<DeliveryReport> unset())
@@ -43,7 +43,7 @@ public class MtBatchBinarySmsUpdateTest {
 		        "{",
 		        "  'type': 'mt_binary',",
 		        "  'from': '1234',",
-		        "  'to': [ '987654321' ],",
+		        "  'to_add': [ '987654321' ],",
 		        "  'body': 'SGVsbG8sIHdvcmxkIQ==',",
 		        "  'udh': '01020304',",
 		        "  'delivery_report': null",
