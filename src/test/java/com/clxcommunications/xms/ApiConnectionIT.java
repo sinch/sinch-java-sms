@@ -54,9 +54,8 @@ public class ApiConnectionIT {
 	public void canPostSimpleBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSms sms =
 		        ClxApi.buildBatchTextSms()
@@ -117,9 +116,8 @@ public class ApiConnectionIT {
 	public void canPostBatchWithSubstitutions() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSms sms =
 		        ClxApi.buildBatchTextSms()
@@ -299,9 +297,8 @@ public class ApiConnectionIT {
 	public void canUpdateSimpleTextBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSmsUpdate sms =
 		        ClxApi.buildBatchTextSmsUpdate()
@@ -363,9 +360,8 @@ public class ApiConnectionIT {
 	public void canUpdateSimpleBinaryBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		Set<String> tags = new TreeSet<String>();
 		tags.add("tag1");
@@ -431,9 +427,8 @@ public class ApiConnectionIT {
 	public void canFetchBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 		String response = String.join("\n",
@@ -516,9 +511,8 @@ public class ApiConnectionIT {
 	public void canCancelBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
 		MtBatchTextSmsResult expected =

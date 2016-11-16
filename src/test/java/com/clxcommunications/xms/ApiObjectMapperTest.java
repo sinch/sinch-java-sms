@@ -46,9 +46,8 @@ public class ApiObjectMapperTest {
 
 	@Test
 	public void serializesThreeTenOffsetDateTime() throws Exception {
-		OffsetDateTime time =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		MapperTestClass input = new MapperTestClass();
 		input.setTime(time);
@@ -65,9 +64,8 @@ public class ApiObjectMapperTest {
 
 	@Test
 	public void deserializesThreeTenOffsetDateTime() throws Exception {
-		OffsetDateTime time =
-		        OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000,
-		                ZoneOffset.UTC);
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
 
 		String input = Utils.join("\n",
 		        "{",
