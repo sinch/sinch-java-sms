@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.immutables.value.Value;
 
-import com.clxcommunications.xms.ValueStylePublic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

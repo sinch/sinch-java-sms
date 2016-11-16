@@ -2,7 +2,6 @@ package com.clxcommunications.xms.api;
 
 import org.immutables.value.Value;
 
-import com.clxcommunications.xms.ValueStylePackageDirect;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

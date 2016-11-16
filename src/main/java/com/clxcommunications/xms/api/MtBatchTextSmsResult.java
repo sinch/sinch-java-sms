@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 
-import com.clxcommunications.xms.ValueStylePublic;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonTypeName;

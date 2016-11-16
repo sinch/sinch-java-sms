@@ -49,8 +49,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Value.Immutable(copy = false)
-@Value.Style(jdkOnly = true, build = "start",
-        visibility = ImplementationVisibility.PACKAGE)
+@Value.Style(depluralize = true, jdkOnly = true, from = "using",
+        build = "start", visibility = ImplementationVisibility.PACKAGE)
 public abstract class ApiConnection implements Closeable {
 
 	public static class Builder extends ImmutableApiConnection.Builder {

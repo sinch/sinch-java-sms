@@ -1,4 +1,4 @@
-package com.clxcommunications.xms;
+package com.clxcommunications.xms.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,6 +14,6 @@ import org.immutables.value.Value.Style.ImplementationVisibility;
         allParameters = true, depluralizeDictionary = { "batch:batches" },
         visibility = ImplementationVisibility.PACKAGE,
         defaults = @Value.Immutable(builder = false, copy = false))
-public @interface ValueStylePackageDirect {
+@interface ValueStylePackageDirect {
 
 }
