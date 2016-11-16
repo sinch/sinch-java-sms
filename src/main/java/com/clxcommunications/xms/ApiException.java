@@ -1,5 +1,7 @@
 package com.clxcommunications.xms;
 
+import com.clxcommunications.xms.api.ApiError;
+
 public class ApiException extends Exception {
 
 	private static final long serialVersionUID = 1L;

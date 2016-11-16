@@ -7,6 +7,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
+import com.clxcommunications.xms.api.BatchId;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * A few utils that are handy to have around in the test suite.
  */
-final class TestUtils {
+public final class TestUtils {
 
 	public static final Charset US_ASCII = Charset.forName("US-ASCII");
 
@@ -31,7 +32,7 @@ final class TestUtils {
 	 * 
 	 * @return a unique, non-null, message identifier
 	 */
-	static String freshSmsId() {
+	public static String freshSmsId() {
 		return "sms" + uniqueCounter.incrementAndGet();
 	}
 
@@ -40,7 +41,7 @@ final class TestUtils {
 	 * 
 	 * @return a unique, non-null, username
 	 */
-	static String freshUsername() {
+	public static String freshUsername() {
 		return "user" + uniqueCounter.incrementAndGet();
 	}
 
@@ -49,7 +50,7 @@ final class TestUtils {
 	 * 
 	 * @return a unique, non-null, batch ID.
 	 */
-	static BatchId freshBatchId() {
+	public static BatchId freshBatchId() {
 		return BatchId.of("batch" + uniqueCounter.incrementAndGet());
 	}
 
@@ -61,7 +62,7 @@ final class TestUtils {
 	 *            a JSON encoded string
 	 * @return a non-null Hamcrest matcher
 	 */
-	static Matcher<String> jsonEqualTo(final String expected) {
+	public static Matcher<String> jsonEqualTo(final String expected) {
 		return new BaseMatcher<String>() {
 
 			private final ObjectMapper om = new ObjectMapper();

@@ -24,6 +24,18 @@ import org.junit.Test;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
+import com.clxcommunications.xms.api.ApiError;
+import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.ImmutableMtBatchBinarySmsResult;
+import com.clxcommunications.xms.api.ImmutableMtBatchTextSmsResult;
+import com.clxcommunications.xms.api.ImmutablePagedBatchResult;
+import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
+import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
+import com.clxcommunications.xms.api.MtBatchSmsResult;
+import com.clxcommunications.xms.api.MtBatchTextSms;
+import com.clxcommunications.xms.api.MtBatchTextSmsResult;
+import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
+import com.clxcommunications.xms.api.Page;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;

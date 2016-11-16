@@ -11,6 +11,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.http.concurrent.FutureCallback;
 
+import com.clxcommunications.xms.api.Page;
 import com.fasterxml.jackson.core.JsonParseException;
 
 @NotThreadSafe

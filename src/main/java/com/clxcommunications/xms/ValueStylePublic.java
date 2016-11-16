@@ -14,6 +14,6 @@ import org.immutables.value.Value;
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(depluralize = true, from = "using", jdkOnly = true,
         depluralizeDictionary = { "batch:batches" })
-@interface ValueStylePublic {
+public @interface ValueStylePublic {
 
 }

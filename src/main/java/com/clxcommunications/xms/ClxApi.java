@@ -3,6 +3,12 @@ package com.clxcommunications.xms;
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
+import com.clxcommunications.xms.api.ImmutableMtBatchBinarySms;
+import com.clxcommunications.xms.api.ImmutableMtBatchTextSms;
+import com.clxcommunications.xms.api.ImmutableParameterValues;
+import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
+import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
+
 /**
  * A collection of convenient static methods for generating CLX API objects.
  */

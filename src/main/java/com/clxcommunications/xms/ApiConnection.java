@@ -33,6 +33,17 @@ import org.apache.http.protocol.HttpContext;
 import org.immutables.value.Value;
 import org.immutables.value.Value.Style.ImplementationVisibility;
 
+import com.clxcommunications.xms.api.ApiError;
+import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
+import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
+import com.clxcommunications.xms.api.MtBatchSms;
+import com.clxcommunications.xms.api.MtBatchSmsResult;
+import com.clxcommunications.xms.api.MtBatchTextSms;
+import com.clxcommunications.xms.api.MtBatchTextSmsResult;
+import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
+import com.clxcommunications.xms.api.Page;
+import com.clxcommunications.xms.api.PagedBatchResult;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;

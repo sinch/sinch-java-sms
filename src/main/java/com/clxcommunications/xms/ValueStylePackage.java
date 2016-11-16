@@ -13,6 +13,6 @@ import org.immutables.value.Value.Style.ImplementationVisibility;
 @Value.Style(depluralize = true, from = "using", jdkOnly = true,
         depluralizeDictionary = { "batch:batches" },
         visibility = ImplementationVisibility.PACKAGE)
-@interface ValueStylePackage {
+public @interface ValueStylePackage {
 
 }

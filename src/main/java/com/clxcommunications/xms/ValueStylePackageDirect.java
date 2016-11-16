@@ -14,6 +14,6 @@ import org.immutables.value.Value.Style.ImplementationVisibility;
         allParameters = true, depluralizeDictionary = { "batch:batches" },
         visibility = ImplementationVisibility.PACKAGE,
         defaults = @Value.Immutable(builder = false, copy = false))
-@interface ValueStylePackageDirect {
+public @interface ValueStylePackageDirect {
 
 }

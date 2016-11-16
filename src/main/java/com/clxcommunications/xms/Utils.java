@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
  * This class holds a number of static convenience methods for use within the
  * package. They are not intended for public exposure.
  */
-final class Utils {
+public final class Utils {
 
 	/**
 	 * Convenience method that joins the given strings using the given
@@ -22,7 +22,7 @@ final class Utils {
 	 * @return the joined string
 	 */
 	@Nonnull
-	static String join(String delim, String... strings) {
+	public static String join(String delim, String... strings) {
 		requireNonNull(strings, "strings");
 
 		return join(delim, Arrays.asList(strings));
@@ -39,7 +39,7 @@ final class Utils {
 	 * @return the joined string
 	 */
 	@Nonnull
-	static String join(String delim, Iterable<String> strings) {
+	public static String join(String delim, Iterable<String> strings) {
 		requireNonNull(delim, "delim");
 		requireNonNull(strings, "strings");
 
