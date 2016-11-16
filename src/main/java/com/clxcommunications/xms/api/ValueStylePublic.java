@@ -13,6 +13,7 @@ import org.immutables.value.Value;
 @Target({ ElementType.PACKAGE, ElementType.TYPE })
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(depluralize = true, from = "using", jdkOnly = true,
+        overshadowImplementation = true,
         depluralizeDictionary = { "batch:batches" }, typeImmutable = "*Impl")
 @interface ValueStylePublic {
 
