@@ -3,6 +3,8 @@ package com.clxcommunications.xms;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.immutables.value.Value;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -14,20 +16,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @param <T>
  *            the underlying API type
  */
+@Value.Immutable
+@ValueStylePackageDirect
 @JsonInclude(Include.NON_NULL)
-public final class UpdateValue<T> {
+public abstract class UpdateValue<T> {
 
 	/**
 	 * Marker object signifying that the field should be removed.
 	 */
-	private static final UpdateValue<?> UNSET = new UpdateValue<Object>(null);
-
-	@Nullable
-	private final T value;
-
-	private UpdateValue(T value) {
-		this.value = value;
-	}
+	private static final UpdateValue<?> UNSET = ImmutableUpdateValue.of(null);
 
 	@SuppressWarnings("unchecked")
 	@Nonnull
@@ -38,7 +35,7 @@ public final class UpdateValue<T> {
 	@JsonCreator
 	@Nonnull
 	public static <T> UpdateValue<T> set(@Nullable T value) {
-		return new UpdateValue<T>(value);
+		return ImmutableUpdateValue.of(value);
 	}
 
 	/**
@@ -47,8 +44,31 @@ public final class UpdateValue<T> {
 	 * @return the update value if set, <code>null</code> otherwise
 	 */
 	@JsonValue
-	public T valueOrNull() {
-		return value;
+	@Nullable
+	public abstract T valueOrNull();
+
+	/**
+	 * Whether this update value is set or unset.
+	 * 
+	 * @return <code>true</code> if set; <code>false</code> otherwise
+	 */
+	public final boolean isSet() {
+		return valueOrNull() != null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("UpdateValue{");
+		if (isSet()) {
+			sb.append("set=" + valueOrNull());
+		} else {
+			sb.append("unset");
+		}
+		sb.append("}");
+
+		return sb.toString();
 	}
 
 }
