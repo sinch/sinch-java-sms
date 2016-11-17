@@ -28,6 +28,11 @@ public abstract class MtBatchSms {
 		super();
 	}
 
+	/**
+	 * The list of message recipients. May not be empty.
+	 * 
+	 * @return a non-empty list of recipients
+	 */
 	public abstract List<String> to();
 
 	public abstract String from();

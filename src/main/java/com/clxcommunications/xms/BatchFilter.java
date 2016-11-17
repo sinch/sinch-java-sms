@@ -13,6 +13,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 import org.threeten.bp.LocalDate;
 
+/**
+ * Describes a filter for limiting results when fetching batches.
+ */
 @Value.Immutable
 @ValueStylePublic
 public abstract class BatchFilter {
@@ -28,16 +31,40 @@ public abstract class BatchFilter {
 		return 0;
 	}
 
+	/**
+	 * Limits results to batches sent at or after this date.
+	 * 
+	 * @return a non-null date
+	 */
 	@Nullable
 	public abstract LocalDate startDate();
 
+	/**
+	 * Limits results to batches send before this date.
+	 * 
+	 * @return a non-null date
+	 */
 	@Nullable
 	public abstract LocalDate endDate();
 
+	/**
+	 * Limits results to batches sent from the given addresses. If empty then
+	 * all origins are included.
+	 * 
+	 * @return a non-null set of origins
+	 */
 	public abstract Set<String> from();
 
+	/**
+	 * Limits results to batches having <em>any</em> the given tags.
+	 * 
+	 * @return a non-null set of tags
+	 */
 	public abstract Set<String> tags();
 
+	/**
+	 * Verifies that the object is in a reasonable state.
+	 */
 	protected void check() {
 		for (String s : from()) {
 			if (s.contains(",")) {

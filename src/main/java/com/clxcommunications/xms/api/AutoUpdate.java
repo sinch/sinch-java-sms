@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * Describes auto updates of groups.
+ * Describes auto updates of groups. Auto updates allow end users to add or
+ * remove themselves from groups.
  */
 @Value.Immutable
 @ValueStylePublic
@@ -16,9 +17,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface AutoUpdate {
 
 	/**
-	 * An MSISDN or short code
+	 * An MSISDN or short code. A mobile originated message sent to this address
+	 * can trigger the auto update if a matching keyword is found.
 	 * 
-	 * @return a non-null address
+	 * @return a non-null MSISDN or short code
 	 */
 	String to();
 

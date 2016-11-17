@@ -1,5 +1,7 @@
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.clxcommunications.xms.ApiException;
@@ -62,10 +64,30 @@ public abstract class ApiError {
 
 	}
 
+	/**
+	 * The machine readable error code.
+	 * 
+	 * @return a non-null string
+	 */
 	public abstract String code();
 
+	/**
+	 * The human readable error message.
+	 * 
+	 * @return a non-null string
+	 */
 	public abstract String text();
 
+	/**
+	 * Creates a new API error object from the given code and text.
+	 * 
+	 * @param code
+	 *            the error code
+	 * @param text
+	 *            the error message
+	 * @return a non-null API error object
+	 */
+	@Nonnull
 	public static ApiError of(String code, String text) {
 		return ApiErrorImpl.of(code, text);
 	}
