@@ -2,12 +2,15 @@ package com.clxcommunications.xms.api;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import org.threeten.bp.OffsetDateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -48,6 +51,14 @@ public abstract class MtBatchSms {
 	@Nullable
 	@JsonProperty("callback_url")
 	public abstract URI callbackUrl();
+
+	/**
+	 * The tags that should be attached to this message.
+	 * 
+	 * @return a non-null set of tags
+	 */
+	@JsonInclude(Include.NON_EMPTY)
+	public abstract Set<String> tags();
 
 	@OverridingMethodsMustInvokeSuper
 	protected void check() {

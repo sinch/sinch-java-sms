@@ -1,7 +1,6 @@
 package com.clxcommunications.xms.api;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.immutables.value.Value;
 
@@ -17,9 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public abstract class MtBatchTextSms extends MtBatchSms {
 
 	public abstract String body();
-
-	@JsonInclude(Include.NON_EMPTY)
-	public abstract Set<String> tags();
 
 	@JsonInclude(Include.NON_EMPTY)
 	public abstract Map<String, ParameterValues> parameters();
