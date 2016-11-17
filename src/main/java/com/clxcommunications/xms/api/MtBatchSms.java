@@ -38,7 +38,7 @@ public abstract class MtBatchSms {
 
 	@Nullable
 	@JsonProperty("delivery_report")
-	public abstract DeliveryReport deliveryReport();
+	public abstract ReportType deliveryReport();
 
 	@Nullable
 	@JsonProperty("send_at")

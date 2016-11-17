@@ -36,7 +36,7 @@ public class MtBatchBinarySmsUpdateTest {
 		        .addToAdd("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))
 		        .udh(new byte[] { 1, 2, 3, 4 })
-		        .deliveryReport(UpdateValue.<DeliveryReport> unset())
+		        .deliveryReport(UpdateValue.<ReportType> unset())
 		        .build();
 
 		String expected = Utils.join("\n",

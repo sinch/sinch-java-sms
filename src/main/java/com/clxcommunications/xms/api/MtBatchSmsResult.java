@@ -33,7 +33,7 @@ public abstract class MtBatchSmsResult {
 	public abstract String from();
 
 	@Nullable
-	public abstract DeliveryReport deliveryReport();
+	public abstract ReportType deliveryReport();
 
 	@Nullable
 	public abstract URI callbackUrl();

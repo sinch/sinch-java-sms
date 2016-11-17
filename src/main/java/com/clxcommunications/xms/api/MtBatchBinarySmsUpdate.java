@@ -21,10 +21,10 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 	public static class Builder extends MtBatchBinarySmsUpdateImpl.Builder {
 
 		public Builder unsetDeliveryReport() {
-			return this.deliveryReport(UpdateValue.<DeliveryReport> unset());
+			return this.deliveryReport(UpdateValue.<ReportType> unset());
 		}
 
-		public Builder deliveryReport(DeliveryReport deliveryReport) {
+		public Builder deliveryReport(ReportType deliveryReport) {
 			if (deliveryReport == null) {
 				return this.unsetDeliveryReport();
 			} else {
