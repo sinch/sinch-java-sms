@@ -5,6 +5,8 @@ This is the Java SDK for the CLX Communications REST API (also called
 XMS) for batch SMS messaging. It provides an asynchronous Java API
 that provides convenient access to all the features of XMS.
 
+The library is compatible with Java 6 and later.
+
 Using
 -----
 
