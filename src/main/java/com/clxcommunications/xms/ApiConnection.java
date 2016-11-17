@@ -209,6 +209,18 @@ public abstract class ApiConnection implements Closeable {
 		return HttpAsyncClients.createMinimal();
 	}
 
+	/**
+	 * The future callback wrapper to use in all API calls. By default this is
+	 * {@link CallbackWrapper.ExceptionDropper}, that is, any exception thrown
+	 * in a given callback is logged and dropped.
+	 * 
+	 * @return a non-null callback wrapper
+	 */
+	@Value.Default
+	public CallbackWrapper callbackWrapper() {
+		return CallbackWrapper.exceptionDropper;
+	}
+
 	public abstract HttpHost endpointHost();
 
 	/**
@@ -410,7 +422,7 @@ public abstract class ApiConnection implements Closeable {
 		        new BatchTextSmsResultAsyncConsumer();
 
 		return httpClient().execute(requestProducer, responseConsumer,
-		        callback);
+		        callbackWrapper().wrap(callback));
 	}
 
 	/**
@@ -435,7 +447,8 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
 		        new BatchTextSmsResultAsyncConsumer();
 
-		return httpClient().execute(producer, consumer, callback);
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
 	}
 
 	/**
@@ -460,7 +473,8 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> consumer =
 		        new BatchBinarySmsResultAsyncConsumer();
 
-		return httpClient().execute(producer, consumer, callback);
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
 	}
 
 	/**
@@ -482,7 +496,8 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
 		        new BatchTextSmsResultAsyncConsumer();
 
-		return httpClient().execute(producer, consumer, callback);
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
 	}
 
 	public PagedFetcher<MtBatchSmsResult> fetchBatches(final BatchFilter filter,
@@ -492,7 +507,8 @@ public abstract class ApiConnection implements Closeable {
 			@Override
 			Future<Page<MtBatchSmsResult>> fetchAsync(int page,
 			        FutureCallback<Page<MtBatchSmsResult>> callback) {
-				return fetchBatches(page, filter, callback);
+				return fetchBatches(page, filter,
+				        callbackWrapper().wrap(callback));
 			}
 
 		};
@@ -513,7 +529,8 @@ public abstract class ApiConnection implements Closeable {
 		        new PagedResultAsyncConsumer<PagedBatchResult, MtBatchSmsResult>(
 		                PagedBatchResult.class);
 
-		return httpClient().execute(producer, consumer, callback);
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
 	}
 
 	public Future<MtBatchTextSmsResult> cancelBatch(BatchId batchId) {
@@ -530,7 +547,8 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
 		        new BatchTextSmsResultAsyncConsumer();
 
-		return httpClient().execute(producer, consumer, callback);
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
 	}
 
 }
