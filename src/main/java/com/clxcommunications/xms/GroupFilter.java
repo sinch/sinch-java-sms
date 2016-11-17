@@ -31,7 +31,7 @@ public abstract class GroupFilter {
 	protected void check() {
 		for (String s : tags()) {
 			if (s.contains(",")) {
-				throw new IllegalArgumentException("tags contains comma");
+				throw new IllegalStateException("tags contains comma");
 			}
 		}
 	}

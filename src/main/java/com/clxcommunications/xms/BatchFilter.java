@@ -41,13 +41,13 @@ public abstract class BatchFilter {
 	protected void check() {
 		for (String s : from()) {
 			if (s.contains(",")) {
-				throw new IllegalArgumentException("from contains comma");
+				throw new IllegalStateException("from contains comma");
 			}
 		}
 
 		for (String s : tags()) {
 			if (s.contains(",")) {
-				throw new IllegalArgumentException("tags contains comma");
+				throw new IllegalStateException("tags contains comma");
 			}
 		}
 	}
