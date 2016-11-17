@@ -17,8 +17,8 @@ import org.immutables.value.Value;
 @Target({ ElementType.PACKAGE, ElementType.TYPE })
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(depluralize = true, from = "using", jdkOnly = true,
-        overshadowImplementation = true,
-        depluralizeDictionary = { "batch:batches" }, typeImmutable = "*Impl")
+        overshadowImplementation = true, typeImmutable = "*Impl",
+        depluralizeDictionary = { "batch:batches", "status:statuses" })
 @interface ValueStylePublic {
 
 }

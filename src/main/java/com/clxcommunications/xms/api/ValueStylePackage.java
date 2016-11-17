@@ -12,8 +12,8 @@ import org.immutables.value.Value.Style.ImplementationVisibility;
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(depluralize = true, from = "using", jdkOnly = true,
         overshadowImplementation = true,
-        depluralizeDictionary = { "batch:batches" },
-        visibility = ImplementationVisibility.PACKAGE, typeImmutable = "*Impl")
+        visibility = ImplementationVisibility.PACKAGE, typeImmutable = "*Impl",
+        depluralizeDictionary = { "batch:batches", "status:statuses" })
 @interface ValueStylePackage {
 
 }
