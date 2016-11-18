@@ -42,7 +42,7 @@ import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResultImpl;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
-import com.clxcommunications.xms.api.MtBatchTextSms;
+import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsResultImpl;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
@@ -75,7 +75,7 @@ public class ApiConnectionIT {
 		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		MtBatchTextSms sms =
+		MtBatchTextSmsCreate sms =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -137,7 +137,7 @@ public class ApiConnectionIT {
 		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		MtBatchTextSms sms =
+		MtBatchTextSmsCreate sms =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -221,7 +221,7 @@ public class ApiConnectionIT {
 	public void canHandleBatchPostWithError() throws Throwable {
 		String username = TestUtils.freshUsername();
 
-		MtBatchTextSms sms =
+		MtBatchTextSmsCreate sms =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -265,7 +265,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		MtBatchTextSms sms =
+		MtBatchTextSmsCreate sms =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")

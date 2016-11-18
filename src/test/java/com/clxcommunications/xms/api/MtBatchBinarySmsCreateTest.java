@@ -10,13 +10,13 @@ import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 
-public class MtBatchBinarySmsTest {
+public class MtBatchBinarySmsCreateTest {
 
 	private final ApiObjectMapper json = new ApiObjectMapper();
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		MtBatchSms input = minimalBatchBuilder().build();
+		MtBatchSmsCreate input = minimalBatchBuilder().build();
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -34,16 +34,16 @@ public class MtBatchBinarySmsTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
-		MtBatchSms expected = minimalBatchBuilder().build();
+		MtBatchSmsCreate expected = minimalBatchBuilder().build();
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSms actual = json.readValue(input, MtBatchSms.class);
+		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
 
-	private static MtBatchBinarySmsImpl.Builder minimalBatchBuilder() {
+	private static MtBatchBinarySmsCreateImpl.Builder minimalBatchBuilder() {
 		return ClxApi.buildBatchBinarySms()
 		        .from("1234")
 		        .addTo("987654321")

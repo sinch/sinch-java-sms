@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePublic
-@JsonDeserialize(as = MtBatchTextSmsImpl.class)
+@JsonDeserialize(as = MtBatchTextSmsCreateImpl.class)
 @JsonTypeName("mt_text")
-public abstract class MtBatchTextSms extends MtBatchSms {
+public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
 
 	public abstract String body();
 

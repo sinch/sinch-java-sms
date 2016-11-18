@@ -10,13 +10,13 @@ import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 
-public class MtBatchTextSmsTest {
+public class MtBatchTextSmsCreateTest {
 
 	private final ApiObjectMapper json = new ApiObjectMapper();
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		MtBatchSms input = minimalBatchBuilder().build();
+		MtBatchSmsCreate input = minimalBatchBuilder().build();
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -33,18 +33,18 @@ public class MtBatchTextSmsTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
-		MtBatchSms expected = minimalBatchBuilder().build();
+		MtBatchSmsCreate expected = minimalBatchBuilder().build();
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSms actual = json.readValue(input, MtBatchSms.class);
+		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
 
 	@Test
 	public void canSerializeWithParameters() throws Exception {
-		MtBatchSms input = minimalBatchBuilder()
+		MtBatchSmsCreate input = minimalBatchBuilder()
 		        .putParameter("param1",
 		                ClxApi.buildSubstitution()
 		                        .putSubstitution("123", "foo")
@@ -73,7 +73,7 @@ public class MtBatchTextSmsTest {
 
 	@Test
 	public void canDeserializeWithParameters() throws Exception {
-		MtBatchSms expected = minimalBatchBuilder()
+		MtBatchSmsCreate expected = minimalBatchBuilder()
 		        .putParameter("param1",
 		                ClxApi.buildSubstitution()
 		                        .putSubstitution("123", "foo")
@@ -83,14 +83,14 @@ public class MtBatchTextSmsTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSms actual = json.readValue(input, MtBatchSms.class);
+		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
 
 	@Test
 	public void canSerializeWithParametersAndDefault() throws Exception {
-		MtBatchSms input = minimalBatchBuilder()
+		MtBatchSmsCreate input = minimalBatchBuilder()
 		        .putParameter("param1",
 		                ClxApi.buildSubstitution()
 		                        .putSubstitution("123", "foo")
@@ -121,7 +121,7 @@ public class MtBatchTextSmsTest {
 
 	@Test
 	public void canDeserializeWithParametersAndDefault() throws Exception {
-		MtBatchSms expected = minimalBatchBuilder()
+		MtBatchSmsCreate expected = minimalBatchBuilder()
 		        .putParameter("param1",
 		                ClxApi.buildSubstitution()
 		                        .putSubstitution("123", "foo")
@@ -132,12 +132,12 @@ public class MtBatchTextSmsTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSms actual = json.readValue(input, MtBatchSms.class);
+		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
 
-	private static MtBatchTextSmsImpl.Builder minimalBatchBuilder() {
+	private static MtBatchTextSmsCreateImpl.Builder minimalBatchBuilder() {
 		return ClxApi.buildBatchTextSms()
 		        .from("1234")
 		        .addTo("987654321")

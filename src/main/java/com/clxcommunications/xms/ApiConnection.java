@@ -39,9 +39,8 @@ import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
-import com.clxcommunications.xms.api.MtBatchSms;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
-import com.clxcommunications.xms.api.MtBatchTextSms;
+import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
@@ -408,7 +407,7 @@ public abstract class ApiConnection implements Closeable {
 	 *             if the server response indicated an error
 	 * @throws JsonParseException
 	 */
-	public MtBatchTextSmsResult sendBatch(MtBatchTextSms sms)
+	public MtBatchTextSmsResult sendBatch(MtBatchTextSmsCreate sms)
 	        throws InterruptedException, ExecutionException, ApiException,
 	        JsonParseException {
 		try {
@@ -424,7 +423,7 @@ public abstract class ApiConnection implements Closeable {
 		}
 	}
 
-	public Future<MtBatchTextSmsResult> sendBatchAsync(MtBatchSms sms,
+	public Future<MtBatchTextSmsResult> sendBatchAsync(MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
 		HttpPost httpPost = post(batchesEndpoint(), sms);
 

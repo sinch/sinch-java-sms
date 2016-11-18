@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @Type(MtBatchTextSms.class),
-        @Type(MtBatchBinarySms.class)
+        @Type(MtBatchTextSmsCreate.class),
+        @Type(MtBatchBinarySmsCreate.class)
 })
-public abstract class MtBatchSms {
+public abstract class MtBatchSmsCreate {
 
-	public MtBatchSms() {
+	public MtBatchSmsCreate() {
 		super();
 	}
 
@@ -69,6 +69,10 @@ public abstract class MtBatchSms {
 	protected void check() {
 		if (to().isEmpty()) {
 			throw new IllegalStateException("no destination");
+		}
+
+		if (from().isEmpty()) {
+			throw new IllegalStateException("empty from address");
 		}
 	}
 

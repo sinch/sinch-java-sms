@@ -3,9 +3,9 @@ package com.clxcommunications.xms;
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
-import com.clxcommunications.xms.api.MtBatchBinarySmsImpl;
+import com.clxcommunications.xms.api.MtBatchBinarySmsCreateImpl;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
-import com.clxcommunications.xms.api.MtBatchTextSmsImpl;
+import com.clxcommunications.xms.api.MtBatchTextSmsCreateImpl;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.ParameterValuesImpl;
 
@@ -16,16 +16,16 @@ public final class ClxApi {
 
 	public static final int MAX_BODY_BYTES = 140;
 
-	public static MtBatchTextSmsImpl.Builder buildBatchTextSms() {
-		return MtBatchTextSmsImpl.builder();
+	public static MtBatchTextSmsCreateImpl.Builder buildBatchTextSms() {
+		return MtBatchTextSmsCreateImpl.builder();
 	}
 
 	public static MtBatchTextSmsUpdate.Builder buildBatchTextSmsUpdate() {
 		return MtBatchTextSmsUpdate.builder();
 	}
 
-	public static MtBatchBinarySmsImpl.Builder buildBatchBinarySms() {
-		return MtBatchBinarySmsImpl.builder();
+	public static MtBatchBinarySmsCreateImpl.Builder buildBatchBinarySms() {
+		return MtBatchBinarySmsCreateImpl.builder();
 	}
 
 	public static MtBatchBinarySmsUpdate.Builder buildBatchBinarySmsUpdate() {
