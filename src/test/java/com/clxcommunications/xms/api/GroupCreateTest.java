@@ -8,8 +8,8 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
-import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 

@@ -10,8 +10,8 @@ import org.threeten.bp.Clock;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
-import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 
 public class GroupResponseTest {

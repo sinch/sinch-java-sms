@@ -8,9 +8,9 @@ import java.util.TreeMap;
 
 import org.junit.Test;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
 import com.clxcommunications.xms.ClxApi;
-import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.UpdateValue;
 import com.clxcommunications.xms.Utils;
 

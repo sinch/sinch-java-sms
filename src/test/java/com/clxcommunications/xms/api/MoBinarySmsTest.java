@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.threeten.bp.Clock;
 import org.threeten.bp.OffsetDateTime;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
-import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 import com.fasterxml.jackson.databind.JsonMappingException;
 

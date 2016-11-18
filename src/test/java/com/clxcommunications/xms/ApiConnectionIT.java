@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;

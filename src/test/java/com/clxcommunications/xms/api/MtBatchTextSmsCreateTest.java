@@ -5,9 +5,9 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
 import com.clxcommunications.xms.ClxApi;
-import com.clxcommunications.xms.TestUtils;
 import com.clxcommunications.xms.Utils;
 
 public class MtBatchTextSmsCreateTest {

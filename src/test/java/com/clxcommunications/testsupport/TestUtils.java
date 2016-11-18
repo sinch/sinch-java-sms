@@ -1,4 +1,4 @@
-package com.clxcommunications.xms;
+package com.clxcommunications.testsupport;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;

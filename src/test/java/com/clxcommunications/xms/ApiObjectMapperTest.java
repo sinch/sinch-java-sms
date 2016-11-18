@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
+import com.clxcommunications.testsupport.TestUtils;
+
 public class ApiObjectMapperTest {
 
 	/**
