@@ -1,10 +1,10 @@
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
@@ -13,8 +13,46 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Immutable
 @ValueStylePublic
-@JsonDeserialize(builder = AutoUpdateImpl.Builder.class)
-public interface AutoUpdate {
+@JsonDeserialize(builder = AutoUpdate.Builder.class)
+public abstract class AutoUpdate {
+
+	public static final class Builder extends AutoUpdateImpl.Builder {
+
+		/**
+		 * The keyword trigger to use for adding a number to a group.
+		 * 
+		 * @param firstWord
+		 *            the first keyword, can be <code>null</code>
+		 * @param secondWord
+		 *            the second keyword, can be <code>null</code>
+		 * @return this builder for use in a chained invocation
+		 */
+		@Nonnull
+		public Builder add(@Nullable String firstWord,
+		        @Nullable String secondWord) {
+			return this.add(KeywordPair.of(firstWord, secondWord));
+		}
+
+		/**
+		 * The keyword trigger to use for removing a number to a group.
+		 * 
+		 * @param firstWord
+		 *            the first keyword, can be <code>null</code>
+		 * @param secondWord
+		 *            the second keyword, can be <code>null</code>
+		 * @return this builder for use in a chained invocation
+		 */
+		@Nonnull
+		public Builder remove(@Nullable String firstWord,
+		        @Nullable String secondWord) {
+			return this.remove(KeywordPair.of(firstWord, secondWord));
+		}
+
+	}
+
+	public static final Builder builder() {
+		return new AutoUpdate.Builder();
+	}
 
 	/**
 	 * An MSISDN or short code. A mobile originated message sent to this address
@@ -22,22 +60,22 @@ public interface AutoUpdate {
 	 * 
 	 * @return a non-null MSISDN or short code
 	 */
-	String to();
+	public abstract String to();
 
-	@JsonProperty("add_keyword_first")
+	/**
+	 * The keyword trigger used to add a member.
+	 * 
+	 * @return a keyword pair
+	 */
 	@Nullable
-	String addKeywordFirst();
+	public abstract KeywordPair add();
 
-	@JsonProperty("add_keyword_second")
+	/**
+	 * The keyword trigger used to remove a member.
+	 * 
+	 * @return a keyword pair
+	 */
 	@Nullable
-	String addKeywordSecond();
-
-	@JsonProperty("remove_keyword_first")
-	@Nullable
-	String removeKeywordFirst();
-
-	@JsonProperty("remove_keyword_second")
-	@Nullable
-	String removeKeywordSecond();
+	public abstract KeywordPair remove();
 
 }

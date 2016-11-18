@@ -60,10 +60,8 @@ public class GroupResponseTest {
 		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
-		                .addKeywordFirst("kw0")
-		                .addKeywordSecond("kw1")
-		                .removeKeywordFirst("kw2")
-		                .removeKeywordSecond("kw3")
+		                .add("kw0", "kw1")
+		                .remove("kw2", "kw3")
 		                .build())
 		        .createdAt(time)
 		        .modifiedAt(time)
@@ -78,10 +76,8 @@ public class GroupResponseTest {
 		                + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
-		        "    'add_keyword_first': 'kw0',",
-		        "    'add_keyword_second': 'kw1',",
-		        "    'remove_keyword_first': 'kw2',",
-		        "    'remove_keyword_second': 'kw3'",
+		        "    'add': { 'first_word': 'kw0', 'second_word': 'kw1' },",
+		        "    'remove': { 'first_word': 'kw2', 'second_word': 'kw3' }",
 		        "  },",
 		        "  'created_at': '2016-10-02T09:34:28.542Z',",
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
@@ -125,10 +121,8 @@ public class GroupResponseTest {
 		        .childGroups(Arrays.asList(groupId1, groupId2))
 		        .autoUpdate(AutoUpdateImpl.builder()
 		                .to("1111")
-		                .addKeywordFirst("kw0")
-		                .addKeywordSecond("kw1")
-		                .removeKeywordFirst("kw2")
-		                .removeKeywordSecond("kw3")
+		                .add("kw0", "kw1")
+		                .remove("kw2", "kw3")
 		                .build())
 		        .createdAt(time)
 		        .modifiedAt(time)
