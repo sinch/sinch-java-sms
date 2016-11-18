@@ -58,4 +58,8 @@ public final class ClxApi {
 		return GroupFilterImpl.builder();
 	}
 
+	public static InboundsFilterImpl.Builder buildInboundsFilter() {
+		return InboundsFilterImpl.builder();
+	}
+
 }
