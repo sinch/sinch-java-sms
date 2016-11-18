@@ -16,12 +16,14 @@ import javax.annotation.Nullable;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.IOControl;
@@ -99,11 +101,21 @@ public abstract class ApiConnection implements Closeable {
 		protected T buildResult(HttpContext context) throws Exception {
 			int code = response.getStatusLine().getStatusCode();
 
-			if (code == 200 || code == 201) {
+			switch (code) {
+			case HttpStatus.SC_OK:
+			case HttpStatus.SC_CREATED:
 				return buildSuccessResult(sb.toString(), context);
-			} else {
+			case HttpStatus.SC_BAD_REQUEST:
+			case HttpStatus.SC_FORBIDDEN:
 				ApiError error = json.readValue(sb.toString(), ApiError.class);
 				throw new ApiException(error);
+			default:
+				// TODO: Good idea to buffer the response in this case?
+				ContentType contentType =
+				        ContentType.getLenient(response.getEntity());
+				response.setEntity(
+				        new StringEntity(sb.toString(), contentType));
+				throw new UnexpectedResponseException(response);
 			}
 		}
 

@@ -11,14 +11,26 @@ import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.theInstance;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.entity.ContentType;
 import org.junit.Rule;
 import org.junit.Test;
 import org.threeten.bp.OffsetDateTime;
@@ -502,6 +514,139 @@ public class ApiConnectionIT {
 			MtBatchTextSmsResult result =
 			        conn.fetchBatch(batchId, testCallback).get();
 			assertThat(result, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
+	public void canHandle404WhenFetchingBatch() throws Throwable {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(404)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())
+		                        .withBody("BAD")));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		/*
+		 * The exception we'll receive in the callback. Need to store it to
+		 * verify that it is the same exception as received from #get().
+		 */
+		final AtomicReference<Exception> failException =
+		        new AtomicReference<Exception>();
+
+		try {
+			/*
+			 * Used to make sure callback and test thread are agreeing about the
+			 * failException variable.
+			 */
+			final CyclicBarrier barrier = new CyclicBarrier(2);
+
+			FutureCallback<MtBatchTextSmsResult> testCallback =
+			        new FutureCallback<MtBatchTextSmsResult>() {
+
+				        @Override
+				        public void failed(Exception exception) {
+					        if (!failException.compareAndSet(null,
+					                exception)) {
+						        fail("failed called multiple times");
+					        }
+
+					        try {
+						        barrier.await();
+					        } catch (Exception e) {
+						        throw new RuntimeException(e);
+					        }
+				        }
+
+				        @Override
+				        public void completed(MtBatchTextSmsResult result) {
+					        fail("batch unexpectedly completed: " + result);
+				        }
+
+				        @Override
+				        public void cancelled() {
+					        fail("batch unexpectedly cancelled");
+				        }
+
+			        };
+
+			Future<MtBatchTextSmsResult> future =
+			        conn.fetchBatch(batchId, testCallback);
+
+			// Give plenty of time for the callback to be called.
+			barrier.await(1, TimeUnit.SECONDS);
+
+			future.get();
+			fail("unexpected future get success");
+		} catch (ExecutionException executionException) {
+			/*
+			 * The exception cause should be the same as we received in the
+			 * callback.
+			 */
+			assertThat(failException.get(),
+			        is(theInstance(executionException.getCause())));
+
+			assertThat(executionException.getCause(),
+			        is(instanceOf(UnexpectedResponseException.class)));
+
+			UnexpectedResponseException ure =
+			        (UnexpectedResponseException) executionException.getCause();
+
+			assertThat(ure.getResponse(), notNullValue());
+
+			assertThat(ure.getResponse().getStatusLine()
+			        .getStatusCode(), is(404));
+
+			assertThat(
+			        ure.getResponse().getEntity().getContentType().getValue(),
+			        is(ContentType.TEXT_PLAIN.toString()));
+
+			byte[] buf = new byte[100];
+			int read;
+
+			InputStream contentStream = null;
+			try {
+				contentStream = ure.getResponse().getEntity().getContent();
+				read = contentStream.read(buf);
+			} catch (IOException ioe) {
+				throw new AssertionError(
+				        "unexpected exception: "
+				                + ioe.getMessage(),
+				        ioe);
+			} finally {
+				if (contentStream != null) {
+					try {
+						contentStream.close();
+					} catch (IOException ioe) {
+						throw new AssertionError(
+						        "unexpected exception: " + ioe.getMessage(),
+						        ioe);
+					}
+				}
+			}
+
+			assertThat(read, is(3));
+			assertThat(Arrays.copyOf(buf, 3),
+			        is(new byte[] { 'B', 'A', 'D' }));
 		} finally {
 			conn.close();
 		}
