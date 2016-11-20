@@ -153,27 +153,6 @@ public class ApiConnectionIT {
 
 		String expectedRequest = json.writeValueAsString(sms);
 
-		String response = String.join("\n",
-		        "{",
-		        "  'to': [",
-		        "    '123456789',",
-		        "    '987654321'",
-		        "  ],",
-		        "  'body': 'Hello, ${name}!',",
-		        "  'canceled': false,",
-		        "  'id': '" + batchId.id() + "',",
-		        "  'type' : 'mt_text',",
-		        "  'parameters' : {",
-		        "    'name' : {",
-		        "      '123456789' : 'Jane',",
-		        "      'default' : 'world'",
-		        "    }",
-		        "  },",
-		        "  'from': '12345',",
-		        "  'created_at': '2016-10-02T09:34:28.542Z',",
-		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
-		        "}").replace('\'', '"');
-
 		MtBatchTextSmsResult expectedResponse =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
@@ -185,6 +164,8 @@ public class ApiConnectionIT {
 		                .createdAt(smsTime)
 		                .modifiedAt(smsTime)
 		                .build();
+
+		String response = json.writeValueAsString(expectedResponse);
 
 		String path = "/xms/v1/" + username + "/batches";
 
@@ -450,20 +431,6 @@ public class ApiConnectionIT {
 		        542000000, ZoneOffset.UTC);
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
-		String response = String.join("\n",
-		        "{",
-		        "  'to': [",
-		        "    '123456789',",
-		        "    '987654321'",
-		        "  ],",
-		        "  'type' : 'mt_text',",
-		        "  'body': 'Hello, world!',",
-		        "  'canceled': false,",
-		        "  'id': '" + batchId.id() + "',",
-		        "  'from': '12345',",
-		        "  'created_at': '2016-10-02T09:34:28.542Z',",
-		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
-		        "}").replace('\'', '"');
 
 		final MtBatchTextSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
@@ -475,6 +442,8 @@ public class ApiConnectionIT {
 		                .createdAt(smsTime)
 		                .modifiedAt(smsTime)
 		                .build();
+
+		String response = json.writeValueAsString(expected);
 
 		wm.stubFor(get(
 		        urlEqualTo(path))
