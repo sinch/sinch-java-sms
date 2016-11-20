@@ -50,6 +50,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResultImpl;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
@@ -84,8 +85,6 @@ public class ApiConnectionIT {
 		                .body("Hello, world!")
 		                .build();
 
-		String expectedRequest = json.writeValueAsString(sms);
-
 		MtBatchTextSmsResult expectedResponse =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
@@ -97,16 +96,9 @@ public class ApiConnectionIT {
 		                .modifiedAt(smsTime)
 		                .build();
 
-		String response = json.writeValueAsString(expectedResponse);
-
 		String path = "/xms/v1/" + username + "/batches";
 
-		wm.stubFor(post(urlEqualTo(path))
-		        .willReturn(aResponse()
-		                .withStatus(201)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
-		                .withBody(response)));
+		stubPostResponse(expectedResponse, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -121,14 +113,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(postRequestedFor(
-		        urlEqualTo(path))
-		                .withRequestBody(equalToJson(expectedRequest))
-		                .withHeader("Content-Type",
-		                        matching("application/json; charset=UTF-8"))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer toktok")));
+		verifyPostRequest(path, sms);
 	}
 
 	@Test
@@ -151,8 +136,6 @@ public class ApiConnectionIT {
 		                                .build())
 		                .build();
 
-		String expectedRequest = json.writeValueAsString(sms);
-
 		MtBatchTextSmsResult expectedResponse =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
@@ -165,20 +148,13 @@ public class ApiConnectionIT {
 		                .modifiedAt(smsTime)
 		                .build();
 
-		String response = json.writeValueAsString(expectedResponse);
-
 		String path = "/xms/v1/" + username + "/batches";
 
-		wm.stubFor(post(urlEqualTo(path))
-		        .willReturn(aResponse()
-		                .withStatus(201)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
-		                .withBody(response)));
+		stubPostResponse(expectedResponse, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
-		        .token("tok")
+		        .token("toktok")
 		        .endpointHost("localhost", wm.port(), "http")
 		        .start();
 
@@ -189,14 +165,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(postRequestedFor(
-		        urlEqualTo(path))
-		                .withRequestBody(equalToJson(expectedRequest))
-		                .withHeader("Content-Type",
-		                        matching("application/json; charset=UTF-8"))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyPostRequest(path, sms);
 	}
 
 	@Test(expected = ApiException.class)
@@ -308,8 +277,6 @@ public class ApiConnectionIT {
 		                .unsetExpireAt()
 		                .build();
 
-		String expectedRequest = json.writeValueAsString(sms);
-
 		MtBatchTextSmsResult expectedResponse =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from(sms.from())
@@ -321,16 +288,9 @@ public class ApiConnectionIT {
 		                .modifiedAt(smsTime)
 		                .build();
 
-		String response = json.writeValueAsString(expectedResponse);
-
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		wm.stubFor(post(urlEqualTo(path))
-		        .willReturn(aResponse()
-		                .withStatus(201)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
-		                .withBody(response)));
+		stubPostResponse(expectedResponse, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -346,14 +306,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(postRequestedFor(
-		        urlEqualTo(path))
-		                .withRequestBody(equalToJson(expectedRequest))
-		                .withHeader("Content-Type",
-		                        matching("application/json; charset=UTF-8"))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer toktok")));
+		verifyPostRequest(path, sms);
 	}
 
 	@Test
@@ -374,8 +327,6 @@ public class ApiConnectionIT {
 		                .unsetExpireAt()
 		                .build();
 
-		String expectedRequest = json.writeValueAsString(sms);
-
 		MtBatchBinarySmsResult expectedResponse =
 		        MtBatchBinarySmsResultImpl.builder()
 		                .from(sms.from())
@@ -388,16 +339,9 @@ public class ApiConnectionIT {
 		                .modifiedAt(smsTime)
 		                .build();
 
-		String response = json.writeValueAsString(expectedResponse);
-
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		wm.stubFor(post(urlEqualTo(path))
-		        .willReturn(aResponse()
-		                .withStatus(201)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
-		                .withBody(response)));
+		stubPostResponse(expectedResponse, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -413,14 +357,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(postRequestedFor(
-		        urlEqualTo(path))
-		                .withRequestBody(equalToJson(expectedRequest))
-		                .withHeader("Content-Type",
-		                        matching("application/json; charset=UTF-8"))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer toktok")));
+		verifyPostRequest(path, sms);
 	}
 
 	@Test
@@ -850,6 +787,53 @@ public class ApiConnectionIT {
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
 		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	/**
+	 * Helper that sets up WireMock to respond using a JSON body.
+	 * 
+	 * @param response
+	 *            the response to give, serialized to JSON
+	 * @param path
+	 *            the path on which to listen
+	 * @throws JsonProcessingException
+	 *             if the given response object could not be serialized
+	 */
+	private void stubPostResponse(Object response, String path)
+	        throws JsonProcessingException {
+		byte[] body = json.writeValueAsBytes(response);
+
+		wm.stubFor(post(urlEqualTo(path))
+		        .willReturn(aResponse()
+		                .withStatus(201)
+		                .withHeader("Content-Type",
+		                        "application/json; charset=UTF-8")
+		                .withBody(body)));
+	}
+
+	/**
+	 * Helper that sets up WireMock to verify that a request matches a given
+	 * object in JSON format.
+	 * 
+	 * @param path
+	 *            the request path to match
+	 * @param request
+	 *            the request object whose JSON serialization should match
+	 * @throws JsonProcessingException
+	 *             if the given request object could not be serialized
+	 */
+	private void verifyPostRequest(String path, Object request)
+	        throws JsonProcessingException {
+		String expectedRequest = json.writeValueAsString(request);
+
+		wm.verify(postRequestedFor(
+		        urlEqualTo(path))
+		                .withRequestBody(equalToJson(expectedRequest))
+		                .withHeader("Content-Type",
+		                        matching("application/json; charset=UTF-8"))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer toktok")));
 	}
 
 }
