@@ -37,7 +37,7 @@ public class BatchFilterTest {
 		assertThat(actual, is(expected));
 	}
 
-	@Property(trials = 50)
+	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> from, Set<String> tags, LocalDate startDate,
 	        LocalDate endDate) throws Exception {

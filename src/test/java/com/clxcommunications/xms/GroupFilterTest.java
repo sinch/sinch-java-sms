@@ -30,7 +30,7 @@ public class GroupFilterTest {
 		assertThat(actual, is(expected));
 	}
 
-	@Property(trials = 50)
+	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> tags) throws Exception {
 		GroupFilter filter = ClxApi.buildGroupFilter()
