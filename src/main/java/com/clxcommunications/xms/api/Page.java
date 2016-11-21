@@ -31,7 +31,7 @@ public abstract class Page<T> implements Iterable<T> {
 	@JsonProperty("count")
 	public abstract int numPages();
 
-	protected abstract List<T> content();
+	public abstract List<T> content();
 
 	/**
 	 * Returns an iterator that traverses the content of this page.

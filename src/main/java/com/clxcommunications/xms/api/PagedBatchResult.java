@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.immutables.value.Value;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
@@ -12,12 +12,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = PagedBatchResultImpl.Builder.class)
 public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
 
-	public abstract List<MtBatchSmsResult> batches();
-
-	@JsonIgnore
+	@JsonProperty("batches")
 	@Override
-	protected final List<MtBatchSmsResult> content() {
-		return batches();
-	}
+	public abstract List<MtBatchSmsResult> content();
 
 }
