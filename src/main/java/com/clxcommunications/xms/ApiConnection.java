@@ -37,6 +37,7 @@ import org.immutables.value.Value.Style.ImplementationVisibility;
 
 import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
@@ -460,6 +461,34 @@ public abstract class ApiConnection implements Closeable {
 		}
 	}
 
+	/**
+	 * Attempts to send the given batch synchronously. Internally this uses an
+	 * asynchronous call and blocks until it completes.
+	 * 
+	 * @param sms
+	 *            the batch to send
+	 * @return a batch submission result
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ExecutionException
+	 *             if the send threw an unknown exception
+	 * @throws ApiException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 * @throws JsonProcessingException
+	 *             if JSON deserialization failed
+	 */
+	public MtBatchBinarySmsResult sendBatch(MtBatchBinarySmsCreate sms)
+	        throws InterruptedException, ExecutionException, ApiException,
+	        JsonProcessingException, UnexpectedResponseException {
+		try {
+			return sendBatchAsync(sms, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
+	}
+
 	public Future<MtBatchTextSmsResult> sendBatchAsync(MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
 		HttpPost httpPost = post(batchesEndpoint(), sms);
@@ -468,6 +497,20 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
 		        new BatchTextSmsResultAsyncConsumer();
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	public Future<MtBatchBinarySmsResult> sendBatchAsync(
+	        MtBatchBinarySmsCreate sms,
+	        FutureCallback<MtBatchBinarySmsResult> callback) {
+		HttpPost httpPost = post(batchesEndpoint(), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
+		        new BatchBinarySmsResultAsyncConsumer();
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));

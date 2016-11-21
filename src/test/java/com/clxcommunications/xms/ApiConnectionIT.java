@@ -33,12 +33,14 @@ import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.junit.Rule;
 import org.junit.Test;
+import org.threeten.bp.Clock;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResultImpl;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -98,7 +100,54 @@ public class ApiConnectionIT {
 	        new TestLoggerFactoryResetRule();
 
 	@Test
-	public void canPostSimpleBatch() throws Throwable {
+	public void canPostBinaryBatch() throws Throwable {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
+
+		MtBatchBinarySmsCreate request =
+		        ClxApi.buildBatchBinarySms()
+		                .from("12345")
+		                .addTo("123456789")
+		                .addTo("987654321")
+		                .body("body".getBytes(TestUtils.US_ASCII))
+		                .udh("udh".getBytes(TestUtils.US_ASCII))
+		                .build();
+
+		MtBatchBinarySmsResult expected =
+		        MtBatchBinarySmsResultImpl.builder()
+		                .from(request.from())
+		                .to(request.to())
+		                .body(request.body())
+		                .udh(request.udh())
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(time)
+		                .modifiedAt(time)
+		                .build();
+
+		String path = "/xms/v1/" + username + "/batches";
+
+		stubPostResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			MtBatchBinarySmsResult actual = conn.sendBatch(request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canPostTextBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -144,7 +193,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canPostBatchWithSubstitutions() throws Throwable {
+	public void canPostTextBatchWithSubstitutions() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
