@@ -12,7 +12,7 @@ import com.clxcommunications.xms.api.ParameterValuesImpl;
 /**
  * A collection of convenient static methods for generating CLX API objects.
  */
-public final class ClxApi {
+public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static final int MAX_BODY_BYTES = 140;
 
