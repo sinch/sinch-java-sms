@@ -404,6 +404,34 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Unwrap exceptions for synchronous send methods. This helper will examine
+	 * an {@link ExecutionException} object and unwrap and throw it's cause if
+	 * it makes sense for a synchronous call.
+	 * 
+	 * @param e
+	 *            the exception to examine
+	 * @return returns <code>e</code>
+	 * @throws ApiException
+	 * @throws UnexpectedResponseException
+	 * @throws JsonProcessingException
+	 * @throws ExecutionException
+	 */
+	private ExecutionException maybeUnwrapExecutionException(
+	        ExecutionException e)
+	        throws ApiException, UnexpectedResponseException,
+	        JsonProcessingException, ExecutionException {
+		if (e.getCause() instanceof ApiException) {
+			throw (ApiException) e.getCause();
+		} else if (e.getCause() instanceof UnexpectedResponseException) {
+			throw (UnexpectedResponseException) e.getCause();
+		} else if (e.getCause() instanceof JsonProcessingException) {
+			throw (JsonProcessingException) e.getCause();
+		}
+
+		return e;
+	}
+
+	/**
 	 * Attempts to send the given batch synchronously. Internally this uses an
 	 * asynchronous call and blocks until it completes.
 	 * 
@@ -417,21 +445,18 @@ public abstract class ApiConnection implements Closeable {
 	 *             {@link ApiException}
 	 * @throws ApiException
 	 *             if the server response indicated an error
-	 * @throws JsonParseException
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 * @throws JsonProcessingException
+	 *             if JSON deserialization failed
 	 */
 	public MtBatchTextSmsResult sendBatch(MtBatchTextSmsCreate sms)
 	        throws InterruptedException, ExecutionException, ApiException,
-	        JsonParseException {
+	        JsonProcessingException, UnexpectedResponseException {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof ApiException) {
-				throw (ApiException) e.getCause();
-			} else if (e.getCause() instanceof JsonParseException) {
-				throw (JsonParseException) e.getCause();
-			} else {
-				throw e;
-			}
+			throw maybeUnwrapExecutionException(e);
 		}
 	}
 
