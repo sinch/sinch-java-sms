@@ -74,15 +74,19 @@ public abstract class ApiConnection implements Closeable {
 
 	}
 
-	private abstract class JsonApiAsyncConsumer<T>
-	        extends AsyncCharConsumer<T> {
+	private class JsonApiAsyncConsumer<T> extends AsyncCharConsumer<T> {
 
+		private final Class<T> jsonClass;
 		private HttpResponse response;
 		private StringBuilder sb;
 
+		public JsonApiAsyncConsumer(Class<T> jsonClass) {
+			this.jsonClass = jsonClass;
+		}
+
 		@Override
-		protected void onCharReceived(CharBuffer buf,
-		        IOControl ioctrl) throws IOException {
+		protected void onCharReceived(CharBuffer buf, IOControl ioctrl)
+		        throws IOException {
 			sb.append(buf.toString());
 		}
 
@@ -94,9 +98,10 @@ public abstract class ApiConnection implements Closeable {
 		}
 
 		@Nonnull
-		protected abstract T buildSuccessResult(String str,
-		        HttpContext context)
-		        throws JsonParseException, JsonMappingException, IOException;
+		protected T buildSuccessResult(String str, HttpContext context)
+		        throws JsonParseException, JsonMappingException, IOException {
+			return json.readValue(str, jsonClass);
+		}
 
 		@Override
 		protected T buildResult(HttpContext context) throws Exception {
@@ -118,59 +123,6 @@ public abstract class ApiConnection implements Closeable {
 				        new StringEntity(sb.toString(), contentType));
 				throw new UnexpectedResponseException(response);
 			}
-		}
-
-	}
-
-	private final class BatchSmsResultAsyncConsumer
-	        extends JsonApiAsyncConsumer<MtBatchSmsResult> {
-
-		@Override
-		protected MtBatchSmsResult buildSuccessResult(String str,
-		        HttpContext context) throws JsonParseException,
-		        JsonMappingException, IOException {
-			return json.readValue(str, MtBatchSmsResult.class);
-		}
-
-	}
-
-	private final class BatchTextSmsResultAsyncConsumer
-	        extends JsonApiAsyncConsumer<MtBatchTextSmsResult> {
-
-		@Override
-		protected MtBatchTextSmsResult buildSuccessResult(String str,
-		        HttpContext context) throws JsonParseException,
-		        JsonMappingException, IOException {
-			return json.readValue(str, MtBatchTextSmsResult.class);
-		}
-
-	}
-
-	private final class BatchBinarySmsResultAsyncConsumer
-	        extends JsonApiAsyncConsumer<MtBatchBinarySmsResult> {
-
-		@Override
-		protected MtBatchBinarySmsResult buildSuccessResult(String str,
-		        HttpContext context) throws JsonParseException,
-		        JsonMappingException, IOException {
-			return json.readValue(str, MtBatchBinarySmsResult.class);
-		}
-
-	}
-
-	private final class PagedResultAsyncConsumer<P extends Page<T>, T>
-	        extends JsonApiAsyncConsumer<Page<T>> {
-
-		final private Class<P> clazz;
-
-		private PagedResultAsyncConsumer(Class<P> clazz) {
-			this.clazz = clazz;
-		}
-
-		@Override
-		protected Page<T> buildSuccessResult(String str, HttpContext context)
-		        throws JsonParseException, JsonMappingException, IOException {
-			return json.readValue(str, clazz);
 		}
 
 	}
@@ -355,6 +307,20 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Helper that produces a HTTP consumer that consumes the given class as a
+	 * JSON object.
+	 * 
+	 * @param clazz
+	 *            the class whose JSON representation is consumed
+	 * @return an HTTP consumer
+	 */
+	@SuppressWarnings("unchecked")
+	private <T, P extends T> JsonApiAsyncConsumer<T> jsonAsyncConsumer(
+	        Class<P> clazz) {
+		return (JsonApiAsyncConsumer<T>) new JsonApiAsyncConsumer<P>(clazz);
+	}
+
+	/**
 	 * Posts a JSON serialization of the given object to the given endpoint.
 	 * 
 	 * @param endpoint
@@ -496,7 +462,7 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
-		        new BatchTextSmsResultAsyncConsumer();
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
@@ -510,7 +476,7 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
-		        new BatchBinarySmsResultAsyncConsumer();
+		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
@@ -536,7 +502,7 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
-		        new BatchTextSmsResultAsyncConsumer();
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
@@ -562,7 +528,7 @@ public abstract class ApiConnection implements Closeable {
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> consumer =
-		        new BatchBinarySmsResultAsyncConsumer();
+		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
@@ -585,7 +551,8 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
 		HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
-		        new BatchSmsResultAsyncConsumer();
+		        new JsonApiAsyncConsumer<MtBatchSmsResult>(
+		                MtBatchSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
@@ -617,8 +584,7 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
 		HttpAsyncResponseConsumer<Page<MtBatchSmsResult>> consumer =
-		        new PagedResultAsyncConsumer<PagedBatchResult, MtBatchSmsResult>(
-		                PagedBatchResult.class);
+		        jsonAsyncConsumer(PagedBatchResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
@@ -636,7 +602,7 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
-		        new BatchTextSmsResultAsyncConsumer();
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
