@@ -59,8 +59,7 @@ public abstract class ApiConnection implements Closeable {
 	public static class Builder extends ApiConnectionImpl.Builder {
 
 		public Builder endpointHost(String hostname, int port, String scheme) {
-			this.endpointHost(new HttpHost(hostname, port, scheme));
-			return this;
+			return this.endpointHost(new HttpHost(hostname, port, scheme));
 		}
 
 		@Override
