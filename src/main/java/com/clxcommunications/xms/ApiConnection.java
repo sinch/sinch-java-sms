@@ -51,11 +51,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Value.Immutable(copy = false)
-@Value.Style(depluralize = true, jdkOnly = true, from = "using",
-        build = "start", visibility = ImplementationVisibility.PACKAGE)
+@Value.Style(depluralize = true, jdkOnly = true,
+        overshadowImplementation = true, from = "using", build = "start",
+        typeImmutable = "*Impl", visibility = ImplementationVisibility.PACKAGE)
 public abstract class ApiConnection implements Closeable {
 
-	public static class Builder extends ImmutableApiConnection.Builder {
+	public static class Builder extends ApiConnectionImpl.Builder {
 
 		public Builder endpointHost(String hostname, int port, String scheme) {
 			this.endpointHost(new HttpHost(hostname, port, scheme));
@@ -63,8 +64,8 @@ public abstract class ApiConnection implements Closeable {
 		}
 
 		@Override
-		public ImmutableApiConnection start() {
-			ImmutableApiConnection conn = super.start();
+		public ApiConnection start() {
+			ApiConnection conn = super.start();
 
 			conn.httpClient().start();
 
