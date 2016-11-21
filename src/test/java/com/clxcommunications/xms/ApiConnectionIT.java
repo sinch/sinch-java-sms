@@ -101,10 +101,10 @@ public class ApiConnectionIT {
 	public void canPostSimpleBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		MtBatchTextSmsCreate sms =
+		MtBatchTextSmsCreate request =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -112,20 +112,20 @@ public class ApiConnectionIT {
 		                .body("Hello, world!")
 		                .build();
 
-		MtBatchTextSmsResult expectedResponse =
+		MtBatchTextSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
-		                .from(sms.from())
-		                .to(sms.to())
-		                .body(sms.body())
+		                .from(request.from())
+		                .to(request.to())
+		                .body(request.body())
 		                .canceled(false)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		stubPostResponse(expectedResponse, path);
+		stubPostResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -134,23 +134,23 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult result = conn.sendBatch(sms);
-			assertThat(result, is(expectedResponse));
+			MtBatchTextSmsResult actual = conn.sendBatch(request);
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
 
-		verifyPostRequest(path, sms);
+		verifyPostRequest(path, request);
 	}
 
 	@Test
 	public void canPostBatchWithSubstitutions() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		MtBatchTextSmsCreate sms =
+		MtBatchTextSmsCreate request =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -163,21 +163,21 @@ public class ApiConnectionIT {
 		                                .build())
 		                .build();
 
-		MtBatchTextSmsResult expectedResponse =
+		MtBatchTextSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
-		                .from(sms.from())
-		                .to(sms.to())
-		                .body(sms.body())
-		                .parameters(sms.parameters())
+		                .from(request.from())
+		                .to(request.to())
+		                .body(request.body())
+		                .parameters(request.parameters())
 		                .canceled(false)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		stubPostResponse(expectedResponse, path);
+		stubPostResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -186,20 +186,20 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult result = conn.sendBatch(sms);
-			assertThat(result, is(expectedResponse));
+			MtBatchTextSmsResult actual = conn.sendBatch(request);
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
 
-		verifyPostRequest(path, sms);
+		verifyPostRequest(path, request);
 	}
 
 	@Test(expected = ApiException.class)
 	public void canHandleBatchPostWithError() throws Throwable {
 		String username = TestUtils.freshUsername();
 
-		MtBatchTextSmsCreate sms =
+		MtBatchTextSmsCreate request =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -227,7 +227,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			conn.sendBatch(sms);
+			conn.sendBatch(request);
 			fail("Expected exception, got none");
 		} catch (ApiException e) {
 			assertThat(e.getCode(), is(apiError.code()));
@@ -243,7 +243,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		MtBatchTextSmsCreate sms =
+		MtBatchTextSmsCreate request =
 		        ClxApi.buildBatchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
@@ -282,7 +282,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			conn.sendBatch(sms);
+			conn.sendBatch(request);
 			fail("Expected exception, got none");
 		} finally {
 			conn.close();
@@ -293,10 +293,10 @@ public class ApiConnectionIT {
 	public void canUpdateSimpleTextBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		MtBatchTextSmsUpdate sms =
+		MtBatchTextSmsUpdate request =
 		        ClxApi.buildBatchTextSmsUpdate()
 		                .from("12345")
 		                .body("Hello, world!")
@@ -304,20 +304,20 @@ public class ApiConnectionIT {
 		                .unsetExpireAt()
 		                .build();
 
-		MtBatchTextSmsResult expectedResponse =
+		MtBatchTextSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
-		                .from(sms.from())
+		                .from(request.from())
 		                .addTo("123")
-		                .body(sms.body())
+		                .body(request.body())
 		                .canceled(false)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		stubPostResponse(expectedResponse, path);
+		stubPostResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -326,49 +326,49 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult result =
-			        conn.updateBatchAsync(batchId, sms, null).get();
-			assertThat(result, is(expectedResponse));
+			MtBatchTextSmsResult actual =
+			        conn.updateBatchAsync(batchId, request, null).get();
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
 
-		verifyPostRequest(path, sms);
+		verifyPostRequest(path, request);
 	}
 
 	@Test
 	public void canUpdateSimpleBinaryBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
 		Set<String> tags = new TreeSet<String>();
 		tags.add("tag1");
 		tags.add("tag2");
 
-		MtBatchBinarySmsUpdate sms =
+		MtBatchBinarySmsUpdate request =
 		        ClxApi.buildBatchBinarySmsUpdate()
 		                .from("12345")
 		                .body("howdy".getBytes(TestUtils.US_ASCII))
 		                .unsetExpireAt()
 		                .build();
 
-		MtBatchBinarySmsResult expectedResponse =
+		MtBatchBinarySmsResult expected =
 		        MtBatchBinarySmsResultImpl.builder()
-		                .from(sms.from())
+		                .from(request.from())
 		                .addTo("123")
-		                .body(sms.body())
+		                .body(request.body())
 		                .udh((byte) 1, (byte) 0xff)
 		                .canceled(false)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		stubPostResponse(expectedResponse, path);
+		stubPostResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -377,21 +377,21 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchBinarySmsResult result =
-			        conn.updateBatchAsync(batchId, sms, null).get();
-			assertThat(result, is(expectedResponse));
+			MtBatchBinarySmsResult actual =
+			        conn.updateBatchAsync(batchId, request, null).get();
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
 
-		verifyPostRequest(path, sms);
+		verifyPostRequest(path, request);
 	}
 
 	@Test
 	public void canFetchBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
@@ -403,8 +403,8 @@ public class ApiConnectionIT {
 		                .body("Hello, world!")
 		                .canceled(false)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String response = json.writeValueAsString(expected);
@@ -434,9 +434,9 @@ public class ApiConnectionIT {
 
 			        };
 
-			MtBatchTextSmsResult result =
+			MtBatchTextSmsResult actual =
 			        conn.fetchBatch(batchId, testCallback).get();
-			assertThat(result, is(expected));
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
@@ -575,7 +575,7 @@ public class ApiConnectionIT {
 	public void canCancelBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
-		OffsetDateTime smsTime = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
@@ -586,8 +586,8 @@ public class ApiConnectionIT {
 		                .body("Hello, world!")
 		                .canceled(true)
 		                .id(batchId)
-		                .createdAt(smsTime)
-		                .modifiedAt(smsTime)
+		                .createdAt(time)
+		                .modifiedAt(time)
 		                .build();
 
 		String response = json.writeValueAsString(expected);
@@ -663,9 +663,9 @@ public class ApiConnectionIT {
 			PagedFetcher<MtBatchSmsResult> fetcher =
 			        conn.fetchBatches(filter, testCallback);
 
-			Page<MtBatchSmsResult> result =
+			Page<MtBatchSmsResult> actual =
 			        fetcher.fetchAsync(0, testCallback).get();
-			assertThat(result, is(expected));
+			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
 		}
