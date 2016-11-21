@@ -388,7 +388,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchBatch() throws Throwable {
+	public void canFetchTextBatch() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -396,7 +396,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		final MtBatchTextSmsResult expected =
+		final MtBatchSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
@@ -424,17 +424,79 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<MtBatchTextSmsResult> testCallback =
-			        new TestCallback<MtBatchTextSmsResult>() {
+			FutureCallback<MtBatchSmsResult> testCallback =
+			        new TestCallback<MtBatchSmsResult>() {
 
 				        @Override
-				        public void completed(MtBatchTextSmsResult result) {
+				        public void completed(MtBatchSmsResult result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			MtBatchTextSmsResult actual =
+			MtBatchSmsResult actual =
+			        conn.fetchBatch(batchId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
+	public void canFetchBinaryBatch() throws Throwable {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+
+		final MtBatchSmsResult expected =
+		        MtBatchBinarySmsResultImpl.builder()
+		                .from("12345")
+		                .addTo("123456789", "987654321")
+		                .body((byte) 0xf0, (byte) 0x0f)
+		                .udh((byte) 0x50, (byte) 0x05)
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(time)
+		                .modifiedAt(time)
+		                .build();
+
+		String response = json.writeValueAsString(expected);
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			FutureCallback<MtBatchSmsResult> testCallback =
+			        new TestCallback<MtBatchSmsResult>() {
+
+				        @Override
+				        public void completed(MtBatchSmsResult result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			MtBatchSmsResult actual =
 			        conn.fetchBatch(batchId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -483,8 +545,8 @@ public class ApiConnectionIT {
 			 */
 			final CyclicBarrier barrier = new CyclicBarrier(2);
 
-			FutureCallback<MtBatchTextSmsResult> testCallback =
-			        new TestCallback<MtBatchTextSmsResult>() {
+			FutureCallback<MtBatchSmsResult> testCallback =
+			        new TestCallback<MtBatchSmsResult>() {
 
 				        @Override
 				        public void failed(Exception exception) {
@@ -502,7 +564,7 @@ public class ApiConnectionIT {
 
 			        };
 
-			Future<MtBatchTextSmsResult> future =
+			Future<MtBatchSmsResult> future =
 			        conn.fetchBatch(batchId, testCallback);
 
 			// Give plenty of time for the callback to be called.

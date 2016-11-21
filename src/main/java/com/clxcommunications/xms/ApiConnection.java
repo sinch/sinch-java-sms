@@ -120,6 +120,18 @@ public abstract class ApiConnection implements Closeable {
 
 	}
 
+	private final class BatchSmsResultAsyncConsumer
+	        extends JsonApiAsyncConsumer<MtBatchSmsResult> {
+
+		@Override
+		protected MtBatchSmsResult buildSuccessResult(String str,
+		        HttpContext context) throws JsonParseException,
+		        JsonMappingException, IOException {
+			return json.readValue(str, MtBatchSmsResult.class);
+		}
+
+	}
+
 	private final class BatchTextSmsResultAsyncConsumer
 	        extends JsonApiAsyncConsumer<MtBatchTextSmsResult> {
 
@@ -497,15 +509,15 @@ public abstract class ApiConnection implements Closeable {
 	 *            a callback that is activated at call completion
 	 * @return a future yielding the updated status of the batch
 	 */
-	public Future<MtBatchTextSmsResult> fetchBatch(BatchId batchId,
-	        FutureCallback<MtBatchTextSmsResult> callback) {
+	public Future<MtBatchSmsResult> fetchBatch(BatchId batchId,
+	        FutureCallback<MtBatchSmsResult> callback) {
 		HttpGet req = get(batchEndpoint(batchId));
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
-		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
-		        new BatchTextSmsResultAsyncConsumer();
+		HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
+		        new BatchSmsResultAsyncConsumer();
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
