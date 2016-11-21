@@ -20,7 +20,9 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CyclicBarrier;
@@ -860,6 +862,127 @@ public class ApiConnectionIT {
 			Page<MtBatchSmsResult> actual2 =
 			        fetcher.fetchAsync(1, testCallback).get();
 			assertThat(actual2, is(expected2));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path1))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path2))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
+	public void canIterateOverBatchesWithTwoPages() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchFilter filter = BatchFilterImpl.builder().build();
+
+		// Prepare first page.
+		String path1 = "/xms/v1/" + username + "/batches?page=0";
+
+		final Page<MtBatchSmsResult> expected1 =
+		        PagedBatchResultImpl.builder()
+		                .page(0)
+		                .size(1)
+		                .numPages(2)
+		                .addContent(
+		                        MtBatchTextSmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body("body")
+		                                .canceled(false)
+		                                .build())
+		                .build();
+		String response1 = json.writeValueAsString(expected1);
+
+		wm.stubFor(get(
+		        urlEqualTo(path1))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response1)));
+
+		// Prepare second page.
+		String path2 = "/xms/v1/" + username + "/batches?page=1";
+
+		final Page<MtBatchSmsResult> expected2 =
+		        PagedBatchResultImpl.builder()
+		                .page(1)
+		                .size(2)
+		                .numPages(2)
+		                .addContent(
+		                        MtBatchBinarySmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body((byte) 0)
+		                                .udh((byte) 1)
+		                                .canceled(false)
+		                                .build())
+		                .addContent(
+		                        MtBatchTextSmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body("body")
+		                                .canceled(false)
+		                                .build())
+		                .build();
+		String response2 = json.writeValueAsString(expected2);
+
+		wm.stubFor(get(
+		        urlEqualTo(path2))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response2)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			FutureCallback<Page<MtBatchSmsResult>> testCallback =
+			        new TestCallback<Page<MtBatchSmsResult>>() {
+
+				        @Override
+				        public void completed(Page<MtBatchSmsResult> result) {
+					        switch (result.page()) {
+					        case 0:
+						        assertThat(result, is(expected1));
+						        break;
+					        case 1:
+						        assertThat(result, is(expected2));
+						        break;
+					        default:
+						        fail("unexpected page: " + result);
+					        }
+				        }
+
+			        };
+
+			PagedFetcher<MtBatchSmsResult> fetcher =
+			        conn.fetchBatches(filter, testCallback);
+
+			List<MtBatchSmsResult> actuals =
+			        new ArrayList<MtBatchSmsResult>();
+
+			for (MtBatchSmsResult result : fetcher.elements()) {
+				actuals.add(result);
+			}
+
+			List<MtBatchSmsResult> expecteds =
+			        new ArrayList<MtBatchSmsResult>();
+			expecteds.addAll(expected1.content());
+			expecteds.addAll(expected2.content());
+
+			assertThat(actuals, is(expecteds));
 		} finally {
 			conn.close();
 		}

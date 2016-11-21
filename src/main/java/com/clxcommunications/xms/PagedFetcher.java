@@ -1,7 +1,7 @@
 package com.clxcommunications.xms;
 
 import java.net.URISyntaxException;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -99,23 +99,119 @@ public abstract class PagedFetcher<T> {
 	 * Returns an iterable object that traverses all fetched elements across all
 	 * associated pages. Note, internally this is done by iterating over fetched
 	 * pages and, when necessary, fetching new pages.
+	 * <p>
+	 * Note, since multiple fetches may be necessary to iterate over all batches
+	 * it is possible that concurrent changes on the server will cause the same
+	 * batch to be iterated over twice.
+	 * <p>
+	 * Note, since the returned iterator will perform asynchronous network
+	 * traffic it is possible that the {@link Iterator#hasNext()} and
+	 * {@link Iterator#next()} methods throws {@link RuntimeException} having as
+	 * cause an {@link ExecutionException}.
 	 * 
 	 * @return a non-null iterable
+	 * @throws RuntimeException
+	 *             if the background page fetching failed
 	 */
 	public Iterable<T> elements() {
-		// TODO Implement
-		return Collections.emptyList();
+
+		return new Iterable<T>() {
+
+			@Override
+			public Iterator<T> iterator() {
+
+				final Iterator<Page<T>> pageIt = pages().iterator();
+
+				return new Iterator<T>() {
+
+					Iterator<T> pageElemIt = pageIt.next().iterator();
+
+					@Override
+					public boolean hasNext() {
+						if (!pageElemIt.hasNext()) {
+							if (!pageIt.hasNext()) {
+								return false;
+							} else {
+								pageElemIt = pageIt.next().iterator();
+								return pageElemIt.hasNext();
+							}
+						} else {
+							return true;
+						}
+					}
+
+					@Override
+					public T next() {
+						if (!pageElemIt.hasNext()) {
+							pageElemIt = pageIt.next().iterator();
+						}
+
+						return pageElemIt.next();
+					}
+
+				};
+
+			}
+
+		};
 	}
 
 	/**
 	 * Returns an iterable object that fetches and traverses all matching pages.
 	 * Note, each iteration will result in a network fetch.
+	 * <p>
+	 * This iterator will always yield at least one page, which might be empty.
+	 * <p>
+	 * Note, since the returned iterator will perform asynchronous network
+	 * traffic it is possible that the {@link Iterator#next()} method throws
+	 * {@link RuntimeException} having as cause an {@link ExecutionException}.
 	 * 
 	 * @return a non-null iterable
+	 * @throws RuntimeException
+	 *             if the background page fetching failed
 	 */
 	public Iterable<Page<T>> pages() {
-		// TODO Implement
-		return Collections.emptyList();
+
+		return new Iterable<Page<T>>() {
+
+			@Override
+			public Iterator<Page<T>> iterator() {
+
+				return new Iterator<Page<T>>() {
+
+					Page<T> page = null;
+
+					@Override
+					public boolean hasNext() {
+						if (page == null) {
+							return true;
+						} else {
+							return page.page() + 1 < page.numPages();
+						}
+					}
+
+					@Override
+					public Page<T> next() {
+						int pageToFetch =
+						        (page == null) ? 0 : page.page() + 1;
+
+						try {
+							page = fetchAsync(pageToFetch, null).get();
+						} catch (InterruptedException e) {
+							// Interrupt the thread to let upstream code know.
+							Thread.currentThread().interrupt();
+						} catch (ExecutionException e) {
+							throw new RuntimeException(e);
+						}
+
+						return page;
+					}
+
+				};
+
+			}
+
+		};
 	}
 
 }
