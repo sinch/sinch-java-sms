@@ -244,8 +244,8 @@ public class ApiConnectionIT {
 		verifyPostRequest(path, request);
 	}
 
-	@Test(expected = ApiException.class)
-	public void canHandleBatchPostWithError() throws Throwable {
+	@Test
+	public void canHandleBatchPostWithError() throws Exception {
 		String username = TestUtils.freshUsername();
 
 		MtBatchTextSmsCreate request =
@@ -275,7 +275,6 @@ public class ApiConnectionIT {
 		} catch (ApiException e) {
 			assertThat(e.getCode(), is(apiError.code()));
 			assertThat(e.getText(), is(apiError.text()));
-			throw e;
 		} finally {
 			conn.close();
 		}
