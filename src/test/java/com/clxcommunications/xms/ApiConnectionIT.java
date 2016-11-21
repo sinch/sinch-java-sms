@@ -270,7 +270,7 @@ public class ApiConnectionIT {
 
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
-		                .withStatus(400)
+		                .withStatus(201)
 		                .withHeader("Content-Type",
 		                        "application/json; charset=UTF-8")
 		                .withBody(response)));
