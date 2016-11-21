@@ -58,6 +58,33 @@ import uk.org.lidalia.slf4jtest.TestLoggerFactoryResetRule;
 
 public class ApiConnectionIT {
 
+	/**
+	 * A convenient {@link FutureCallback} for use in tests. By default all
+	 * callback methods will call {@link #fail(String)}. Override the one that
+	 * should succeed.
+	 * 
+	 * @param <T>
+	 *            the callback result type
+	 */
+	private static class TestCallback<T> implements FutureCallback<T> {
+
+		@Override
+		public void failed(Exception e) {
+			fail("API call unexpectedly failed with '" + e.getMessage() + "'");
+		}
+
+		@Override
+		public void completed(T result) {
+			fail("API call unexpectedly completed with '" + result + "'");
+		}
+
+		@Override
+		public void cancelled() {
+			fail("API call unexpectedly cancelled");
+		}
+
+	}
+
 	private final ApiObjectMapper json = new ApiObjectMapper();
 
 	@Rule
@@ -398,24 +425,13 @@ public class ApiConnectionIT {
 
 		try {
 			FutureCallback<MtBatchTextSmsResult> testCallback =
-			        new FutureCallback<MtBatchTextSmsResult>() {
-
-				        @Override
-				        public void failed(Exception ex) {
-					        fail("batch unexpectedly failed: "
-					                + ex.getMessage());
-
-				        }
+			        new TestCallback<MtBatchTextSmsResult>() {
 
 				        @Override
 				        public void completed(MtBatchTextSmsResult result) {
 					        assertThat(result, is(expected));
 				        }
 
-				        @Override
-				        public void cancelled() {
-					        fail("batch unexpectedly cancelled");
-				        }
 			        };
 
 			MtBatchTextSmsResult result =
@@ -468,7 +484,7 @@ public class ApiConnectionIT {
 			final CyclicBarrier barrier = new CyclicBarrier(2);
 
 			FutureCallback<MtBatchTextSmsResult> testCallback =
-			        new FutureCallback<MtBatchTextSmsResult>() {
+			        new TestCallback<MtBatchTextSmsResult>() {
 
 				        @Override
 				        public void failed(Exception exception) {
@@ -482,16 +498,6 @@ public class ApiConnectionIT {
 					        } catch (Exception e) {
 						        throw new RuntimeException(e);
 					        }
-				        }
-
-				        @Override
-				        public void completed(MtBatchTextSmsResult result) {
-					        fail("batch unexpectedly completed: " + result);
-				        }
-
-				        @Override
-				        public void cancelled() {
-					        fail("batch unexpectedly cancelled");
 				        }
 
 			        };
@@ -645,22 +651,11 @@ public class ApiConnectionIT {
 
 		try {
 			FutureCallback<Page<MtBatchSmsResult>> testCallback =
-			        new FutureCallback<Page<MtBatchSmsResult>>() {
-
-				        @Override
-				        public void failed(Exception ex) {
-					        fail("batch unexpectedly failed: "
-					                + ex.getMessage());
-				        }
+			        new TestCallback<Page<MtBatchSmsResult>>() {
 
 				        @Override
 				        public void completed(Page<MtBatchSmsResult> result) {
 					        assertThat(result, is(expected));
-				        }
-
-				        @Override
-				        public void cancelled() {
-					        fail("batch unexpectedly cancelled");
 				        }
 
 			        };
@@ -733,13 +728,7 @@ public class ApiConnectionIT {
 
 		try {
 			FutureCallback<Page<MtBatchSmsResult>> testCallback =
-			        new FutureCallback<Page<MtBatchSmsResult>>() {
-
-				        @Override
-				        public void failed(Exception ex) {
-					        fail("batch unexpectedly failed: "
-					                + ex.getMessage());
-				        }
+			        new TestCallback<Page<MtBatchSmsResult>>() {
 
 				        @Override
 				        public void completed(Page<MtBatchSmsResult> result) {
@@ -753,11 +742,6 @@ public class ApiConnectionIT {
 					        default:
 						        fail("unexpected page: " + result);
 					        }
-				        }
-
-				        @Override
-				        public void cancelled() {
-					        fail("batch unexpectedly cancelled");
 				        }
 
 			        };
