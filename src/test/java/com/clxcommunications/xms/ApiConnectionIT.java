@@ -128,7 +128,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		stubPostResponse(expected, path);
+		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -174,7 +174,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		stubPostResponse(expected, path);
+		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -226,7 +226,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		stubPostResponse(expected, path);
+		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -258,16 +258,10 @@ public class ApiConnectionIT {
 
 		ApiError apiError = ApiError.of("syntax_constraint_violation",
 		        "The syntax constraint was violated");
-		String response = json.writeValueAsString(apiError);
 
 		String path = "/xms/v1/" + username + "/batches";
 
-		wm.stubFor(post(urlEqualTo(path))
-		        .willReturn(aResponse()
-		                .withStatus(400)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
-		                .withBody(response)));
+		stubPostResponse(apiError, path, 400);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -366,7 +360,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		stubPostResponse(expected, path);
+		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -417,7 +411,7 @@ public class ApiConnectionIT {
 
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		stubPostResponse(expected, path);
+		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -891,16 +885,18 @@ public class ApiConnectionIT {
 	 *            the response to give, serialized to JSON
 	 * @param path
 	 *            the path on which to listen
+	 * @param status
+	 *            the response HTTP status
 	 * @throws JsonProcessingException
 	 *             if the given response object could not be serialized
 	 */
-	private void stubPostResponse(Object response, String path)
+	private void stubPostResponse(Object response, String path, int status)
 	        throws JsonProcessingException {
 		byte[] body = json.writeValueAsBytes(response);
 
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
-		                .withStatus(201)
+		                .withStatus(status)
 		                .withHeader("Content-Type",
 		                        "application/json; charset=UTF-8")
 		                .withBody(body)));
