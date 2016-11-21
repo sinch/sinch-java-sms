@@ -442,8 +442,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
 	 * @throws ExecutionException
-	 *             if the send throw an exception other than
-	 *             {@link ApiException}
+	 *             if the send threw an unknown exception
 	 * @throws ApiException
 	 *             if the server response indicated an error
 	 * @throws UnexpectedResponseException
