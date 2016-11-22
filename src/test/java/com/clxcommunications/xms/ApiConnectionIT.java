@@ -23,16 +23,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
+import org.eclipse.jetty.util.ConcurrentArrayQueue;
 import org.junit.Rule;
 import org.junit.Test;
 import org.threeten.bp.Clock;
@@ -724,6 +725,105 @@ public class ApiConnectionIT {
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
 		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	/**
+	 * Verifies that the default HTTP client actually can handle multiple
+	 * simultaneous requests.
+	 */
+	@Test
+	public void canCancelBatchConcurrently() throws Throwable {
+		String username = TestUtils.freshUsername();
+
+		// Set up the first request (the one that will be delayed).
+		MtBatchSmsResult expected1 =
+		        MtBatchTextSmsResultImpl.builder()
+		                .from("12345")
+		                .addTo("123456789", "987654321")
+		                .body("Hello, world!")
+		                .canceled(true)
+		                .id(TestUtils.freshBatchId())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		String path1 =
+		        "/xms/v1/" + username + "/batches/" + expected1.id().id();
+		byte[] response1 = json.writeValueAsBytes(expected1);
+
+		wm.stubFor(delete(
+		        urlEqualTo(path1))
+		                .willReturn(aResponse()
+		                        .withFixedDelay(500) // Delay for a while.
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response1)));
+
+		// Set up the second request.
+		MtBatchSmsResult expected2 =
+		        MtBatchBinarySmsResultImpl.builder()
+		                .from("12345")
+		                .addTo("123456789", "987654321")
+		                .body("Hello, world!".getBytes())
+		                .udh((byte) 1)
+		                .canceled(true)
+		                .id(TestUtils.freshBatchId())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		String path2 =
+		        "/xms/v1/" + username + "/batches/" + expected2.id().id();
+		byte[] response2 = json.writeValueAsBytes(expected2);
+
+		wm.stubFor(delete(
+		        urlEqualTo(path2))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response2)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			final Queue<MtBatchSmsResult> results =
+			        new ConcurrentArrayQueue<MtBatchSmsResult>();
+			final CountDownLatch latch = new CountDownLatch(2);
+
+			FutureCallback<MtBatchSmsResult> callback =
+			        new TestCallback<MtBatchSmsResult>() {
+
+				        @Override
+				        public void completed(MtBatchSmsResult result) {
+					        results.add(result);
+					        latch.countDown();
+				        }
+
+			        };
+
+			conn.cancelBatch(expected1.id(), callback);
+			Thread.sleep(100);
+			conn.cancelBatch(expected2.id(), callback);
+
+			// Wait for callback to be called.
+			latch.await();
+
+			// We expect the second message to be handled first.
+			assertThat(results.size(), is(2));
+			assertThat(results.poll(), is(expected2));
+			assertThat(results.poll(), is(expected1));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(deleteRequestedFor(urlEqualTo(path1)));
+		wm.verify(deleteRequestedFor(urlEqualTo(path2)));
 	}
 
 	@Test
