@@ -588,7 +588,7 @@ public class ApiConnectionIT {
 			 * Used to make sure callback and test thread are agreeing about the
 			 * failException variable.
 			 */
-			final CyclicBarrier barrier = new CyclicBarrier(2);
+			final CountDownLatch latch = new CountDownLatch(1);
 
 			FutureCallback<MtBatchSmsResult> testCallback =
 			        new TestCallback<MtBatchSmsResult>() {
@@ -600,11 +600,7 @@ public class ApiConnectionIT {
 						        fail("failed called multiple times");
 					        }
 
-					        try {
-						        barrier.await();
-					        } catch (Exception e) {
-						        throw new RuntimeException(e);
-					        }
+					        latch.countDown();
 				        }
 
 			        };
@@ -613,7 +609,7 @@ public class ApiConnectionIT {
 			        conn.fetchBatch(batchId, testCallback);
 
 			// Give plenty of time for the callback to be called.
-			barrier.await(1, TimeUnit.SECONDS);
+			latch.await();
 
 			future.get();
 			fail("unexpected future get success");
