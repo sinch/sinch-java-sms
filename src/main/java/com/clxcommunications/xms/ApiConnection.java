@@ -589,19 +589,19 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
-	public Future<MtBatchTextSmsResult> cancelBatch(BatchId batchId) {
+	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId) {
 		return cancelBatch(batchId, null);
 	}
 
-	public Future<MtBatchTextSmsResult> cancelBatch(BatchId batchId,
-	        FutureCallback<MtBatchTextSmsResult> callback) {
+	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId,
+	        FutureCallback<MtBatchSmsResult> callback) {
 		HttpDelete req = delete(batchEndpoint(batchId));
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
-		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
-		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
+		HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
+		        jsonAsyncConsumer(MtBatchSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

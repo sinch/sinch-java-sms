@@ -685,7 +685,7 @@ public class ApiConnectionIT {
 		        542000000, ZoneOffset.UTC);
 		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
 
-		MtBatchTextSmsResult expected =
+		MtBatchSmsResult expected =
 		        MtBatchTextSmsResultImpl.builder()
 		                .from("12345")
 		                .addTo("123456789", "987654321")
@@ -713,7 +713,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult result = conn.cancelBatch(batchId).get();
+			MtBatchSmsResult result = conn.cancelBatch(batchId).get();
 			assertThat(result, is(expected));
 		} finally {
 			conn.close();
