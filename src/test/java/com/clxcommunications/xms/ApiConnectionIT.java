@@ -433,7 +433,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchTextBatch() throws Throwable {
+	public void canFetchTextBatchAsync() throws Throwable {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -480,7 +480,7 @@ public class ApiConnectionIT {
 			        };
 
 			MtBatchSmsResult actual =
-			        conn.fetchBatch(batchId, testCallback).get();
+			        conn.fetchBatchAsync(batchId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -542,7 +542,7 @@ public class ApiConnectionIT {
 			        };
 
 			MtBatchSmsResult actual =
-			        conn.fetchBatch(batchId, testCallback).get();
+			        conn.fetchBatchAsync(batchId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -606,7 +606,7 @@ public class ApiConnectionIT {
 			        };
 
 			Future<MtBatchSmsResult> future =
-			        conn.fetchBatch(batchId, testCallback);
+			        conn.fetchBatchAsync(batchId, testCallback);
 
 			// Give plenty of time for the callback to be called.
 			latch.await();
@@ -710,7 +710,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchSmsResult result = conn.cancelBatch(batchId).get();
+			MtBatchSmsResult result = conn.cancelBatch(batchId);
 			assertThat(result, is(expected));
 		} finally {
 			conn.close();
@@ -803,9 +803,9 @@ public class ApiConnectionIT {
 
 			        };
 
-			conn.cancelBatch(expected1.id(), callback);
+			conn.cancelBatchAsync(expected1.id(), callback);
 			Thread.sleep(100);
-			conn.cancelBatch(expected2.id(), callback);
+			conn.cancelBatchAsync(expected2.id(), callback);
 
 			// Wait for callback to be called.
 			latch.await();

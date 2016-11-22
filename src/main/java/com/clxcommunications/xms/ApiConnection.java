@@ -588,7 +588,7 @@ public abstract class ApiConnection implements Closeable {
 	 *            a callback that is activated at call completion
 	 * @return a future yielding the updated status of the batch
 	 */
-	public Future<MtBatchSmsResult> fetchBatch(BatchId batchId,
+	public Future<MtBatchSmsResult> fetchBatchAsync(BatchId batchId,
 	        FutureCallback<MtBatchSmsResult> callback) {
 		HttpGet req = get(batchEndpoint(batchId));
 
@@ -660,9 +660,25 @@ public abstract class ApiConnection implements Closeable {
 	 * @param batchId
 	 *            identifier of the batch to delete
 	 * @return a future containing the batch that was cancelled
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ExecutionException
+	 *             if the send threw an unknown exception
+	 * @throws ApiException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 * @throws JsonProcessingException
+	 *             if JSON deserialization failed
 	 */
-	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId) {
-		return cancelBatch(batchId, null);
+	public MtBatchSmsResult cancelBatch(BatchId batchId)
+	        throws InterruptedException, JsonProcessingException,
+	        ExecutionException, ApiException, UnexpectedResponseException {
+		try {
+			return cancelBatchAsync(batchId, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
 	}
 
 	/**
@@ -674,7 +690,7 @@ public abstract class ApiConnection implements Closeable {
 	 *            the callback invoked when request completes
 	 * @return a future containing the batch that was cancelled
 	 */
-	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId,
+	public Future<MtBatchSmsResult> cancelBatchAsync(BatchId batchId,
 	        FutureCallback<MtBatchSmsResult> callback) {
 		HttpDelete req = delete(batchEndpoint(batchId));
 
