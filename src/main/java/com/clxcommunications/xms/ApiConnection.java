@@ -50,6 +50,15 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+/**
+ * An abstract representation of an XMS connection. This class exposes a number
+ * of methods which can be called to interact with the XMS REST API.
+ * <p>
+ * To instantiate this class it is necessary to use a builder, see
+ * {@link #builder()}. The builder can be used to configure the connection as
+ * necessary, once the connection is opened with {@link Builder#start()} it is
+ * necessary to later close the connection using {@link #close()}.
+ */
 @Value.Immutable(copy = false)
 @Value.Style(depluralize = true, jdkOnly = true,
         overshadowImplementation = true, from = "using", build = "start",
@@ -132,17 +141,30 @@ public abstract class ApiConnection implements Closeable {
 	private final ApiObjectMapper json;
 
 	/**
-	 * Package visibility because one implementation should be enough.
+	 * Constructor of API connections. This only has package visibility since
+	 * users of the SDK are not expected to inherit from this class.
 	 */
 	ApiConnection() {
 		json = new ApiObjectMapper();
 	}
 
+	/**
+	 * Returns a fresh builder of API connections.
+	 * 
+	 * @return a non-null connection builder
+	 */
 	@Nonnull
 	public static Builder builder() {
 		return new Builder();
 	}
 
+	/**
+	 * Closes this API connection and releases associated resources. In
+	 * particular the underlying {@link CloseableHttpAsyncClient} will be
+	 * closed.
+	 * 
+	 * @see java.io.Closeable#close()
+	 */
 	@Override
 	public void close() throws IOException {
 		httpClient().close();
@@ -176,6 +198,7 @@ public abstract class ApiConnection implements Closeable {
 	/**
 	 * The HTTP client used by this connection. The default client is a minimal
 	 * one that does not support, for example, authentication or redirects.
+	 * <p>
 	 * Note, this HTTP client is closed when this API connection is closed.
 	 * 
 	 * @return a non-null HTTP client
@@ -197,6 +220,11 @@ public abstract class ApiConnection implements Closeable {
 		return CallbackWrapper.exceptionDropper;
 	}
 
+	/**
+	 * The HTTP host providing the XMS API.
+	 * 
+	 * @return a non-null host specification
+	 */
 	public abstract HttpHost endpointHost();
 
 	/**
@@ -454,6 +482,15 @@ public abstract class ApiConnection implements Closeable {
 		}
 	}
 
+	/**
+	 * Asynchronously submits the given text batch.
+	 * 
+	 * @param sms
+	 *            the batch to send
+	 * @param callback
+	 *            a callback that is invoked when submit is completed
+	 * @return a future whose result is the creation response
+	 */
 	public Future<MtBatchTextSmsResult> sendBatchAsync(MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
 		HttpPost httpPost = post(batchesEndpoint(), sms);
@@ -467,6 +504,15 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Asynchronously submits the given binary batch.
+	 * 
+	 * @param sms
+	 *            the batch to send
+	 * @param callback
+	 *            a callback that is invoked when submit is completed
+	 * @return a future whose result is the creation response
+	 */
 	public Future<MtBatchBinarySmsResult> sendBatchAsync(
 	        MtBatchBinarySmsCreate sms,
 	        FutureCallback<MtBatchBinarySmsResult> callback) {
@@ -557,6 +603,16 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Creates a page fetcher to retrieve a paged list of batches. Note, this
+	 * method does not itself cause any network activity.
+	 * 
+	 * @param filter
+	 *            the batch filter
+	 * @param callback
+	 *            the callback to invoke when call is finished
+	 * @return a future page
+	 */
 	public PagedFetcher<MtBatchSmsResult> fetchBatches(final BatchFilter filter,
 	        final FutureCallback<Page<MtBatchSmsResult>> callback) {
 		return new PagedFetcher<MtBatchSmsResult>() {
@@ -571,6 +627,17 @@ public abstract class ApiConnection implements Closeable {
 		};
 	}
 
+	/**
+	 * Fetches the given page in a paged list of batches.
+	 * 
+	 * @param page
+	 *            the page to fetch
+	 * @param filter
+	 *            the batch filter
+	 * @param callback
+	 *            the callback to invoke when call is finished
+	 * @return a future page
+	 */
 	private Future<Page<MtBatchSmsResult>> fetchBatches(int page,
 	        BatchFilter filter,
 	        FutureCallback<Page<MtBatchSmsResult>> callback) {
@@ -589,10 +656,26 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Cancels the batch with the given batch ID.
+	 * 
+	 * @param batchId
+	 *            identifier of the batch to delete
+	 * @return a future containing the batch that was cancelled
+	 */
 	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId) {
 		return cancelBatch(batchId, null);
 	}
 
+	/**
+	 * Cancels the batch with the given batch ID.
+	 * 
+	 * @param batchId
+	 *            identifier of the batch to delete
+	 * @param callback
+	 *            the callback invoked when request completes
+	 * @return a future containing the batch that was cancelled
+	 */
 	public Future<MtBatchSmsResult> cancelBatch(BatchId batchId,
 	        FutureCallback<MtBatchSmsResult> callback) {
 		HttpDelete req = delete(batchEndpoint(batchId));
