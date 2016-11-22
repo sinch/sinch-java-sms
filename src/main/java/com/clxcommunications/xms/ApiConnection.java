@@ -20,6 +20,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
@@ -384,6 +385,43 @@ public abstract class ApiConnection implements Closeable {
 		return req;
 	}
 
+	/**
+	 * Puts a JSON serialization of the given object to the given endpoint.
+	 * 
+	 * @param endpoint
+	 *            the target endpoint
+	 * @param object
+	 *            the object whose JSON representation is sent
+	 * @return a HTTP post request.
+	 */
+	private <T> HttpPut put(URI endpoint, T object) {
+		final byte[] content;
+
+		/*
+		 * Attempt to serialize the given object into JSON. Note, we swallow the
+		 * JsonProcessingException since we control which objects will be
+		 * serialized and can guarantee that they all should be serializable.
+		 * Thus, if the exception still is thrown it indicates a severe bug in
+		 * internal state management.
+		 */
+		try {
+			content = json.writeValueAsBytes(object);
+		} catch (JsonProcessingException e) {
+			throw new IllegalStateException(e);
+		}
+
+		ByteArrayEntity entity =
+		        new ByteArrayEntity(content, ContentType.APPLICATION_JSON);
+
+		HttpPut req = new HttpPut(endpoint);
+
+		req.setHeader("Authorization", "Bearer " + token());
+		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
+		req.setEntity(entity);
+
+		return req;
+	}
+
 	private HttpGet get(URI endpoint) {
 		HttpGet req = new HttpGet(endpoint);
 		req.setHeader("Authorization", "Bearer " + token());
@@ -520,6 +558,114 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
+		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Attempts to replace the given batch synchronously. Internally this uses
+	 * an asynchronous call and blocks until it completes.
+	 * 
+	 * @param id
+	 *            identifier of the batch to replace
+	 * @param sms
+	 *            the batch description
+	 * @return a batch submission result
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ExecutionException
+	 *             if the send threw an unknown exception
+	 * @throws ApiException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 * @throws JsonProcessingException
+	 *             if JSON deserialization failed
+	 */
+	public MtBatchTextSmsResult replaceBatch(BatchId id,
+	        MtBatchTextSmsCreate sms)
+	        throws InterruptedException, ExecutionException, ApiException,
+	        JsonProcessingException, UnexpectedResponseException {
+		try {
+			return replaceBatchAsync(id, sms, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Attempts to replace the given batch synchronously. Internally this uses
+	 * an asynchronous call and blocks until it completes.
+	 * 
+	 * @param id
+	 *            identifier of the batch to replace
+	 * @param sms
+	 *            the batch description
+	 * @return a batch submission result
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ExecutionException
+	 *             if the send threw an unknown exception
+	 * @throws ApiException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 * @throws JsonProcessingException
+	 *             if JSON deserialization failed
+	 */
+	public MtBatchBinarySmsResult replaceBatch(BatchId id,
+	        MtBatchBinarySmsCreate sms)
+	        throws InterruptedException, ExecutionException, ApiException,
+	        JsonProcessingException, UnexpectedResponseException {
+		try {
+			return replaceBatchAsync(id, sms, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously submits the given text batch.
+	 * 
+	 * @param sms
+	 *            the batch to send
+	 * @param callback
+	 *            a callback that is invoked when submit is completed
+	 * @return a future whose result is the creation response
+	 */
+	public Future<MtBatchTextSmsResult> replaceBatchAsync(BatchId id,
+	        MtBatchTextSmsCreate sms,
+	        FutureCallback<MtBatchTextSmsResult> callback) {
+		HttpPut httpPut = put(batchEndpoint(id), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPut);
+		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Asynchronously submits the given binary batch.
+	 * 
+	 * @param sms
+	 *            the batch to send
+	 * @param callback
+	 *            a callback that is invoked when submit is completed
+	 * @return a future whose result is the creation response
+	 */
+	public Future<MtBatchBinarySmsResult> replaceBatchAsync(BatchId id,
+	        MtBatchBinarySmsCreate sms,
+	        FutureCallback<MtBatchBinarySmsResult> callback) {
+		HttpPut httpPut = put(batchEndpoint(id), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPut);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
 		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
