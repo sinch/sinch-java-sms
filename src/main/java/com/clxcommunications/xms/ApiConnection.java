@@ -609,12 +609,10 @@ public abstract class ApiConnection implements Closeable {
 	 * 
 	 * @param filter
 	 *            the batch filter
-	 * @param callback
-	 *            the callback to invoke when call is finished
 	 * @return a future page
 	 */
-	public PagedFetcher<MtBatchSmsResult> fetchBatches(final BatchFilter filter,
-	        final FutureCallback<Page<MtBatchSmsResult>> callback) {
+	public PagedFetcher<MtBatchSmsResult> fetchBatches(
+	        final BatchFilter filter) {
 		return new PagedFetcher<MtBatchSmsResult>() {
 
 			@Override

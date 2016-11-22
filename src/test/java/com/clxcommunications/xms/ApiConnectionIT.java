@@ -862,8 +862,7 @@ public class ApiConnectionIT {
 
 			        };
 
-			PagedFetcher<MtBatchSmsResult> fetcher =
-			        conn.fetchBatches(filter, testCallback);
+			PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
 
 			Page<MtBatchSmsResult> actual =
 			        fetcher.fetchAsync(0, testCallback).get();
@@ -948,8 +947,7 @@ public class ApiConnectionIT {
 
 			        };
 
-			PagedFetcher<MtBatchSmsResult> fetcher =
-			        conn.fetchBatches(filter, testCallback);
+			PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
 
 			Page<MtBatchSmsResult> actual1 =
 			        fetcher.fetchAsync(0, testCallback).get();
@@ -1044,27 +1042,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<Page<MtBatchSmsResult>> testCallback =
-			        new TestCallback<Page<MtBatchSmsResult>>() {
-
-				        @Override
-				        public void completed(Page<MtBatchSmsResult> result) {
-					        switch (result.page()) {
-					        case 0:
-						        assertThat(result, is(expected1));
-						        break;
-					        case 1:
-						        assertThat(result, is(expected2));
-						        break;
-					        default:
-						        fail("unexpected page: " + result);
-					        }
-				        }
-
-			        };
-
-			PagedFetcher<MtBatchSmsResult> fetcher =
-			        conn.fetchBatches(filter, testCallback);
+			PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
 
 			List<Page<MtBatchSmsResult>> actuals =
 			        new ArrayList<Page<MtBatchSmsResult>>();
@@ -1165,27 +1143,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<Page<MtBatchSmsResult>> testCallback =
-			        new TestCallback<Page<MtBatchSmsResult>>() {
-
-				        @Override
-				        public void completed(Page<MtBatchSmsResult> result) {
-					        switch (result.page()) {
-					        case 0:
-						        assertThat(result, is(expected1));
-						        break;
-					        case 1:
-						        assertThat(result, is(expected2));
-						        break;
-					        default:
-						        fail("unexpected page: " + result);
-					        }
-				        }
-
-			        };
-
-			PagedFetcher<MtBatchSmsResult> fetcher =
-			        conn.fetchBatches(filter, testCallback);
+			PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
 
 			List<MtBatchSmsResult> actuals =
 			        new ArrayList<MtBatchSmsResult>();
