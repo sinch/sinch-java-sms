@@ -976,6 +976,127 @@ public class ApiConnectionIT {
 	}
 
 	@Test
+	public void canIterateOverPages() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchFilter filter = BatchFilterImpl.builder().build();
+
+		// Prepare first page.
+		String path1 = "/xms/v1/" + username + "/batches?page=0";
+
+		final Page<MtBatchSmsResult> expected1 =
+		        PagedBatchResultImpl.builder()
+		                .page(0)
+		                .size(1)
+		                .numPages(2)
+		                .addContent(
+		                        MtBatchTextSmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body("body")
+		                                .canceled(false)
+		                                .build())
+		                .build();
+		String response1 = json.writeValueAsString(expected1);
+
+		wm.stubFor(get(
+		        urlEqualTo(path1))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response1)));
+
+		// Prepare second page.
+		String path2 = "/xms/v1/" + username + "/batches?page=1";
+
+		final Page<MtBatchSmsResult> expected2 =
+		        PagedBatchResultImpl.builder()
+		                .page(1)
+		                .size(2)
+		                .numPages(2)
+		                .addContent(
+		                        MtBatchBinarySmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body((byte) 0)
+		                                .udh((byte) 1)
+		                                .canceled(false)
+		                                .build())
+		                .addContent(
+		                        MtBatchTextSmsResultImpl.builder()
+		                                .id(TestUtils.freshBatchId())
+		                                .body("body")
+		                                .canceled(false)
+		                                .build())
+		                .build();
+		String response2 = json.writeValueAsString(expected2);
+
+		wm.stubFor(get(
+		        urlEqualTo(path2))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response2)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			FutureCallback<Page<MtBatchSmsResult>> testCallback =
+			        new TestCallback<Page<MtBatchSmsResult>>() {
+
+				        @Override
+				        public void completed(Page<MtBatchSmsResult> result) {
+					        switch (result.page()) {
+					        case 0:
+						        assertThat(result, is(expected1));
+						        break;
+					        case 1:
+						        assertThat(result, is(expected2));
+						        break;
+					        default:
+						        fail("unexpected page: " + result);
+					        }
+				        }
+
+			        };
+
+			PagedFetcher<MtBatchSmsResult> fetcher =
+			        conn.fetchBatches(filter, testCallback);
+
+			List<Page<MtBatchSmsResult>> actuals =
+			        new ArrayList<Page<MtBatchSmsResult>>();
+
+			for (Page<MtBatchSmsResult> result : fetcher.pages()) {
+				actuals.add(result);
+			}
+
+			List<Page<MtBatchSmsResult>> expecteds =
+			        new ArrayList<Page<MtBatchSmsResult>>();
+			expecteds.add(expected1);
+			expecteds.add(expected2);
+
+			assertThat(actuals, is(expecteds));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path1))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path2))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
 	public void canIterateOverBatchesWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchFilter filter = BatchFilterImpl.builder().build();
