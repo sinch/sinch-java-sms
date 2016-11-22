@@ -674,6 +674,56 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Updates the given text batch. The update is performed synchronously.
+	 * 
+	 * @param batchId
+	 *            identifier of the batch to update
+	 * @param sms
+	 *            a description of the desired updated
+	 * @return the batch with the updates applied
+	 * @throws InterruptedException
+	 * @throws JsonProcessingException
+	 * @throws ExecutionException
+	 * @throws ApiException
+	 * @throws UnexpectedResponseException
+	 */
+	public MtBatchTextSmsResult updateBatch(BatchId batchId,
+	        MtBatchTextSmsUpdate sms)
+	        throws InterruptedException, JsonProcessingException,
+	        ExecutionException, ApiException, UnexpectedResponseException {
+		try {
+			return updateBatchAsync(batchId, sms, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Updates the given binary batch. The update is performed synchronously.
+	 * 
+	 * @param batchId
+	 *            identifier of the batch to update
+	 * @param sms
+	 *            a description of the desired updated
+	 * @return
+	 * @throws InterruptedException
+	 * @throws JsonProcessingException
+	 * @throws ExecutionException
+	 * @throws ApiException
+	 * @throws UnexpectedResponseException
+	 */
+	public MtBatchBinarySmsResult updateBatch(BatchId batchId,
+	        MtBatchBinarySmsUpdate sms)
+	        throws InterruptedException, JsonProcessingException,
+	        ExecutionException, ApiException, UnexpectedResponseException {
+		try {
+			return updateBatchAsync(batchId, sms, null).get();
+		} catch (ExecutionException e) {
+			throw maybeUnwrapExecutionException(e);
+		}
+	}
+
+	/**
 	 * Asynchronously updates the text batch with the given batch ID. The batch
 	 * is updated to match the given update object.
 	 * 
