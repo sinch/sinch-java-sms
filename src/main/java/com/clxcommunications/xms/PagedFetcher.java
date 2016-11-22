@@ -12,7 +12,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.apache.http.concurrent.FutureCallback;
 
 import com.clxcommunications.xms.api.Page;
-import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @NotThreadSafe
 public abstract class PagedFetcher<T> {
@@ -20,19 +20,12 @@ public abstract class PagedFetcher<T> {
 	public PagedFetcher() {
 	}
 
-	Page<T> fetch(int page)
-	        throws InterruptedException, ExecutionException, ApiException,
-	        JsonParseException {
+	Page<T> fetch(int page) throws JsonProcessingException, ExecutionException,
+	        ApiException, UnexpectedResponseException, InterruptedException {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof ApiException) {
-				throw (ApiException) e.getCause();
-			} else if (e.getCause() instanceof JsonParseException) {
-				throw (JsonParseException) e.getCause();
-			} else {
-				throw e;
-			}
+			throw ApiConnection.maybeUnwrapExecutionException(e);
 		}
 	}
 

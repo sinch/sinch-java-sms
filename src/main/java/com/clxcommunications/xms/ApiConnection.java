@@ -411,7 +411,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws JsonProcessingException
 	 * @throws ExecutionException
 	 */
-	private ExecutionException maybeUnwrapExecutionException(
+	static ExecutionException maybeUnwrapExecutionException(
 	        ExecutionException e)
 	        throws ApiException, UnexpectedResponseException,
 	        JsonProcessingException, ExecutionException {
