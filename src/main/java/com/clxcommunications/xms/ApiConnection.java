@@ -13,8 +13,10 @@ import java.util.concurrent.Future;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
@@ -358,31 +360,8 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a HTTP post request.
 	 */
 	private <T> HttpPost post(URI endpoint, T object) {
-		final byte[] content;
-
-		/*
-		 * Attempt to serialize the given object into JSON. Note, we swallow the
-		 * JsonProcessingException since we control which objects will be
-		 * serialized and can guarantee that they all should be serializable.
-		 * Thus, if the exception still is thrown it indicates a severe bug in
-		 * internal state management.
-		 */
-		try {
-			content = json.writeValueAsBytes(object);
-		} catch (JsonProcessingException e) {
-			throw new IllegalStateException(e);
-		}
-
-		ByteArrayEntity entity =
-		        new ByteArrayEntity(content, ContentType.APPLICATION_JSON);
-
-		HttpPost req = new HttpPost(endpoint);
-
-		req.setHeader("Authorization", "Bearer " + token());
-		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
-		req.setEntity(entity);
-
-		return req;
+		return withJsonContent(object,
+		        withStandardHeaders(new HttpPost(endpoint)));
 	}
 
 	/**
@@ -395,14 +374,50 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a HTTP post request.
 	 */
 	private <T> HttpPut put(URI endpoint, T object) {
+		return withJsonContent(object,
+		        withStandardHeaders(new HttpPut(endpoint)));
+	}
+
+	private HttpGet get(URI endpoint) {
+		return withStandardHeaders(new HttpGet(endpoint));
+	}
+
+	private HttpDelete delete(URI endpoint) {
+		return withStandardHeaders(new HttpDelete(endpoint));
+	}
+
+	/**
+	 * Attaches the headers that XMS require.
+	 * 
+	 * @param req
+	 *            the request to which the headers should be added
+	 * @return the given request object
+	 */
+	private <T extends HttpRequest> T withStandardHeaders(T req) {
+		req.setHeader("Authorization", "Bearer " + token());
+		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
+		return req;
+	}
+
+	/**
+	 * Attaches an object serialized as JSON to the given request.
+	 * 
+	 * @param object
+	 *            the object that should be serialized and added to the request
+	 * @param req
+	 *            the request to which the headers should be added
+	 * @return the given request object
+	 */
+	private <T extends HttpEntityEnclosingRequest> T withJsonContent(
+	        Object object, T req) {
 		final byte[] content;
 
 		/*
-		 * Attempt to serialize the given object into JSON. Note, we swallow the
-		 * JsonProcessingException since we control which objects will be
-		 * serialized and can guarantee that they all should be serializable.
-		 * Thus, if the exception still is thrown it indicates a severe bug in
-		 * internal state management.
+		 * Attempt to serialize the given object into JSON. Note, we wrap the
+		 * JsonProcessingException in a runtime exception since we control which
+		 * objects will be serialized and can guarantee that they all should be
+		 * serializable. Thus, if the exception still is thrown it indicates a
+		 * severe bug in internal state management.
 		 */
 		try {
 			content = json.writeValueAsBytes(object);
@@ -413,26 +428,8 @@ public abstract class ApiConnection implements Closeable {
 		ByteArrayEntity entity =
 		        new ByteArrayEntity(content, ContentType.APPLICATION_JSON);
 
-		HttpPut req = new HttpPut(endpoint);
-
-		req.setHeader("Authorization", "Bearer " + token());
-		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
 		req.setEntity(entity);
 
-		return req;
-	}
-
-	private HttpGet get(URI endpoint) {
-		HttpGet req = new HttpGet(endpoint);
-		req.setHeader("Authorization", "Bearer " + token());
-		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
-		return req;
-	}
-
-	private HttpDelete delete(URI endpoint) {
-		HttpDelete req = new HttpDelete(endpoint);
-		req.setHeader("Authorization", "Bearer " + token());
-		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
 		return req;
 	}
 
