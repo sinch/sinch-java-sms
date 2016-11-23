@@ -16,8 +16,6 @@ public interface CallbackWrapper {
 	/**
 	 * A callback wrapper that catches and logs exceptions thrown within the
 	 * wrapped callback at the ERROR level.
-	 * 
-	 * @see DropExceptionWrapper
 	 */
 	public static final CallbackWrapper exceptionDropper =
 	        new DropExceptionWrapper();

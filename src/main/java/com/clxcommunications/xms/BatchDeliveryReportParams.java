@@ -16,6 +16,10 @@ import org.immutables.value.Value;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.DeliveryStatus;
 
+/**
+ * Describes the a filter that restricts and controls how a batch delivery
+ * report is returned.
+ */
 @Value.Immutable
 @ValueStylePublic
 public abstract class BatchDeliveryReportParams {
@@ -24,7 +28,19 @@ public abstract class BatchDeliveryReportParams {
 	 * The delivery report types that can be retrieved.
 	 */
 	public static enum ReportType {
-		SUMMARY, FULL
+		/**
+		 * Indicates a summary batch delivery report. The summary delivery
+		 * report does not include the per-recipient result but rather
+		 * aggregated statistics about the deliveries.
+		 */
+		SUMMARY,
+
+		/**
+		 * Indicates a full batch delivery report. This includes per-recipient
+		 * delivery results. For batches with many destinations such reports may
+		 * be very large.
+		 */
+		FULL
 	}
 
 	/**

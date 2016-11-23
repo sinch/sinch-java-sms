@@ -29,6 +29,12 @@ public abstract class GroupFilter {
 		return 0;
 	}
 
+	/**
+	 * If non-empty then only groups with one or more of these tags are
+	 * retained. If empty then tags are not considered in the filtering.
+	 * 
+	 * @return a non-null set of tags.
+	 */
 	public abstract Set<String> tags();
 
 	protected void check() {

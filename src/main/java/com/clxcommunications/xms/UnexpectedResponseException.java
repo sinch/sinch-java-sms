@@ -15,6 +15,12 @@ public class UnexpectedResponseException extends Exception {
 	 */
 	private final HttpResponse response;
 
+	/**
+	 * Creates a new unexpected response exception.
+	 * 
+	 * @param response
+	 *            the response that was unexpected
+	 */
 	public UnexpectedResponseException(final HttpResponse response) {
 		super("received unexpected response having status "
 		        + getStatusCodeOrThrow(response));

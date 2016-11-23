@@ -2,6 +2,7 @@ package com.clxcommunications.xms.api;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.immutables.value.Value;
 
@@ -16,6 +17,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = AutoUpdate.Builder.class)
 public abstract class AutoUpdate {
 
+	/**
+	 * A builder of auto update descriptions. Initialize the desired attributes
+	 * and call the build method to instantiate the object.
+	 */
+	@NotThreadSafe
 	public static class Builder extends AutoUpdateImpl.Builder {
 
 		/**
@@ -50,6 +56,12 @@ public abstract class AutoUpdate {
 
 	}
 
+	/**
+	 * Instantiates a fresh builder of auto update objects.
+	 * 
+	 * @return a fresh auto update builder
+	 */
+	@Nonnull
 	public static final Builder builder() {
 		return new AutoUpdate.Builder();
 	}

@@ -9,7 +9,7 @@ import org.immutables.value.Value;
 
 /**
  * A default style for public immutable value types.
- * 
+ * <p>
  * Note, this is a duplicate of
  * {@link com.clxcommunications.xms.api.ValueStylePublic} to be able to keep it
  * at package visibility.

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * Representation of a batch delivery report.
+ * A batch delivery report.
  */
 @Value.Enclosing
 @Value.Immutable
@@ -24,16 +24,34 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonTypeName("delivery_report_sms")
 public interface BatchDeliveryReport {
 
+	/**
+	 * A description of the messages having a given delivery state.
+	 */
 	@Value.Immutable
 	@ValueStylePublic
 	@JsonDeserialize(builder = BatchDeliveryReportImpl.Status.Builder.class)
 	@JsonInclude(Include.NON_EMPTY)
 	public interface Status {
 
+		/**
+		 * The delivery status code.
+		 * 
+		 * @return a status code
+		 */
 		int code();
 
+		/**
+		 * The delivery status for this bucket.
+		 * 
+		 * @return a non-null delivery status
+		 */
 		DeliveryStatus status();
 
+		/**
+		 * The number of individual messages in this status bucket.
+		 * 
+		 * @return a positive integer
+		 */
 		int count();
 
 		/**
@@ -46,12 +64,30 @@ public interface BatchDeliveryReport {
 
 	}
 
+	/**
+	 * Identifier of the batch to which this delivery report refers.
+	 * 
+	 * @return a non-null batch identifier
+	 */
 	@JsonProperty("batch_id")
 	BatchId batchId();
 
+	/**
+	 * The total number of messages in the batch. This is including message
+	 * expansion, that is, including messages needing multiple parts.
+	 * 
+	 * @return a positive integer
+	 */
 	@JsonProperty("total_message_count")
 	int totalMessageCount();
 
+	/**
+	 * A list of {@link Status statuses} for the batch. Only non-empty statuses
+	 * are present here, that is, for each member status there is at least one
+	 * message having the state.
+	 * 
+	 * @return a list of statuses
+	 */
 	List<Status> statuses();
 
 }

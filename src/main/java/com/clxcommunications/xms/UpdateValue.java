@@ -26,12 +26,25 @@ public abstract class UpdateValue<T> {
 	 */
 	private static final UpdateValue<?> UNSET = UpdateValueImpl.of(null);
 
+	/**
+	 * An update value indicating that the value should be reset to its default
+	 * value.
+	 * 
+	 * @return an update indicating a reset
+	 */
 	@SuppressWarnings("unchecked")
 	@Nonnull
 	public static <T> UpdateValue<T> unset() {
 		return (UpdateValue<T>) UNSET;
 	}
 
+	/**
+	 * An update value indicating that the value should be changed.
+	 * 
+	 * @param value
+	 *            the new value
+	 * @return an update indicating a set
+	 */
 	@JsonCreator
 	@Nonnull
 	public static <T> UpdateValue<T> set(@Nullable T value) {
