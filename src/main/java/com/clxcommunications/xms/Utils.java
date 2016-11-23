@@ -73,8 +73,9 @@ public final class Utils {
 	 * Unwrap exceptions for synchronous send methods. This helper will examine
 	 * an {@link ExecutionException} object and unwrap and throw its cause if it
 	 * makes sense for a synchronous call. Beside the checked exception shown in
-	 * the method signature this method will also unwrap any runtime exception
-	 * and re-throw it directly.
+	 * the method signature this method will also unwrap any
+	 * {@link RuntimeException runtime exception} or {@link Error error} and
+	 * directly re-throws it.
 	 * <p>
 	 * If no unwrapping happens then the given exception is returned unchanged
 	 * to facilitate the following use:
@@ -101,6 +102,8 @@ public final class Utils {
 	        JsonProcessingException, ExecutionException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
+		} else if (e.getCause() instanceof Error) {
+			throw (Error) e.getCause();
 		} else if (e.getCause() instanceof ApiException) {
 			throw (ApiException) e.getCause();
 		} else if (e.getCause() instanceof UnexpectedResponseException) {
