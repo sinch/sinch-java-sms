@@ -275,7 +275,7 @@ public class ApiConnectionIT {
 		try {
 			conn.sendBatch(request);
 			fail("Expected exception, got none");
-		} catch (ApiException e) {
+		} catch (ErrorResponseException e) {
 			assertThat(e.getCode(), is(apiError.code()));
 			assertThat(e.getText(), is(apiError.text()));
 		} finally {

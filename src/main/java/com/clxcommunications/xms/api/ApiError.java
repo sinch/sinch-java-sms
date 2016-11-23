@@ -4,13 +4,13 @@ import javax.annotation.Nonnull;
 
 import org.immutables.value.Value;
 
-import com.clxcommunications.xms.ApiException;
+import com.clxcommunications.xms.ErrorResponseException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * API object containing an error response.
  * 
- * @see ApiException
+ * @see ErrorResponseException
  */
 @Value.Immutable
 @ValueStylePackageDirect

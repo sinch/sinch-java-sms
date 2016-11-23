@@ -39,7 +39,7 @@ public abstract class PagedFetcher<T> {
 	 *             if the fetched JSON could not be deserialized
 	 * @throws ExecutionException
 	 *             if another checked exception occurred during execution
-	 * @throws ApiException
+	 * @throws ErrorResponseException
 	 *             if the HTTP endpoint returned an error message
 	 * @throws UnexpectedResponseException
 	 *             if the HTTP endpoint responded with an unexpected message
@@ -48,7 +48,8 @@ public abstract class PagedFetcher<T> {
 	 */
 	@Nonnull
 	Page<T> fetch(int page) throws JsonProcessingException, ExecutionException,
-	        ApiException, UnexpectedResponseException, InterruptedException {
+	        ErrorResponseException, UnexpectedResponseException,
+	        InterruptedException {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {

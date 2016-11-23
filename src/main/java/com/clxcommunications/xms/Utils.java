@@ -91,21 +91,21 @@ public final class Utils {
 	 * @param e
 	 *            the exception to examine
 	 * @return returns <code>e</code>
-	 * @throws ApiException
+	 * @throws ErrorResponseException
 	 * @throws UnexpectedResponseException
 	 * @throws JsonProcessingException
 	 * @throws ExecutionException
 	 */
 	static ExecutionException maybeUnwrapExecutionException(
 	        ExecutionException e)
-	        throws ApiException, UnexpectedResponseException,
+	        throws ErrorResponseException, UnexpectedResponseException,
 	        JsonProcessingException, ExecutionException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
 		} else if (e.getCause() instanceof Error) {
 			throw (Error) e.getCause();
-		} else if (e.getCause() instanceof ApiException) {
-			throw (ApiException) e.getCause();
+		} else if (e.getCause() instanceof ErrorResponseException) {
+			throw (ErrorResponseException) e.getCause();
 		} else if (e.getCause() instanceof UnexpectedResponseException) {
 			throw (UnexpectedResponseException) e.getCause();
 		} else if (e.getCause() instanceof JsonProcessingException) {

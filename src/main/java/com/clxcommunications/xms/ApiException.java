@@ -1,27 +1,26 @@
 package com.clxcommunications.xms;
 
-import com.clxcommunications.xms.api.ApiError;
-
-public class ApiException extends Exception {
+/**
+ * Base class for all exceptions specific to the CLX SDK.
+ */
+public abstract class ApiException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String code;
-	private final String text;
-
-	ApiException(ApiError error) {
-		super(error.text());
-
-		this.code = error.code();
-		this.text = error.text();
+	public ApiException() {
+		super();
 	}
 
-	public String getCode() {
-		return code;
+	public ApiException(String message) {
+		super(message);
 	}
 
-	public String getText() {
-		return text;
+	public ApiException(Throwable cause) {
+		super(cause);
+	}
+
+	public ApiException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

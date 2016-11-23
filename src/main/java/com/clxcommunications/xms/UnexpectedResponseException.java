@@ -6,7 +6,7 @@ import org.apache.http.HttpResponse;
  * Exception thrown when an API connection receives a response from the REST API
  * that is neither a success response nor an API level error.
  */
-public class UnexpectedResponseException extends Exception {
+public class UnexpectedResponseException extends ApiException {
 
 	private static final long serialVersionUID = 1L;
 
