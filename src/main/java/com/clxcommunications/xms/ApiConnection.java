@@ -460,17 +460,14 @@ public abstract class ApiConnection implements Closeable {
 	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
 	 *             if the server response indicated an error
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 *             if the send threw an unknown exception
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
-	 * @throws JsonProcessingException
-	 *             if JSON deserialization failed
 	 */
 	public MtBatchTextSmsResult sendBatch(MtBatchTextSmsCreate sms)
-	        throws InterruptedException, ErrorResponseException,
-	        UnexpectedResponseException, JsonProcessingException,
-	        ExecutionException {
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
@@ -487,19 +484,16 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch submission result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 *             if the send threw an unknown exception
 	 * @throws ErrorResponseException
 	 *             if the server response indicated an error
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
-	 * @throws JsonProcessingException
-	 *             if JSON deserialization failed
 	 */
 	public MtBatchBinarySmsResult sendBatch(MtBatchBinarySmsCreate sms)
-	        throws InterruptedException, ExecutionException,
-	        ErrorResponseException, JsonProcessingException,
-	        UnexpectedResponseException {
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
@@ -565,17 +559,15 @@ public abstract class ApiConnection implements Closeable {
 	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
 	 *             if the server response indicated an error
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 *             if the send threw an unknown exception
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
-	 * @throws JsonProcessingException
-	 *             if JSON deserialization failed
 	 */
 	public MtBatchTextSmsResult replaceBatch(BatchId id,
-	        MtBatchTextSmsCreate sms) throws InterruptedException,
-	        ErrorResponseException, UnexpectedResponseException,
-	        JsonProcessingException, ExecutionException {
+	        MtBatchTextSmsCreate sms)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -594,20 +586,17 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch submission result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 *             if the send threw an unknown exception
 	 * @throws ErrorResponseException
 	 *             if the server response indicated an error
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
-	 * @throws JsonProcessingException
-	 *             if JSON deserialization failed
 	 */
 	public MtBatchBinarySmsResult replaceBatch(BatchId id,
 	        MtBatchBinarySmsCreate sms)
-	        throws InterruptedException, ExecutionException,
-	        ErrorResponseException, JsonProcessingException,
-	        UnexpectedResponseException {
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -674,15 +663,14 @@ public abstract class ApiConnection implements Closeable {
 	 *            a description of the desired updated
 	 * @return the batch with the updates applied
 	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 * @throws JsonProcessingException
+	 * @throws ConcurrentException
 	 * @throws UnexpectedResponseException
 	 * @throws ErrorResponseException
 	 */
 	public MtBatchTextSmsResult updateBatch(BatchId id,
-	        MtBatchTextSmsUpdate sms) throws InterruptedException,
-	        ErrorResponseException, UnexpectedResponseException,
-	        JsonProcessingException, ExecutionException {
+	        MtBatchTextSmsUpdate sms)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -697,17 +685,16 @@ public abstract class ApiConnection implements Closeable {
 	 *            identifier of the batch to update
 	 * @param sms
 	 *            a description of the desired updated
-	 * @return
+	 * @return the batch with the updates applied
 	 * @throws InterruptedException
-	 * @throws JsonProcessingException
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 * @throws ErrorResponseException
 	 * @throws UnexpectedResponseException
 	 */
 	public MtBatchBinarySmsResult updateBatch(BatchId id,
-	        MtBatchBinarySmsUpdate sms) throws InterruptedException,
-	        JsonProcessingException, ExecutionException, ErrorResponseException,
-	        UnexpectedResponseException {
+	        MtBatchBinarySmsUpdate sms)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -850,19 +837,16 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a future containing the batch that was cancelled
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ExecutionException
+	 * @throws ConcurrentException
 	 *             if the send threw an unknown exception
 	 * @throws ErrorResponseException
 	 *             if the server response indicated an error
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
-	 * @throws JsonProcessingException
-	 *             if JSON deserialization failed
 	 */
 	public MtBatchSmsResult cancelBatch(BatchId batchId)
-	        throws InterruptedException, JsonProcessingException,
-	        ExecutionException, ErrorResponseException,
-	        UnexpectedResponseException {
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return cancelBatchAsync(batchId, null).get();
 		} catch (ExecutionException e) {

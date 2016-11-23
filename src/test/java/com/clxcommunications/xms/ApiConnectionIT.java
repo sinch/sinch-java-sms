@@ -283,7 +283,7 @@ public class ApiConnectionIT {
 		}
 	}
 
-	@Test(expected = JsonParseException.class)
+	@Test
 	public void canHandleBatchPostWithInvalidJson() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
@@ -329,6 +329,8 @@ public class ApiConnectionIT {
 		try {
 			conn.sendBatch(request);
 			fail("Expected exception, got none");
+		} catch (ConcurrentException e) {
+			assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));
 		} finally {
 			conn.close();
 		}

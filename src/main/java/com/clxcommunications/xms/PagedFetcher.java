@@ -15,7 +15,6 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.apache.http.concurrent.FutureCallback;
 
 import com.clxcommunications.xms.api.Page;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Used for API calls that emits their result over multiple pages. This class
@@ -34,10 +33,8 @@ public abstract class PagedFetcher<T> {
 	 * 
 	 * @param page
 	 *            the page number (starting from zero)
-	 * @return the page
-	 * @throws JsonProcessingException
-	 *             if the fetched JSON could not be deserialized
-	 * @throws ExecutionException
+	 * @return the fetched page
+	 * @throws ConcurrentException
 	 *             if another checked exception occurred during execution
 	 * @throws ErrorResponseException
 	 *             if the HTTP endpoint returned an error message
@@ -47,9 +44,8 @@ public abstract class PagedFetcher<T> {
 	 *             if the fetch was interrupted before completing
 	 */
 	@Nonnull
-	Page<T> fetch(int page) throws JsonProcessingException, ExecutionException,
-	        ErrorResponseException, UnexpectedResponseException,
-	        InterruptedException {
+	Page<T> fetch(int page) throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {

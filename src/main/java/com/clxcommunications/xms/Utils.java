@@ -6,8 +6,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nonnull;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 /**
  * This class holds a number of static convenience methods for use within the
  * SDK. That is, these methods are not considered part of the public API of this
@@ -71,14 +69,15 @@ public final class Utils {
 
 	/**
 	 * Unwrap exceptions for synchronous send methods. This helper will examine
-	 * an {@link ExecutionException} object and unwrap and throw its cause if it
-	 * makes sense for a synchronous call. Beside the checked exception shown in
-	 * the method signature this method will also unwrap any
+	 * an {@link ExecutionException} and re-throw its cause. Beside the checked
+	 * exception shown in the method signature this method will also unwrap any
 	 * {@link RuntimeException runtime exception} or {@link Error error} and
-	 * directly re-throws it.
+	 * directly re-throw it.
 	 * <p>
-	 * If no unwrapping happens then the given exception is returned unchanged
-	 * to facilitate the following use:
+	 * For checked exceptions we directly throw {@link ErrorResponseException}
+	 * and {@link UnexpectedResponseException}. Any other checked exception is
+	 * wrapped in a {@link ConcurrentException}, which is subsequently returned. Since
+	 * {@link ConcurrentException} is returned we facilitate the following use:
 	 * 
 	 * <pre>
 	 * try {
@@ -93,13 +92,10 @@ public final class Utils {
 	 * @return returns <code>e</code>
 	 * @throws ErrorResponseException
 	 * @throws UnexpectedResponseException
-	 * @throws JsonProcessingException
 	 * @throws ExecutionException
 	 */
-	static ExecutionException maybeUnwrapExecutionException(
-	        ExecutionException e)
-	        throws ErrorResponseException, UnexpectedResponseException,
-	        JsonProcessingException, ExecutionException {
+	static ConcurrentException maybeUnwrapExecutionException(ExecutionException e)
+	        throws ErrorResponseException, UnexpectedResponseException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
 		} else if (e.getCause() instanceof Error) {
@@ -108,11 +104,9 @@ public final class Utils {
 			throw (ErrorResponseException) e.getCause();
 		} else if (e.getCause() instanceof UnexpectedResponseException) {
 			throw (UnexpectedResponseException) e.getCause();
-		} else if (e.getCause() instanceof JsonProcessingException) {
-			throw (JsonProcessingException) e.getCause();
+		} else {
+			return new ConcurrentException(e.getCause());
 		}
-
-		return e;
 	}
 
 }
