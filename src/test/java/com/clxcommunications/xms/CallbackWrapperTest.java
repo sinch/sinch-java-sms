@@ -52,7 +52,7 @@ public class CallbackWrapperTest {
 	        new TestLoggerFactoryResetRule();
 
 	TestLogger logger = TestLoggerFactory
-	        .getTestLogger(CallbackWrapper.ExceptionDropper.class);
+	        .getTestLogger(DropExceptionWrapper.class);
 
 	@Test
 	public void identityCanWrapNull() throws Exception {

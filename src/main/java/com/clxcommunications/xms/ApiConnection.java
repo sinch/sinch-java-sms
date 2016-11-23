@@ -211,7 +211,7 @@ public abstract class ApiConnection implements Closeable {
 
 	/**
 	 * The future callback wrapper to use in all API calls. By default this is
-	 * {@link CallbackWrapper.ExceptionDropper}, that is, any exception thrown
+	 * {@link CallbackWrapper#exceptionDropper}, that is, any exception thrown
 	 * in a given callback is logged and dropped.
 	 * 
 	 * @return a non-null callback wrapper
