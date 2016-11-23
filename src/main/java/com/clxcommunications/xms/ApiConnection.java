@@ -613,12 +613,14 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously submits the given text batch.
+	 * Asynchronously replaces the given text batch.
 	 * 
+	 * @param id
+	 *            identifier of the batch to replace
 	 * @param sms
-	 *            the batch to send
+	 *            the new batch description
 	 * @param callback
-	 *            a callback that is invoked when submit is completed
+	 *            a callback that is invoked when replace is completed
 	 * @return a future whose result is the creation response
 	 */
 	public Future<MtBatchTextSmsResult> replaceBatchAsync(BatchId id,
@@ -636,12 +638,14 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously submits the given binary batch.
+	 * Asynchronously replaces the given binary batch.
 	 * 
+	 * @param id
+	 *            identifier of the batch to replace
 	 * @param sms
-	 *            the batch to send
+	 *            the new batch description
 	 * @param callback
-	 *            a callback that is invoked when submit is completed
+	 *            a callback that is invoked when replace is completed
 	 * @return a future whose result is the creation response
 	 */
 	public Future<MtBatchBinarySmsResult> replaceBatchAsync(BatchId id,
@@ -661,7 +665,7 @@ public abstract class ApiConnection implements Closeable {
 	/**
 	 * Updates the given text batch. The update is performed synchronously.
 	 * 
-	 * @param batchId
+	 * @param id
 	 *            identifier of the batch to update
 	 * @param sms
 	 *            a description of the desired updated
@@ -672,12 +676,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws ApiException
 	 * @throws UnexpectedResponseException
 	 */
-	public MtBatchTextSmsResult updateBatch(BatchId batchId,
+	public MtBatchTextSmsResult updateBatch(BatchId id,
 	        MtBatchTextSmsUpdate sms)
 	        throws InterruptedException, JsonProcessingException,
 	        ExecutionException, ApiException, UnexpectedResponseException {
 		try {
-			return updateBatchAsync(batchId, sms, null).get();
+			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
 			throw Utils.maybeUnwrapExecutionException(e);
 		}
@@ -686,7 +690,7 @@ public abstract class ApiConnection implements Closeable {
 	/**
 	 * Updates the given binary batch. The update is performed synchronously.
 	 * 
-	 * @param batchId
+	 * @param id
 	 *            identifier of the batch to update
 	 * @param sms
 	 *            a description of the desired updated
@@ -697,12 +701,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws ApiException
 	 * @throws UnexpectedResponseException
 	 */
-	public MtBatchBinarySmsResult updateBatch(BatchId batchId,
+	public MtBatchBinarySmsResult updateBatch(BatchId id,
 	        MtBatchBinarySmsUpdate sms)
 	        throws InterruptedException, JsonProcessingException,
 	        ExecutionException, ApiException, UnexpectedResponseException {
 		try {
-			return updateBatchAsync(batchId, sms, null).get();
+			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
 			throw Utils.maybeUnwrapExecutionException(e);
 		}
