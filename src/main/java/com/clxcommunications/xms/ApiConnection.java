@@ -471,7 +471,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -497,7 +497,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -571,7 +571,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -600,7 +600,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -674,7 +674,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -698,7 +698,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
@@ -850,7 +850,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return cancelBatchAsync(batchId, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 

@@ -49,7 +49,7 @@ public abstract class PagedFetcher<T> {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {
-			throw Utils.maybeUnwrapExecutionException(e);
+			throw Utils.unwrapExecutionException(e);
 		}
 	}
 

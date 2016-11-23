@@ -94,7 +94,7 @@ public final class Utils {
 	 * @throws UnexpectedResponseException
 	 * @throws ExecutionException
 	 */
-	static ConcurrentException maybeUnwrapExecutionException(ExecutionException e)
+	static ConcurrentException unwrapExecutionException(ExecutionException e)
 	        throws ErrorResponseException, UnexpectedResponseException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
