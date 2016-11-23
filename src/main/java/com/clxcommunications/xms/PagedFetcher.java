@@ -25,7 +25,7 @@ public abstract class PagedFetcher<T> {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {
-			throw ApiConnection.maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 

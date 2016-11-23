@@ -437,34 +437,6 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Unwrap exceptions for synchronous send methods. This helper will examine
-	 * an {@link ExecutionException} object and unwrap and throw it's cause if
-	 * it makes sense for a synchronous call.
-	 * 
-	 * @param e
-	 *            the exception to examine
-	 * @return returns <code>e</code>
-	 * @throws ApiException
-	 * @throws UnexpectedResponseException
-	 * @throws JsonProcessingException
-	 * @throws ExecutionException
-	 */
-	static ExecutionException maybeUnwrapExecutionException(
-	        ExecutionException e)
-	        throws ApiException, UnexpectedResponseException,
-	        JsonProcessingException, ExecutionException {
-		if (e.getCause() instanceof ApiException) {
-			throw (ApiException) e.getCause();
-		} else if (e.getCause() instanceof UnexpectedResponseException) {
-			throw (UnexpectedResponseException) e.getCause();
-		} else if (e.getCause() instanceof JsonProcessingException) {
-			throw (JsonProcessingException) e.getCause();
-		}
-
-		return e;
-	}
-
-	/**
 	 * Attempts to send the given batch synchronously. Internally this uses an
 	 * asynchronous call and blocks until it completes.
 	 * 
@@ -488,7 +460,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -516,7 +488,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return sendBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -592,7 +564,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -623,7 +595,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -694,7 +666,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return updateBatchAsync(batchId, sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -719,7 +691,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return updateBatchAsync(batchId, sms, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
@@ -873,7 +845,7 @@ public abstract class ApiConnection implements Closeable {
 		try {
 			return cancelBatchAsync(batchId, null).get();
 		} catch (ExecutionException e) {
-			throw maybeUnwrapExecutionException(e);
+			throw Utils.maybeUnwrapExecutionException(e);
 		}
 	}
 
