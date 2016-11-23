@@ -1,11 +1,15 @@
 package com.clxcommunications.xms;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.http.concurrent.FutureCallback;
@@ -42,6 +46,7 @@ public abstract class PagedFetcher<T> {
 	 * @throws InterruptedException
 	 *             if the fetch was interrupted before completing
 	 */
+	@Nonnull
 	Page<T> fetch(int page) throws JsonProcessingException, ExecutionException,
 	        ApiException, UnexpectedResponseException, InterruptedException {
 		try {
@@ -60,21 +65,23 @@ public abstract class PagedFetcher<T> {
 	 *            request callback
 	 * @return a future providing the requested page
 	 */
+	@Nonnull
 	abstract Future<Page<T>> fetchAsync(int page,
-	        FutureCallback<Page<T>> callback);
+	        @Nullable FutureCallback<Page<T>> callback);
 
 	/**
 	 * Fetch all pages, some or all pages may be fetched asynchronously.
 	 * <p>
-	 * The returned collection is ordered by page number but no guarantee is
-	 * made of the order in which the callback is called.
+	 * The returned list is ordered by page number but no guarantee is made of
+	 * the order in which the callback is called.
 	 * 
 	 * @param callback
 	 *            request callback, called once per page
 	 * @return a queue of futures, one for each fetched page
 	 */
-	Queue<Future<Page<T>>> fetchPagesAsync(
-	        final FutureCallback<Page<T>> callback) {
+	@Nonnull
+	List<Future<Page<T>>> fetchPagesAsync(
+	        @Nullable final FutureCallback<Page<T>> callback) {
 		final Queue<Future<Page<T>>> futures =
 		        new ConcurrentLinkedQueue<Future<Page<T>>>();
 
@@ -107,9 +114,13 @@ public abstract class PagedFetcher<T> {
 
 		        });
 
-		futures.add(initialFuture);
+		List<Future<Page<T>>> result =
+		        new ArrayList<Future<Page<T>>>(1 + futures.size());
 
-		return futures;
+		result.add(initialFuture);
+		result.addAll(futures);
+
+		return result;
 	}
 
 	/**
@@ -130,6 +141,7 @@ public abstract class PagedFetcher<T> {
 	 * @throws RuntimeException
 	 *             if the background page fetching failed
 	 */
+	@Nonnull
 	public Iterable<T> elements() {
 
 		return new Iterable<T>() {
@@ -187,6 +199,7 @@ public abstract class PagedFetcher<T> {
 	 * @throws RuntimeException
 	 *             if the background page fetching failed
 	 */
+	@Nonnull
 	public Iterable<Page<T>> pages() {
 
 		return new Iterable<Page<T>>() {
