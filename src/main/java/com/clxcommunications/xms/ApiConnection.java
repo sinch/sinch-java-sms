@@ -49,9 +49,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * An abstract representation of an XMS connection. This class exposes a number
@@ -110,7 +108,7 @@ public abstract class ApiConnection implements Closeable {
 
 		@Nonnull
 		protected T buildSuccessResult(String str, HttpContext context)
-		        throws JsonParseException, JsonMappingException, IOException {
+		        throws JsonProcessingException, IOException {
 			return json.readValue(str, jsonClass);
 		}
 
