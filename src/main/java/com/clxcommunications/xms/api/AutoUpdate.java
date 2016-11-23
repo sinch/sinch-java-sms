@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = AutoUpdate.Builder.class)
 public abstract class AutoUpdate {
 
-	public static final class Builder extends AutoUpdateImpl.Builder {
+	public static class Builder extends AutoUpdateImpl.Builder {
 
 		/**
 		 * The keyword trigger to use for adding a number to a group.

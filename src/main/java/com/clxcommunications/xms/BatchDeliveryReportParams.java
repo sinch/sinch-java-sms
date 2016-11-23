@@ -30,8 +30,7 @@ public abstract class BatchDeliveryReportParams {
 	/**
 	 * A builder of batch delivery report filters.
 	 */
-	public static final class Builder
-	        extends BatchDeliveryReportParamsImpl.Builder {
+	public static class Builder extends BatchDeliveryReportParamsImpl.Builder {
 
 		/**
 		 * Request a summary delivery report.
