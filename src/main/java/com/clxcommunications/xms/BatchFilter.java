@@ -34,7 +34,7 @@ public abstract class BatchFilter {
 	/**
 	 * Limits results to batches sent at or after this date.
 	 * 
-	 * @return a non-null date
+	 * @return a date
 	 */
 	@Nullable
 	public abstract LocalDate startDate();
@@ -42,7 +42,7 @@ public abstract class BatchFilter {
 	/**
 	 * Limits results to batches send before this date.
 	 * 
-	 * @return a non-null date
+	 * @return a date
 	 */
 	@Nullable
 	public abstract LocalDate endDate();

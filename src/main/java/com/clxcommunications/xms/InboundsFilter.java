@@ -13,6 +13,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 import org.threeten.bp.LocalDate;
 
+/**
+ * Describes a filter for limiting results when fetching inbound messages.
+ */
 @Value.Immutable
 @ValueStylePublic
 public abstract class InboundsFilter {
@@ -28,14 +31,33 @@ public abstract class InboundsFilter {
 		return 0;
 	}
 
+	/**
+	 * Limits results to inbound messages sent at or after this date.
+	 * 
+	 * @return a date
+	 */
 	@Nullable
 	public abstract LocalDate startDate();
 
+	/**
+	 * Limits results to inbound messages send before this date.
+	 * 
+	 * @return a date
+	 */
 	@Nullable
 	public abstract LocalDate endDate();
 
+	/**
+	 * Limits results to inbound messages destined for one of these numbers. If
+	 * empty then all message destinations are eligible.
+	 * 
+	 * @return a set of message destinations
+	 */
 	public abstract Set<String> to();
 
+	/**
+	 * Verifies that this filter is in a reasonable state.
+	 */
 	protected void check() {
 		for (String s : to()) {
 			if (s.contains(",")) {

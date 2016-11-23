@@ -27,13 +27,26 @@ public abstract class BatchDeliveryReportParams {
 		SUMMARY, FULL
 	}
 
+	/**
+	 * A builder of batch delivery report filters.
+	 */
 	public static final class Builder
 	        extends BatchDeliveryReportParamsImpl.Builder {
 
+		/**
+		 * Request a summary delivery report.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder summaryReport() {
 			return this.reportType(ReportType.SUMMARY);
 		}
 
+		/**
+		 * Request a full delivery report.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder fullReport() {
 			return this.reportType(ReportType.FULL);
 		}
@@ -58,11 +71,26 @@ public abstract class BatchDeliveryReportParams {
 	 */
 	public abstract BatchId batchId();
 
+	/**
+	 * The desired report type. If not set then the default report type is used.
+	 * 
+	 * @return the desired report type or <code>null</code> if default
+	 */
 	@Nullable
 	public abstract ReportType reportType();
 
+	/**
+	 * A set of delivery statuses that should be fetches.
+	 * 
+	 * @return the delivery statuses
+	 */
 	public abstract Set<DeliveryStatus> statuses();
 
+	/**
+	 * A set of status codes that should be fetches.
+	 * 
+	 * @return the status codes
+	 */
 	public abstract Set<Integer> codes();
 
 	/**

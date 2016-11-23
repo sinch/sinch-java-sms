@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Wrapper class for API objects used for update API methods. Allows
  * 
  * @param <T>
- *            the underlying API type
+ *            the wrapped type
  */
 @Value.Immutable
 @ValueStylePackageDirect

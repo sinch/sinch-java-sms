@@ -11,6 +11,9 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 
+/**
+ * Describes a filter for limiting results when fetching groups.
+ */
 @Value.Immutable
 @ValueStylePublic
 public abstract class GroupFilter {

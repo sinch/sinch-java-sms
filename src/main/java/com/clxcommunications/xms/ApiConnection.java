@@ -174,14 +174,14 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Authorization token.
+	 * The XMS authorization token.
 	 * 
 	 * @return a non-null string
 	 */
 	public abstract String token();
 
 	/**
-	 * Service username.
+	 * The XMS service username.
 	 * 
 	 * @return a non-null string
 	 */
@@ -245,6 +245,9 @@ public abstract class ApiConnection implements Closeable {
 		}
 	}
 
+	/**
+	 * Validates that this object is in a coherent state.
+	 */
 	@Value.Check
 	protected void check() {
 		if (!endpointBasePath().startsWith("/")) {
@@ -303,6 +306,7 @@ public abstract class ApiConnection implements Closeable {
 	 *             if the generated URL is invalid, wraps the
 	 *             {@link URISyntaxException}
 	 */
+	@Nonnull
 	private URI endpoint(String subPath) {
 		return endpoint(subPath, null);
 	}
@@ -351,13 +355,13 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Posts a JSON serialization of the given object to the given endpoint.
+	 * POSTs a JSON serialization of the given object to the given endpoint.
 	 * 
 	 * @param endpoint
 	 *            the target endpoint
 	 * @param object
 	 *            the object whose JSON representation is sent
-	 * @return a HTTP post request.
+	 * @return a HTTP post request
 	 */
 	private <T> HttpPost post(URI endpoint, T object) {
 		return withJsonContent(object,
@@ -365,23 +369,37 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Puts a JSON serialization of the given object to the given endpoint.
+	 * PUTs a JSON serialization of the given object to the given endpoint.
 	 * 
 	 * @param endpoint
 	 *            the target endpoint
 	 * @param object
 	 *            the object whose JSON representation is sent
-	 * @return a HTTP post request.
+	 * @return a HTTP put request
 	 */
 	private <T> HttpPut put(URI endpoint, T object) {
 		return withJsonContent(object,
 		        withStandardHeaders(new HttpPut(endpoint)));
 	}
 
+	/**
+	 * GETs from the given endpoint.
+	 * 
+	 * @param endpoint
+	 *            the target endpoint
+	 * @return a HTTP get request
+	 */
 	private HttpGet get(URI endpoint) {
 		return withStandardHeaders(new HttpGet(endpoint));
 	}
 
+	/**
+	 * DELETEs from the given endpoint.
+	 * 
+	 * @param endpoint
+	 *            the target endpoint
+	 * @return a HTTP delete request
+	 */
 	private HttpDelete delete(URI endpoint) {
 		return withStandardHeaders(new HttpDelete(endpoint));
 	}

@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This interface provides a method for wrapping a {@link FutureCallback} such
  * that additional logic can be introduced to the callback.
+ * <p>
+ * This class also contains the predefined wrappers {@link #exceptionDropper}
+ * and {@link #identity}.
  */
 public interface CallbackWrapper {
 
@@ -75,8 +78,8 @@ public interface CallbackWrapper {
 	        new ExceptionDropper();
 
 	/**
-	 * A callback wrapper that doesn't wrap, that is, it simply returns the
-	 * input callback.
+	 * The identity callback wrapper. That is, it simply returns the input
+	 * callback untouched.
 	 */
 	public static final CallbackWrapper identity =
 	        new CallbackWrapper() {
@@ -94,6 +97,8 @@ public interface CallbackWrapper {
 	 * 
 	 * @param callback
 	 *            the callback object to wrap
+	 * @param <T>
+	 *            the result type of the callback
 	 * @return a wrapped callback
 	 */
 	@Nullable

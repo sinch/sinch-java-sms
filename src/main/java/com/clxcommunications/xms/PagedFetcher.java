@@ -1,6 +1,5 @@
 package com.clxcommunications.xms;
 
-import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,12 +13,35 @@ import org.apache.http.concurrent.FutureCallback;
 import com.clxcommunications.xms.api.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+/**
+ * Used for API calls that emits their result over multiple pages. This class
+ * includes convenience methods for interacting with such pages in various ways.
+ * For example, it is possible to retrieve individual pages or to produce an
+ * iterator that seamlessly will iterate over all elements of all pages.
+ * 
+ * @param <T>
+ *            the element type
+ */
 @NotThreadSafe
 public abstract class PagedFetcher<T> {
 
-	public PagedFetcher() {
-	}
-
+	/**
+	 * Synchronously fetches the page having the given page number.
+	 * 
+	 * @param page
+	 *            the page number (starting from zero)
+	 * @return the page
+	 * @throws JsonProcessingException
+	 *             if the fetched JSON could not be deserialized
+	 * @throws ExecutionException
+	 *             if another checked exception occurred during execution
+	 * @throws ApiException
+	 *             if the HTTP endpoint returned an error message
+	 * @throws UnexpectedResponseException
+	 *             if the HTTP endpoint responded with an unexpected message
+	 * @throws InterruptedException
+	 *             if the fetch was interrupted before completing
+	 */
 	Page<T> fetch(int page) throws JsonProcessingException, ExecutionException,
 	        ApiException, UnexpectedResponseException, InterruptedException {
 		try {
@@ -30,7 +52,7 @@ public abstract class PagedFetcher<T> {
 	}
 
 	/**
-	 * Attempts to asynchronously fetch the given page.
+	 * Asynchronously fetches the page having the given page number.
 	 * 
 	 * @param page
 	 *            page to fetch (staring from zero)
@@ -43,11 +65,13 @@ public abstract class PagedFetcher<T> {
 
 	/**
 	 * Fetch all pages, some or all pages may be fetched asynchronously.
+	 * <p>
+	 * The returned collection is ordered by page number but no guarantee is
+	 * made of the order in which the callback is called.
 	 * 
 	 * @param callback
 	 *            request callback, called once per page
 	 * @return a queue of futures, one for each fetched page
-	 * @throws URISyntaxException
 	 */
 	Queue<Future<Page<T>>> fetchPagesAsync(
 	        final FutureCallback<Page<T>> callback) {

@@ -10,7 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * This class holds a number of static convenience methods for use within the
- * package. They are not intended for public exposure.
+ * SDK. That is, these methods are not considered part of the public API of this
+ * library and their behavior may change without notice!
  */
 public final class Utils {
 
