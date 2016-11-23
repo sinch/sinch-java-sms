@@ -103,7 +103,7 @@ public class ApiConnectionIT {
 	        new TestLoggerFactoryResetRule();
 
 	@Test
-	public void canPostBinaryBatch() throws Throwable {
+	public void canPostBinaryBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
@@ -150,7 +150,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canPostTextBatch() throws Throwable {
+	public void canPostTextBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -196,7 +196,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canPostTextBatchWithSubstitutions() throws Throwable {
+	public void canPostTextBatchWithSubstitutions() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -284,7 +284,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test(expected = JsonParseException.class)
-	public void canHandleBatchPostWithInvalidJson() throws Throwable {
+	public void canHandleBatchPostWithInvalidJson() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -335,7 +335,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canUpdateSimpleTextBatch() throws Throwable {
+	public void canUpdateSimpleTextBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -382,7 +382,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canUpdateSimpleBinaryBatch() throws Throwable {
+	public void canUpdateSimpleBinaryBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -433,7 +433,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchTextBatchAsync() throws Throwable {
+	public void canFetchTextBatchAsync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -494,7 +494,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchBinaryBatch() throws Throwable {
+	public void canFetchBinaryBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -556,7 +556,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canHandle404WhenFetchingBatch() throws Throwable {
+	public void canHandle404WhenFetchingBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -675,7 +675,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canCancelBatch() throws Throwable {
+	public void canCancelBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -726,9 +726,12 @@ public class ApiConnectionIT {
 	/**
 	 * Verifies that the default HTTP client actually can handle multiple
 	 * simultaneous requests.
+	 * 
+	 * @throws Exception
+	 *             shouldn't happen
 	 */
 	@Test
-	public void canCancelBatchConcurrently() throws Throwable {
+	public void canCancelBatchConcurrently() throws Exception {
 		String username = TestUtils.freshUsername();
 
 		// Set up the first request (the one that will be delayed).
