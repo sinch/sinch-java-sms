@@ -36,7 +36,6 @@ import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
 import org.immutables.value.Value;
-import org.immutables.value.Value.Style.ImplementationVisibility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,9 +62,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * necessary to later close the connection using {@link #close()}.
  */
 @Value.Immutable(copy = false)
-@Value.Style(depluralize = true, jdkOnly = true,
-        overshadowImplementation = true, from = "using", build = "start",
-        typeImmutable = "*Impl", visibility = ImplementationVisibility.PACKAGE)
+@ValueStylePackageDirect
 public abstract class ApiConnection implements Closeable {
 
 	public static class Builder extends ApiConnectionImpl.Builder {
@@ -74,13 +71,16 @@ public abstract class ApiConnection implements Closeable {
 			return this.endpointHost(new HttpHost(hostname, port, scheme));
 		}
 
-		@Override
+		/**
+		 * Builds and starts the defined API connection. This is identical to
+		 * calling {@link #build()} and then {@link ApiConnection#start()}.
+		 * 
+		 * @return an API connection
+		 */
 		public ApiConnection start() {
-			ApiConnection conn = super.start();
+			ApiConnection conn = super.build();
 
-			log.debug("Starting API connection : {}", conn);
-
-			conn.httpClient().start();
+			conn.start();
 
 			return conn;
 		}
@@ -164,6 +164,16 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	/**
+	 * Starts up this API connection. This must be called before performing any
+	 * API calls.
+	 */
+	public void start() {
+		log.debug("Starting API connection : {}", this);
+
+		httpClient().start();
 	}
 
 	/**
