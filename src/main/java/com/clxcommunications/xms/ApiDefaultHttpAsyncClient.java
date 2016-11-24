@@ -23,14 +23,24 @@ import org.apache.http.protocol.HttpContext;
  */
 final class ApiDefaultHttpAsyncClient implements HttpAsyncClient, Closeable {
 
-	/*
-	 * TODO: Better default client. Need timeout values, max connections per
-	 * route, max overall connections, etc.
+	/**
+	 * The default maximum number of simultaneous connections to open towards
+	 * the XMS endpoint.
+	 */
+	private static final int DEFAULT_MAX_CONN = 10;
+
+	/**
+	 * The underlying actual HTTP client.
 	 */
 	private final CloseableHttpAsyncClient client;
 
 	public ApiDefaultHttpAsyncClient() {
-		client = HttpAsyncClients.createMinimal();
+		// TODO: Is this a good default setup?
+		client = HttpAsyncClients.custom()
+		        .disableCookieManagement()
+		        .setMaxConnPerRoute(DEFAULT_MAX_CONN)
+		        .setMaxConnTotal(DEFAULT_MAX_CONN)
+		        .build();
 	}
 
 	void start() {
