@@ -8,6 +8,7 @@
 	<packaging>jar</packaging>
 	<name>CLX Java SDK for XMS</name>
 	<description>Library providing a Java API for the CLX Communications batch messaging REST API.</description>
+	<inceptionYear>2016</inceptionYear>
 	<organization>
 		<name>CLX Communications</name>
 		<url>https://www.clxcommunications.com/</url>
