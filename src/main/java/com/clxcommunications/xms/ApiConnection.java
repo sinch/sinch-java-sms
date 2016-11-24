@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.nio.CharBuffer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -14,11 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -26,19 +22,14 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.HttpAsyncClient;
-import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.protocol.BasicAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
-import org.apache.http.protocol.HttpContext;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
@@ -118,59 +109,6 @@ public abstract class ApiConnection implements Closeable {
 			conn.start();
 
 			return conn;
-		}
-
-	}
-
-	private class JsonApiAsyncConsumer<T> extends AsyncCharConsumer<T> {
-
-		private final Class<T> jsonClass;
-		private HttpResponse response;
-		private StringBuilder sb;
-
-		public JsonApiAsyncConsumer(Class<T> jsonClass) {
-			this.jsonClass = jsonClass;
-		}
-
-		@Override
-		protected void onCharReceived(CharBuffer buf, IOControl ioctrl)
-		        throws IOException {
-			sb.append(buf.toString());
-		}
-
-		@Override
-		protected void onResponseReceived(HttpResponse response)
-		        throws HttpException, IOException {
-			this.response = response;
-			this.sb = new StringBuilder();
-		}
-
-		@Nonnull
-		protected T buildSuccessResult(String str, HttpContext context)
-		        throws JsonProcessingException, IOException {
-			return json.readValue(str, jsonClass);
-		}
-
-		@Override
-		protected T buildResult(HttpContext context) throws Exception {
-			int code = response.getStatusLine().getStatusCode();
-
-			switch (code) {
-			case HttpStatus.SC_OK:
-			case HttpStatus.SC_CREATED:
-				return buildSuccessResult(sb.toString(), context);
-			case HttpStatus.SC_BAD_REQUEST:
-			case HttpStatus.SC_FORBIDDEN:
-				ApiError error = json.readValue(sb.toString(), ApiError.class);
-				throw new ErrorResponseException(error);
-			default:
-				// TODO: Good idea to buffer the response in this case?
-				ContentType contentType =
-				        ContentType.getLenient(response.getEntity());
-				response.setEntity(
-				        new StringEntity(sb.toString(), contentType));
-				throw new UnexpectedResponseException(response);
-			}
 		}
 
 	}
@@ -417,7 +355,8 @@ public abstract class ApiConnection implements Closeable {
 	@SuppressWarnings("unchecked")
 	private <T, P extends T> JsonApiAsyncConsumer<T> jsonAsyncConsumer(
 	        Class<P> clazz) {
-		return (JsonApiAsyncConsumer<T>) new JsonApiAsyncConsumer<P>(clazz);
+		return (JsonApiAsyncConsumer<T>) new JsonApiAsyncConsumer<P>(json,
+		        clazz);
 	}
 
 	/**
@@ -848,8 +787,7 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
 		HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
-		        new JsonApiAsyncConsumer<MtBatchSmsResult>(
-		                MtBatchSmsResult.class);
+		        jsonAsyncConsumer(MtBatchSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
