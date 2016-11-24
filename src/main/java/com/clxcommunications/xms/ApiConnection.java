@@ -50,6 +50,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * An abstract representation of an XMS connection. This class exposes a number
@@ -95,6 +96,16 @@ public abstract class ApiConnection implements Closeable {
 			return this.endpointHost(new HttpHost(hostname, port, scheme));
 		}
 
+		@Override
+		public ApiConnection build() {
+			ApiConnection conn = super.build();
+
+			conn.json.configure(SerializationFeature.INDENT_OUTPUT,
+			        conn.prettyPrintJson());
+
+			return conn;
+		}
+
 		/**
 		 * Builds and starts the defined API connection. This is identical to
 		 * calling {@link #build()} and then {@link ApiConnection#start()}.
@@ -102,7 +113,7 @@ public abstract class ApiConnection implements Closeable {
 		 * @return an API connection
 		 */
 		public ApiConnection start() {
-			ApiConnection conn = super.build();
+			ApiConnection conn = build();
 
 			conn.start();
 
