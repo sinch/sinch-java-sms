@@ -37,6 +37,8 @@ import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
 import org.immutables.value.Value;
 import org.immutables.value.Value.Style.ImplementationVisibility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.clxcommunications.xms.api.ApiError;
 import com.clxcommunications.xms.api.BatchId;
@@ -75,6 +77,8 @@ public abstract class ApiConnection implements Closeable {
 		@Override
 		public ApiConnection start() {
 			ApiConnection conn = super.start();
+
+			log.debug("Starting API connection : {}", conn);
 
 			conn.httpClient().start();
 
@@ -136,6 +140,9 @@ public abstract class ApiConnection implements Closeable {
 
 	}
 
+	private static final Logger log =
+	        LoggerFactory.getLogger(ApiConnection.class);
+
 	/**
 	 * A Jackson object mapper.
 	 */
@@ -168,6 +175,8 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Override
 	public void close() throws IOException {
+		log.debug("Closing API connection : {}", this);
+
 		httpClient().close();
 	}
 
