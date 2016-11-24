@@ -708,9 +708,13 @@ public abstract class ApiConnection implements Closeable {
 	 *            a description of the desired updated
 	 * @return the batch with the updates applied
 	 * @throws InterruptedException
-	 * @throws ConcurrentException
-	 * @throws UnexpectedResponseException
+	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
 	 */
 	public MtBatchTextSmsResult updateBatch(BatchId id,
 	        MtBatchTextSmsUpdate sms)
@@ -732,9 +736,13 @@ public abstract class ApiConnection implements Closeable {
 	 *            a description of the desired updated
 	 * @return the batch with the updates applied
 	 * @throws InterruptedException
-	 * @throws ConcurrentException
+	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
 	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
 	 */
 	public MtBatchBinarySmsResult updateBatch(BatchId id,
 	        MtBatchBinarySmsUpdate sms)
