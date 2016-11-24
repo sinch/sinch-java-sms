@@ -27,9 +27,8 @@ import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.IOControl;
+import org.apache.http.nio.client.HttpAsyncClient;
 import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.protocol.BasicAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
@@ -196,23 +195,33 @@ public abstract class ApiConnection implements Closeable {
 	 * API calls.
 	 */
 	public void start() {
-		log.debug("Starting API connection : {}", this);
+		log.debug("Starting API connection: {}", this);
 
-		httpClient().start();
+		if (httpClient() instanceof ApiDefaultHttpAsyncClient) {
+			((ApiDefaultHttpAsyncClient) httpClient()).start();
+		} else {
+			log.debug("Not starting HTTP client since it was given externally");
+		}
 	}
 
 	/**
-	 * Closes this API connection and releases associated resources. In
-	 * particular the underlying {@link CloseableHttpAsyncClient} will be
-	 * closed.
+	 * Closes this API connection and releases associated resources.
+	 * <p>
+	 * Note, this will <em>not</em> shut down the HTTP client if the API
+	 * connection was initialized with a custom {@link HttpAsyncClient http
+	 * client}.
 	 * 
 	 * @see java.io.Closeable#close()
 	 */
 	@Override
 	public void close() throws IOException {
-		log.debug("Closing API connection : {}", this);
+		log.debug("Closing API connection: {}", this);
 
-		httpClient().close();
+		if (httpClient() instanceof ApiDefaultHttpAsyncClient) {
+			((ApiDefaultHttpAsyncClient) httpClient()).close();
+		} else {
+			log.debug("Not closing HTTP client since it was given externally");
+		}
 	}
 
 	/**
@@ -244,13 +253,17 @@ public abstract class ApiConnection implements Closeable {
 	 * The HTTP client used by this connection. The default client is a minimal
 	 * one that does not support, for example, authentication or redirects.
 	 * <p>
-	 * Note, this HTTP client is closed when this API connection is closed.
+	 * Note, when this API connection is closed then this HTTP client is also
+	 * closed <em>only</em> if the default HTTP client is used. That is, if
+	 * {@link Builder#httpClient(HttpAsyncClient)} was used to initialize using
+	 * an external {@link HttpAsyncClient} then this client must also be started
+	 * up and shut down externally.
 	 * 
 	 * @return a non-null HTTP client
 	 */
 	@Value.Default
-	public CloseableHttpAsyncClient httpClient() {
-		return HttpAsyncClients.createMinimal();
+	public HttpAsyncClient httpClient() {
+		return new ApiDefaultHttpAsyncClient();
 	}
 
 	/**
