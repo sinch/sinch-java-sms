@@ -452,15 +452,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(get(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -475,11 +467,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path);
 	}
 
 	@Test
@@ -502,15 +490,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(get(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -536,11 +516,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path);
 	}
 
 	@Test
@@ -564,15 +540,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(get(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -598,11 +566,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path);
 	}
 
 	@Test
@@ -717,11 +681,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path);
 	}
 
 	@Test
@@ -888,15 +848,7 @@ public class ApiConnectionIT {
 		                .numPages(0)
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(get(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -924,11 +876,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path);
 	}
 
 	@Test
@@ -945,15 +893,8 @@ public class ApiConnectionIT {
 		                .size(0)
 		                .numPages(2)
 		                .build();
-		String response1 = json.writeValueAsString(expected1);
 
-		wm.stubFor(get(
-		        urlEqualTo(path1))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response1)));
+		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
 		String path2 = "/xms/v1/" + username + "/batches?page=1";
@@ -964,15 +905,8 @@ public class ApiConnectionIT {
 		                .size(0)
 		                .numPages(2)
 		                .build();
-		String response2 = json.writeValueAsString(expected2);
 
-		wm.stubFor(get(
-		        urlEqualTo(path2))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response2)));
+		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -1013,17 +947,8 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path1))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
-
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path2))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path1);
+		verifyGetRequest(path2);
 	}
 
 	@Test
@@ -1046,15 +971,8 @@ public class ApiConnectionIT {
 		                                .canceled(false)
 		                                .build())
 		                .build();
-		String response1 = json.writeValueAsString(expected1);
 
-		wm.stubFor(get(
-		        urlEqualTo(path1))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response1)));
+		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
 		String path2 = "/xms/v1/" + username + "/batches?page=1";
@@ -1078,15 +996,8 @@ public class ApiConnectionIT {
 		                                .canceled(false)
 		                                .build())
 		                .build();
-		String response2 = json.writeValueAsString(expected2);
 
-		wm.stubFor(get(
-		        urlEqualTo(path2))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response2)));
+		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -1114,17 +1025,8 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path1))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
-
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path2))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path1);
+		verifyGetRequest(path2);
 	}
 
 	@Test
@@ -1147,15 +1049,8 @@ public class ApiConnectionIT {
 		                                .canceled(false)
 		                                .build())
 		                .build();
-		String response1 = json.writeValueAsString(expected1);
 
-		wm.stubFor(get(
-		        urlEqualTo(path1))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response1)));
+		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
 		String path2 = "/xms/v1/" + username + "/batches?page=1";
@@ -1179,15 +1074,8 @@ public class ApiConnectionIT {
 		                                .canceled(false)
 		                                .build())
 		                .build();
-		String response2 = json.writeValueAsString(expected2);
 
-		wm.stubFor(get(
-		        urlEqualTo(path2))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response2)));
+		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
@@ -1215,21 +1103,51 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(getRequestedFor(
-		        urlEqualTo(path1))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyGetRequest(path1);
+		verifyGetRequest(path2);
+	}
 
+	/**
+	 * Helper that sets up WireMock to respond to a GET using a JSON body.
+	 * 
+	 * @param response
+	 *            the response to give, serialized to JSON
+	 * @param path
+	 *            the path on which to listen
+	 * @param status
+	 *            the response HTTP status
+	 * @throws JsonProcessingException
+	 *             if the given response object could not be serialized
+	 */
+	private void stubGetResponse(Object response, String path)
+	        throws JsonProcessingException {
+		byte[] body = json.writeValueAsBytes(response);
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(body)));
+	}
+
+	/**
+	 * Helper that sets up WireMock to verify a GET request.
+	 * 
+	 * @param path
+	 *            the request path to match
+	 */
+	private void verifyGetRequest(String path) {
 		wm.verify(getRequestedFor(
-		        urlEqualTo(path2))
+		        urlEqualTo(path))
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
 		                .withHeader("Authorization", equalTo("Bearer tok")));
 	}
 
 	/**
-	 * Helper that sets up WireMock to respond using a JSON body.
+	 * Helper that sets up WireMock to respond to a POST using a JSON body.
 	 * 
 	 * @param response
 	 *            the response to give, serialized to JSON
