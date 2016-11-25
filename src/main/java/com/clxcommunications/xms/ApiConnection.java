@@ -803,7 +803,7 @@ public abstract class ApiConnection implements Closeable {
 	 *            ID of the batch to fetch
 	 * @param callback
 	 *            a callback that is activated at call completion
-	 * @return a future yielding the updated status of the batch
+	 * @return a future yielding the desired batch
 	 */
 	public Future<MtBatchSmsResult> fetchBatchAsync(BatchId batchId,
 	        FutureCallback<MtBatchSmsResult> callback) {
@@ -875,7 +875,7 @@ public abstract class ApiConnection implements Closeable {
 	 * 
 	 * @param batchId
 	 *            identifier of the batch to delete
-	 * @return a future containing the batch that was cancelled
+	 * @return the cancelled batch
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
 	 * @throws ConcurrentException
