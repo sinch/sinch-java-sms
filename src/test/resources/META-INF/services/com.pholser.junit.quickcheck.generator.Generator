@@ -1,2 +1,3 @@
+com.clxcommunications.testsupport.BatchIdGenerator
 com.clxcommunications.testsupport.ThreeTenLocalDateGenerator
 com.clxcommunications.testsupport.ThreeTenOffsetDateTimeGenerator

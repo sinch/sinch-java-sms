@@ -104,9 +104,9 @@ public class BatchDeliveryReportTest {
 	}
 
 	@Property
-	public void canDeserialize(String batchId) throws Exception {
+	public void canDeserialize(BatchId batchId) throws Exception {
 		BatchDeliveryReport expected = new BatchDeliveryReport.Builder()
-		        .batchId(BatchId.of(batchId))
+		        .batchId(batchId)
 		        .totalMessageCount(50)
 		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(10)
