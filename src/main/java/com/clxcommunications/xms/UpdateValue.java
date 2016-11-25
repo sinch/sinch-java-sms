@@ -31,6 +31,8 @@ public abstract class UpdateValue<T> {
 	 * value.
 	 * 
 	 * @return an update indicating a reset
+	 * @param <T>
+	 *            the wrapped type
 	 */
 	@SuppressWarnings("unchecked")
 	@Nonnull
@@ -44,6 +46,8 @@ public abstract class UpdateValue<T> {
 	 * @param value
 	 *            the new value
 	 * @return an update indicating a set
+	 * @param <T>
+	 *            the wrapped type
 	 */
 	@JsonCreator
 	@Nonnull
