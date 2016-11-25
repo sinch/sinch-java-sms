@@ -42,7 +42,9 @@ import org.threeten.bp.ZoneOffset;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.api.ApiError;
+import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.DeliveryStatus;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -1105,6 +1107,124 @@ public class ApiConnectionIT {
 
 		verifyGetRequest(path1);
 		verifyGetRequest(path2);
+	}
+
+	@Test
+	public void canFetchDeliveryReportSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id()
+		        + "/delivery_report"
+		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
+
+		final BatchDeliveryReport expected =
+		        new BatchDeliveryReport.Builder()
+		                .batchId(batchId)
+		                .totalMessageCount(1010)
+		                .addStatus(
+		                        new BatchDeliveryReport.Status.Builder()
+		                                .code(200)
+		                                .status(DeliveryStatus.ABORTED)
+		                                .count(10)
+		                                .addRecipient("rec1", "rec2")
+		                                .build())
+		                .addStatus(
+		                        new BatchDeliveryReport.Status.Builder()
+		                                .code(300)
+		                                .status(DeliveryStatus.DELIVERED)
+		                                .count(20)
+		                                .addRecipient("rec3", "rec4", "rec5")
+		                                .build())
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		BatchDeliveryReportParams filter =
+		        new BatchDeliveryReportParams.Builder()
+		                .fullReport()
+		                .addStatus(DeliveryStatus.ABORTED,
+		                        DeliveryStatus.DELIVERED)
+		                .addCode(200, 300)
+		                .build();
+
+		try {
+			BatchDeliveryReport actual =
+			        conn.fetchDeliveryReport(batchId, filter);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchDeliveryReportAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id()
+		        + "/delivery_report?type=full";
+
+		final BatchDeliveryReport expected =
+		        new BatchDeliveryReport.Builder()
+		                .batchId(batchId)
+		                .totalMessageCount(1010)
+		                .addStatus(
+		                        new BatchDeliveryReport.Status.Builder()
+		                                .code(200)
+		                                .status(DeliveryStatus.ABORTED)
+		                                .count(10)
+		                                .addRecipient("rec1", "rec2")
+		                                .build())
+		                .addStatus(
+		                        new BatchDeliveryReport.Status.Builder()
+		                                .code(300)
+		                                .status(DeliveryStatus.DELIVERED)
+		                                .count(20)
+		                                .addRecipient("rec3", "rec4", "rec5")
+		                                .build())
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		BatchDeliveryReportParams filter =
+		        new BatchDeliveryReportParams.Builder()
+		                .fullReport()
+		                .build();
+
+		try {
+			FutureCallback<BatchDeliveryReport> testCallback =
+			        new TestCallback<BatchDeliveryReport>() {
+
+				        @Override
+				        public void completed(BatchDeliveryReport result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			BatchDeliveryReport actual = conn.fetchDeliveryReportAsync(
+			        batchId, filter, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
 	}
 
 	/**

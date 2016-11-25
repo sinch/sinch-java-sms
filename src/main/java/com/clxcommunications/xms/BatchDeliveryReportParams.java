@@ -13,7 +13,6 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 
-import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.DeliveryStatus;
 
 /**
@@ -69,24 +68,6 @@ public abstract class BatchDeliveryReportParams {
 	}
 
 	/**
-	 * The requested number of entries per page. A non-positive value means that
-	 * the default value will be used.
-	 * 
-	 * @return the desired page size
-	 */
-	@Value.Default
-	public int pageSize() {
-		return 0;
-	}
-
-	/**
-	 * Batch ID whose delivery report should be retrieved.
-	 * 
-	 * @return a non-null batch ID
-	 */
-	public abstract BatchId batchId();
-
-	/**
 	 * The desired report type. If not set then the default report type is used.
 	 * 
 	 * @return the desired report type or <code>null</code> if default
@@ -116,17 +97,8 @@ public abstract class BatchDeliveryReportParams {
 	 * @return a non-null string containing query parameters
 	 */
 	@Nonnull
-	String toUrlEncodedQuery(int page) {
+	String toUrlEncodedQuery() {
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(6);
-
-		params.add(new BasicNameValuePair("page", String.valueOf(page)));
-
-		if (pageSize() > 0) {
-			params.add(new BasicNameValuePair("page_size",
-			        String.valueOf(pageSize())));
-		}
-
-		params.add(new BasicNameValuePair("id", batchId().id()));
 
 		if (reportType() != null) {
 			params.add(new BasicNameValuePair("type",

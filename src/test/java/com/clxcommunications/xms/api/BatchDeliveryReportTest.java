@@ -19,15 +19,15 @@ public class BatchDeliveryReportTest {
 
 	@Test
 	public void canSerializeSummary() throws Exception {
-		BatchDeliveryReport input = BatchDeliveryReportImpl.builder()
+		BatchDeliveryReport input = new BatchDeliveryReport.Builder()
 		        .batchId(BatchId.of("batchid"))
 		        .totalMessageCount(50)
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(10)
 		                .status(DeliveryStatus.DELIVERED)
 		                .count(20)
 		                .build())
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(20)
 		                .status(DeliveryStatus.FAILED)
 		                .count(30)
@@ -60,16 +60,16 @@ public class BatchDeliveryReportTest {
 
 	@Test
 	public void canSerializeFull() throws Exception {
-		BatchDeliveryReport input = BatchDeliveryReportImpl.builder()
+		BatchDeliveryReport input = new BatchDeliveryReport.Builder()
 		        .batchId(BatchId.of("batchid"))
 		        .totalMessageCount(50)
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(10)
 		                .status(DeliveryStatus.DELIVERED)
 		                .count(20)
 		                .addRecipient("to1", "to2")
 		                .build())
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(20)
 		                .status(DeliveryStatus.FAILED)
 		                .count(30)
@@ -105,15 +105,15 @@ public class BatchDeliveryReportTest {
 
 	@Property
 	public void canDeserialize(String batchId) throws Exception {
-		BatchDeliveryReport expected = BatchDeliveryReportImpl.builder()
+		BatchDeliveryReport expected = new BatchDeliveryReport.Builder()
 		        .batchId(BatchId.of(batchId))
 		        .totalMessageCount(50)
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(10)
 		                .status(DeliveryStatus.DELIVERED)
 		                .count(20)
 		                .build())
-		        .addStatus(BatchDeliveryReportImpl.Status.builder()
+		        .addStatus(new BatchDeliveryReport.Status.Builder()
 		                .code(20)
 		                .status(DeliveryStatus.FAILED)
 		                .count(30)

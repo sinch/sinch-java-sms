@@ -30,6 +30,7 @@ import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
@@ -327,10 +328,10 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	@Nonnull
-	private URI batchDeliveryReportEndpoint(BatchId batchId, String type) {
+	private URI batchDeliveryReportEndpoint(BatchId batchId, String query) {
 		return endpoint(
 		        "/batches/" + batchId.id() + "/delivery_report",
-		        "type=" + type);
+		        query);
 	}
 
 	@Nonnull
@@ -913,6 +914,62 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
 		        jsonAsyncConsumer(MtBatchSmsResult.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Fetches a delivery report for the batch with the given batch ID. Blocks
+	 * until the fetch has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch whose delivery report to fetch
+	 * @param filter
+	 *            parameters controlling the response content
+	 * @return the desired delivery report
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public BatchDeliveryReport fetchDeliveryReport(BatchId id,
+	        BatchDeliveryReportParams filter)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchDeliveryReportAsync(id, filter, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches a delivery report for the batch with the given batch ID.
+	 * 
+	 * @param id
+	 *            batch ID of the delivery report batch to fetch
+	 * @param filter
+	 *            parameters controlling the response content
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the delivery report
+	 */
+	public Future<BatchDeliveryReport> fetchDeliveryReportAsync(BatchId id,
+	        BatchDeliveryReportParams filter,
+	        FutureCallback<BatchDeliveryReport> callback) {
+		String query = filter.toUrlEncodedQuery();
+		HttpGet req = get(batchDeliveryReportEndpoint(id, query));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<BatchDeliveryReport> consumer =
+		        jsonAsyncConsumer(BatchDeliveryReport.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
