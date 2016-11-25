@@ -99,7 +99,8 @@ public abstract class ApiConnection implements Closeable {
 
 		/**
 		 * Builds and starts the defined API connection. This is identical to
-		 * calling {@link #build()} and then {@link ApiConnection#start()}.
+		 * calling {@link #build()} and then immediately calling
+		 * {@link ApiConnection#start()} on the generated connection object.
 		 * 
 		 * @return an API connection
 		 */
