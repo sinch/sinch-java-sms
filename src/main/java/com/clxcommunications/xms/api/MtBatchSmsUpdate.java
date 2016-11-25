@@ -25,10 +25,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class MtBatchSmsUpdate {
 
-	public MtBatchSmsUpdate() {
-		super();
-	}
-
 	/**
 	 * The message destinations to add to the batch.
 	 * 

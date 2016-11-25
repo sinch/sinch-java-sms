@@ -24,10 +24,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class MtBatchSmsCreate {
 
-	public MtBatchSmsCreate() {
-		super();
-	}
-
 	/**
 	 * The list of message recipients. May not be empty.
 	 * 

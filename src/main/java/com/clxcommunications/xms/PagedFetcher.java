@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.http.concurrent.FutureCallback;
 
@@ -25,7 +24,6 @@ import com.clxcommunications.xms.api.Page;
  * @param <T>
  *            the element type
  */
-@NotThreadSafe
 public abstract class PagedFetcher<T> {
 
 	/**

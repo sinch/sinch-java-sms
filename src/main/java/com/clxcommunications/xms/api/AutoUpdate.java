@@ -33,9 +33,7 @@ public abstract class AutoUpdate {
 		 *            the second keyword, can be <code>null</code>
 		 * @return this builder for use in a chained invocation
 		 */
-		@Nonnull
-		public Builder add(@Nullable String firstWord,
-		        @Nullable String secondWord) {
+		public Builder add(String firstWord, String secondWord) {
 			return this.add(KeywordPair.of(firstWord, secondWord));
 		}
 
@@ -48,9 +46,7 @@ public abstract class AutoUpdate {
 		 *            the second keyword, can be <code>null</code>
 		 * @return this builder for use in a chained invocation
 		 */
-		@Nonnull
-		public Builder remove(@Nullable String firstWord,
-		        @Nullable String secondWord) {
+		public Builder remove(String firstWord, String secondWord) {
 			return this.remove(KeywordPair.of(firstWord, secondWord));
 		}
 
