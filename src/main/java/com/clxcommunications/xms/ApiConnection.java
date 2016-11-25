@@ -772,6 +772,31 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Fetches the given batch. Blocks until the fetch has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch to fetch
+	 * @return the desired batch
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public MtBatchSmsResult fetchBatch(BatchId id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchBatchAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
 	 * Fetches a batch with the given batch ID.
 	 * 
 	 * @param batchId

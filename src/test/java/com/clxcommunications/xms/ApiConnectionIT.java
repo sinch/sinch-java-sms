@@ -433,6 +433,56 @@ public class ApiConnectionIT {
 	}
 
 	@Test
+	public void canFetchTextBatch() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
+
+		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+
+		final MtBatchSmsResult expected =
+		        new MtBatchTextSmsResult.Builder()
+		                .from("12345")
+		                .addTo("123456789", "987654321")
+		                .body("Hello, world!")
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(time)
+		                .modifiedAt(time)
+		                .build();
+
+		String response = json.writeValueAsString(expected);
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpointHost("localhost", wm.port(), "http")
+		        .start();
+
+		try {
+			MtBatchSmsResult actual = conn.fetchBatch(batchId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(getRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
 	public void canFetchTextBatchAsync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
