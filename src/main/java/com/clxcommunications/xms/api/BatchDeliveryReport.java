@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Enclosing
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonDeserialize(builder = BatchDeliveryReportImpl.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 @JsonTypeInfo(use = Id.NAME, property = "type")
@@ -28,7 +28,6 @@ public interface BatchDeliveryReport {
 	 * A description of the messages having a given delivery state.
 	 */
 	@Value.Immutable
-	@ValueStylePublic
 	@JsonDeserialize(builder = BatchDeliveryReportImpl.Status.Builder.class)
 	@JsonInclude(Include.NON_EMPTY)
 	public interface Status {

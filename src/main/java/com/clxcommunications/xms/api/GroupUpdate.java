@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonSerialize(as = GroupUpdateImpl.class)
 @JsonInclude(Include.NON_EMPTY)
 public abstract class GroupUpdate {

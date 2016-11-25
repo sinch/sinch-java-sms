@@ -15,8 +15,12 @@ import org.immutables.value.Value;
  * Describes a filter for limiting results when fetching groups.
  */
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 public abstract class GroupFilter {
+
+	public static class Builder extends GroupFilterImpl.Builder {
+
+	}
 
 	/**
 	 * The requested number of entries per page. A non-positive value means that

@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface MtBatchDryRunResult {
 
 	@Value.Immutable
-	@ValueStylePackage
 	@JsonDeserialize(builder = PerRecipientImpl.Builder.class)
 	public interface PerRecipient {
 

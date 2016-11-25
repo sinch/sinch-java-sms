@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonDeserialize(as = GroupResponseImpl.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupResponse {

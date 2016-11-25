@@ -10,10 +10,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonDeserialize(using = JacksonUtils.ParameterValuesDeserializer.class)
 @JsonSerialize(using = JacksonUtils.ParameterValuesSerializer.class)
 public abstract class ParameterValues {
+
+	public static class Builder extends ParameterValuesImpl.Builder {
+
+	}
 
 	public abstract Map<String, String> substitutions();
 

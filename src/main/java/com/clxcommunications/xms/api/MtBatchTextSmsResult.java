@@ -12,10 +12,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
-@ValueStylePublic
-@JsonDeserialize(as = MtBatchTextSmsResultImpl.class)
+@ValueStylePackage
+@JsonDeserialize(builder = MtBatchTextSmsResult.Builder.class)
 @JsonTypeName("mt_text")
 public abstract class MtBatchTextSmsResult extends MtBatchSmsResult {
+
+	public static class Builder extends MtBatchTextSmsResultImpl.Builder {
+
+	}
 
 	public abstract String body();
 

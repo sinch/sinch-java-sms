@@ -3,11 +3,11 @@ package com.clxcommunications.xms;
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
-import com.clxcommunications.xms.api.MtBatchBinarySmsCreateImpl;
+import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
-import com.clxcommunications.xms.api.MtBatchTextSmsCreateImpl;
+import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
-import com.clxcommunications.xms.api.ParameterValuesImpl;
+import com.clxcommunications.xms.api.ParameterValues;
 
 /**
  * A collection of convenient static methods for generating CLX API objects.
@@ -16,50 +16,50 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static final int MAX_BODY_BYTES = 140;
 
-	public static MtBatchTextSmsCreateImpl.Builder buildBatchTextSms() {
-		return MtBatchTextSmsCreateImpl.builder();
+	public static MtBatchTextSmsCreate.Builder buildBatchTextSms() {
+		return new MtBatchTextSmsCreate.Builder();
 	}
 
 	public static MtBatchTextSmsUpdate.Builder buildBatchTextSmsUpdate() {
 		return MtBatchTextSmsUpdate.builder();
 	}
 
-	public static MtBatchBinarySmsCreateImpl.Builder buildBatchBinarySms() {
-		return MtBatchBinarySmsCreateImpl.builder();
+	public static MtBatchBinarySmsCreate.Builder buildBatchBinarySms() {
+		return new MtBatchBinarySmsCreate.Builder();
 	}
 
 	public static MtBatchBinarySmsUpdate.Builder buildBatchBinarySmsUpdate() {
 		return MtBatchBinarySmsUpdate.builder();
 	}
 
-	public static ParameterValuesImpl.Builder buildSubstitution() {
-		return ParameterValuesImpl.builder();
+	public static ParameterValues.Builder buildSubstitution() {
+		return new ParameterValues.Builder();
 	}
 
-	public static BatchFilterImpl.Builder buildBatchFilter() {
-		return BatchFilterImpl.builder();
+	public static BatchFilter.Builder buildBatchFilter() {
+		return new BatchFilter.Builder();
 	}
 
 	public static BatchFilter filterTodaysBatches() {
-		return BatchFilterImpl.builder()
+		return new BatchFilter.Builder()
 		        .startDate(LocalDate.now(Clock.systemUTC()))
 		        .build();
 	}
 
 	public static BatchFilter filterYesterdaysBatches() {
 		final LocalDate now = LocalDate.now(Clock.systemUTC());
-		return BatchFilterImpl.builder()
+		return new BatchFilter.Builder()
 		        .startDate(now.minusDays(1))
 		        .endDate(now)
 		        .build();
 	}
 
-	public static GroupFilterImpl.Builder buildGroupFilter() {
-		return GroupFilterImpl.builder();
+	public static GroupFilter.Builder buildGroupFilter() {
+		return new GroupFilter.Builder();
 	}
 
-	public static InboundsFilterImpl.Builder buildInboundsFilter() {
-		return InboundsFilterImpl.builder();
+	public static InboundsFilter.Builder buildInboundsFilter() {
+		return new InboundsFilter.Builder();
 	}
 
 }

@@ -20,7 +20,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		GroupCreate input = GroupCreateImpl.builder().build();
+		GroupCreate input = new GroupCreate.Builder().build();
 
 		String expected = "{}";
 		String actual = json.writeValueAsString(input);
@@ -33,7 +33,7 @@ public class GroupCreateTest {
 		GroupId groupId1 = TestUtils.freshGroupId();
 		GroupId groupId2 = TestUtils.freshGroupId();
 
-		GroupCreate input = GroupCreateImpl.builder()
+		GroupCreate input = new GroupCreate.Builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
@@ -67,7 +67,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
-		GroupCreate expected = GroupCreateImpl.builder().build();
+		GroupCreate expected = new GroupCreate.Builder().build();
 
 		String input = json.writeValueAsString(expected);
 
@@ -81,7 +81,7 @@ public class GroupCreateTest {
 		GroupId groupId1 = TestUtils.freshGroupId();
 		GroupId groupId2 = TestUtils.freshGroupId();
 
-		GroupCreate expected = GroupCreateImpl.builder()
+		GroupCreate expected = new GroupCreate.Builder()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")

@@ -21,7 +21,7 @@ import com.clxcommunications.xms.api.DeliveryStatus;
  * report is returned.
  */
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 public abstract class BatchDeliveryReportParams {
 
 	/**

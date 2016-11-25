@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * remove themselves from groups.
  */
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonDeserialize(builder = AutoUpdate.Builder.class)
 public abstract class AutoUpdate {
 

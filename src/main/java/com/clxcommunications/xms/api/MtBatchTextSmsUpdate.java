@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonSerialize(as = MtBatchTextSmsUpdateImpl.class)
 @JsonTypeName("mt_text")
 public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {

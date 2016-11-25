@@ -45,7 +45,7 @@ public class MtBatchBinarySmsResultTest {
 	}
 
 	private static MtBatchBinarySmsResultImpl.Builder minimalBatchBuilder() {
-		return MtBatchBinarySmsResultImpl.builder()
+		return new MtBatchBinarySmsResult.Builder()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))

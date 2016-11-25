@@ -144,7 +144,7 @@ public class MtBatchTextSmsResultTest {
 	}
 
 	private static MtBatchTextSmsResultImpl.Builder minimalBatchBuilder() {
-		return MtBatchTextSmsResultImpl.builder()
+		return new MtBatchTextSmsResult.Builder()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!")

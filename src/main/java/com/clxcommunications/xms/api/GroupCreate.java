@@ -13,10 +13,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
-@ValueStylePublic
-@JsonDeserialize(builder = GroupCreateImpl.Builder.class)
+@ValueStylePackage
+@JsonDeserialize(builder = GroupCreate.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupCreate {
+
+	public static final class Builder extends GroupCreateImpl.Builder {
+
+	}
 
 	/**
 	 * The group name.

@@ -17,8 +17,12 @@ import org.threeten.bp.LocalDate;
  * Describes a filter for limiting results when fetching inbound messages.
  */
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 public abstract class InboundsFilter {
+
+	public static class Builder extends InboundsFilterImpl.Builder {
+
+	}
 
 	/**
 	 * The requested number of entries per page. A non-positive value means that

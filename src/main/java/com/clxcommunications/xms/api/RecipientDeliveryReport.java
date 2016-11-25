@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * Representation of a delivery report for a specific recipient.
  */
 @Value.Immutable
-@ValueStylePublic
+@ValueStylePackage
 @JsonDeserialize(builder = RecipientDeliveryReportImpl.Builder.class)
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonTypeName("recipient_delivery_report_sms")
