@@ -14,9 +14,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(as = GroupResponseImpl.class)
+@JsonDeserialize(builder = GroupResponse.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupResponse {
+
+	public static final class Builder extends GroupResponseImpl.Builder {
+
+	}
 
 	/**
 	 * The unique group ID that identifies this group.

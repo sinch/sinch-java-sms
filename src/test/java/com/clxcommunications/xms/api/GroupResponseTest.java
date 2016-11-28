@@ -24,7 +24,7 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = GroupResponseImpl.builder()
+		GroupResponse input = new GroupResponse.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(time)
@@ -53,7 +53,7 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = GroupResponseImpl.builder()
+		GroupResponse input = new GroupResponse.Builder()
 		        .id(groupId)
 		        .size(72)
 		        .name("mygroup")
@@ -93,7 +93,7 @@ public class GroupResponseTest {
 		GroupId groupId = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = GroupResponseImpl.builder()
+		GroupResponse expected = new GroupResponse.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(time)
@@ -114,7 +114,7 @@ public class GroupResponseTest {
 		GroupId groupId2 = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = GroupResponseImpl.builder()
+		GroupResponse expected = new GroupResponse.Builder()
 		        .id(groupId)
 		        .name("mygroup")
 		        .size(72)
