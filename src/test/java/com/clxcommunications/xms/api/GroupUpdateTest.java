@@ -40,7 +40,7 @@ public class GroupUpdateTest {
 		        .addMemberRemove("987654321", "4242424242")
 		        .childGroupsAdd(Arrays.asList(groupId1, groupId2))
 		        .addChildGroupsRemove(groupId3)
-		        .autoUpdate(AutoUpdateImpl.builder()
+		        .autoUpdate(AutoUpdate.builder()
 		                .to("1111")
 		                .add("kw0", "kw1")
 		                .remove("kw2", "kw3")
