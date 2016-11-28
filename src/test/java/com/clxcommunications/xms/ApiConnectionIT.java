@@ -108,7 +108,7 @@ public class ApiConnectionIT {
 	        new TestLoggerFactoryResetRule();
 
 	@Test
-	public void canPostBinaryBatch() throws Exception {
+	public void canCreateBinaryBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
@@ -145,7 +145,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchBinarySmsResult actual = conn.sendBatch(request);
+			MtBatchBinarySmsResult actual = conn.createBatch(request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -155,7 +155,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canPostTextBatch() throws Exception {
+	public void canCreateTextBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -191,7 +191,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult actual = conn.sendBatch(request);
+			MtBatchTextSmsResult actual = conn.createBatch(request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -201,7 +201,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canPostTextBatchWithSubstitutions() throws Exception {
+	public void canCreateTextBatchWithSubstitutions() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
@@ -243,7 +243,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult actual = conn.sendBatch(request);
+			MtBatchTextSmsResult actual = conn.createBatch(request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -253,7 +253,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canHandleBatchPostWithError() throws Exception {
+	public void canHandleBatchCreateWithError() throws Exception {
 		String username = TestUtils.freshUsername();
 
 		MtBatchTextSmsCreate request =
@@ -278,7 +278,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			conn.sendBatch(request);
+			conn.createBatch(request);
 			fail("Expected exception, got none");
 		} catch (ErrorResponseException e) {
 			assertThat(e.getCode(), is(apiError.code()));
@@ -289,7 +289,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canHandleBatchPostWithInvalidJson() throws Exception {
+	public void canHandleBatchCreateWithInvalidJson() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -332,7 +332,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			conn.sendBatch(request);
+			conn.createBatch(request);
 			fail("Expected exception, got none");
 		} catch (ConcurrentException e) {
 			assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));

@@ -472,12 +472,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to send the given batch synchronously. Internally this uses an
+	 * Attempts to create the given batch synchronously. Internally this uses an
 	 * asynchronous call and blocks until it completes.
 	 * 
 	 * @param sms
-	 *            the batch to send
-	 * @return a batch submission result
+	 *            the batch to create
+	 * @return a batch creation result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
@@ -487,23 +487,23 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public MtBatchTextSmsResult sendBatch(MtBatchTextSmsCreate sms)
+	public MtBatchTextSmsResult createBatch(MtBatchTextSmsCreate sms)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
-			return sendBatchAsync(sms, null).get();
+			return createBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
 	/**
-	 * Attempts to send the given batch synchronously. Internally this uses an
+	 * Attempts to create the given batch synchronously. Internally this uses an
 	 * asynchronous call and blocks until it completes.
 	 * 
 	 * @param sms
-	 *            the batch to send
-	 * @return a batch submission result
+	 *            the batch to create
+	 * @return a batch creation result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
 	 * @throws ConcurrentException
@@ -513,26 +513,27 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public MtBatchBinarySmsResult sendBatch(MtBatchBinarySmsCreate sms)
+	public MtBatchBinarySmsResult createBatch(MtBatchBinarySmsCreate sms)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
-			return sendBatchAsync(sms, null).get();
+			return createBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
 	}
 
 	/**
-	 * Asynchronously submits the given text batch.
+	 * Asynchronously creates the given text batch.
 	 * 
 	 * @param sms
-	 *            the batch to send
+	 *            the batch to create
 	 * @param callback
-	 *            a callback that is invoked when submit is completed
+	 *            a callback that is invoked when creation is completed
 	 * @return a future whose result is the creation response
 	 */
-	public Future<MtBatchTextSmsResult> sendBatchAsync(MtBatchTextSmsCreate sms,
+	public Future<MtBatchTextSmsResult> createBatchAsync(
+	        MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
 		HttpPost httpPost = post(batchesEndpoint(), sms);
 
@@ -554,7 +555,7 @@ public abstract class ApiConnection implements Closeable {
 	 *            a callback that is invoked when submit is completed
 	 * @return a future whose result is the creation response
 	 */
-	public Future<MtBatchBinarySmsResult> sendBatchAsync(
+	public Future<MtBatchBinarySmsResult> createBatchAsync(
 	        MtBatchBinarySmsCreate sms,
 	        FutureCallback<MtBatchBinarySmsResult> callback) {
 		HttpPost httpPost = post(batchesEndpoint(), sms);
