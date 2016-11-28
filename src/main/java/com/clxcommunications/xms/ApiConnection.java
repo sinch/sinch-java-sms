@@ -60,18 +60,6 @@ public abstract class ApiConnection implements Closeable {
 	public static class Builder extends ApiConnectionImpl.Builder {
 
 		/**
-		 * Initializes the endpoint host from the given URL.
-		 * 
-		 * @param url
-		 *            the URL containing the host
-		 * @return this builder for use in a chained invocation
-		 * @see HttpHost#create(String)
-		 */
-		public Builder endpointHostFromUrl(String url) {
-			return this.endpointHost(HttpHost.create(url));
-		}
-
-		/**
 		 * Initializes the endpoint host from the given hostname, port, and
 		 * scheme.
 		 * 
