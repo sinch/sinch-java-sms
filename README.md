@@ -34,6 +34,9 @@ therefore is sufficient to execute
 in your terminal. The project will then be compiled and tested before
 finally being installed in your local repository.
 
+Note that Java 8 is required to build and run the test suite. The
+installed JAR file is Java 6 compatible, however.
+
 Developing in Eclipse
 ---------------------
 
