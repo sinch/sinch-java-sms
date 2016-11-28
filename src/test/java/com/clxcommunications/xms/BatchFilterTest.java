@@ -1,6 +1,6 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class BatchFilterTest {
 
 		List<NameValuePair> actual = filter.toQueryParams(4);
 
-		assertThat(actual, hasItems(
+		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("page", "4"),
 		        new BasicNameValuePair("page_size", "20"),
 		        new BasicNameValuePair("start_date", "2010-10-11"),

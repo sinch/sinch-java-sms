@@ -2,6 +2,7 @@ package com.clxcommunications.xms;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class UtilsTest {
 
 	@Test
 	public void canJoinEmpty() {
-		assertThat(Utils.join("sep"), is(""));
+		assertThat(Utils.join("sep"), isEmptyString());
 	}
 
 	@Test

@@ -1,6 +1,6 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class ClxApiTest {
 		List<NameValuePair> actual =
 		        ClxApi.filterTodaysBatches().toQueryParams(81);
 
-		assertThat(actual, hasItems(
+		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("page", "81"),
 		        new BasicNameValuePair("start_date", today.toString())));
 	}
@@ -32,7 +32,7 @@ public class ClxApiTest {
 		List<NameValuePair> actual =
 		        ClxApi.filterYesterdaysBatches().toQueryParams(82);
 
-		assertThat(actual, hasItems(
+		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("page", "82"),
 		        new BasicNameValuePair("start_date", yesterday.toString()),
 		        new BasicNameValuePair("end_date", today.toString())));

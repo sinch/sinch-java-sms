@@ -1,10 +1,10 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,9 +27,8 @@ public class BatchDeliveryReportParamsTest {
 		        new BatchDeliveryReportParams.Builder().build();
 
 		List<NameValuePair> actual = filter.toQueryParams();
-		List<NameValuePair> expected = Collections.<NameValuePair> emptyList();
 
-		assertThat(actual, is(expected));
+		assertThat(actual, is(empty()));
 	}
 
 	@Test
@@ -44,7 +43,7 @@ public class BatchDeliveryReportParamsTest {
 
 		List<NameValuePair> actual = filter.toQueryParams();
 
-		assertThat(actual, hasItems(
+		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("type", "full"),
 		        new BasicNameValuePair("status", "Expired,Delivered"),
 		        new BasicNameValuePair("code", "100,200,300")));
