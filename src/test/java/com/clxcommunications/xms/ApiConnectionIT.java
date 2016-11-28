@@ -1468,6 +1468,70 @@ public class ApiConnectionIT {
 		verifyPutRequest(path, request);
 	}
 
+	@Test
+	public void canFetchTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.fetchTags(batchId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual = conn.fetchTagsAsync(batchId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
 	/**
 	 * Helper that sets up WireMock to respond to a GET using a JSON body.
 	 * 
@@ -1547,6 +1611,55 @@ public class ApiConnectionIT {
 		String expectedRequest = json.writeValueAsString(request);
 
 		wm.verify(postRequestedFor(
+		        urlEqualTo(path))
+		                .withRequestBody(equalToJson(expectedRequest))
+		                .withHeader("Content-Type",
+		                        matching("application/json; charset=UTF-8"))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer toktok")));
+	}
+
+	/**
+	 * Helper that sets up WireMock to respond to a POST using a JSON body.
+	 * 
+	 * @param response
+	 *            the response to give, serialized to JSON
+	 * @param path
+	 *            the path on which to listen
+	 * @param status
+	 *            the response HTTP status
+	 * @throws JsonProcessingException
+	 *             if the given response object could not be serialized
+	 */
+	private void stubPutResponse(Object response, String path, int status)
+	        throws JsonProcessingException {
+		byte[] body = json.writeValueAsBytes(response);
+
+		wm.stubFor(put(urlEqualTo(path))
+		        .willReturn(aResponse()
+		                .withStatus(status)
+		                .withHeader("Content-Type",
+		                        "application/json; charset=UTF-8")
+		                .withBody(body)));
+	}
+
+	/**
+	 * Helper that sets up WireMock to verify that a request matches a given
+	 * object in JSON format.
+	 * 
+	 * @param path
+	 *            the request path to match
+	 * @param request
+	 *            the request object whose JSON serialization should match
+	 * @throws JsonProcessingException
+	 *             if the given request object could not be serialized
+	 */
+	private void verifyPutRequest(String path, Object request)
+	        throws JsonProcessingException {
+		String expectedRequest = json.writeValueAsString(request);
+
+		wm.verify(putRequestedFor(
 		        urlEqualTo(path))
 		                .withRequestBody(equalToJson(expectedRequest))
 		                .withHeader("Content-Type",

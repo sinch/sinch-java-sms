@@ -1148,4 +1148,53 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Fetches the tags of the batch with the given batch ID. Blocks until the
+	 * retrieval has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @return the batch tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags fetchTags(BatchId id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchTagsAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches the tags of the batch with the given batch ID.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the new set of tags
+	 */
+	public Future<Tags> fetchTagsAsync(BatchId id,
+	        FutureCallback<Tags> callback) {
+		HttpGet req = get(batchTagsEndpoint(id));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
 }
