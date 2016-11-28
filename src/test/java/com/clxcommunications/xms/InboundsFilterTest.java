@@ -1,11 +1,14 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.threeten.bp.LocalDate;
@@ -20,17 +23,17 @@ public class InboundsFilterTest {
 	public void canGenerateQueryParameters() throws Exception {
 		InboundsFilter filter = ClxApi.buildInboundsFilter()
 		        .pageSize(20)
-		        .startDate(LocalDate.of(2010, 10, 10))
-		        .endDate(LocalDate.of(2011, 10, 10))
+		        .startDate(LocalDate.of(2010, 11, 12))
+		        .endDate(LocalDate.of(2011, 11, 12))
 		        .build();
 
-		String actual = filter.toUrlEncodedQuery(4);
-		String expected = "page=4"
-		        + "&page_size=20"
-		        + "&start_date=2010-10-10"
-		        + "&end_date=2011-10-10";
+		List<NameValuePair> actual = filter.toQueryParameters(4);
 
-		assertThat(actual, is(expected));
+		assertThat(actual, containsInAnyOrder(
+		        (NameValuePair) new BasicNameValuePair("page", "4"),
+		        new BasicNameValuePair("page_size", "20"),
+		        new BasicNameValuePair("start_date", "2010-11-12"),
+		        new BasicNameValuePair("end_date", "2011-11-12")));
 	}
 
 	@Property
@@ -43,10 +46,10 @@ public class InboundsFilterTest {
 		        .endDate(endDate)
 		        .build();
 
-		String query = filter.toUrlEncodedQuery(page);
+		List<NameValuePair> params = filter.toQueryParameters(page);
 
 		// Will throw IllegalArgumentException if an invalid URI is attempted.
-		URI.create("http://localhost/?" + query);
+		new URIBuilder().addParameters(params).build();
 	}
 
 }
