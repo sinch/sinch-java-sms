@@ -129,14 +129,14 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/xms/v1/" + username + "/batches";
+		String path = "/" + username + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -175,14 +175,14 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/xms/v1/" + username + "/batches";
+		String path = "/" + username + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -227,14 +227,14 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/xms/v1/" + username + "/batches";
+		String path = "/" + username + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -262,14 +262,14 @@ public class ApiConnectionIT {
 		ApiError apiError = ApiError.of("syntax_constraint_violation",
 		        "The syntax constraint was violated");
 
-		String path = "/xms/v1/" + username + "/batches";
+		String path = "/" + username + "/batches";
 
 		stubPostResponse(apiError, path, 400);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -311,7 +311,7 @@ public class ApiConnectionIT {
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
 		        "}").replace('\'', '"');
 
-		String path = "/xms/v1/" + username + "/batches";
+		String path = "/" + username + "/batches";
 
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
@@ -323,7 +323,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -362,14 +362,14 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -413,14 +413,14 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("toktok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -441,7 +441,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -459,7 +459,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -479,7 +479,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -497,7 +497,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -528,7 +528,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		final MtBatchSmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
@@ -547,7 +547,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -576,7 +576,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		wm.stubFor(get(
 		        urlEqualTo(path))
@@ -589,7 +589,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		/*
@@ -692,7 +692,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId.id();
 
 		MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -718,7 +718,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -759,7 +759,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		String path1 =
-		        "/xms/v1/" + username + "/batches/" + expected1.id().id();
+		        "/" + username + "/batches/" + expected1.id().id();
 		byte[] response1 = json.writeValueAsBytes(expected1);
 
 		wm.stubFor(delete(
@@ -785,7 +785,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		String path2 =
-		        "/xms/v1/" + username + "/batches/" + expected2.id().id();
+		        "/" + username + "/batches/" + expected2.id().id();
 		byte[] response2 = json.writeValueAsBytes(expected2);
 
 		wm.stubFor(delete(
@@ -799,7 +799,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -840,7 +840,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListBatchesWithEmpty() throws Exception {
 		String username = TestUtils.freshUsername();
-		String path = "/xms/v1/" + username + "/batches?page=0";
+		String path = "/" + username + "/batches?page=0";
 		BatchFilter filter = ClxApi.buildBatchFilter().build();
 
 		final Page<MtBatchSmsResult> expected =
@@ -855,7 +855,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -887,7 +887,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.buildBatchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/xms/v1/" + username + "/batches?page=0";
+		String path1 = "/" + username + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -899,7 +899,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/xms/v1/" + username + "/batches?page=1";
+		String path2 = "/" + username + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -913,7 +913,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -959,7 +959,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.buildBatchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/xms/v1/" + username + "/batches?page=0";
+		String path1 = "/" + username + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -977,7 +977,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/xms/v1/" + username + "/batches?page=1";
+		String path2 = "/" + username + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1004,7 +1004,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -1037,7 +1037,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.buildBatchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/xms/v1/" + username + "/batches?page=0";
+		String path1 = "/" + username + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1055,7 +1055,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/xms/v1/" + username + "/batches?page=1";
+		String path2 = "/" + username + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1082,7 +1082,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		try {
@@ -1114,7 +1114,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId.id()
 		        + "/delivery_report"
 		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
 
@@ -1143,7 +1143,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		BatchDeliveryReportParams filter =
@@ -1170,7 +1170,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/xms/v1/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId.id()
 		        + "/delivery_report?type=full";
 
 		final BatchDeliveryReport expected =
@@ -1198,7 +1198,7 @@ public class ApiConnectionIT {
 		ApiConnection conn = ApiConnection.builder()
 		        .username(username)
 		        .token("tok")
-		        .endpointHost("localhost", wm.port(), "http")
+		        .endpoint("http://localhost:" + wm.port())
 		        .start();
 
 		BatchDeliveryReportParams filter =

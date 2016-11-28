@@ -2,10 +2,8 @@ package com.clxcommunications.xms;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -60,20 +58,15 @@ public abstract class ApiConnection implements Closeable {
 	public static class Builder extends ApiConnectionImpl.Builder {
 
 		/**
-		 * Initializes the endpoint host from the given hostname, port, and
-		 * scheme.
+		 * Initializes the endpoint from the given URL string. The URL should
+		 * not contain query or fragment components.
 		 * 
-		 * @param hostname
-		 *            the hostname
-		 * @param port
-		 *            the port
-		 * @param scheme
-		 *            the scheme (typically http or https)
+		 * @param url
+		 *            the URL to the XMS endpoint
 		 * @return this builder for use in a chained invocation
-		 * @see HttpHost#HttpHost(String, int, String)
 		 */
-		public Builder endpointHost(String hostname, int port, String scheme) {
-			return this.endpointHost(new HttpHost(hostname, port, scheme));
+		public Builder endpoint(String url) {
+			return this.endpoint(URI.create(url));
 		}
 
 		@Override
@@ -218,14 +211,26 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * The base endpoint of the XMS API. This specifies the HTTP host and base
+	 * path that will be used in sending requests to XMS. The URL should not
+	 * contain query or fragment components.
+	 * 
+	 * @return a non-null URL
+	 */
+	@Value.Default
+	public URI endpoint() {
+		return URI.create("https://api.mblox.com/xms/v1");
+	}
+
+	/**
 	 * The HTTP host providing the XMS API.
 	 * 
 	 * @return a non-null host specification
 	 */
-	@Value.Default
+	@Value.Derived
 	public HttpHost endpointHost() {
-		// TODO: Maybe use property or not have a default at all?
-		return new HttpHost("api.mblox.com", 443, "https");
+		URI uri = endpoint();
+		return new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
 	}
 
 	/**
@@ -236,11 +241,7 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Default
 	public String endpointBasePath() {
-		try {
-			return "/xms/v1/" + URLEncoder.encode(username(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new IllegalStateException(e);
-		}
+		return endpoint().getPath();
 	}
 
 	/**
@@ -248,27 +249,15 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Check
 	protected void check() {
-		if (!endpointBasePath().startsWith("/")) {
+		if (endpoint().getQuery() != null) {
 			throw new IllegalStateException(
-			        "endpoint base path does not start with '/'");
+			        "base endpoint has query component");
 		}
 
-		if (endpointBasePath().contains("?")) {
-			throw new IllegalStateException("endpoint base path contains '?'");
+		if (endpoint().getFragment() != null) {
+			throw new IllegalStateException(
+			        "base endpoint has fragment component");
 		}
-
-		/*
-		 * Attempt to create a plain endpoint URL. If it fails then something is
-		 * very wrong with the host or the endpoint base path. If it succeeds
-		 * then all endpoints generated in normal use of this class should
-		 * succeed since we validate the user input.
-		 * 
-		 * Note, this does not mean that the generated URL makes sense, it only
-		 * means that the code will not throw exceptions. For example, if the
-		 * user sets the endpoint base path, "/hello?world" then all bets are
-		 * off.
-		 */
-		endpoint("", null);
 	}
 
 	/**
@@ -285,6 +274,7 @@ public abstract class ApiConnection implements Closeable {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(endpointHost().toURI());
+		sb.append('/').append(username());
 		sb.append(endpointBasePath());
 		sb.append(subPath);
 		if (query != null) {

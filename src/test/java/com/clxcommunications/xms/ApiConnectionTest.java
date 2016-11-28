@@ -9,30 +9,27 @@ public class ApiConnectionTest {
 		ApiConnection conn = ApiConnection.builder()
 		        .token("token")
 		        .username("username")
-		        .endpointHost("localhost", -1, null)
-		        .endpointBasePath("/custompath")
+		        .endpoint("https://localhost:3000/basepath")
 		        .start();
 
 		conn.close();
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void rejectsBasePathWithoutInitialSlash() throws Exception {
+	public void rejectsEndpointWithQueryComponent() throws Exception {
 		ApiConnection.builder()
 		        .token("token")
 		        .username("username")
-		        .endpointHost("localhost", -1, null)
-		        .endpointBasePath("custompath")
+		        .endpoint("https://localhost:3000/basepath?query=yes")
 		        .start();
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void rejectsBasePathWithQuestionMark() throws Exception {
+	public void rejectsBasePathWithFragmentComponent() throws Exception {
 		ApiConnection.builder()
 		        .token("token")
 		        .username("username")
-		        .endpointHost("localhost", -1, null)
-		        .endpointBasePath("/custom?path")
+		        .endpoint("https://localhost:3000/basepath#fragment")
 		        .start();
 	}
 
