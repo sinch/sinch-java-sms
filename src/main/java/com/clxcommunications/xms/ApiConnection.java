@@ -498,6 +498,29 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Asynchronously creates the given text batch.
+	 * 
+	 * @param sms
+	 *            the batch to create
+	 * @param callback
+	 *            a callback that is invoked when creation is completed
+	 * @return a future whose result is the creation response
+	 */
+	public Future<MtBatchTextSmsResult> createBatchAsync(
+	        MtBatchTextSmsCreate sms,
+	        FutureCallback<MtBatchTextSmsResult> callback) {
+		HttpPost httpPost = post(batchesEndpoint(), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
 	 * Attempts to create the given batch synchronously. Internally this uses an
 	 * asynchronous call and blocks until it completes.
 	 * 
@@ -521,29 +544,6 @@ public abstract class ApiConnection implements Closeable {
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
-	}
-
-	/**
-	 * Asynchronously creates the given text batch.
-	 * 
-	 * @param sms
-	 *            the batch to create
-	 * @param callback
-	 *            a callback that is invoked when creation is completed
-	 * @return a future whose result is the creation response
-	 */
-	public Future<MtBatchTextSmsResult> createBatchAsync(
-	        MtBatchTextSmsCreate sms,
-	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPost httpPost = post(batchesEndpoint(), sms);
-
-		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
-		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
-		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
-
-		return httpClient().execute(requestProducer, responseConsumer,
-		        callbackWrapper().wrap(callback));
 	}
 
 	/**
