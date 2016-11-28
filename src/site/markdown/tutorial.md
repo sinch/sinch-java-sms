@@ -72,14 +72,14 @@ Creating a batch is typically one of the first things one would like to do when 
 
 ```java
 MtBatchTextSmsResult result =
-    conn.create(ClxApi.batchTextSms()
+    conn.createBatch(ClxApi.batchTextSms()
         .from("12345")
         .addTo("987654321")
         .body("Hello, World!")
         .build())
 ```
 
-You will notice a few things with this code. We are using a `conn` variable that corresponds to an API connection that we assume has been previously created. We are calling the `create` method on that object with a single argument that describes the batch we wish to create.
+You will notice a few things with this code. We are using a `conn` variable that corresponds to an API connection that we assume has been previously created. We are calling the `createBatch` method on that object with a single argument that describes the batch we wish to create.
 
 Describing the batch is done using an object satisfying the `MtBatchTextSmsCreate` interface. Such objects can most easily be created using the builder returned by `ClxApi.batchTextSms()`. For a batch with a binary body you would similarly describe it using a object satisfying the `MtBatchBinarySmsCreate` interface and typically use `ClxApi.batchBinarySms()` to build such objects.
 
@@ -88,7 +88,7 @@ The return value in this case is a `MtBatchTextSmsResult` object which contains 
 System.out.println("Batch id is " + result.id())
 ```
 
-There is also an asynchronous method corresponding to `create` above, called `createAsync`. This method will return immediately with a `Future<MtBatchTextSmsResult>` return value and takes an extra argument that corresponds to a callback that is invoked when the request actually completes. In the asynchronous setting the above example becomes
+There is also an asynchronous method corresponding to `createBatch` above, called `createBatchAsync`. This method will return immediately with a `Future<MtBatchTextSmsResult>` return value and takes an extra argument that corresponds to a callback that is invoked when the request actually completes. In the asynchronous setting the above example becomes
 
 ```java
 callback = new FutureCallback<MtBatchTextSmsResult> {
@@ -97,7 +97,7 @@ callback = new FutureCallback<MtBatchTextSmsResult> {
 
 };
 Future<MtBatchTextSmsResult> future =
-    conn.createAsync(ClxApi.batchTextSms()
+    conn.createBatchAsync(ClxApi.batchTextSms()
         .from("12345")
         .addTo("987654321")
         .body("Hello, World!")
