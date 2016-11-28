@@ -8,9 +8,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(as = TagsImpl.class)
-public interface Tags {
+@JsonDeserialize(builder = TagsImpl.Builder.class)
+public abstract class Tags {
 
-	List<String> tags();
+	public abstract List<String> tags();
+
+	public static final Tags of(Iterable<String> tags) {
+		return TagsImpl.builder().tags(tags).build();
+	}
+
+	public static final Tags of(String... tags) {
+		return TagsImpl.builder().addTag(tags).build();
+	}
 
 }

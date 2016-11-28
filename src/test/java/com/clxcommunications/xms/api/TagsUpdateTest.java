@@ -23,9 +23,9 @@ public class TagsUpdateTest {
 	@Property
 	public void canSerializeJson(List<String> toAdd, List<String> toRemove)
 	        throws Exception {
-		TagsUpdate input = TagsUpdateImpl.builder()
-		        .newTag(toAdd)
-		        .removeTag(toRemove)
+		TagsUpdate input = new TagsUpdate.Builder()
+		        .addAllTagInsertions(toAdd)
+		        .addAllTagRemovals(toRemove)
 		        .build();
 
 		List<String> escapedToAdd = new ArrayList<String>();
@@ -51,11 +51,11 @@ public class TagsUpdateTest {
 	}
 
 	@Property
-	public void canDeserializeJson(List<String> toAdd, List<String> toRemove)
+	public void canDeserializeJson(String[] toAdd, String[] toRemove)
 	        throws Exception {
-		TagsUpdate expected = TagsUpdateImpl.builder()
-		        .newTag(toAdd)
-		        .removeTag(toRemove)
+		TagsUpdate expected = new TagsUpdate.Builder()
+		        .addTagInsertion(toAdd)
+		        .addTagRemoval(toRemove)
 		        .build();
 
 		String input = json.writeValueAsString(expected);

@@ -55,6 +55,8 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
+import com.clxcommunications.xms.api.Tags;
+import com.clxcommunications.xms.api.TagsUpdate;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -1316,6 +1318,83 @@ public class ApiConnectionIT {
 		}
 
 		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canUpdateTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		TagsUpdate request =
+		        new TagsUpdate.Builder()
+		                .addTagInsertion("aTag1", "аТаг2")
+		                .addTagRemoval("rTag1", "rТаг2")
+		                .build();
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.updateTags(batchId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canUpdateTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		TagsUpdate request =
+		        new TagsUpdate.Builder()
+		                .addTagInsertion("aTag1", "аТаг2")
+		                .addTagRemoval("rTag1", "rТаг2")
+		                .build();
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual =
+			        conn.updateTagsAsync(batchId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
 	}
 
 	/**

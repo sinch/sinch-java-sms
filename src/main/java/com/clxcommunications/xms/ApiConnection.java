@@ -45,6 +45,8 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
+import com.clxcommunications.xms.api.Tags;
+import com.clxcommunications.xms.api.TagsUpdate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -349,6 +351,11 @@ public abstract class ApiConnection implements Closeable {
 	        String recipient) {
 		return endpoint(
 		        "/batches/" + batchId.id() + "/delivery_report/" + recipient);
+	}
+
+	@Nonnull
+	private URI batchTagsEndpoint(BatchId batchId) {
+		return endpoint("/batches/" + batchId.id() + "/tags");
 	}
 
 	/**
@@ -1030,6 +1037,59 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncResponseConsumer<RecipientDeliveryReport> consumer =
 		        jsonAsyncConsumer(RecipientDeliveryReport.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Updates the tags of the batch with the given batch ID. Blocks until the
+	 * update has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param tags
+	 *            the tag update object
+	 * @return the updated set of tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags updateTags(BatchId id, TagsUpdate tags)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return updateTagsAsync(id, tags, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Updates the tags of the batch with the given batch ID.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param tags
+	 *            the tag update object
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the updated set of tags
+	 */
+	public Future<Tags> updateTagsAsync(BatchId id, TagsUpdate tags,
+	        FutureCallback<Tags> callback) {
+		HttpPost req = post(batchTagsEndpoint(id), tags);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
