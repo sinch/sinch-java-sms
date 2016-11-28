@@ -10,6 +10,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -1395,6 +1397,75 @@ public class ApiConnectionIT {
 		}
 
 		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		Tags request = Tags.of("rTag1", "rTag2");
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.replaceTags(batchId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+
+		Tags request = Tags.of("rTag1", "rTag2");
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual =
+			        conn.replaceTagsAsync(batchId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
 	}
 
 	/**

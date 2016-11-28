@@ -1095,4 +1095,57 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Replaces the tags of the batch with the given batch ID. Blocks until the
+	 * replacement has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param tags
+	 *            the replacements tags
+	 * @return the new set of tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags replaceTags(BatchId id, Tags tags)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return replaceTagsAsync(id, tags, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Replaces the tags of the batch with the given batch ID.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param tags
+	 *            the replacement tags
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the new set of tags
+	 */
+	public Future<Tags> replaceTagsAsync(BatchId id, Tags tags,
+	        FutureCallback<Tags> callback) {
+		HttpPut req = put(batchTagsEndpoint(id), tags);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
 }
