@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
+import com.clxcommunications.xms.api.GroupCreate;
+import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -356,6 +358,11 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI batchTagsEndpoint(BatchId batchId) {
 		return endpoint("/batches/" + batchId.id() + "/tags");
+	}
+
+	@Nonnull
+	private URI groupsEndpoint() {
+		return endpoint("/groups");
 	}
 
 	/**
@@ -1195,6 +1202,54 @@ public abstract class ApiConnection implements Closeable {
 		        jsonAsyncConsumer(Tags.class);
 
 		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Attempts to create the given group synchronously. Internally this uses an
+	 * asynchronous call and blocks until it completes.
+	 * 
+	 * @param group
+	 *            the group to create
+	 * @return a created group
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public GroupResponse createGroup(GroupCreate group)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return createGroupAsync(group, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously creates the given group.
+	 * 
+	 * @param group
+	 *            the group to create
+	 * @param callback
+	 *            a callback that is invoked when creation is completed
+	 * @return a future whose result is the creation response
+	 */
+	public Future<GroupResponse> createGroupAsync(GroupCreate group,
+	        FutureCallback<GroupResponse> callback) {
+		HttpPost httpPost = post(groupsEndpoint(), group);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		HttpAsyncResponseConsumer<GroupResponse> responseConsumer =
+		        jsonAsyncConsumer(GroupResponse.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
 	}
 
