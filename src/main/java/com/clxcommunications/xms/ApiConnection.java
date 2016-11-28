@@ -503,7 +503,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @param sms
 	 *            the batch to create
 	 * @param callback
-	 *            a callback that is invoked when creation is completed
+	 *            a callback that is invoked when batch is created
 	 * @return a future whose result is the creation response
 	 */
 	public Future<MtBatchTextSmsResult> createBatchAsync(
@@ -547,12 +547,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously submits the given binary batch.
+	 * Asynchronously creates the given binary batch.
 	 * 
 	 * @param sms
-	 *            the batch to send
+	 *            the batch to create
 	 * @param callback
-	 *            a callback that is invoked when submit is completed
+	 *            a callback that is invoked when batch is created
 	 * @return a future whose result is the creation response
 	 */
 	public Future<MtBatchBinarySmsResult> createBatchAsync(
