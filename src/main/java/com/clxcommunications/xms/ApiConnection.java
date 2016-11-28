@@ -234,7 +234,11 @@ public abstract class ApiConnection implements Closeable {
 	 * 
 	 * @return a non-null host specification
 	 */
-	public abstract HttpHost endpointHost();
+	@Value.Default
+	public HttpHost endpointHost() {
+		// TODO: Maybe use property or not have a default at all?
+		return new HttpHost("api.mblox.com", 443, "https");
+	}
 
 	/**
 	 * The endpoint base path. The default value is
