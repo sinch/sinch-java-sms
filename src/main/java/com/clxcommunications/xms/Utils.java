@@ -76,8 +76,9 @@ public final class Utils {
 	 * <p>
 	 * For checked exceptions we directly throw {@link ErrorResponseException}
 	 * and {@link UnexpectedResponseException}. Any other checked exception is
-	 * wrapped in a {@link ConcurrentException}, which is subsequently returned. Since
-	 * {@link ConcurrentException} is returned we facilitate the following use:
+	 * wrapped in a {@link ConcurrentException}, which is subsequently returned.
+	 * Since {@link ConcurrentException} is returned we facilitate the following
+	 * use:
 	 * 
 	 * <pre>
 	 * try {
