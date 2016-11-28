@@ -1,15 +1,14 @@
 package com.clxcommunications.xms;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 
@@ -94,10 +93,10 @@ public abstract class BatchDeliveryReportParams {
 	 * 
 	 * @param page
 	 *            the page to request
-	 * @return a non-null string containing query parameters
+	 * @return a list of query parameters
 	 */
 	@Nonnull
-	String toUrlEncodedQuery() {
+	List<NameValuePair> toQueryParams() {
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(6);
 
 		if (reportType() != null) {
@@ -129,7 +128,7 @@ public abstract class BatchDeliveryReportParams {
 			        Utils.join(",", codeStrings)));
 		}
 
-		return URLEncodedUtils.format(params, Consts.UTF_8);
+		return params;
 	}
 
 }

@@ -1,15 +1,19 @@
 package com.clxcommunications.xms;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.clxcommunications.xms.BatchDeliveryReportParams.ReportType;
 import com.clxcommunications.xms.api.DeliveryStatus;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
@@ -22,8 +26,8 @@ public class BatchDeliveryReportParamsTest {
 		BatchDeliveryReportParams filter =
 		        new BatchDeliveryReportParams.Builder().build();
 
-		String actual = filter.toUrlEncodedQuery();
-		String expected = "";
+		List<NameValuePair> actual = filter.toQueryParams();
+		List<NameValuePair> expected = Collections.<NameValuePair> emptyList();
 
 		assertThat(actual, is(expected));
 	}
@@ -38,17 +42,18 @@ public class BatchDeliveryReportParamsTest {
 		                .addCode(100, 200, 300)
 		                .build();
 
-		String actual = filter.toUrlEncodedQuery();
-		String expected = "type=full"
-		        + "&status=Expired%2CDelivered"
-		        + "&code=100%2C200%2C300";
+		List<NameValuePair> actual = filter.toQueryParams();
 
-		assertThat(actual, is(expected));
+		assertThat(actual, hasItems(
+		        (NameValuePair) new BasicNameValuePair("type", "full"),
+		        new BasicNameValuePair("status", "Expired,Delivered"),
+		        new BasicNameValuePair("code", "100,200,300")));
 	}
 
 	@Property
-	public void generatesValidQueryParameters(ReportType reportType,
-	        Set<Integer> codes) throws Exception {
+	public void generatesValidQueryParameters(
+	        BatchDeliveryReportParams.ReportType reportType, Set<Integer> codes)
+	        throws Exception {
 		BatchDeliveryReportParams filter =
 		        new BatchDeliveryReportParams.Builder()
 		                .reportType(reportType)
@@ -57,10 +62,10 @@ public class BatchDeliveryReportParamsTest {
 		                .codes(codes)
 		                .build();
 
-		String query = filter.toUrlEncodedQuery();
+		List<NameValuePair> params = filter.toQueryParams();
 
 		// Will throw IllegalArgumentException if an invalid URI is attempted.
-		URI.create("http://localhost/?" + query);
+		new URIBuilder().addParameters(params).build();
 	}
 
 }

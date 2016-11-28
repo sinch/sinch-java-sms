@@ -2,21 +2,26 @@ package com.clxcommunications.xms;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
@@ -258,50 +263,66 @@ public abstract class ApiConnection implements Closeable {
 			throw new IllegalStateException(
 			        "base endpoint has fragment component");
 		}
+
+		/*
+		 * Attempt to create a plain endpoint URL. If it succeeds then all
+		 * endpoints generated in normal use of this class should succeed.
+		 * 
+		 * Note, this does not mean that the generated URL makes sense, it only
+		 * means that the code will not throw exceptions.
+		 */
+		endpoint("");
 	}
 
 	/**
-	 * Helper returning an endpoint URL for the given sub-path and query.
+	 * Helper returning an endpoint URL for the given sub-path and query
+	 * parameters.
 	 * 
 	 * @param subPath
 	 *            path fragment to place after the base path
-	 * @param query
-	 *            the query string, may be null
+	 * @param params
+	 *            the query parameters, may be empty
 	 * @return a non-null endpoint URL
 	 */
 	@Nonnull
-	private URI endpoint(@Nonnull String subPath, @Nullable String query) {
-		StringBuilder sb = new StringBuilder();
+	private URI endpoint(@Nonnull String subPath,
+	        @Nonnull List<NameValuePair> params) {
+		try {
+			String user = URLEncoder.encode(username(), "UTF-8");
+			String path = endpoint().getPath() + "/" + user + subPath;
+			URIBuilder uriBuilder = new URIBuilder(endpoint())
+			        .setPath(path);
 
-		sb.append(endpointHost().toURI());
-		sb.append('/').append(username());
-		sb.append(endpointBasePath());
-		sb.append(subPath);
-		if (query != null) {
-			sb.append('?').append(query);
+			if (!params.isEmpty()) {
+				uriBuilder.setParameters(params);
+			}
+
+			return uriBuilder.build();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e);
 		}
-
-		return URI.create(sb.toString());
 	}
 
 	/**
-	 * Like {@link #endpoint(String, String)} but with an empty query string.
+	 * Like {@link #endpoint(String, String)} but with no query parameters.
 	 * 
 	 * @param subPath
 	 *            path fragment to place after the base path
 	 * @return a non-null endpoint URL
-	 * @throws IllegalStateException
+	 * @throws IllegalArgumentException
 	 *             if the generated URL is invalid, wraps the
 	 *             {@link URISyntaxException}
 	 */
 	@Nonnull
 	private URI endpoint(String subPath) {
-		return endpoint(subPath, null);
+		return endpoint(subPath, Collections.<NameValuePair> emptyList());
 	}
 
 	@Nonnull
 	private URI batchesEndpoint() {
-		return endpoint("/batches", null);
+		return endpoint("/batches", Collections.<NameValuePair> emptyList());
 	}
 
 	@Nonnull
@@ -310,10 +331,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	@Nonnull
-	private URI batchDeliveryReportEndpoint(BatchId batchId, String query) {
+	private URI batchDeliveryReportEndpoint(BatchId batchId,
+	        List<NameValuePair> params) {
 		return endpoint(
 		        "/batches/" + batchId.id() + "/delivery_report",
-		        query);
+		        params);
 	}
 
 	@Nonnull
@@ -838,8 +860,8 @@ public abstract class ApiConnection implements Closeable {
 	private Future<Page<MtBatchSmsResult>> fetchBatches(int page,
 	        BatchFilter filter,
 	        FutureCallback<Page<MtBatchSmsResult>> callback) {
-		String query = filter.toUrlEncodedQuery(page);
-		URI url = endpoint("/batches", query);
+		List<NameValuePair> params = filter.toQueryParams(page);
+		URI url = endpoint("/batches", params);
 
 		HttpGet req = get(url);
 
@@ -944,8 +966,8 @@ public abstract class ApiConnection implements Closeable {
 	public Future<BatchDeliveryReport> fetchDeliveryReportAsync(BatchId id,
 	        BatchDeliveryReportParams filter,
 	        FutureCallback<BatchDeliveryReport> callback) {
-		String query = filter.toUrlEncodedQuery();
-		HttpGet req = get(batchDeliveryReportEndpoint(id, query));
+		List<NameValuePair> params = filter.toQueryParams();
+		HttpGet req = get(batchDeliveryReportEndpoint(id, params));
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);

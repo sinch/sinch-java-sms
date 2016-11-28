@@ -1,8 +1,12 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
 
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
@@ -11,21 +15,27 @@ public class ClxApiTest {
 
 	@Test
 	public void canFilterTodaysBatches() throws Exception {
-		LocalDate now = LocalDate.now(Clock.systemUTC());
-		String expected = String.format("page=81&start_date=%s", now);
-		String actual = ClxApi.filterTodaysBatches().toUrlEncodedQuery(81);
+		LocalDate today = LocalDate.now(Clock.systemUTC());
 
-		assertThat(actual, is(expected));
+		List<NameValuePair> actual =
+		        ClxApi.filterTodaysBatches().toQueryParams(81);
+
+		assertThat(actual, hasItems(
+		        (NameValuePair) new BasicNameValuePair("page", "81"),
+		        new BasicNameValuePair("start_date", today.toString())));
 	}
 
 	@Test
 	public void canFilterYesterdaysBatches() throws Exception {
-		LocalDate now = LocalDate.now(Clock.systemUTC());
-		String expected = String.format("page=82&start_date=%s&end_date=%s",
-		        now.minusDays(1), now);
-		String actual = ClxApi.filterYesterdaysBatches().toUrlEncodedQuery(82);
+		LocalDate today = LocalDate.now(Clock.systemUTC());
+		LocalDate yesterday = today.minusDays(1);
+		List<NameValuePair> actual =
+		        ClxApi.filterYesterdaysBatches().toQueryParams(82);
 
-		assertThat(actual, is(expected));
+		assertThat(actual, hasItems(
+		        (NameValuePair) new BasicNameValuePair("page", "82"),
+		        new BasicNameValuePair("start_date", yesterday.toString()),
+		        new BasicNameValuePair("end_date", today.toString())));
 	}
 
 }
