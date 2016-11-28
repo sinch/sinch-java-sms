@@ -16,10 +16,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = RecipientDeliveryReportImpl.Builder.class)
+@JsonDeserialize(builder = RecipientDeliveryReport.Builder.class)
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonTypeName("recipient_delivery_report_sms")
 public interface RecipientDeliveryReport {
+
+	public static final class Builder
+	        extends RecipientDeliveryReportImpl.Builder {
+
+	}
 
 	@JsonProperty("batch_id")
 	BatchId batchId();

@@ -44,6 +44,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
+import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -974,6 +975,61 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncResponseConsumer<BatchDeliveryReport> consumer =
 		        jsonAsyncConsumer(BatchDeliveryReport.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Fetches a delivery report for the batch with the given batch ID and
+	 * recipient. Blocks until the fetch has completed.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param recipient
+	 *            MSISDN of recipient
+	 * @return the desired delivery report
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public RecipientDeliveryReport fetchDeliveryReport(BatchId id,
+	        String recipient) throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchDeliveryReportAsync(id, recipient, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches a delivery report for the batch with the given batch ID and
+	 * recipient.
+	 * 
+	 * @param id
+	 *            identifier of the batch
+	 * @param recipient
+	 *            MSISDN of recipient
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the delivery report
+	 */
+	public Future<RecipientDeliveryReport> fetchDeliveryReportAsync(BatchId id,
+	        String recipient,
+	        FutureCallback<RecipientDeliveryReport> callback) {
+		HttpGet req = get(batchRecipientDeliveryReportEndpoint(id, recipient));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<RecipientDeliveryReport> consumer =
+		        jsonAsyncConsumer(RecipientDeliveryReport.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

@@ -22,16 +22,17 @@ public class RecipientDeliveryReportTest {
 		OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		RecipientDeliveryReport input = RecipientDeliveryReportImpl.builder()
-		        .batchId(BatchId.of("batchid"))
-		        .recipient("12345")
-		        .code(10)
-		        .status(DeliveryStatus.DELIVERED)
-		        .statusMessage("status message")
-		        .at(time1)
-		        .operatorStatusAt(time2)
-		        .operator("818181")
-		        .build();
+		RecipientDeliveryReport input =
+		        new RecipientDeliveryReport.Builder()
+		                .batchId(BatchId.of("batchid"))
+		                .recipient("12345")
+		                .code(10)
+		                .status(DeliveryStatus.DELIVERED)
+		                .statusMessage("status message")
+		                .at(time1)
+		                .operatorStatusAt(time2)
+		                .operator("818181")
+		                .build();
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -58,15 +59,16 @@ public class RecipientDeliveryReportTest {
 		OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		RecipientDeliveryReport expected = RecipientDeliveryReportImpl.builder()
-		        .batchId(BatchId.of("batchid"))
-		        .recipient("1235")
-		        .code(10)
-		        .status(DeliveryStatus.DELIVERED)
-		        .statusMessage("status message")
-		        .at(time1)
-		        .operatorStatusAt(time2)
-		        .build();
+		RecipientDeliveryReport expected =
+		        new RecipientDeliveryReport.Builder()
+		                .batchId(BatchId.of("batchid"))
+		                .recipient("1235")
+		                .code(10)
+		                .status(DeliveryStatus.DELIVERED)
+		                .statusMessage("status message")
+		                .at(time1)
+		                .operatorStatusAt(time2)
+		                .build();
 
 		String input = json.writeValueAsString(expected);
 

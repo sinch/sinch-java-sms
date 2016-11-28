@@ -54,6 +54,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
+import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -1219,6 +1220,96 @@ public class ApiConnectionIT {
 
 			BatchDeliveryReport actual = conn.fetchDeliveryReportAsync(
 			        batchId, filter, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchRecipientDeliveryReportSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		String recipient = "987654321";
+
+		String path = "/" + username + "/batches/" + batchId.id()
+		        + "/delivery_report/" + recipient;
+
+		final RecipientDeliveryReport expected =
+		        new RecipientDeliveryReport.Builder()
+		                .batchId(batchId)
+		                .recipient(recipient)
+		                .code(200)
+		                .status(DeliveryStatus.ABORTED)
+		                .statusMessage("this is the status")
+		                .operator("10101")
+		                .at(OffsetDateTime.now())
+		                .operatorStatusAt(OffsetDateTime.now(Clock.systemUTC()))
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			RecipientDeliveryReport actual =
+			        conn.fetchDeliveryReport(batchId, recipient);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchRecipientDeliveryReportAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		String recipient = "987654321";
+
+		String path = "/" + username + "/batches/" + batchId.id()
+		        + "/delivery_report/" + recipient;
+
+		final RecipientDeliveryReport expected =
+		        new RecipientDeliveryReport.Builder()
+		                .batchId(batchId)
+		                .recipient(recipient)
+		                .code(200)
+		                .status(DeliveryStatus.ABORTED)
+		                .statusMessage("this is the status")
+		                .operator("10101")
+		                .at(OffsetDateTime.now())
+		                .operatorStatusAt(OffsetDateTime.now(Clock.systemUTC()))
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<RecipientDeliveryReport> testCallback =
+			        new TestCallback<RecipientDeliveryReport>() {
+
+				        @Override
+				        public void completed(RecipientDeliveryReport result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			RecipientDeliveryReport actual = conn.fetchDeliveryReportAsync(
+			        batchId, recipient, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
