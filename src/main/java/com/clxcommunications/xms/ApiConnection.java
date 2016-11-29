@@ -516,10 +516,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchTextSmsResult> createBatchAsync(
 	        MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPost httpPost = post(batchesEndpoint(), sms);
+		HttpPost req = post(batchesEndpoint(), sms);
 
 		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
 		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
@@ -565,10 +565,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchBinarySmsResult> createBatchAsync(
 	        MtBatchBinarySmsCreate sms,
 	        FutureCallback<MtBatchBinarySmsResult> callback) {
-		HttpPost httpPost = post(batchesEndpoint(), sms);
+		HttpPost req = post(batchesEndpoint(), sms);
 
 		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
 		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
@@ -648,10 +648,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchTextSmsResult> replaceBatchAsync(BatchId id,
 	        MtBatchTextSmsCreate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPut httpPut = put(batchEndpoint(id), sms);
+		HttpPut req = put(batchEndpoint(id), sms);
 
 		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPut);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
 		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
@@ -673,10 +673,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchBinarySmsResult> replaceBatchAsync(BatchId id,
 	        MtBatchBinarySmsCreate sms,
 	        FutureCallback<MtBatchBinarySmsResult> callback) {
-		HttpPut httpPut = put(batchEndpoint(id), sms);
+		HttpPut req = put(batchEndpoint(id), sms);
 
 		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPut);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
 		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
@@ -755,10 +755,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchTextSmsResult> updateBatchAsync(BatchId batchId,
 	        MtBatchTextSmsUpdate sms,
 	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPost httpPost = post(batchEndpoint(batchId), sms);
+		HttpPost req = post(batchEndpoint(batchId), sms);
 
 		HttpAsyncRequestProducer producer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
 		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
 
@@ -781,10 +781,10 @@ public abstract class ApiConnection implements Closeable {
 	public Future<MtBatchBinarySmsResult> updateBatchAsync(BatchId batchId,
 	        MtBatchBinarySmsUpdate sms,
 	        FutureCallback<MtBatchBinarySmsResult> callback) {
-		HttpPost httpPost = post(batchEndpoint(batchId), sms);
+		HttpPost req = post(batchEndpoint(batchId), sms);
 
 		HttpAsyncRequestProducer producer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<MtBatchBinarySmsResult> consumer =
 		        jsonAsyncConsumer(MtBatchBinarySmsResult.class);
 
@@ -1242,10 +1242,10 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	public Future<GroupResponse> createGroupAsync(GroupCreate group,
 	        FutureCallback<GroupResponse> callback) {
-		HttpPost httpPost = post(groupsEndpoint(), group);
+		HttpPost req = post(groupsEndpoint(), group);
 
 		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), httpPost);
+		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<GroupResponse> responseConsumer =
 		        jsonAsyncConsumer(GroupResponse.class);
 
