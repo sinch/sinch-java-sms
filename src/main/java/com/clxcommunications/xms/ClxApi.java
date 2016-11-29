@@ -16,19 +16,19 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static final int MAX_BODY_BYTES = 140;
 
-	public static MtBatchTextSmsCreate.Builder buildBatchTextSms() {
+	public static MtBatchTextSmsCreate.Builder batchTextSms() {
 		return new MtBatchTextSmsCreate.Builder();
 	}
 
-	public static MtBatchTextSmsUpdate.Builder buildBatchTextSmsUpdate() {
+	public static MtBatchTextSmsUpdate.Builder batchTextSmsUpdate() {
 		return MtBatchTextSmsUpdate.builder();
 	}
 
-	public static MtBatchBinarySmsCreate.Builder buildBatchBinarySms() {
+	public static MtBatchBinarySmsCreate.Builder batchBinarySms() {
 		return new MtBatchBinarySmsCreate.Builder();
 	}
 
-	public static MtBatchBinarySmsUpdate.Builder buildBatchBinarySmsUpdate() {
+	public static MtBatchBinarySmsUpdate.Builder batchBinarySmsUpdate() {
 		return MtBatchBinarySmsUpdate.builder();
 	}
 
@@ -36,7 +36,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 		return new ParameterValues.Builder();
 	}
 
-	public static BatchFilter.Builder buildBatchFilter() {
+	public static BatchFilter.Builder batchFilter() {
 		return new BatchFilter.Builder();
 	}
 
@@ -54,11 +54,11 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 		        .build();
 	}
 
-	public static GroupFilter.Builder buildGroupFilter() {
+	public static GroupFilter.Builder groupFilter() {
 		return new GroupFilter.Builder();
 	}
 
-	public static InboundsFilter.Builder buildInboundsFilter() {
+	public static InboundsFilter.Builder inboundsFilter() {
 		return new InboundsFilter.Builder();
 	}
 

@@ -20,7 +20,7 @@ public class MtBatchTextSmsUpdateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		MtBatchSmsUpdate input = ClxApi.buildBatchTextSmsUpdate().build();
+		MtBatchSmsUpdate input = ClxApi.batchTextSmsUpdate().build();
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -41,7 +41,7 @@ public class MtBatchTextSmsUpdateTest {
 		        .putSubstitution("key1", "value1")
 		        .build());
 
-		MtBatchSmsUpdate input = ClxApi.buildBatchTextSmsUpdate()
+		MtBatchSmsUpdate input = ClxApi.batchTextSmsUpdate()
 		        .from("1234")
 		        .addToAdd("987654321")
 		        .body("Hello, world!")
@@ -64,7 +64,7 @@ public class MtBatchTextSmsUpdateTest {
 
 	@Test
 	public void canSerializeWithUnsetParameters() throws Exception {
-		MtBatchSmsUpdate input = ClxApi.buildBatchTextSmsUpdate()
+		MtBatchSmsUpdate input = ClxApi.batchTextSmsUpdate()
 		        .from("1234")
 		        .addToAdd("987654321")
 		        .body("Hello, world!")

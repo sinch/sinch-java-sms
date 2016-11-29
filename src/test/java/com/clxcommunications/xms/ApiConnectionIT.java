@@ -127,7 +127,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
 		MtBatchBinarySmsCreate request =
-		        ClxApi.buildBatchBinarySms()
+		        ClxApi.batchBinarySms()
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
@@ -175,7 +175,7 @@ public class ApiConnectionIT {
 		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSmsCreate request =
-		        ClxApi.buildBatchTextSms()
+		        ClxApi.batchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
@@ -221,7 +221,7 @@ public class ApiConnectionIT {
 		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSmsCreate request =
-		        ClxApi.buildBatchTextSms()
+		        ClxApi.batchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
@@ -270,7 +270,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 
 		MtBatchTextSmsCreate request =
-		        ClxApi.buildBatchTextSms()
+		        ClxApi.batchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
@@ -307,7 +307,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 
 		MtBatchTextSmsCreate request =
-		        ClxApi.buildBatchTextSms()
+		        ClxApi.batchTextSms()
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
@@ -362,7 +362,7 @@ public class ApiConnectionIT {
 		        542000000, ZoneOffset.UTC);
 
 		MtBatchTextSmsUpdate request =
-		        ClxApi.buildBatchTextSmsUpdate()
+		        ClxApi.batchTextSmsUpdate()
 		                .from("12345")
 		                .body("Hello, world!")
 		                .unsetDeliveryReport()
@@ -413,7 +413,7 @@ public class ApiConnectionIT {
 		tags.add("tag2");
 
 		MtBatchBinarySmsUpdate request =
-		        ClxApi.buildBatchBinarySmsUpdate()
+		        ClxApi.batchBinarySmsUpdate()
 		                .from("12345")
 		                .body("howdy".getBytes(TestUtils.US_ASCII))
 		                .unsetExpireAt()
@@ -857,7 +857,7 @@ public class ApiConnectionIT {
 	public void canListBatchesWithEmpty() throws Exception {
 		String username = TestUtils.freshUsername();
 		String path = "/" + username + "/batches?page=0";
-		BatchFilter filter = ClxApi.buildBatchFilter().build();
+		BatchFilter filter = ClxApi.batchFilter().build();
 
 		final Page<MtBatchSmsResult> expected =
 		        new PagedBatchResult.Builder()
@@ -900,7 +900,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListBatchesWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		BatchFilter filter = ClxApi.buildBatchFilter().build();
+		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
 		String path1 = "/" + username + "/batches?page=0";
@@ -972,7 +972,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canIterateOverPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		BatchFilter filter = ClxApi.buildBatchFilter().build();
+		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
 		String path1 = "/" + username + "/batches?page=0";
@@ -1050,7 +1050,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canIterateOverBatchesWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		BatchFilter filter = ClxApi.buildBatchFilter().build();
+		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
 		String path1 = "/" + username + "/batches?page=0";
@@ -1549,7 +1549,7 @@ public class ApiConnectionIT {
 
 		String path = "/" + username + "/batches/dry_run";
 
-		MtBatchSmsCreate request = ClxApi.buildBatchTextSms()
+		MtBatchSmsCreate request = ClxApi.batchTextSms()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!")
@@ -1587,7 +1587,7 @@ public class ApiConnectionIT {
 		String path = "/" + username + "/batches/dry_run"
 		        + "?per_recipient=true&number_of_recipients=5";
 
-		MtBatchSmsCreate request = ClxApi.buildBatchTextSms()
+		MtBatchSmsCreate request = ClxApi.batchTextSms()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!")
@@ -1902,7 +1902,7 @@ public class ApiConnectionIT {
 	public void canListGroupsWithEmpty() throws Exception {
 		String username = TestUtils.freshUsername();
 		String path = "/" + username + "/groups?page=0";
-		GroupFilter filter = ClxApi.buildGroupFilter().build();
+		GroupFilter filter = ClxApi.groupFilter().build();
 
 		final Page<GroupResponse> expected =
 		        new PagedGroupResult.Builder()
@@ -1945,7 +1945,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListGroupsWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		GroupFilter filter = ClxApi.buildGroupFilter()
+		GroupFilter filter = ClxApi.groupFilter()
 		        .addTag("tag1", "таг2")
 		        .build();
 
@@ -2547,7 +2547,7 @@ public class ApiConnectionIT {
 	public void canListInboundsWithEmpty() throws Exception {
 		String username = TestUtils.freshUsername();
 		String path = "/" + username + "/inbounds?page=0";
-		InboundsFilter filter = ClxApi.buildInboundsFilter().build();
+		InboundsFilter filter = ClxApi.inboundsFilter().build();
 
 		final Page<MoSms> expected =
 		        new PagedInboundsResult.Builder()
@@ -2590,7 +2590,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListInboundsWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		InboundsFilter filter = ClxApi.buildInboundsFilter()
+		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .addTo("10101")
 		        .build();
 		String inboundsId1 = TestUtils.freshSmsId();

@@ -17,7 +17,7 @@ public class MtBatchBinarySmsUpdateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		MtBatchSmsUpdate input = ClxApi.buildBatchBinarySmsUpdate().build();
+		MtBatchSmsUpdate input = ClxApi.batchBinarySmsUpdate().build();
 
 		String expected = Utils.join("\n",
 		        "{",
@@ -31,7 +31,7 @@ public class MtBatchBinarySmsUpdateTest {
 
 	@Test
 	public void canSerializeWithUpdatedFields() throws Exception {
-		MtBatchSmsUpdate input = ClxApi.buildBatchBinarySmsUpdate()
+		MtBatchSmsUpdate input = ClxApi.batchBinarySmsUpdate()
 		        .from("1234")
 		        .addToAdd("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))

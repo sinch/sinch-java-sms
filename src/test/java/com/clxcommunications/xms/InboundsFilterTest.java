@@ -21,7 +21,7 @@ public class InboundsFilterTest {
 
 	@Test
 	public void canGenerateQueryParameters() throws Exception {
-		InboundsFilter filter = ClxApi.buildInboundsFilter()
+		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(20)
 		        .startDate(LocalDate.of(2010, 11, 12))
 		        .endDate(LocalDate.of(2011, 11, 12))
@@ -40,7 +40,7 @@ public class InboundsFilterTest {
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> tags, LocalDate startDate, LocalDate endDate)
 	        throws Exception {
-		InboundsFilter filter = ClxApi.buildInboundsFilter()
+		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(pageSize)
 		        .startDate(startDate)
 		        .endDate(endDate)

@@ -21,7 +21,7 @@ public class BatchFilterTest {
 
 	@Test
 	public void canGenerateQueryParameters() throws Exception {
-		BatchFilter filter = ClxApi.buildBatchFilter()
+		BatchFilter filter = ClxApi.batchFilter()
 		        .pageSize(20)
 		        .addFrom("12345", "6789")
 		        .addTag("tag1", "таг2")
@@ -44,7 +44,7 @@ public class BatchFilterTest {
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> from, Set<String> tags, LocalDate startDate,
 	        LocalDate endDate) throws Exception {
-		BatchFilter filter = ClxApi.buildBatchFilter()
+		BatchFilter filter = ClxApi.batchFilter()
 		        .pageSize(pageSize)
 		        .from(from)
 		        .tags(tags)

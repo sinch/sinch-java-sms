@@ -138,7 +138,7 @@ public class MtBatchTextSmsCreateTest {
 	}
 
 	private static MtBatchTextSmsCreate.Builder minimalBatchBuilder() {
-		return ClxApi.buildBatchTextSms()
+		return ClxApi.batchTextSms()
 		        .from("1234")
 		        .addTo("987654321")
 		        .body("Hello, world!");

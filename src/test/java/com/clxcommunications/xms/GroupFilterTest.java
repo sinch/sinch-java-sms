@@ -20,7 +20,7 @@ public class GroupFilterTest {
 
 	@Test
 	public void canGenerateQueryParameters() throws Exception {
-		GroupFilter filter = ClxApi.buildGroupFilter()
+		GroupFilter filter = ClxApi.groupFilter()
 		        .pageSize(20)
 		        .addTag("tag1", "таг2")
 		        .build();
@@ -36,7 +36,7 @@ public class GroupFilterTest {
 	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> tags) throws Exception {
-		GroupFilter filter = ClxApi.buildGroupFilter()
+		GroupFilter filter = ClxApi.groupFilter()
 		        .pageSize(pageSize)
 		        .tags(tags)
 		        .build();
