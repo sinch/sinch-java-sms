@@ -114,6 +114,12 @@ public abstract class ApiConnection implements Closeable {
 	        LoggerFactory.getLogger(ApiConnection.class);
 
 	/**
+	 * The default endpoint of this API connection.
+	 */
+	public static final URI DEFAULT_ENDPOINT =
+	        URI.create("https://api.mblox.com/xms/v1");
+
+	/**
 	 * A Jackson object mapper.
 	 */
 	private final ApiObjectMapper json;
@@ -235,7 +241,7 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Default
 	public URI endpoint() {
-		return URI.create("https://api.mblox.com/xms/v1");
+		return DEFAULT_ENDPOINT;
 	}
 
 	/**
