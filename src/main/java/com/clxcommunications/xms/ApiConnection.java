@@ -40,6 +40,7 @@ import com.clxcommunications.xms.api.GroupId;
 import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.GroupUpdate;
+import com.clxcommunications.xms.api.MoSms;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -50,6 +51,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
 import com.clxcommunications.xms.api.PagedGroupResult;
+import com.clxcommunications.xms.api.PagedInboundsResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.clxcommunications.xms.api.Tags;
 import com.clxcommunications.xms.api.TagsUpdate;
@@ -384,6 +386,16 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI groupTagsEndpoint(GroupId id) {
 		return endpoint("/groups/" + id + "/tags");
+	}
+
+	@Nonnull
+	private URI inboundsEndpoint(List<NameValuePair> params) {
+		return endpoint("/inbounds", params);
+	}
+
+	@Nonnull
+	private URI inboundEndpoint(String id) {
+		return endpoint("/inbounds/" + id);
 	}
 
 	/**
@@ -1375,11 +1387,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Creates a page fetcher to retrieve a paged list of batches. Note, this
+	 * Creates a page fetcher to retrieve a paged list of groups. Note, this
 	 * method does not itself cause any network activity.
 	 * 
 	 * @param filter
-	 *            the batch filter
+	 *            the group filter
 	 * @return a future page
 	 */
 	public PagedFetcher<GroupResponse> fetchGroups(
@@ -1397,12 +1409,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches the given page in a paged list of batches.
+	 * Fetches the given page in a paged list of groups.
 	 * 
 	 * @param page
 	 *            the page to fetch
 	 * @param filter
-	 *            the batch filter
+	 *            the group filter
 	 * @param callback
 	 *            the callback to invoke when call is finished
 	 * @return a future page
@@ -1724,6 +1736,104 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncResponseConsumer<Tags> consumer =
 		        jsonAsyncConsumer(Tags.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Creates a page fetcher to retrieve a paged list of inbound messages.
+	 * Note, this method does not itself cause any network activity.
+	 * 
+	 * @param filter
+	 *            the inbounds filter
+	 * @return a future page
+	 */
+	public PagedFetcher<MoSms> fetchInbounds(
+	        final InboundsFilter filter) {
+		return new PagedFetcher<MoSms>() {
+
+			@Override
+			Future<Page<MoSms>> fetchAsync(int page,
+			        FutureCallback<Page<MoSms>> callback) {
+				return fetchInbounds(page, filter,
+				        callbackWrapper().wrap(callback));
+			}
+
+		};
+	}
+
+	/**
+	 * Fetches the given page in a paged list of inbound messages.
+	 * 
+	 * @param page
+	 *            the page to fetch
+	 * @param filter
+	 *            the inbounds filter
+	 * @param callback
+	 *            the callback to invoke when call is finished
+	 * @return a future page
+	 */
+	private Future<Page<MoSms>> fetchInbounds(int page,
+	        InboundsFilter filter,
+	        FutureCallback<Page<MoSms>> callback) {
+		List<NameValuePair> params = filter.toQueryParams(page);
+		HttpGet req = get(inboundsEndpoint(params));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Page<MoSms>> consumer =
+		        jsonAsyncConsumer(PagedInboundsResult.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Fetches the inbound message having the given identifier. Blocks until the
+	 * retrieval has completed.
+	 * 
+	 * @param id
+	 *            identifier of the inbound message
+	 * @return the fetched message
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public MoSms fetchInbound(String id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchInboundAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches the inbound message having the given identifier.
+	 * 
+	 * @param id
+	 *            identifier of the inbound message
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the fetched message
+	 */
+	public Future<MoSms> fetchInboundAsync(String id,
+	        FutureCallback<MoSms> callback) {
+		HttpGet req = get(inboundEndpoint(id));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<MoSms> consumer =
+		        jsonAsyncConsumer(MoSms.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

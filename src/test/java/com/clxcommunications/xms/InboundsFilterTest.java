@@ -27,7 +27,7 @@ public class InboundsFilterTest {
 		        .endDate(LocalDate.of(2011, 11, 12))
 		        .build();
 
-		List<NameValuePair> actual = filter.toQueryParameters(4);
+		List<NameValuePair> actual = filter.toQueryParams(4);
 
 		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("page", "4"),
@@ -46,7 +46,7 @@ public class InboundsFilterTest {
 		        .endDate(endDate)
 		        .build();
 
-		List<NameValuePair> params = filter.toQueryParameters(page);
+		List<NameValuePair> params = filter.toQueryParams(page);
 
 		// Will throw IllegalArgumentException if an invalid URI is attempted.
 		new URIBuilder().addParameters(params).build();

@@ -53,6 +53,9 @@ import com.clxcommunications.xms.api.GroupId;
 import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.GroupUpdate;
+import com.clxcommunications.xms.api.MoBinarySms;
+import com.clxcommunications.xms.api.MoSms;
+import com.clxcommunications.xms.api.MoTextSms;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -63,6 +66,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
 import com.clxcommunications.xms.api.PagedGroupResult;
+import com.clxcommunications.xms.api.PagedInboundsResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.clxcommunications.xms.api.Tags;
 import com.clxcommunications.xms.api.TagsUpdate;
@@ -2443,6 +2447,229 @@ public class ApiConnectionIT {
 			        };
 
 			Tags actual = conn.fetchTagsAsync(groupId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canListInboundsWithEmpty() throws Exception {
+		String username = TestUtils.freshUsername();
+		String path = "/" + username + "/inbounds?page=0";
+		InboundsFilter filter = ClxApi.buildInboundsFilter().build();
+
+		final Page<MoSms> expected =
+		        new PagedInboundsResult.Builder()
+		                .page(0)
+		                .size(0)
+		                .numPages(0)
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Page<MoSms>> testCallback =
+			        new TestCallback<Page<MoSms>>() {
+
+				        @Override
+				        public void completed(Page<MoSms> result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			PagedFetcher<MoSms> fetcher = conn.fetchInbounds(filter);
+
+			Page<MoSms> actual =
+			        fetcher.fetchAsync(0, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canListInboundsWithTwoPages() throws Exception {
+		String username = TestUtils.freshUsername();
+		InboundsFilter filter = ClxApi.buildInboundsFilter()
+		        .addTo("10101")
+		        .build();
+		String inboundsId1 = TestUtils.freshSmsId();
+		String inboundsId2 = TestUtils.freshSmsId();
+		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
+		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
+
+		// Prepare first page.
+		String path1 = "/" + username + "/inbounds?page=0&to=10101";
+
+		final Page<MoSms> expected1 =
+		        new PagedInboundsResult.Builder()
+		                .page(0)
+		                .size(1)
+		                .numPages(2)
+		                .addContent(new MoTextSms.Builder()
+		                        .from("987654321")
+		                        .to("54321")
+		                        .id(inboundsId1)
+		                        .receivedAt(time1)
+		                        .sentAt(time2)
+		                        .body("body1")
+		                        .build())
+		                .build();
+
+		stubGetResponse(expected1, path1);
+
+		// Prepare second page.
+		String path2 = "/" + username + "/inbounds?page=1&to=10101";
+
+		final Page<MoSms> expected2 =
+		        new PagedInboundsResult.Builder()
+		                .page(1)
+		                .size(1)
+		                .numPages(2)
+		                .addContent(new MoBinarySms.Builder()
+		                        .from("123456789")
+		                        .to("12345")
+		                        .id(inboundsId2)
+		                        .receivedAt(time2)
+		                        .sentAt(time1)
+		                        .body("body2".getBytes(TestUtils.US_ASCII))
+		                        .udh("udh".getBytes(TestUtils.US_ASCII))
+		                        .build())
+		                .build();
+
+		stubGetResponse(expected2, path2);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Page<MoSms>> testCallback =
+			        new TestCallback<Page<MoSms>>() {
+
+				        @Override
+				        public void completed(Page<MoSms> result) {
+					        switch (result.page()) {
+					        case 0:
+						        assertThat(result, is(expected1));
+						        break;
+					        case 1:
+						        assertThat(result, is(expected2));
+						        break;
+					        default:
+						        fail("unexpected page: " + result);
+					        }
+				        }
+
+			        };
+
+			PagedFetcher<MoSms> fetcher = conn.fetchInbounds(filter);
+
+			Page<MoSms> actual1 = fetcher.fetchAsync(0, testCallback).get();
+			assertThat(actual1, is(expected1));
+
+			Page<MoSms> actual2 = fetcher.fetchAsync(1, testCallback).get();
+			assertThat(actual2, is(expected2));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path1);
+		verifyGetRequest(path2);
+	}
+
+	@Test
+	public void canFetchInboundSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		String smsId = TestUtils.freshSmsId();
+		String inboundsId = TestUtils.freshSmsId();
+		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
+		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
+
+		String path = "/" + username + "/inbounds/" + smsId;
+
+		MoSms expected = new MoBinarySms.Builder()
+		        .from("123456789")
+		        .to("12345")
+		        .id(inboundsId)
+		        .receivedAt(time1)
+		        .sentAt(time2)
+		        .body("body2".getBytes(TestUtils.US_ASCII))
+		        .udh("udh".getBytes(TestUtils.US_ASCII))
+		        .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			MoSms actual = conn.fetchInbound(smsId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchInboundAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		String smsId = TestUtils.freshSmsId();
+		String inboundsId = TestUtils.freshSmsId();
+		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
+		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
+
+		String path = "/" + username + "/inbounds/" + smsId;
+
+		final MoSms expected = new MoBinarySms.Builder()
+		        .from("123456789")
+		        .to("12345")
+		        .id(inboundsId)
+		        .receivedAt(time1)
+		        .sentAt(time2)
+		        .body("body2".getBytes(TestUtils.US_ASCII))
+		        .udh("udh".getBytes(TestUtils.US_ASCII))
+		        .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<MoSms> testCallback =
+			        new TestCallback<MoSms>() {
+
+				        @Override
+				        public void completed(MoSms result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			MoSms actual = conn.fetchInboundAsync(smsId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();

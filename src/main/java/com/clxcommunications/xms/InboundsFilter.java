@@ -77,7 +77,7 @@ public abstract class InboundsFilter {
 	 * @return a non-null string containing query parameters
 	 */
 	@Nonnull
-	List<NameValuePair> toQueryParameters(int page) {
+	List<NameValuePair> toQueryParams(int page) {
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(6);
 
 		params.add(new BasicNameValuePair("page", String.valueOf(page)));
