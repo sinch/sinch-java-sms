@@ -335,14 +335,14 @@ public abstract class ApiConnection implements Closeable {
 
 	@Nonnull
 	private URI batchEndpoint(BatchId batchId) {
-		return endpoint("/batches/" + batchId.id());
+		return endpoint("/batches/" + batchId);
 	}
 
 	@Nonnull
 	private URI batchDeliveryReportEndpoint(BatchId batchId,
 	        List<NameValuePair> params) {
 		return endpoint(
-		        "/batches/" + batchId.id() + "/delivery_report",
+		        "/batches/" + batchId + "/delivery_report",
 		        params);
 	}
 
@@ -355,12 +355,12 @@ public abstract class ApiConnection implements Closeable {
 	private URI batchRecipientDeliveryReportEndpoint(BatchId batchId,
 	        String recipient) {
 		return endpoint(
-		        "/batches/" + batchId.id() + "/delivery_report/" + recipient);
+		        "/batches/" + batchId + "/delivery_report/" + recipient);
 	}
 
 	@Nonnull
 	private URI batchTagsEndpoint(BatchId batchId) {
-		return endpoint("/batches/" + batchId.id() + "/tags");
+		return endpoint("/batches/" + batchId + "/tags");
 	}
 
 	@Nonnull
@@ -375,12 +375,12 @@ public abstract class ApiConnection implements Closeable {
 
 	@Nonnull
 	private URI groupEndpoint(GroupId id) {
-		return endpoint("/groups/" + id.id());
+		return endpoint("/groups/" + id);
 	}
 
 	@Nonnull
 	private URI groupMembersEndpoint(GroupId id) {
-		return endpoint("/groups/" + id.id() + "/members");
+		return endpoint("/groups/" + id + "/members");
 	}
 
 	/**

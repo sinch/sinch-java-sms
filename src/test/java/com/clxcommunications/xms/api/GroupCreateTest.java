@@ -51,7 +51,7 @@ public class GroupCreateTest {
 		        "  'name': 'mygroup',",
 		        "  'members': [ '123456789', '987654321', '4242424242' ],",
 		        "  'child_groups': [ '"
-		                + groupId1.id() + "', '" + groupId2.id() + "' ],",
+		                + groupId1 + "', '" + groupId2 + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add': { 'first_word': 'kw0', 'second_word': 'kw1' },",

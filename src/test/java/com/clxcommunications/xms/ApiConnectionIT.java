@@ -316,7 +316,7 @@ public class ApiConnectionIT {
 		        "  'body': 'Hello, world!',",
 		        "  'type' 'mt_text',",
 		        "  'canceled': false,",
-		        "  'id': '" + batchId.id() + "',",
+		        "  'id': '" + batchId + "',",
 		        "  'from': '12345',",
 		        "  'created_at': '2016-10-02T09:34:28.542Z',",
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
@@ -373,7 +373,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
@@ -424,7 +424,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
@@ -452,7 +452,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -490,7 +490,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -539,7 +539,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
@@ -587,7 +587,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		wm.stubFor(get(
 		        urlEqualTo(path))
@@ -703,7 +703,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
-		String path = "/" + username + "/batches/" + batchId.id();
+		String path = "/" + username + "/batches/" + batchId;
 
 		MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -769,8 +769,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path1 =
-		        "/" + username + "/batches/" + expected1.id().id();
+		String path1 = "/" + username + "/batches/" + expected1.id();
 		byte[] response1 = json.writeValueAsBytes(expected1);
 
 		wm.stubFor(delete(
@@ -795,8 +794,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path2 =
-		        "/" + username + "/batches/" + expected2.id().id();
+		String path2 = "/" + username + "/batches/" + expected2.id();
 		byte[] response2 = json.writeValueAsBytes(expected2);
 
 		wm.stubFor(delete(
@@ -1125,7 +1123,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId
 		        + "/delivery_report"
 		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
 
@@ -1181,7 +1179,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId
 		        + "/delivery_report?type=full";
 
 		final BatchDeliveryReport expected =
@@ -1244,7 +1242,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1284,7 +1282,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + username + "/batches/" + batchId.id()
+		String path = "/" + username + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1333,7 +1331,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1366,7 +1364,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1410,7 +1408,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1439,7 +1437,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1479,7 +1477,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		Tags expected = Tags.of("tag1", "таг2");
 
@@ -1506,7 +1504,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId.id() + "/tags";
+		String path = "/" + username + "/batches/" + batchId + "/tags";
 
 		final Tags expected = Tags.of("tag1", "таг2");
 
@@ -1658,7 +1656,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId.id();
+		String path = "/" + username + "/groups/" + groupId;
 
 		GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1697,7 +1695,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId.id();
+		String path = "/" + username + "/groups/" + groupId;
 
 		final GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1747,7 +1745,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId.id() + "/members";
+		String path = "/" + username + "/groups/" + groupId + "/members";
 
 		GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 
@@ -1774,7 +1772,7 @@ public class ApiConnectionIT {
 		String username = TestUtils.freshUsername();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId.id() + "/members";
+		String path = "/" + username + "/groups/" + groupId + "/members";
 
 		final GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 

@@ -52,9 +52,9 @@ public class GroupUpdateTest {
 		        "  'name': null,",
 		        "  'add': [ '123456789' ],",
 		        "  'remove': [ '987654321', '4242424242' ],",
-		        "  'child_groups_add': [ '" + groupId1.id() + "', '"
-		                + groupId2.id() + "' ],",
-		        "  'child_groups_remove': [ '" + groupId3.id() + "' ],",
+		        "  'child_groups_add': [ '" + groupId1 + "', '" + groupId2
+		                + "' ],",
+		        "  'child_groups_remove': [ '" + groupId3 + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add': { 'first_word': 'kw0', 'second_word': 'kw1' },",

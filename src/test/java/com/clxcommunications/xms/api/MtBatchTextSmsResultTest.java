@@ -25,7 +25,7 @@ public class MtBatchTextSmsResultTest {
 		        "  'to': [ '987654321' ],",
 		        "  'body': 'Hello, world!',",
 		        "  'canceled': false,",
-		        "  'id': '" + input.id().id() + "'",
+		        "  'id': '" + input.id() + "'",
 		        "}").replace('\'', '"');
 
 		String actual = json.writeValueAsString(input);
@@ -61,7 +61,7 @@ public class MtBatchTextSmsResultTest {
 		        "  'to': [ '987654321' ],",
 		        "  'body': 'Hello, world!',",
 		        "  'canceled': false,",
-		        "  'id': '" + input.id().id() + "',",
+		        "  'id': '" + input.id() + "',",
 		        "  'parameters': {",
 		        "    'param1': {",
 		        "      '123': 'foo',",
@@ -110,7 +110,7 @@ public class MtBatchTextSmsResultTest {
 		        "  'to': [ '987654321' ],",
 		        "  'body': 'Hello, world!',",
 		        "  'canceled': false,",
-		        "  'id': '" + input.id().id() + "',",
+		        "  'id': '" + input.id() + "',",
 		        "  'parameters': {",
 		        "    'param1': {",
 		        "      '123': 'foo',",

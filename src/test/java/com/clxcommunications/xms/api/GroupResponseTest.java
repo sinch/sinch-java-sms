@@ -33,7 +33,7 @@ public class GroupResponseTest {
 
 		String expected = Utils.join("\n",
 		        "{",
-		        "  'id': '" + groupId.id() + "',",
+		        "  'id': '" + groupId + "',",
 		        "  'size': 72,",
 		        "  'created_at': '2016-10-02T09:34:28.542Z',",
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
@@ -69,11 +69,10 @@ public class GroupResponseTest {
 
 		String expected = Utils.join("\n",
 		        "{",
-		        "  'id': '" + groupId.id() + "',",
+		        "  'id': '" + groupId + "',",
 		        "  'name': 'mygroup',",
 		        "  'size': 72,",
-		        "  'child_groups': [ '" + groupId1.id() + "', '" + groupId2.id()
-		                + "' ],",
+		        "  'child_groups': [ '" + groupId1 + "', '" + groupId2 + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add': { 'first_word': 'kw0', 'second_word': 'kw1' },",

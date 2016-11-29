@@ -23,7 +23,7 @@ public class MtBatchBinarySmsResultTest {
 		        "  'from': '1234',",
 		        "  'to': [ '987654321' ],",
 		        "  'canceled': false,",
-		        "  'id': '" + input.id().id() + "',",
+		        "  'id': '" + input.id() + "',",
 		        "  'body': 'SGVsbG8sIHdvcmxkIQ==',",
 		        "  'udh': '01020304'",
 		        "}").replace('\'', '"');
