@@ -385,7 +385,11 @@ public abstract class ApiConnection implements Closeable {
 
 	/**
 	 * Helper that produces a HTTP consumer that consumes the given class as a
-	 * JSON object.
+	 * JSON object. The generics stuff here is to get a form of covariant
+	 * relation between the type of JSON input and the return type of this
+	 * class. Basically, if `P extends T` then it should be possible to read a
+	 * JSON type `P` but instead of necessarily returning a value of type `P`
+	 * return it as a `T`.
 	 * 
 	 * @param clazz
 	 *            the class whose JSON representation is consumed
