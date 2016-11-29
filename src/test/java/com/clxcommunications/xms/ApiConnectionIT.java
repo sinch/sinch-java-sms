@@ -1853,10 +1853,13 @@ public class ApiConnectionIT {
 	@Test
 	public void canListGroupsWithTwoPages() throws Exception {
 		String username = TestUtils.freshUsername();
-		GroupFilter filter = ClxApi.buildGroupFilter().build();
+		GroupFilter filter = ClxApi.buildGroupFilter()
+		        .addTag("tag1", "таг2")
+		        .build();
 
 		// Prepare first page.
-		String path1 = "/" + username + "/groups?page=0";
+		String path1 = "/" + username
+		        + "/groups?page=0&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected1 =
 		        new PagedGroupResult.Builder()
@@ -1868,7 +1871,8 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username + "/groups?page=1";
+		String path2 = "/" + username
+		        + "/groups?page=1&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected2 =
 		        new PagedGroupResult.Builder()
