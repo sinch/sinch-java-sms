@@ -143,7 +143,7 @@ public class MtBatchTextSmsResultTest {
 		assertThat(actual, is(expected));
 	}
 
-	private static MtBatchTextSmsResultImpl.Builder minimalBatchBuilder() {
+	private static MtBatchTextSmsResult.Builder minimalBatchBuilder() {
 		return new MtBatchTextSmsResult.Builder()
 		        .from("1234")
 		        .addTo("987654321")

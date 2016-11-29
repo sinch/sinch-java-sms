@@ -43,7 +43,7 @@ public class MtBatchBinarySmsCreateTest {
 		assertThat(actual, is(expected));
 	}
 
-	private static MtBatchBinarySmsCreateImpl.Builder minimalBatchBuilder() {
+	private static MtBatchBinarySmsCreate.Builder minimalBatchBuilder() {
 		return ClxApi.buildBatchBinarySms()
 		        .from("1234")
 		        .addTo("987654321")
