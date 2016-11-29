@@ -4,17 +4,28 @@ import java.util.List;
 
 import org.immutables.value.Value;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = MtBatchDryRunResultImpl.Builder.class)
+@JsonDeserialize(builder = MtBatchDryRunResult.Builder.class)
+@JsonInclude(Include.NON_EMPTY)
 public interface MtBatchDryRunResult {
 
+	public static final class Builder extends MtBatchDryRunResultImpl.Builder {
+
+	}
+
 	@Value.Immutable
-	@JsonDeserialize(builder = PerRecipientImpl.Builder.class)
+	@JsonDeserialize(builder = PerRecipient.Builder.class)
 	public interface PerRecipient {
+
+		public static final class Builder extends PerRecipientImpl.Builder {
+
+		}
 
 		String recipient();
 
