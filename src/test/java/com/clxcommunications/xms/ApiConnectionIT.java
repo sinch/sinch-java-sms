@@ -1328,7 +1328,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canUpdateTagsSync() throws Exception {
+	public void canUpdateBatchTagsSync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -1361,7 +1361,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canUpdateTagsAsync() throws Exception {
+	public void canUpdateBatchTagsAsync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -1405,7 +1405,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canReplaceTagsSync() throws Exception {
+	public void canReplaceBatchTagsSync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -1434,7 +1434,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canReplaceTagsAsync() throws Exception {
+	public void canReplaceBatchTagsAsync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -1474,7 +1474,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchTagsSync() throws Exception {
+	public void canFetchBatchTagsSync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -1501,7 +1501,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canFetchTagsAsync() throws Exception {
+	public void canFetchBatchTagsAsync() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
 
