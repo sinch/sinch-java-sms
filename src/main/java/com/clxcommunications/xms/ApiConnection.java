@@ -624,6 +624,31 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Asynchronously replaces the given text batch.
+	 * 
+	 * @param id
+	 *            identifier of the batch to replace
+	 * @param sms
+	 *            the new batch description
+	 * @param callback
+	 *            a callback that is invoked when replace is completed
+	 * @return a future whose result is the creation response
+	 */
+	public Future<MtBatchTextSmsResult> replaceBatchAsync(BatchId id,
+	        MtBatchTextSmsCreate sms,
+	        FutureCallback<MtBatchTextSmsResult> callback) {
+		HttpPut req = put(batchEndpoint(id), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
 	 * Attempts to replace the given batch synchronously. Internally this uses
 	 * an asynchronous call and blocks until it completes.
 	 * 
@@ -650,31 +675,6 @@ public abstract class ApiConnection implements Closeable {
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
-	}
-
-	/**
-	 * Asynchronously replaces the given text batch.
-	 * 
-	 * @param id
-	 *            identifier of the batch to replace
-	 * @param sms
-	 *            the new batch description
-	 * @param callback
-	 *            a callback that is invoked when replace is completed
-	 * @return a future whose result is the creation response
-	 */
-	public Future<MtBatchTextSmsResult> replaceBatchAsync(BatchId id,
-	        MtBatchTextSmsCreate sms,
-	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPut req = put(batchEndpoint(id), sms);
-
-		HttpAsyncRequestProducer requestProducer =
-		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<MtBatchTextSmsResult> responseConsumer =
-		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
-
-		return httpClient().execute(requestProducer, responseConsumer,
-		        callbackWrapper().wrap(callback));
 	}
 
 	/**
@@ -731,6 +731,32 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
+	 * Asynchronously updates the text batch with the given batch ID. The batch
+	 * is updated to match the given update object.
+	 * 
+	 * @param batchId
+	 *            the batch that should be updated
+	 * @param sms
+	 *            description of the desired update
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the updated batch
+	 */
+	public Future<MtBatchTextSmsResult> updateBatchAsync(BatchId batchId,
+	        MtBatchTextSmsUpdate sms,
+	        FutureCallback<MtBatchTextSmsResult> callback) {
+		HttpPost req = post(batchEndpoint(batchId), sms);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
+		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
 	 * Updates the given binary batch. The update is performed synchronously.
 	 * 
 	 * @param id
@@ -756,32 +782,6 @@ public abstract class ApiConnection implements Closeable {
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
-	}
-
-	/**
-	 * Asynchronously updates the text batch with the given batch ID. The batch
-	 * is updated to match the given update object.
-	 * 
-	 * @param batchId
-	 *            the batch that should be updated
-	 * @param sms
-	 *            description of the desired update
-	 * @param callback
-	 *            called at call success, failure, or cancellation
-	 * @return a future containing the updated batch
-	 */
-	public Future<MtBatchTextSmsResult> updateBatchAsync(BatchId batchId,
-	        MtBatchTextSmsUpdate sms,
-	        FutureCallback<MtBatchTextSmsResult> callback) {
-		HttpPost req = post(batchEndpoint(batchId), sms);
-
-		HttpAsyncRequestProducer producer =
-		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<MtBatchTextSmsResult> consumer =
-		        jsonAsyncConsumer(MtBatchTextSmsResult.class);
-
-		return httpClient().execute(producer, consumer,
-		        callbackWrapper().wrap(callback));
 	}
 
 	/**
