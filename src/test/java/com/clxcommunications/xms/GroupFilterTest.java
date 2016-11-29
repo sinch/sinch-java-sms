@@ -1,11 +1,14 @@
 package com.clxcommunications.xms;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,12 +25,12 @@ public class GroupFilterTest {
 		        .addTag("tag1", "таг2")
 		        .build();
 
-		String actual = filter.toUrlEncodedQuery(4);
-		String expected = "page=4"
-		        + "&page_size=20"
-		        + "&tags=tag1%2C%D1%82%D0%B0%D0%B32";
+		List<NameValuePair> actual = filter.toQueryParams(4);
 
-		assertThat(actual, is(expected));
+		assertThat(actual, containsInAnyOrder(
+		        (NameValuePair) new BasicNameValuePair("page", "4"),
+		        new BasicNameValuePair("page_size", "20"),
+		        new BasicNameValuePair("tags", "tag1,таг2")));
 	}
 
 	@Property
@@ -38,10 +41,10 @@ public class GroupFilterTest {
 		        .tags(tags)
 		        .build();
 
-		String query = filter.toUrlEncodedQuery(page);
+		List<NameValuePair> params = filter.toQueryParams(page);
 
 		// Will throw IllegalArgumentException if an invalid URI is attempted.
-		URI.create("http://localhost/?" + query);
+		new URIBuilder().addParameters(params).build();
 	}
 
 }

@@ -1,13 +1,12 @@
 package com.clxcommunications.xms;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
 
@@ -57,7 +56,7 @@ public abstract class GroupFilter {
 	 * @return a non-null string containing query parameters
 	 */
 	@Nonnull
-	String toUrlEncodedQuery(int page) {
+	List<NameValuePair> toQueryParams(int page) {
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(6);
 
 		params.add(new BasicNameValuePair("page", String.valueOf(page)));
@@ -72,7 +71,7 @@ public abstract class GroupFilter {
 			        Utils.join(",", tags())));
 		}
 
-		return URLEncodedUtils.format(params, Consts.UTF_8);
+		return params;
 	}
 
 }

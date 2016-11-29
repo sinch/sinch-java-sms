@@ -48,6 +48,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
+import com.clxcommunications.xms.api.PagedGroupResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.clxcommunications.xms.api.Tags;
 import com.clxcommunications.xms.api.TagsUpdate;
@@ -365,6 +366,11 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI groupsEndpoint() {
 		return endpoint("/groups");
+	}
+
+	@Nonnull
+	private URI groupsEndpoint(List<NameValuePair> params) {
+		return endpoint("/groups", params);
 	}
 
 	@Nonnull
@@ -1358,6 +1364,55 @@ public abstract class ApiConnection implements Closeable {
 		        jsonAsyncConsumer(GroupMembers.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Creates a page fetcher to retrieve a paged list of batches. Note, this
+	 * method does not itself cause any network activity.
+	 * 
+	 * @param filter
+	 *            the batch filter
+	 * @return a future page
+	 */
+	public PagedFetcher<GroupResponse> fetchGroups(
+	        final GroupFilter filter) {
+		return new PagedFetcher<GroupResponse>() {
+
+			@Override
+			Future<Page<GroupResponse>> fetchAsync(int page,
+			        FutureCallback<Page<GroupResponse>> callback) {
+				return fetchGroups(page, filter,
+				        callbackWrapper().wrap(callback));
+			}
+
+		};
+	}
+
+	/**
+	 * Fetches the given page in a paged list of batches.
+	 * 
+	 * @param page
+	 *            the page to fetch
+	 * @param filter
+	 *            the batch filter
+	 * @param callback
+	 *            the callback to invoke when call is finished
+	 * @return a future page
+	 */
+	private Future<Page<GroupResponse>> fetchGroups(int page,
+	        GroupFilter filter,
+	        FutureCallback<Page<GroupResponse>> callback) {
+		List<NameValuePair> params = filter.toQueryParams(page);
+		HttpGet req = get(groupsEndpoint(params));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Page<GroupResponse>> consumer =
+		        jsonAsyncConsumer(PagedGroupResult.class);
+
+		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
 	}
 

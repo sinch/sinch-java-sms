@@ -61,6 +61,7 @@ import com.clxcommunications.xms.api.MtBatchTextSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.Page;
 import com.clxcommunications.xms.api.PagedBatchResult;
+import com.clxcommunications.xms.api.PagedGroupResult;
 import com.clxcommunications.xms.api.RecipientDeliveryReport;
 import com.clxcommunications.xms.api.Tags;
 import com.clxcommunications.xms.api.TagsUpdate;
@@ -1804,6 +1805,122 @@ public class ApiConnectionIT {
 		}
 
 		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canListGroupsWithEmpty() throws Exception {
+		String username = TestUtils.freshUsername();
+		String path = "/" + username + "/groups?page=0";
+		GroupFilter filter = ClxApi.buildGroupFilter().build();
+
+		final Page<GroupResponse> expected =
+		        new PagedGroupResult.Builder()
+		                .page(0)
+		                .size(0)
+		                .numPages(0)
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Page<GroupResponse>> testCallback =
+			        new TestCallback<Page<GroupResponse>>() {
+
+				        @Override
+				        public void completed(Page<GroupResponse> result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			PagedFetcher<GroupResponse> fetcher = conn.fetchGroups(filter);
+
+			Page<GroupResponse> actual =
+			        fetcher.fetchAsync(0, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canListGroupsWithTwoPages() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupFilter filter = ClxApi.buildGroupFilter().build();
+
+		// Prepare first page.
+		String path1 = "/" + username + "/groups?page=0";
+
+		final Page<GroupResponse> expected1 =
+		        new PagedGroupResult.Builder()
+		                .page(0)
+		                .size(0)
+		                .numPages(2)
+		                .build();
+
+		stubGetResponse(expected1, path1);
+
+		// Prepare second page.
+		String path2 = "/" + username + "/groups?page=1";
+
+		final Page<GroupResponse> expected2 =
+		        new PagedGroupResult.Builder()
+		                .page(1)
+		                .size(0)
+		                .numPages(2)
+		                .build();
+
+		stubGetResponse(expected2, path2);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Page<GroupResponse>> testCallback =
+			        new TestCallback<Page<GroupResponse>>() {
+
+				        @Override
+				        public void completed(Page<GroupResponse> result) {
+					        switch (result.page()) {
+					        case 0:
+						        assertThat(result, is(expected1));
+						        break;
+					        case 1:
+						        assertThat(result, is(expected2));
+						        break;
+					        default:
+						        fail("unexpected page: " + result);
+					        }
+				        }
+
+			        };
+
+			PagedFetcher<GroupResponse> fetcher = conn.fetchGroups(filter);
+
+			Page<GroupResponse> actual1 =
+			        fetcher.fetchAsync(0, testCallback).get();
+			assertThat(actual1, is(expected1));
+
+			Page<GroupResponse> actual2 =
+			        fetcher.fetchAsync(1, testCallback).get();
+			assertThat(actual2, is(expected2));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path1);
+		verifyGetRequest(path2);
 	}
 
 	/**
