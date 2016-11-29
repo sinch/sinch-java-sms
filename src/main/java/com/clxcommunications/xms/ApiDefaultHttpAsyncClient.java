@@ -17,11 +17,12 @@ import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
 
 /**
- * The HTTP client used if the user did not provide a custom one. It is a direct
- * wrapper around a "proper" HTTP client and mainly functions as a marker for
- * {@link ApiConnection}.
+ * The default HTTP client used in API connections. It is configured in a way
+ * suitable for communicating with XMS and is therefore most suited for
+ * communicating with a single HTTP host.
  */
-final class ApiDefaultHttpAsyncClient implements HttpAsyncClient, Closeable {
+public final class ApiDefaultHttpAsyncClient
+        implements HttpAsyncClient, Closeable {
 
 	/**
 	 * The default maximum number of simultaneous connections to open towards
@@ -30,23 +31,72 @@ final class ApiDefaultHttpAsyncClient implements HttpAsyncClient, Closeable {
 	private static final int DEFAULT_MAX_CONN = 10;
 
 	/**
+	 * Whether this client was started internally by {@link ApiConnection}.
+	 */
+	private boolean startedInternally;
+
+	/**
 	 * The underlying actual HTTP client.
 	 */
 	private final CloseableHttpAsyncClient client;
 
+	/**
+	 * Creates a new HTTP async client suitable for communicating with XMS.
+	 */
 	public ApiDefaultHttpAsyncClient() {
-		// TODO: Is this a good default setup?
-		client = HttpAsyncClients.custom()
-		        .disableCookieManagement()
-		        .setMaxConnPerRoute(DEFAULT_MAX_CONN)
-		        .setMaxConnTotal(DEFAULT_MAX_CONN)
-		        .build();
+		this(false);
 	}
 
-	void start() {
+	/**
+	 * Creates a new HTTP async client suitable for communicating with XMS.
+	 * 
+	 * @param startedInternally
+	 *            whether this object was created inside this SDK
+	 */
+	ApiDefaultHttpAsyncClient(boolean startedInternally) {
+		this.startedInternally = startedInternally;
+
+		// TODO: Is this a good default setup?
+		this.client =
+		        HttpAsyncClients.custom()
+		                .disableCookieManagement()
+		                .setMaxConnPerRoute(DEFAULT_MAX_CONN)
+		                .setMaxConnTotal(DEFAULT_MAX_CONN)
+		                .build();
+	}
+
+	/**
+	 * Whether this object was created inside the SDK.
+	 * 
+	 * @return <code>true</code> if internally generated, <code>false</code>
+	 *         otherwise
+	 */
+	boolean isStartedInternally() {
+		return startedInternally;
+	}
+
+	/**
+	 * Whether this client is started.
+	 * 
+	 * @return <code>true</code> if started, <code>false</code> otherwise
+	 */
+	public boolean isRunning() {
+		return client.isRunning();
+	}
+
+	/**
+	 * Starts this client.
+	 */
+	public void start() {
 		client.start();
 	}
 
+	/**
+	 * Closes this client and releases any held resources.
+	 * 
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	@Override
 	public void close() throws IOException {
 		client.close();

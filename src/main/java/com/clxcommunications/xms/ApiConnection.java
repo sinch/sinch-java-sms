@@ -163,8 +163,10 @@ public abstract class ApiConnection implements Closeable {
 	public void close() throws IOException {
 		log.debug("Closing API connection: {}", this);
 
-		if (httpClient() instanceof ApiDefaultHttpAsyncClient) {
-			((ApiDefaultHttpAsyncClient) httpClient()).close();
+		HttpAsyncClient c = httpClient();
+		if (c instanceof ApiDefaultHttpAsyncClient
+		        && ((ApiDefaultHttpAsyncClient) c).isStartedInternally()) {
+			((ApiDefaultHttpAsyncClient) c).close();
 		} else {
 			log.debug("Not closing HTTP client since it was given externally");
 		}
@@ -209,7 +211,7 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Default
 	public HttpAsyncClient httpClient() {
-		return new ApiDefaultHttpAsyncClient();
+		return new ApiDefaultHttpAsyncClient(true);
 	}
 
 	/**
