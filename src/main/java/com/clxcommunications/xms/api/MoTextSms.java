@@ -12,9 +12,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = MoTextSmsImpl.Builder.class)
+@JsonDeserialize(builder = MoTextSms.Builder.class)
 @JsonTypeName("mo_text")
 public abstract class MoTextSms extends MoSms {
+
+	public static final class Builder extends MoTextSmsImpl.Builder {
+
+	}
 
 	/**
 	 * The textual message body.

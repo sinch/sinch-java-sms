@@ -14,6 +14,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonTypeName("mo_binary")
 public abstract class MoBinarySms extends MoSms {
 
+	public static final class Builder extends MoBinarySmsImpl.Builder {
+
+	}
+
 	@Nullable
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)

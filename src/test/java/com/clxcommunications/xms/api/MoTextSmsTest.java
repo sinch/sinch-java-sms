@@ -22,7 +22,7 @@ public class MoTextSmsTest {
 		String receivedAtString = json.writeValueAsString(receivedAt);
 		String body = "Здравей, свят!";
 
-		MoSms input = MoTextSmsImpl.builder()
+		MoSms input = new MoTextSms.Builder()
 		        .to("12345")
 		        .from("987654321")
 		        .body(body)
@@ -52,7 +52,7 @@ public class MoTextSmsTest {
 		String smsId = TestUtils.freshSmsId();
 		OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
 
-		MoSms expected = MoTextSmsImpl.builder()
+		MoSms expected = new MoTextSms.Builder()
 		        .to("12345")
 		        .from("987654321")
 		        .body("Hello, world!")
