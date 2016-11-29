@@ -256,7 +256,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a non-null host specification
 	 */
 	@Value.Derived
-	public HttpHost endpointHost() {
+	protected HttpHost endpointHost() {
 		URI uri = endpoint();
 		return new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
 	}
