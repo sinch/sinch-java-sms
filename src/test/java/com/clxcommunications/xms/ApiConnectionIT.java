@@ -2237,6 +2237,216 @@ public class ApiConnectionIT {
 		                .withHeader("Authorization", equalTo("Bearer tok")));
 	}
 
+	@Test
+	public void canUpdateGroupTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		TagsUpdate request =
+		        new TagsUpdate.Builder()
+		                .addTagInsertion("aTag1", "аТаг2")
+		                .addTagRemoval("rTag1", "rТаг2")
+		                .build();
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.updateTags(groupId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canUpdateGroupTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		TagsUpdate request =
+		        new TagsUpdate.Builder()
+		                .addTagInsertion("aTag1", "аТаг2")
+		                .addTagRemoval("rTag1", "rТаг2")
+		                .build();
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual =
+			        conn.updateTagsAsync(groupId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceGroupTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		Tags request = Tags.of("rTag1", "rTag2");
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.replaceTags(groupId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceGroupTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		Tags request = Tags.of("rTag1", "rTag2");
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual =
+			        conn.replaceTagsAsync(groupId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
+	public void canFetchGroupTagsSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		Tags expected = Tags.of("tag1", "таг2");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			Tags actual = conn.fetchTags(groupId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchGroupTagsAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId + "/tags";
+
+		final Tags expected = Tags.of("tag1", "таг2");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<Tags> testCallback =
+			        new TestCallback<Tags>() {
+
+				        @Override
+				        public void completed(Tags result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			Tags actual = conn.fetchTagsAsync(groupId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
 	/**
 	 * Helper that sets up WireMock to respond to a GET using a JSON body.
 	 * 

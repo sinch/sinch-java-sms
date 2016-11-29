@@ -384,6 +384,11 @@ public abstract class ApiConnection implements Closeable {
 		return endpoint("/groups/" + id + "/members");
 	}
 
+	@Nonnull
+	private URI groupTagsEndpoint(GroupId id) {
+		return endpoint("/groups/" + id + "/tags");
+	}
+
 	/**
 	 * Helper that produces a HTTP consumer that consumes the given class as a
 	 * JSON object. The generics stuff here is to get a form of covariant
@@ -1567,6 +1572,161 @@ public abstract class ApiConnection implements Closeable {
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 		HttpAsyncResponseConsumer<GroupResponse> consumer =
 		        jsonAsyncConsumer(GroupResponse.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Updates the tags of the group with the given identifier. Blocks until the
+	 * update has completed.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @param tags
+	 *            the tag update object
+	 * @return the updated set of tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags updateTags(GroupId id, TagsUpdate tags)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return updateTagsAsync(id, tags, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Updates the tags of the group with the given identifier.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @param tags
+	 *            the tag update object
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the updated set of tags
+	 */
+	public Future<Tags> updateTagsAsync(GroupId id, TagsUpdate tags,
+	        FutureCallback<Tags> callback) {
+		HttpPost req = post(groupTagsEndpoint(id), tags);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Replaces the tags of the group with the given identifier. Blocks until
+	 * the replacement has completed.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @param tags
+	 *            the replacements tags
+	 * @return the new set of tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags replaceTags(GroupId id, Tags tags)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return replaceTagsAsync(id, tags, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Replaces the tags of the group with the given identifier.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @param tags
+	 *            the replacement tags
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the new set of tags
+	 */
+	public Future<Tags> replaceTagsAsync(GroupId id, Tags tags,
+	        FutureCallback<Tags> callback) {
+		HttpPut req = put(groupTagsEndpoint(id), tags);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Fetches the tags of the group with the given identifier. Blocks until the
+	 * retrieval has completed.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @return the batch tags
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public Tags fetchTags(GroupId id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchTagsAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches the tags of the group with the given identifier.
+	 * 
+	 * @param id
+	 *            identifier of the group
+	 * @param callback
+	 *            a callback that is activated at call completion
+	 * @return a future yielding the new set of tags
+	 */
+	public Future<Tags> fetchTagsAsync(GroupId id,
+	        FutureCallback<Tags> callback) {
+		HttpGet req = get(groupTagsEndpoint(id));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<Tags> consumer =
+		        jsonAsyncConsumer(Tags.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
