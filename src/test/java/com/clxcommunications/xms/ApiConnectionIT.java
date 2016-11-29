@@ -2124,6 +2124,119 @@ public class ApiConnectionIT {
 		verifyPutRequest(path, request);
 	}
 
+	@Test
+	public void canDeleteGroupSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		String response = json.writeValueAsString(expected);
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			GroupResponse actual = conn.deleteGroup(groupId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(deleteRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	@Test
+	public void canDeleteGroupAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		final GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		String response = json.writeValueAsString(expected);
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<GroupResponse> testCallback =
+			        new TestCallback<GroupResponse>() {
+
+				        @Override
+				        public void completed(GroupResponse result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			GroupResponse actual =
+			        conn.deleteGroupAsync(groupId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		wm.verify(deleteRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
 	/**
 	 * Helper that sets up WireMock to respond to a GET using a JSON body.
 	 * 

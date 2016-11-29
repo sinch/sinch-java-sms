@@ -1525,4 +1525,51 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Deletes the given group. The call is performed synchronously.
+	 * 
+	 * @param id
+	 *            identifier of the group to delete
+	 * @return the deleted group
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public GroupResponse deleteGroup(GroupId id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return deleteGroupAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously deletes the group with the given group ID.
+	 * 
+	 * @param id
+	 *            the group that should be deleted
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the deleted group
+	 */
+	public Future<GroupResponse> deleteGroupAsync(GroupId id,
+	        FutureCallback<GroupResponse> callback) {
+		HttpDelete req = delete(groupEndpoint(id));
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<GroupResponse> consumer =
+		        jsonAsyncConsumer(GroupResponse.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
 }
