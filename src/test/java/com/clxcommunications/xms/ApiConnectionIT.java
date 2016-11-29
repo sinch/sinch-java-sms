@@ -484,8 +484,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchTextSmsResult actual =
-			        conn.updateBatchAsync(batchId, request, null).get();
+			MtBatchTextSmsResult actual = conn.updateBatch(batchId, request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -535,8 +534,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchBinarySmsResult actual =
-			        conn.updateBatchAsync(batchId, request, null).get();
+			MtBatchBinarySmsResult actual = conn.updateBatch(batchId, request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
