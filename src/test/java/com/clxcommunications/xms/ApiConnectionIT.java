@@ -355,6 +355,99 @@ public class ApiConnectionIT {
 	}
 
 	@Test
+	public void canReplaceBinaryBatch() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
+
+		MtBatchBinarySmsCreate request =
+		        ClxApi.batchBinarySms()
+		                .from("12345")
+		                .addTo("123456789")
+		                .addTo("987654321")
+		                .body("body".getBytes(TestUtils.US_ASCII))
+		                .udh("udh".getBytes(TestUtils.US_ASCII))
+		                .build();
+
+		MtBatchBinarySmsResult expected =
+		        new MtBatchBinarySmsResult.Builder()
+		                .from(request.from())
+		                .to(request.to())
+		                .body(request.body())
+		                .udh(request.udh())
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(time)
+		                .modifiedAt(time)
+		                .build();
+
+		String path = "/" + username + "/batches/" + batchId;
+
+		stubPutResponse(expected, path, 201);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			MtBatchBinarySmsResult actual = conn.replaceBatch(batchId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceTextBatch() throws Exception {
+		String username = TestUtils.freshUsername();
+		BatchId batchId = TestUtils.freshBatchId();
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
+		        542000000, ZoneOffset.UTC);
+
+		MtBatchTextSmsCreate request =
+		        ClxApi.batchTextSms()
+		                .from("12345")
+		                .addTo("123456789")
+		                .addTo("987654321")
+		                .body("Hello, world!")
+		                .build();
+
+		MtBatchTextSmsResult expected =
+		        new MtBatchTextSmsResult.Builder()
+		                .from(request.from())
+		                .to(request.to())
+		                .body(request.body())
+		                .canceled(false)
+		                .id(batchId)
+		                .createdAt(time)
+		                .modifiedAt(time)
+		                .build();
+
+		String path = "/" + username + "/batches/" + batchId;
+
+		stubPutResponse(expected, path, 201);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			MtBatchTextSmsResult actual = conn.replaceBatch(batchId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
 	public void canUpdateSimpleTextBatch() throws Exception {
 		String username = TestUtils.freshUsername();
 		BatchId batchId = TestUtils.freshBatchId();
