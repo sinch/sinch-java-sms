@@ -18,7 +18,7 @@ import org.apache.http.protocol.HttpContext;
 
 /**
  * The default HTTP client used in API connections. It is configured in a way
- * suitable for communicating with XMS and is therefore most suited for
+ * suitable for communicating with XMS and is therefore most applicable for
  * communicating with a single HTTP host.
  */
 public final class ApiDefaultHttpAsyncClient
