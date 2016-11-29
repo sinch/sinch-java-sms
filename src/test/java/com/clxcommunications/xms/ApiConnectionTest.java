@@ -119,4 +119,21 @@ public class ApiConnectionTest {
 		assertThat(clientClosed.get(), is(false));
 	}
 
+	@Test
+	public void leavesExternalApiDefaultHttpClientAlone() throws Exception {
+		ApiDefaultHttpAsyncClient client = new ApiDefaultHttpAsyncClient();
+
+		ApiConnection conn = ApiConnection.builder()
+		        .token("token")
+		        .username("username")
+		        .httpClient(client)
+		        .build();
+
+		client.start();
+		conn.start();
+		conn.close();
+
+		assertThat(client.isRunning(), is(true));
+	}
+
 }
