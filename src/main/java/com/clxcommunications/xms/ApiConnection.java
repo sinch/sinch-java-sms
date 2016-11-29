@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.GroupCreate;
+import com.clxcommunications.xms.api.GroupId;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
@@ -363,6 +364,11 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI groupsEndpoint() {
 		return endpoint("/groups");
+	}
+
+	@Nonnull
+	private URI groupEndpoint(GroupId id) {
+		return endpoint("/groups/" + id.id());
 	}
 
 	/**
@@ -1243,6 +1249,54 @@ public abstract class ApiConnection implements Closeable {
 	public Future<GroupResponse> createGroupAsync(GroupCreate group,
 	        FutureCallback<GroupResponse> callback) {
 		HttpPost req = post(groupsEndpoint(), group);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<GroupResponse> responseConsumer =
+		        jsonAsyncConsumer(GroupResponse.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Attempts to fetch the given group synchronously. Internally this uses an
+	 * asynchronous call and blocks until it completes.
+	 * 
+	 * @param id
+	 *            the group to fetch
+	 * @return the fetched group
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public GroupResponse fetchGroup(GroupId id)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return fetchGroupAsync(id, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously fetches the given group.
+	 * 
+	 * @param id
+	 *            the group to fetch
+	 * @param callback
+	 *            a callback that is invoked when fetching is completed
+	 * @return a future whose result is the fetch response
+	 */
+	public Future<GroupResponse> fetchGroupAsync(GroupId id,
+	        FutureCallback<GroupResponse> callback) {
+		HttpGet req = get(groupEndpoint(id));
 
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);

@@ -1651,6 +1651,95 @@ public class ApiConnectionIT {
 		verifyPostRequest(path, request);
 	}
 
+	@Test
+	public void canFetchGroupSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId.id();
+
+		GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			GroupResponse actual = conn.fetchGroup(groupId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchGroupAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId.id();
+
+		final GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<GroupResponse> testCallback =
+			        new TestCallback<GroupResponse>() {
+
+				        @Override
+				        public void completed(GroupResponse result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			GroupResponse actual =
+			        conn.fetchGroupAsync(groupId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
 	/**
 	 * Helper that sets up WireMock to respond to a GET using a JSON body.
 	 * 
