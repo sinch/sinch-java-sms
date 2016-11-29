@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,6 +26,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.nio.client.HttpAsyncClient;
 import org.apache.http.nio.protocol.BasicAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
@@ -44,6 +46,8 @@ import com.clxcommunications.xms.api.MoSms;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
+import com.clxcommunications.xms.api.MtBatchDryRunResult;
+import com.clxcommunications.xms.api.MtBatchSmsCreate;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsResult;
@@ -347,8 +351,8 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	@Nonnull
-	private URI batchDryRunEndpoint() {
-		return endpoint("/batches/dry_run");
+	private URI batchDryRunEndpoint(List<NameValuePair> params) {
+		return endpoint("/batches/dry_run", params);
 	}
 
 	@Nonnull
@@ -973,6 +977,77 @@ public abstract class ApiConnection implements Closeable {
 		        jsonAsyncConsumer(MtBatchSmsResult.class);
 
 		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Attempts to perform a dry run of the given batch. Internally this uses an
+	 * asynchronous call and blocks until it completes.
+	 * 
+	 * @param sms
+	 *            the batch to dry run
+	 * @param perRecipient
+	 *            whether the per recipient result should be populated
+	 * @param numRecipients
+	 *            the number of recipients to populate
+	 * @return a dry run result
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public MtBatchDryRunResult createBatchDryRun(MtBatchSmsCreate sms,
+	        Boolean perRecipient, Integer numRecipients)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return createBatchDryRunAsync(sms, perRecipient, numRecipients,
+			        null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously performs a dry run of the given batch.
+	 * 
+	 * @param sms
+	 *            the batch to dry run
+	 * @param perRecipient
+	 *            whether the per recipient result should be populated
+	 * @param numRecipients
+	 *            the number of recipients to populate
+	 * @param callback
+	 *            a callback that is invoked when dry run is complete
+	 * @return a future whose result is the dry run result
+	 */
+	public Future<MtBatchDryRunResult> createBatchDryRunAsync(
+	        MtBatchSmsCreate sms, Boolean perRecipient, Integer numRecipients,
+	        FutureCallback<MtBatchDryRunResult> callback) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+
+		if (perRecipient != null) {
+			params.add(new BasicNameValuePair("per_recipient",
+			        perRecipient.toString()));
+		}
+
+		if (numRecipients != null) {
+			params.add(new BasicNameValuePair("number_of_recipients",
+			        numRecipients.toString()));
+		}
+
+		HttpPost req = post(batchDryRunEndpoint(params), sms);
+
+		HttpAsyncRequestProducer requestProducer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<MtBatchDryRunResult> responseConsumer =
+		        jsonAsyncConsumer(MtBatchDryRunResult.class);
+
+		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
 	}
 

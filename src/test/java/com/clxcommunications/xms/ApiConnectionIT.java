@@ -59,6 +59,8 @@ import com.clxcommunications.xms.api.MoTextSms;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
+import com.clxcommunications.xms.api.MtBatchDryRunResult;
+import com.clxcommunications.xms.api.MtBatchSmsCreate;
 import com.clxcommunications.xms.api.MtBatchSmsResult;
 import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsResult;
@@ -1539,6 +1541,92 @@ public class ApiConnectionIT {
 		}
 
 		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canCreateBatchDryRunSync() throws Exception {
+		String username = TestUtils.freshUsername();
+
+		String path = "/" + username + "/batches/dry_run";
+
+		MtBatchSmsCreate request = ClxApi.buildBatchTextSms()
+		        .from("1234")
+		        .addTo("987654321")
+		        .body("Hello, world!")
+		        .build();
+
+		final MtBatchDryRunResult expected =
+		        new MtBatchDryRunResult.Builder()
+		                .numberOfRecipients(20)
+		                .numberOfMessages(200)
+		                .build();
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			MtBatchDryRunResult actual =
+			        conn.createBatchDryRun(request, null, null);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canCreateBatchDryRunAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+
+		String path = "/" + username + "/batches/dry_run"
+		        + "?per_recipient=true&number_of_recipients=5";
+
+		MtBatchSmsCreate request = ClxApi.buildBatchTextSms()
+		        .from("1234")
+		        .addTo("987654321")
+		        .body("Hello, world!")
+		        .build();
+
+		final MtBatchDryRunResult expected =
+		        new MtBatchDryRunResult.Builder()
+		                .numberOfRecipients(20)
+		                .numberOfMessages(200)
+		                .build();
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<MtBatchDryRunResult> testCallback =
+			        new TestCallback<MtBatchDryRunResult>() {
+
+				        @Override
+				        public void completed(MtBatchDryRunResult result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			MtBatchDryRunResult actual =
+			        conn.createBatchDryRunAsync(request, true, 5, testCallback)
+			                .get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
 	}
 
 	@Test
