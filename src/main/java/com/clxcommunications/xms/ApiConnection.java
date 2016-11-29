@@ -39,6 +39,7 @@ import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
 import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
+import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -1415,6 +1416,58 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncResponseConsumer<Page<GroupResponse>> consumer =
 		        jsonAsyncConsumer(PagedGroupResult.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
+	/**
+	 * Updates the given group. The update is performed synchronously.
+	 * 
+	 * @param id
+	 *            identifier of the group to update
+	 * @param group
+	 *            a description of the desired updates
+	 * @return the group with the updates applied
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public GroupResponse updateGroup(GroupId id, GroupUpdate group)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return updateGroupAsync(id, group, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously updates the group with the given group ID. The group is
+	 * updated to match the given update object.
+	 * 
+	 * @param id
+	 *            the group that should be updated
+	 * @param group
+	 *            description of the desired updates
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the updated group
+	 */
+	public Future<GroupResponse> updateGroupAsync(GroupId id, GroupUpdate group,
+	        FutureCallback<GroupResponse> callback) {
+		HttpPost req = post(groupEndpoint(id), group);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<GroupResponse> consumer =
+		        jsonAsyncConsumer(GroupResponse.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

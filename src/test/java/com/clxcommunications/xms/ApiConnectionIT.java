@@ -52,6 +52,7 @@ import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
 import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
+import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -1919,6 +1920,93 @@ public class ApiConnectionIT {
 
 		verifyGetRequest(path1);
 		verifyGetRequest(path2);
+	}
+
+	@Test
+	public void canUpdateGroupSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		GroupUpdate request = GroupUpdate.builder()
+		        .unsetName()
+		        .addMemberAdd("123456789")
+		        .addMemberRemove("987654321")
+		        .build();
+
+		GroupResponse expected = new GroupResponse.Builder()
+		        .size(72)
+		        .id(groupId)
+		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
+		        .modifiedAt(OffsetDateTime.now(Clock.systemUTC()))
+		        .build();
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			GroupResponse actual = conn.updateGroup(groupId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
+	}
+
+	@Test
+	public void canUpdateGroupAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		GroupUpdate request = GroupUpdate.builder()
+		        .unsetName()
+		        .addMemberAdd("123456789")
+		        .addMemberRemove("987654321")
+		        .build();
+
+		final GroupResponse expected = new GroupResponse.Builder()
+		        .size(72)
+		        .id(groupId)
+		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
+		        .modifiedAt(OffsetDateTime.now(Clock.systemUTC()))
+		        .build();
+
+		stubPostResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<GroupResponse> testCallback =
+			        new TestCallback<GroupResponse>() {
+
+				        @Override
+				        public void completed(GroupResponse result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			GroupResponse actual =
+			        conn.updateGroupAsync(groupId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPostRequest(path, request);
 	}
 
 	/**
