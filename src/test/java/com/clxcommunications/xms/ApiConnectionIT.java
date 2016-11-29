@@ -50,6 +50,7 @@ import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.DeliveryStatus;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
+import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsResult;
@@ -1732,6 +1733,71 @@ public class ApiConnectionIT {
 
 			GroupResponse actual =
 			        conn.fetchGroupAsync(groupId, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchGroupMembersSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId.id() + "/members";
+
+		GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			GroupMembers actual = conn.fetchGroupMembers(groupId);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canFetchGroupMembersAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId.id() + "/members";
+
+		final GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
+
+		stubGetResponse(expected, path);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<GroupMembers> testCallback =
+			        new TestCallback<GroupMembers>() {
+
+				        @Override
+				        public void completed(GroupMembers result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			GroupMembers actual =
+			        conn.fetchGroupMembersAsync(groupId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();

@@ -1,5 +1,6 @@
 package com.clxcommunications.xms.api;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import org.immutables.value.Value;
@@ -20,6 +21,10 @@ public abstract class GroupMembers {
 
 	public static GroupMembers of(Iterable<String> members) {
 		return GroupMembersImpl.of(members);
+	}
+
+	public static GroupMembers of(String... members) {
+		return GroupMembersImpl.of(Arrays.asList(members));
 	}
 
 }
