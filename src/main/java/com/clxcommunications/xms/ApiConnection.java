@@ -248,17 +248,6 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * The endpoint base path. The default value is
-	 * <code>/xms/v1/{username}</code>.
-	 * 
-	 * @return the endpoint base path
-	 */
-	@Value.Default
-	public String endpointBasePath() {
-		return endpoint().getPath();
-	}
-
-	/**
 	 * Validates that this object is in a coherent state.
 	 */
 	@Value.Check
