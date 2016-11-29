@@ -2009,6 +2009,121 @@ public class ApiConnectionIT {
 		verifyPostRequest(path, request);
 	}
 
+	@Test
+	public void canReplaceGroupSync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		GroupCreate request =
+		        new GroupCreate.Builder()
+		                .name("mygroup")
+		                .addMember("123456789")
+		                .addMember("987654321", "4242424242")
+		                .addTag("tag1", "таг2")
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .build();
+
+		GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			GroupResponse actual = conn.replaceGroup(groupId, request);
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
+	@Test
+	public void canReplaceGroupAsync() throws Exception {
+		String username = TestUtils.freshUsername();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/" + username + "/groups/" + groupId;
+
+		GroupCreate request =
+		        new GroupCreate.Builder()
+		                .name("mygroup")
+		                .addMember("123456789")
+		                .addMember("987654321", "4242424242")
+		                .addTag("tag1", "таг2")
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .build();
+
+		final GroupResponse expected =
+		        new GroupResponse.Builder()
+		                .id(groupId)
+		                .name("mygroup")
+		                .size(72)
+		                .autoUpdate(AutoUpdate.builder()
+		                        .to("1111")
+		                        .add("kw0", "kw1")
+		                        .remove("kw2", "kw3")
+		                        .build())
+		                .createdAt(OffsetDateTime.now())
+		                .modifiedAt(OffsetDateTime.now())
+		                .build();
+
+		stubPutResponse(expected, path, 200);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .username(username)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			FutureCallback<GroupResponse> testCallback =
+			        new TestCallback<GroupResponse>() {
+
+				        @Override
+				        public void completed(GroupResponse result) {
+					        assertThat(result, is(expected));
+				        }
+
+			        };
+
+			GroupResponse actual = conn
+			        .replaceGroupAsync(groupId, request, testCallback).get();
+			assertThat(actual, is(expected));
+		} finally {
+			conn.close();
+		}
+
+		verifyPutRequest(path, request);
+	}
+
 	/**
 	 * Helper that sets up WireMock to respond to a GET using a JSON body.
 	 * 

@@ -1473,4 +1473,56 @@ public abstract class ApiConnection implements Closeable {
 		        callbackWrapper().wrap(callback));
 	}
 
+	/**
+	 * Replaces the given group. The call is performed synchronously.
+	 * 
+	 * @param id
+	 *            identifier of the group to replace
+	 * @param group
+	 *            a description of the replacement group
+	 * @return the new group
+	 * @throws InterruptedException
+	 *             if the current thread was interrupted while waiting
+	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
+	 * @throws ConcurrentException
+	 *             if the send threw an unknown exception
+	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
+	 */
+	public GroupResponse replaceGroup(GroupId id, GroupCreate group)
+	        throws InterruptedException, ConcurrentException,
+	        ErrorResponseException, UnexpectedResponseException {
+		try {
+			return replaceGroupAsync(id, group, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Asynchronously replaces the group with the given group ID. The group is
+	 * replaced by the given group definition.
+	 * 
+	 * @param id
+	 *            the group that should be replaced
+	 * @param group
+	 *            description of the new group
+	 * @param callback
+	 *            called at call success, failure, or cancellation
+	 * @return a future containing the new group
+	 */
+	public Future<GroupResponse> replaceGroupAsync(GroupId id,
+	        GroupCreate group, FutureCallback<GroupResponse> callback) {
+		HttpPut req = put(groupEndpoint(id), group);
+
+		HttpAsyncRequestProducer producer =
+		        new BasicAsyncRequestProducer(endpointHost(), req);
+		HttpAsyncResponseConsumer<GroupResponse> consumer =
+		        jsonAsyncConsumer(GroupResponse.class);
+
+		return httpClient().execute(producer, consumer,
+		        callbackWrapper().wrap(callback));
+	}
+
 }
