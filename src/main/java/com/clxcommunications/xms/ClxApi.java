@@ -14,8 +14,6 @@ import com.clxcommunications.xms.api.ParameterValues;
  */
 public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
-	public static final int MAX_BODY_BYTES = 140;
-
 	public static MtBatchTextSmsCreate.Builder batchTextSms() {
 		return new MtBatchTextSmsCreate.Builder();
 	}
