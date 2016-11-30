@@ -191,7 +191,7 @@ public abstract class PagedFetcher<T> {
 	 * {@link RuntimeException} having as cause an {@link ExecutionException}.
 	 * 
 	 * @return a non-null iterable
-	 * @throws RuntimeException
+	 * @throws RuntimeApiException
 	 *             if the background page fetching failed
 	 */
 	@Nonnull
@@ -225,7 +225,17 @@ public abstract class PagedFetcher<T> {
 							// Interrupt the thread to let upstream code know.
 							Thread.currentThread().interrupt();
 						} catch (ExecutionException e) {
-							throw new RuntimeException(e);
+							ApiException cause;
+
+							try {
+								cause = Utils.unwrapExecutionException(e);
+							} catch (ErrorResponseException einner) {
+								cause = einner;
+							} catch (UnexpectedResponseException einner) {
+								cause = einner;
+							}
+
+							throw new RuntimeApiException(cause);
 						}
 
 						return page;
