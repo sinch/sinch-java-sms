@@ -185,7 +185,7 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * The XMS authorization token.
+	 * The XMS authentication token.
 	 * 
 	 * @return a non-null string
 	 */

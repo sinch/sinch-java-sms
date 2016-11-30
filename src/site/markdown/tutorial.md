@@ -6,7 +6,7 @@ The purpose of this document is to present the basic concepts of XMS and how to 
 Interacting with XMS
 --------------------
 
-Most interaction with XMS will happen through an _API connection_, given a service plan identifier and authorization token the API connection knows how to communicate with the XMS endpoint. Further configuration can be performed on the API connection but in the typical case a service plan identifier and token is sufficient.
+Most interaction with XMS will happen through an _API connection_, given a service plan identifier and authentication token the API connection knows how to communicate with the XMS endpoint. Further configuration can be performed on the API connection but in the typical case a service plan identifier and authentication token is sufficient.
 
 Once an API connection has been established it is possible to send requests and receive responses. This is typically done by calling a method on the API connection, supplying arguments as necessary, and receiving the response either as a return value or through a supplied callback.
 
@@ -19,9 +19,9 @@ These abstract concepts are made concrete in the text that follows.
 Connection management
 ---------------------
 
-The first step in using the CLX SDK is to create an API connection object, this object is created from the `ApiConnection` class inside the `com.clxcommunications.xms` package and it describes everything we need in order to talk with the XMS endpoint. The minimal amount of information needed are the service plan identifier and the authorization token and these will be provided to you when creating an XMS service.
+The first step in using the CLX SDK is to create an API connection object, this object is created from the `ApiConnection` class inside the `com.clxcommunications.xms` package and it describes everything we need in order to talk with the XMS endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and these will be provided to you when creating an XMS service.
 
-Assuming we have the service plan identifier "myuser" and token "mytoken" then concretely an API connection `conn` is created using a builder as follows
+Assuming we have the service plan identifier "myuser" and authentication token "mytoken" then concretely an API connection `conn` is created using a builder as follows
 
 ```java
 ApiConnection conn = ApiConnection.builder()

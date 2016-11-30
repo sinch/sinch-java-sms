@@ -49,9 +49,9 @@ public final class TestUtils {
 	}
 
 	/**
-	 * Creates and returns a fresh unique authorization token.
+	 * Creates and returns a fresh unique authentication token.
 	 * 
-	 * @return a unique authorization token.
+	 * @return a unique authentication token.
 	 */
 	@Nonnull
 	public static String freshToken() {
