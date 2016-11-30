@@ -1,10 +1,12 @@
 package com.clxcommunications.xms;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,12 +15,15 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.client.HttpAsyncClient;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
 import org.junit.Test;
+
+import com.clxcommunications.testsupport.TestUtils;
 
 public class ApiConnectionTest {
 
@@ -68,14 +73,28 @@ public class ApiConnectionTest {
 
 	@Test
 	public void canBuildWithAllCustoms() throws Exception {
-		ApiConnection.builder()
-		        .token("token")
-		        .servicePlanId("spid")
-		        .endpoint("https://localhost:3000/basepath")
+		String token = TestUtils.freshToken();
+		String spid = TestUtils.freshServicePlanId();
+		URI url = URI.create("https://localhost:3000/basepath");
+		CloseableHttpAsyncClient client = HttpAsyncClients.createMinimal();
+
+		ApiConnection conn = ApiConnection.builder()
+		        .token(token)
+		        .servicePlanId(spid)
+		        .endpoint(url)
 		        .callbackWrapper(CallbackWrapper.identity)
 		        .prettyPrintJson(false)
-		        .httpClient(HttpAsyncClients.createMinimal())
+		        .httpClient(client)
 		        .build();
+
+		assertThat(conn.token(), is(token));
+		assertThat(conn.servicePlanId(), is(spid));
+		assertThat(conn.endpoint(), is(url));
+		assertThat(conn.callbackWrapper(),
+		        is(sameInstance(CallbackWrapper.identity)));
+		assertThat(conn.prettyPrintJson(), is(false));
+		assertThat(conn.httpClient(),
+		        is(sameInstance((HttpAsyncClient) client)));
 	}
 
 	@Test(expected = IllegalStateException.class)
