@@ -3,6 +3,8 @@ package com.clxcommunications.testsupport;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Nonnull;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -44,6 +46,16 @@ public final class TestUtils {
 	 */
 	public static String freshServicePlanId() {
 		return "user" + uniqueCounter.incrementAndGet();
+	}
+
+	/**
+	 * Creates and returns a fresh unique authorization token.
+	 * 
+	 * @return a unique authorization token.
+	 */
+	@Nonnull
+	public static String freshToken() {
+		return "token" + uniqueCounter.incrementAndGet();
 	}
 
 	/**
