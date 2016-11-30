@@ -481,7 +481,7 @@ public abstract class ApiConnection implements Closeable {
 	private <T extends HttpRequest> T withStandardHeaders(T req) {
 		req.setHeader("Authorization", "Bearer " + token());
 		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
-		req.setHeader("X-CLX-SdkVersion", Version.VERSION);
+		req.setHeader("X-CLX-SDK-Version", Version.VERSION);
 		return req;
 	}
 
