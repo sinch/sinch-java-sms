@@ -15,7 +15,7 @@ To use this SDK in your own Java project you can put
 ```xml
 <dependency>
   <groupId>com.clxcommunications</groupId>
-  <artifactId>xms</artifactId>
+  <artifactId>sdk-xms</artifactId>
   <version>XYZ</version>
 </dependency>
 ```
