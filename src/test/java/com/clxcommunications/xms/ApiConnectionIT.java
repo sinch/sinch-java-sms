@@ -122,7 +122,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateBinaryBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
@@ -147,12 +147,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches";
+		String path = "/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -169,7 +169,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateTextBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -193,12 +193,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches";
+		String path = "/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -215,7 +215,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateTextBatchWithSubstitutions() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -245,12 +245,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches";
+		String path = "/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -267,7 +267,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canHandleBatchCreateWithError() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
@@ -280,12 +280,12 @@ public class ApiConnectionIT {
 		ApiError apiError = ApiError.of("syntax_constraint_violation",
 		        "The syntax constraint was violated");
 
-		String path = "/" + username + "/batches";
+		String path = "/" + spid + "/batches";
 
 		stubPostResponse(apiError, path, 400);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -303,7 +303,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canHandleBatchCreateWithInvalidJson() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
 		MtBatchTextSmsCreate request =
@@ -329,7 +329,7 @@ public class ApiConnectionIT {
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
 		        "}").replace('\'', '"');
 
-		String path = "/" + username + "/batches";
+		String path = "/" + spid + "/batches";
 
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
@@ -339,7 +339,7 @@ public class ApiConnectionIT {
 		                .withBody(response)));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -356,7 +356,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceBinaryBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
@@ -381,12 +381,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		stubPutResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -403,7 +403,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceTextBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -427,12 +427,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		stubPutResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -449,7 +449,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateSimpleTextBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -473,12 +473,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -495,7 +495,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateSimpleBinaryBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -523,12 +523,12 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -545,12 +545,12 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchTextBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -566,7 +566,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -583,12 +583,12 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchTextBatchAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -604,7 +604,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -632,12 +632,12 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchBinaryBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
@@ -654,7 +654,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -682,10 +682,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canHandle404WhenFetchingBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		wm.stubFor(get(
 		        urlEqualTo(path))
@@ -696,7 +696,7 @@ public class ApiConnectionIT {
 		                        .withBody("BAD")));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -797,11 +797,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCancelBatch() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
-		String path = "/" + username + "/batches/" + batchId;
+		String path = "/" + spid + "/batches/" + batchId;
 
 		MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -825,7 +825,7 @@ public class ApiConnectionIT {
 		                        .withBody(response)));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -853,7 +853,7 @@ public class ApiConnectionIT {
 	 */
 	@Test
 	public void canCancelBatchConcurrently() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 
 		// Set up the first request (the one that will be delayed).
 		MtBatchSmsResult expected1 =
@@ -867,7 +867,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path1 = "/" + username + "/batches/" + expected1.id();
+		String path1 = "/" + spid + "/batches/" + expected1.id();
 		byte[] response1 = json.writeValueAsBytes(expected1);
 
 		wm.stubFor(delete(
@@ -892,7 +892,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path2 = "/" + username + "/batches/" + expected2.id();
+		String path2 = "/" + spid + "/batches/" + expected2.id();
 		byte[] response2 = json.writeValueAsBytes(expected2);
 
 		wm.stubFor(delete(
@@ -904,7 +904,7 @@ public class ApiConnectionIT {
 		                        .withBody(response2)));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -946,8 +946,8 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListBatchesWithEmpty() throws Exception {
-		String username = TestUtils.freshUsername();
-		String path = "/" + username + "/batches?page=0";
+		String spid = TestUtils.freshServicePlanId();
+		String path = "/" + spid + "/batches?page=0";
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		final Page<MtBatchSmsResult> expected =
@@ -960,7 +960,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -990,11 +990,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListBatchesWithTwoPages() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + username + "/batches?page=0";
+		String path1 = "/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1006,7 +1006,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username + "/batches?page=1";
+		String path2 = "/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1018,7 +1018,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1062,11 +1062,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canIterateOverPages() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + username + "/batches?page=0";
+		String path1 = "/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1084,7 +1084,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username + "/batches?page=1";
+		String path2 = "/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1109,7 +1109,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1140,11 +1140,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canIterateOverBatchesWithTwoPages() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + username + "/batches?page=0";
+		String path1 = "/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1162,7 +1162,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username + "/batches?page=1";
+		String path2 = "/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1187,7 +1187,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1218,10 +1218,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchDeliveryReportSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId
+		String path = "/" + spid + "/batches/" + batchId
 		        + "/delivery_report"
 		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
 
@@ -1248,7 +1248,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1274,10 +1274,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchDeliveryReportAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId
+		String path = "/" + spid + "/batches/" + batchId
 		        + "/delivery_report?type=full";
 
 		final BatchDeliveryReport expected =
@@ -1303,7 +1303,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1336,11 +1336,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchRecipientDeliveryReportSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + username + "/batches/" + batchId
+		String path = "/" + spid + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1358,7 +1358,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1376,11 +1376,11 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchRecipientDeliveryReportAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + username + "/batches/" + batchId
+		String path = "/" + spid + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1398,7 +1398,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1426,10 +1426,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateBatchTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1442,7 +1442,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1459,10 +1459,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateBatchTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1475,7 +1475,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1503,10 +1503,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceBatchTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1515,7 +1515,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1532,10 +1532,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceBatchTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1544,7 +1544,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1572,17 +1572,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchBatchTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags expected = Tags.of("tag1", "таг2");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1599,17 +1599,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchBatchTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + username + "/batches/" + batchId + "/tags";
+		String path = "/" + spid + "/batches/" + batchId + "/tags";
 
 		final Tags expected = Tags.of("tag1", "таг2");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1636,9 +1636,9 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateBatchDryRunSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 
-		String path = "/" + username + "/batches/dry_run";
+		String path = "/" + spid + "/batches/dry_run";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
 		        .from("1234")
@@ -1655,7 +1655,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1673,9 +1673,9 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateBatchDryRunAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 
-		String path = "/" + username + "/batches/dry_run"
+		String path = "/" + spid + "/batches/dry_run"
 		        + "?per_recipient=true&number_of_recipients=5";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
@@ -1693,7 +1693,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1722,10 +1722,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateGroupSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups";
+		String path = "/" + spid + "/groups";
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -1757,7 +1757,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1774,10 +1774,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canCreateGroupAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups";
+		String path = "/" + spid + "/groups";
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -1809,7 +1809,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1837,10 +1837,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1859,7 +1859,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1876,10 +1876,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		final GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1898,7 +1898,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1926,17 +1926,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupMembersSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/members";
+		String path = "/" + spid + "/groups/" + groupId + "/members";
 
 		GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1953,17 +1953,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupMembersAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/members";
+		String path = "/" + spid + "/groups/" + groupId + "/members";
 
 		final GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -1991,8 +1991,8 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListGroupsWithEmpty() throws Exception {
-		String username = TestUtils.freshUsername();
-		String path = "/" + username + "/groups?page=0";
+		String spid = TestUtils.freshServicePlanId();
+		String path = "/" + spid + "/groups?page=0";
 		GroupFilter filter = ClxApi.groupFilter().build();
 
 		final Page<GroupResponse> expected =
@@ -2005,7 +2005,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2035,13 +2035,13 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListGroupsWithTwoPages() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupFilter filter = ClxApi.groupFilter()
 		        .addTag("tag1", "таг2")
 		        .build();
 
 		// Prepare first page.
-		String path1 = "/" + username
+		String path1 = "/" + spid
 		        + "/groups?page=0&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected1 =
@@ -2054,7 +2054,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username
+		String path2 = "/" + spid
 		        + "/groups?page=1&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected2 =
@@ -2067,7 +2067,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2111,10 +2111,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateGroupSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupUpdate request = GroupUpdate.builder()
 		        .unsetName()
@@ -2132,7 +2132,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2149,10 +2149,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateGroupAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupUpdate request = GroupUpdate.builder()
 		        .unsetName()
@@ -2170,7 +2170,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2198,10 +2198,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceGroupSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -2233,7 +2233,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2250,10 +2250,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceGroupAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -2285,7 +2285,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2313,10 +2313,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canDeleteGroupSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -2343,7 +2343,7 @@ public class ApiConnectionIT {
 		                        .withBody(response)));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2364,10 +2364,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canDeleteGroupAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId;
+		String path = "/" + spid + "/groups/" + groupId;
 
 		final GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -2394,7 +2394,7 @@ public class ApiConnectionIT {
 		                        .withBody(response)));
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2426,10 +2426,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateGroupTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -2442,7 +2442,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2459,10 +2459,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canUpdateGroupTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -2475,7 +2475,7 @@ public class ApiConnectionIT {
 		stubPostResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2503,10 +2503,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceGroupTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -2515,7 +2515,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2532,10 +2532,10 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canReplaceGroupTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -2544,7 +2544,7 @@ public class ApiConnectionIT {
 		stubPutResponse(expected, path, 200);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("toktok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2572,17 +2572,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupTagsSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags expected = Tags.of("tag1", "таг2");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2599,17 +2599,17 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchGroupTagsAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + username + "/groups/" + groupId + "/tags";
+		String path = "/" + spid + "/groups/" + groupId + "/tags";
 
 		final Tags expected = Tags.of("tag1", "таг2");
 
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2636,8 +2636,8 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListInboundsWithEmpty() throws Exception {
-		String username = TestUtils.freshUsername();
-		String path = "/" + username + "/inbounds?page=0";
+		String spid = TestUtils.freshServicePlanId();
+		String path = "/" + spid + "/inbounds?page=0";
 		InboundsFilter filter = ClxApi.inboundsFilter().build();
 
 		final Page<MoSms> expected =
@@ -2650,7 +2650,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2680,7 +2680,7 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canListInboundsWithTwoPages() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .addTo("10101")
 		        .build();
@@ -2690,7 +2690,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
 		// Prepare first page.
-		String path1 = "/" + username + "/inbounds?page=0&to=10101";
+		String path1 = "/" + spid + "/inbounds?page=0&to=10101";
 
 		final Page<MoSms> expected1 =
 		        new PagedInboundsResult.Builder()
@@ -2710,7 +2710,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + username + "/inbounds?page=1&to=10101";
+		String path2 = "/" + spid + "/inbounds?page=1&to=10101";
 
 		final Page<MoSms> expected2 =
 		        new PagedInboundsResult.Builder()
@@ -2731,7 +2731,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2773,13 +2773,13 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchInboundSync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		String smsId = TestUtils.freshSmsId();
 		String inboundsId = TestUtils.freshSmsId();
 		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
-		String path = "/" + username + "/inbounds/" + smsId;
+		String path = "/" + spid + "/inbounds/" + smsId;
 
 		MoSms expected = new MoBinarySms.Builder()
 		        .from("123456789")
@@ -2794,7 +2794,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();
@@ -2811,13 +2811,13 @@ public class ApiConnectionIT {
 
 	@Test
 	public void canFetchInboundAsync() throws Exception {
-		String username = TestUtils.freshUsername();
+		String spid = TestUtils.freshServicePlanId();
 		String smsId = TestUtils.freshSmsId();
 		String inboundsId = TestUtils.freshSmsId();
 		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
-		String path = "/" + username + "/inbounds/" + smsId;
+		String path = "/" + spid + "/inbounds/" + smsId;
 
 		final MoSms expected = new MoBinarySms.Builder()
 		        .from("123456789")
@@ -2832,7 +2832,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
-		        .username(username)
+		        .servicePlanId(spid)
 		        .token("tok")
 		        .endpoint("http://localhost:" + wm.port())
 		        .start();

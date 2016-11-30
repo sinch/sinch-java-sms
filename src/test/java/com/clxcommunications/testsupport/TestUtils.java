@@ -23,8 +23,8 @@ public final class TestUtils {
 	public static final Charset UTF_8 = Charset.forName("UTF-8");
 
 	/**
-	 * Field used by {@link #freshUsername()} and {@link #freshBatchId()} to
-	 * generate unique values.
+	 * Field used by, e.g., {@link #freshServicePlanId()} and
+	 * {@link #freshBatchId()} to generate unique values.
 	 */
 	private static final AtomicInteger uniqueCounter = new AtomicInteger();
 
@@ -38,11 +38,11 @@ public final class TestUtils {
 	}
 
 	/**
-	 * Creates and returns a fresh unique username.
+	 * Creates and returns a fresh unique service plan ID.
 	 * 
-	 * @return a unique, non-null, username
+	 * @return a unique, non-null, service plan ID
 	 */
-	public static String freshUsername() {
+	public static String freshServicePlanId() {
 		return "user" + uniqueCounter.incrementAndGet();
 	}
 

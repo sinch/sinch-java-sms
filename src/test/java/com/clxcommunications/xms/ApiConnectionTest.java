@@ -70,7 +70,7 @@ public class ApiConnectionTest {
 	public void canBuildWithAllCustoms() throws Exception {
 		ApiConnection.builder()
 		        .token("token")
-		        .username("username")
+		        .servicePlanId("spid")
 		        .endpoint("https://localhost:3000/basepath")
 		        .callbackWrapper(CallbackWrapper.identity)
 		        .prettyPrintJson(false)
@@ -82,7 +82,7 @@ public class ApiConnectionTest {
 	public void rejectsEndpointWithQueryComponent() throws Exception {
 		ApiConnection.builder()
 		        .token("token")
-		        .username("username")
+		        .servicePlanId("spid")
 		        .endpoint("https://localhost:3000/basepath?query=yes")
 		        .build();
 	}
@@ -91,7 +91,7 @@ public class ApiConnectionTest {
 	public void rejectsBasePathWithFragmentComponent() throws Exception {
 		ApiConnection.builder()
 		        .token("token")
-		        .username("username")
+		        .servicePlanId("spid")
 		        .endpoint("https://localhost:3000/basepath#fragment")
 		        .build();
 	}
@@ -102,7 +102,7 @@ public class ApiConnectionTest {
 
 		ApiConnection conn = ApiConnection.builder()
 		        .token("token")
-		        .username("username")
+		        .servicePlanId("spid")
 		        .httpClient(new DummyClient() {
 
 			        @Override
@@ -125,7 +125,7 @@ public class ApiConnectionTest {
 
 		ApiConnection conn = ApiConnection.builder()
 		        .token("token")
-		        .username("username")
+		        .servicePlanId("spid")
 		        .httpClient(client)
 		        .build();
 

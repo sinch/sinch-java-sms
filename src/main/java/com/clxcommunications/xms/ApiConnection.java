@@ -192,11 +192,11 @@ public abstract class ApiConnection implements Closeable {
 	public abstract String token();
 
 	/**
-	 * The XMS service username.
+	 * The XMS service plan identifier.
 	 * 
 	 * @return a non-null string
 	 */
-	public abstract String username();
+	public abstract String servicePlanId();
 
 	/**
 	 * Whether the JSON sent to the server should be printed with indentation.
@@ -300,8 +300,8 @@ public abstract class ApiConnection implements Closeable {
 	private URI endpoint(@Nonnull String subPath,
 	        @Nonnull List<NameValuePair> params) {
 		try {
-			String user = URLEncoder.encode(username(), "UTF-8");
-			String path = endpoint().getPath() + "/" + user + subPath;
+			String spid = URLEncoder.encode(servicePlanId(), "UTF-8");
+			String path = endpoint().getPath() + "/" + spid + subPath;
 			URIBuilder uriBuilder = new URIBuilder(endpoint())
 			        .setPath(path);
 
