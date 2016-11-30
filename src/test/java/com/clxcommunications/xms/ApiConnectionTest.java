@@ -1,5 +1,6 @@
 package com.clxcommunications.xms;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
@@ -113,6 +114,30 @@ public class ApiConnectionTest {
 		        .servicePlanId("spid")
 		        .endpoint("https://localhost:3000/basepath#fragment")
 		        .build();
+	}
+
+	@Test
+	public void closesInternalHttpClient() throws Exception {
+		ApiConnection conn = ApiConnection.builder()
+		        .token("token")
+		        .servicePlanId("spid")
+		        .build();
+
+		assertThat(conn.httpClient(),
+		        is(instanceOf(ApiDefaultHttpAsyncClient.class)));
+
+		ApiDefaultHttpAsyncClient client =
+		        (ApiDefaultHttpAsyncClient) conn.httpClient();
+
+		assertThat(client.isRunning(), is(false));
+
+		conn.start();
+
+		assertThat(client.isRunning(), is(true));
+
+		conn.close();
+
+		assertThat(client.isRunning(), is(false));
 	}
 
 	@Test
