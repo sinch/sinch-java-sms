@@ -52,7 +52,7 @@ public abstract class DeliveryStatus {
 	 * @return a non-null delivery status object
 	 */
 	@JsonCreator
-	private static DeliveryStatus of(String status) {
+	public static DeliveryStatus of(String status) {
 		return DeliveryStatusImpl.of(status);
 	}
 
