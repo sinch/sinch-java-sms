@@ -40,6 +40,7 @@
 
 	<build>
 		<plugins>
+			<!-- Used to verify Java 6 compatibility -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>animal-sniffer-maven-plugin</artifactId>
@@ -62,6 +63,7 @@
 				</executions>
 			</plugin>
 
+			<!-- Used mainly to generate the Version class -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>templating-maven-plugin</artifactId>
