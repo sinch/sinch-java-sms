@@ -147,7 +147,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches";
+		String path = "/v1/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
@@ -193,7 +193,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches";
+		String path = "/v1/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
@@ -245,7 +245,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches";
+		String path = "/v1/" + spid + "/batches";
 
 		stubPostResponse(expected, path, 201);
 
@@ -280,7 +280,7 @@ public class ApiConnectionIT {
 		ApiError apiError = ApiError.of("syntax_constraint_violation",
 		        "The syntax constraint was violated");
 
-		String path = "/" + spid + "/batches";
+		String path = "/v1/" + spid + "/batches";
 
 		stubPostResponse(apiError, path, 400);
 
@@ -329,7 +329,7 @@ public class ApiConnectionIT {
 		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
 		        "}").replace('\'', '"');
 
-		String path = "/" + spid + "/batches";
+		String path = "/v1/" + spid + "/batches";
 
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
@@ -381,7 +381,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		stubPutResponse(expected, path, 201);
 
@@ -427,7 +427,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		stubPutResponse(expected, path, 201);
 
@@ -473,7 +473,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
@@ -523,7 +523,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		stubPostResponse(expected, path, 201);
 
@@ -550,7 +550,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -588,7 +588,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -637,7 +637,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
@@ -685,7 +685,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		wm.stubFor(get(
 		        urlEqualTo(path))
@@ -801,7 +801,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
-		String path = "/" + spid + "/batches/" + batchId;
+		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
@@ -855,7 +855,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path1 = "/" + spid + "/batches/" + expected1.id();
+		String path1 = "/v1/" + spid + "/batches/" + expected1.id();
 		byte[] response1 = json.writeValueAsBytes(expected1);
 
 		wm.stubFor(delete(
@@ -880,7 +880,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String path2 = "/" + spid + "/batches/" + expected2.id();
+		String path2 = "/v1/" + spid + "/batches/" + expected2.id();
 
 		stubDeleteResponse(expected2, path2);
 
@@ -928,7 +928,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListBatchesWithEmpty() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
-		String path = "/" + spid + "/batches?page=0";
+		String path = "/v1/" + spid + "/batches?page=0";
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		final Page<MtBatchSmsResult> expected =
@@ -975,7 +975,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + spid + "/batches?page=0";
+		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -987,7 +987,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + spid + "/batches?page=1";
+		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1047,7 +1047,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + spid + "/batches?page=0";
+		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1065,7 +1065,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + spid + "/batches?page=1";
+		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1125,7 +1125,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		// Prepare first page.
-		String path1 = "/" + spid + "/batches?page=0";
+		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
 		        new PagedBatchResult.Builder()
@@ -1143,7 +1143,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + spid + "/batches?page=1";
+		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
 		        new PagedBatchResult.Builder()
@@ -1202,7 +1202,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId
+		String path = "/v1/" + spid + "/batches/" + batchId
 		        + "/delivery_report"
 		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
 
@@ -1258,7 +1258,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId
+		String path = "/v1/" + spid + "/batches/" + batchId
 		        + "/delivery_report?type=full";
 
 		final BatchDeliveryReport expected =
@@ -1321,7 +1321,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + spid + "/batches/" + batchId
+		String path = "/v1/" + spid + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1361,7 +1361,7 @@ public class ApiConnectionIT {
 		BatchId batchId = TestUtils.freshBatchId();
 		String recipient = "987654321";
 
-		String path = "/" + spid + "/batches/" + batchId
+		String path = "/v1/" + spid + "/batches/" + batchId
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
@@ -1410,7 +1410,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1443,7 +1443,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -1487,7 +1487,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1516,7 +1516,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -1556,7 +1556,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		Tags expected = Tags.of("tag1", "таг2");
 
@@ -1583,7 +1583,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
-		String path = "/" + spid + "/batches/" + batchId + "/tags";
+		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		final Tags expected = Tags.of("tag1", "таг2");
 
@@ -1619,7 +1619,7 @@ public class ApiConnectionIT {
 	public void canCreateBatchDryRunSync() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
 
-		String path = "/" + spid + "/batches/dry_run";
+		String path = "/v1/" + spid + "/batches/dry_run";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
 		        .from("1234")
@@ -1656,7 +1656,7 @@ public class ApiConnectionIT {
 	public void canCreateBatchDryRunAsync() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
 
-		String path = "/" + spid + "/batches/dry_run"
+		String path = "/v1/" + spid + "/batches/dry_run"
 		        + "?per_recipient=true&number_of_recipients=5";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
@@ -1706,7 +1706,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups";
+		String path = "/v1/" + spid + "/groups";
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -1758,7 +1758,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups";
+		String path = "/v1/" + spid + "/groups";
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -1821,7 +1821,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1860,7 +1860,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		final GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -1910,7 +1910,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/members";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/members";
 
 		GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 
@@ -1937,7 +1937,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/members";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/members";
 
 		final GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
 
@@ -1973,7 +1973,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListGroupsWithEmpty() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
-		String path = "/" + spid + "/groups?page=0";
+		String path = "/v1/" + spid + "/groups?page=0";
 		GroupFilter filter = ClxApi.groupFilter().build();
 
 		final Page<GroupResponse> expected =
@@ -2022,7 +2022,7 @@ public class ApiConnectionIT {
 		        .build();
 
 		// Prepare first page.
-		String path1 = "/" + spid
+		String path1 = "/v1/" + spid
 		        + "/groups?page=0&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected1 =
@@ -2035,7 +2035,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + spid
+		String path2 = "/v1/" + spid
 		        + "/groups?page=1&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResponse> expected2 =
@@ -2095,7 +2095,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupUpdate request = GroupUpdate.builder()
 		        .unsetName()
@@ -2133,7 +2133,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupUpdate request = GroupUpdate.builder()
 		        .unsetName()
@@ -2182,7 +2182,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -2234,7 +2234,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
 		        new GroupCreate.Builder()
@@ -2297,7 +2297,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -2336,7 +2336,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId;
+		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		final GroupResponse expected =
 		        new GroupResponse.Builder()
@@ -2386,7 +2386,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -2419,7 +2419,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
 		        new TagsUpdate.Builder()
@@ -2463,7 +2463,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -2492,7 +2492,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags request = Tags.of("rTag1", "rTag2");
 
@@ -2532,7 +2532,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		Tags expected = Tags.of("tag1", "таг2");
 
@@ -2559,7 +2559,7 @@ public class ApiConnectionIT {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();
 
-		String path = "/" + spid + "/groups/" + groupId + "/tags";
+		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		final Tags expected = Tags.of("tag1", "таг2");
 
@@ -2594,7 +2594,7 @@ public class ApiConnectionIT {
 	@Test
 	public void canListInboundsWithEmpty() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
-		String path = "/" + spid + "/inbounds?page=0";
+		String path = "/v1/" + spid + "/inbounds?page=0";
 		InboundsFilter filter = ClxApi.inboundsFilter().build();
 
 		final Page<MoSms> expected =
@@ -2647,7 +2647,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
 		// Prepare first page.
-		String path1 = "/" + spid + "/inbounds?page=0&to=10101";
+		String path1 = "/v1/" + spid + "/inbounds?page=0&to=10101";
 
 		final Page<MoSms> expected1 =
 		        new PagedInboundsResult.Builder()
@@ -2667,7 +2667,7 @@ public class ApiConnectionIT {
 		stubGetResponse(expected1, path1);
 
 		// Prepare second page.
-		String path2 = "/" + spid + "/inbounds?page=1&to=10101";
+		String path2 = "/v1/" + spid + "/inbounds?page=1&to=10101";
 
 		final Page<MoSms> expected2 =
 		        new PagedInboundsResult.Builder()
@@ -2736,7 +2736,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
-		String path = "/" + spid + "/inbounds/" + smsId;
+		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
 		MoSms expected = new MoBinarySms.Builder()
 		        .from("123456789")
@@ -2774,7 +2774,7 @@ public class ApiConnectionIT {
 		OffsetDateTime time1 = OffsetDateTime.now(Clock.systemUTC());
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 
-		String path = "/" + spid + "/inbounds/" + smsId;
+		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
 		final MoSms expected = new MoBinarySms.Builder()
 		        .from("123456789")

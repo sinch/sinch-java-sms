@@ -123,7 +123,7 @@ public abstract class ApiConnection implements Closeable {
 	 * The default endpoint of this API connection.
 	 */
 	public static final URI DEFAULT_ENDPOINT =
-	        URI.create("https://api.clxcommunications.com/xms/v1");
+	        URI.create("https://api.clxcommunications.com/xms");
 
 	/**
 	 * A Jackson object mapper.
@@ -301,7 +301,7 @@ public abstract class ApiConnection implements Closeable {
 	        @Nonnull List<NameValuePair> params) {
 		try {
 			String spid = URLEncoder.encode(servicePlanId(), "UTF-8");
-			String path = endpoint().getPath() + "/" + spid + subPath;
+			String path = endpoint().getPath() + "/v1/" + spid + subPath;
 			URIBuilder uriBuilder = new URIBuilder(endpoint())
 			        .setPath(path);
 
