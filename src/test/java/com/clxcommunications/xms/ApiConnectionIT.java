@@ -935,7 +935,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		stubGetResponse(expected, path);
@@ -981,7 +981,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(2)
+		                .totalSize(2)
 		                .build();
 
 		stubGetResponse(expected1, path1);
@@ -993,7 +993,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(1)
 		                .size(0)
-		                .numPages(2)
+		                .totalSize(2)
 		                .build();
 
 		stubGetResponse(expected2, path2);
@@ -1053,7 +1053,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(2)
+		                .totalSize(2)
 		                .addContent(
 		                        new MtBatchTextSmsResult.Builder()
 		                                .id(TestUtils.freshBatchId())
@@ -1071,7 +1071,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(1)
 		                .size(2)
-		                .numPages(2)
+		                .totalSize(2)
 		                .addContent(
 		                        new MtBatchBinarySmsResult.Builder()
 		                                .id(TestUtils.freshBatchId())
@@ -1131,7 +1131,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(2)
+		                .totalSize(3)
 		                .addContent(
 		                        new MtBatchTextSmsResult.Builder()
 		                                .id(TestUtils.freshBatchId())
@@ -1149,7 +1149,7 @@ public class ApiConnectionIT {
 		        new PagedBatchResult.Builder()
 		                .page(1)
 		                .size(2)
-		                .numPages(2)
+		                .totalSize(3)
 		                .addContent(
 		                        new MtBatchBinarySmsResult.Builder()
 		                                .id(TestUtils.freshBatchId())
@@ -1980,7 +1980,7 @@ public class ApiConnectionIT {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		stubGetResponse(expected, path);
@@ -2029,7 +2029,7 @@ public class ApiConnectionIT {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(2)
+		                .totalSize(2)
 		                .build();
 
 		stubGetResponse(expected1, path1);
@@ -2042,7 +2042,7 @@ public class ApiConnectionIT {
 		        new PagedGroupResult.Builder()
 		                .page(1)
 		                .size(0)
-		                .numPages(2)
+		                .totalSize(2)
 		                .build();
 
 		stubGetResponse(expected2, path2);
@@ -2601,7 +2601,7 @@ public class ApiConnectionIT {
 		        new PagedInboundsResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		stubGetResponse(expected, path);
@@ -2653,7 +2653,7 @@ public class ApiConnectionIT {
 		        new PagedInboundsResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(2)
+		                .totalSize(2)
 		                .addContent(new MoTextSms.Builder()
 		                        .from("987654321")
 		                        .to("54321")
@@ -2673,7 +2673,7 @@ public class ApiConnectionIT {
 		        new PagedInboundsResult.Builder()
 		                .page(1)
 		                .size(1)
-		                .numPages(2)
+		                .totalSize(2)
 		                .addContent(new MoBinarySms.Builder()
 		                        .from("123456789")
 		                        .to("12345")

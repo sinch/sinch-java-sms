@@ -146,14 +146,16 @@ public abstract class PagedFetcher<T> {
 
 				return new Iterator<Page<T>>() {
 
-					Page<T> page = null;
+					private Page<T> page = null;
+					private int seenElements = 0;
 
 					@Override
 					public boolean hasNext() {
 						if (page == null) {
 							return true;
 						} else {
-							return page.page() + 1 < page.numPages();
+							return seenElements < page.totalSize()
+							        && !page.isEmpty();
 						}
 					}
 
@@ -179,6 +181,8 @@ public abstract class PagedFetcher<T> {
 
 							throw new RuntimeApiException(cause);
 						}
+
+						seenElements += page.size();
 
 						return page;
 					}

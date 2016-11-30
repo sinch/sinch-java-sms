@@ -21,7 +21,7 @@ public class PagedBatchResultTest {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		String expected = Utils.join("\n",
@@ -43,7 +43,7 @@ public class PagedBatchResultTest {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		String input = json.writeValueAsString(expected);
@@ -84,7 +84,7 @@ public class PagedBatchResultTest {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(0)
+		                .totalSize(0)
 		                .addContent(batchResult1)
 		                .addContent(batchResult2)
 		                .build();
@@ -159,7 +159,7 @@ public class PagedBatchResultTest {
 		        new PagedBatchResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(0)
+		                .totalSize(0)
 		                .addContent(batchResult1)
 		                .addContent(batchResult2)
 		                .build();

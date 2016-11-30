@@ -24,12 +24,12 @@ public abstract class Page<T> implements Iterable<T> {
 	public abstract int size();
 
 	/**
-	 * The total number of pages.
+	 * The total number of elements across all pages.
 	 * 
-	 * @return the number of pages
+	 * @return the total number of elements
 	 */
 	@JsonProperty("count")
-	public abstract int numPages();
+	public abstract int totalSize();
 
 	public abstract List<T> content();
 
@@ -42,9 +42,14 @@ public abstract class Page<T> implements Iterable<T> {
 		return content().iterator();
 	}
 
+	/**
+	 * Whether this page is empty, i.e., does not contain any elements.
+	 * 
+	 * @return <code>true</code> if empty, <code>false</code> otherwise
+	 */
 	@JsonIgnore
-	public final boolean isLast() {
-		return page() + 1 >= numPages();
+	public final boolean isEmpty() {
+		return size() == 0;
 	}
 
 }

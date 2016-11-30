@@ -21,7 +21,7 @@ public class PagedGroupResultTest {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		String expected = Utils.join("\n",
@@ -43,7 +43,7 @@ public class PagedGroupResultTest {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
-		                .numPages(0)
+		                .totalSize(0)
 		                .build();
 
 		String input = json.writeValueAsString(expected);
@@ -85,7 +85,7 @@ public class PagedGroupResultTest {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(0)
+		                .totalSize(0)
 		                .addContent(groupResult1)
 		                .addContent(groupResult2)
 		                .build();
@@ -146,7 +146,7 @@ public class PagedGroupResultTest {
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(1)
-		                .numPages(0)
+		                .totalSize(0)
 		                .addContent(groupResult1)
 		                .addContent(groupResult2)
 		                .build();
