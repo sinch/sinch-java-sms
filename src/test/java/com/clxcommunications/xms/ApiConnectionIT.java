@@ -814,15 +814,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(time)
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(delete(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubDeleteResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .servicePlanId(spid)
@@ -837,11 +829,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(deleteRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyDeleteRequest(path);
 	}
 
 	/**
@@ -893,15 +881,8 @@ public class ApiConnectionIT {
 		                .build();
 
 		String path2 = "/" + spid + "/batches/" + expected2.id();
-		byte[] response2 = json.writeValueAsBytes(expected2);
 
-		wm.stubFor(delete(
-		        urlEqualTo(path2))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response2)));
+		stubDeleteResponse(expected2, path2);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .servicePlanId(spid)
@@ -940,8 +921,8 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(deleteRequestedFor(urlEqualTo(path1)));
-		wm.verify(deleteRequestedFor(urlEqualTo(path2)));
+		verifyDeleteRequest(path1);
+		verifyDeleteRequest(path2);
 	}
 
 	@Test
@@ -2332,15 +2313,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(delete(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubDeleteResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .servicePlanId(spid)
@@ -2355,11 +2328,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(deleteRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyDeleteRequest(path);
 	}
 
 	@Test
@@ -2383,15 +2352,7 @@ public class ApiConnectionIT {
 		                .modifiedAt(OffsetDateTime.now())
 		                .build();
 
-		String response = json.writeValueAsString(expected);
-
-		wm.stubFor(delete(
-		        urlEqualTo(path))
-		                .willReturn(aResponse()
-		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
-		                        .withBody(response)));
+		stubDeleteResponse(expected, path);
 
 		ApiConnection conn = ApiConnection.builder()
 		        .servicePlanId(spid)
@@ -2417,11 +2378,7 @@ public class ApiConnectionIT {
 			conn.close();
 		}
 
-		wm.verify(deleteRequestedFor(
-		        urlEqualTo(path))
-		                .withHeader("Accept",
-		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer tok")));
+		verifyDeleteRequest(path);
 	}
 
 	@Test
@@ -2890,6 +2847,45 @@ public class ApiConnectionIT {
 	 */
 	private void verifyGetRequest(String path) {
 		wm.verify(getRequestedFor(
+		        urlEqualTo(path))
+		                .withHeader("Accept",
+		                        equalTo("application/json; charset=UTF-8"))
+		                .withHeader("Authorization", equalTo("Bearer tok")));
+	}
+
+	/**
+	 * Helper that sets up WireMock to respond to a DELETE using a JSON body.
+	 * 
+	 * @param response
+	 *            the response to give, serialized to JSON
+	 * @param path
+	 *            the path on which to listen
+	 * @param status
+	 *            the response HTTP status
+	 * @throws JsonProcessingException
+	 *             if the given response object could not be serialized
+	 */
+	private void stubDeleteResponse(Object response, String path)
+	        throws JsonProcessingException {
+		byte[] body = json.writeValueAsBytes(response);
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(200)
+		                        .withHeader("Content-Type",
+		                                "application/json; charset=UTF-8")
+		                        .withBody(body)));
+	}
+
+	/**
+	 * Helper that sets up WireMock to verify a DELETE request.
+	 * 
+	 * @param path
+	 *            the request path to match
+	 */
+	private void verifyDeleteRequest(String path) {
+		wm.verify(deleteRequestedFor(
 		        urlEqualTo(path))
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
