@@ -123,7 +123,7 @@ public abstract class ApiConnection implements Closeable {
 	 * The default endpoint of this API connection.
 	 */
 	public static final URI DEFAULT_ENDPOINT =
-	        URI.create("https://api.clxcommunications.com/xms/v1/");
+	        URI.create("https://api.clxcommunications.com/xms/v1");
 
 	/**
 	 * A Jackson object mapper.
