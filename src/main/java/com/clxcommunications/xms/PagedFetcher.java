@@ -1,10 +1,6 @@
 package com.clxcommunications.xms;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -63,60 +59,6 @@ public abstract class PagedFetcher<T> {
 	@Nonnull
 	abstract Future<Page<T>> fetchAsync(int page,
 	        @Nullable FutureCallback<Page<T>> callback);
-
-	/**
-	 * Fetch all pages, some or all pages may be fetched asynchronously.
-	 * <p>
-	 * The returned list is ordered by page number but no guarantee is made of
-	 * the order in which the callback is called.
-	 * 
-	 * @param callback
-	 *            request callback, called once per page
-	 * @return a queue of futures, one for each fetched page
-	 */
-	@Nonnull
-	List<Future<Page<T>>> fetchPagesAsync(
-	        @Nullable final FutureCallback<Page<T>> callback) {
-		final Queue<Future<Page<T>>> futures =
-		        new ConcurrentLinkedQueue<Future<Page<T>>>();
-
-		Future<Page<T>> initialFuture =
-		        fetchAsync(0, new FutureCallback<Page<T>>() {
-
-			        @Override
-			        public void completed(Page<T> result) {
-				        callback.completed(result);
-
-				        /*
-				         * Go over all remaining pages and fetch them. Note,
-				         * they are all submitted to the HTTP client library
-				         * asynchronously!
-				         */
-				        for (int i = 1; i < result.numPages(); i++) {
-					        futures.add(fetchAsync(i, callback));
-				        }
-			        }
-
-			        @Override
-			        public void failed(Exception ex) {
-				        callback.failed(ex);
-			        }
-
-			        @Override
-			        public void cancelled() {
-				        callback.cancelled();
-			        }
-
-		        });
-
-		List<Future<Page<T>>> result =
-		        new ArrayList<Future<Page<T>>>(1 + futures.size());
-
-		result.add(initialFuture);
-		result.addAll(futures);
-
-		return result;
-	}
 
 	/**
 	 * Returns an iterable object that traverses all fetched elements across all
