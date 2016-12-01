@@ -70,10 +70,6 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 
 	}
 
-	public static final Builder builder() {
-		return new Builder();
-	}
-
 	@Nullable
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)

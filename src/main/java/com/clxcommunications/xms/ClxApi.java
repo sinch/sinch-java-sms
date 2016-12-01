@@ -19,7 +19,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 	}
 
 	public static MtBatchTextSmsUpdate.Builder batchTextSmsUpdate() {
-		return MtBatchTextSmsUpdate.builder();
+		return new MtBatchTextSmsUpdate.Builder();
 	}
 
 	public static MtBatchBinarySmsCreate.Builder batchBinarySms() {
@@ -27,7 +27,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 	}
 
 	public static MtBatchBinarySmsUpdate.Builder batchBinarySmsUpdate() {
-		return MtBatchBinarySmsUpdate.builder();
+		return new MtBatchBinarySmsUpdate.Builder();
 	}
 
 	public static ParameterValues.Builder buildSubstitution() {

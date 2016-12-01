@@ -83,10 +83,6 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 
 	}
 
-	public static final Builder builder() {
-		return new Builder();
-	}
-
 	@Nullable
 	public abstract String body();
 
