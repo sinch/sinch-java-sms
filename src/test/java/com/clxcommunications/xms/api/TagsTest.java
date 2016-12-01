@@ -21,6 +21,13 @@ public class TagsTest {
 	private final ApiObjectMapper json = new ApiObjectMapper();
 
 	@Property
+	public void canIterateOverTags(List<String> tags) throws Exception {
+		for (String t : Tags.of(tags)) {
+			assertThat(t, is(tags.remove(0)));
+		}
+	}
+
+	@Property
 	public void canSerializeJson(List<String> tags) throws Exception {
 		Tags input = TagsImpl.builder().tags(tags).build();
 
