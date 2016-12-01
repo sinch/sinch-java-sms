@@ -1,6 +1,5 @@
 package com.clxcommunications.xms.api;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -50,16 +49,6 @@ public abstract class AutoUpdate {
 			return this.remove(KeywordPair.of(firstWord, secondWord));
 		}
 
-	}
-
-	/**
-	 * Instantiates a fresh builder of auto update objects.
-	 * 
-	 * @return a fresh auto update builder
-	 */
-	@Nonnull
-	public static final Builder builder() {
-		return new AutoUpdate.Builder();
 	}
 
 	/**

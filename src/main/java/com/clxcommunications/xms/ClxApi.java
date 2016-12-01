@@ -2,6 +2,7 @@ package com.clxcommunications.xms;
 
 import javax.annotation.Nonnull;
 
+import com.clxcommunications.xms.api.AutoUpdate;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
@@ -77,6 +78,17 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	@Nonnull
 	public static GroupCreate.Builder groupCreate() {
 		return new GroupCreate.Builder();
+	}
+
+	/**
+	 * Returns a freshly created builder of auto update definitions. For use
+	 * when creating groups.
+	 * 
+	 * @return a builder of auto update definitions
+	 */
+	@Nonnull
+	public static AutoUpdate.Builder autoUpdate() {
+		return new AutoUpdate.Builder();
 	}
 
 	/**

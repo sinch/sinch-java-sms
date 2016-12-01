@@ -12,6 +12,7 @@ import org.threeten.bp.ZoneOffset;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
+import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.Utils;
 
 public class GroupResponseTest {
@@ -58,7 +59,7 @@ public class GroupResponseTest {
 		        .size(72)
 		        .name("mygroup")
 		        .childGroups(Arrays.asList(groupId1, groupId2))
-		        .autoUpdate(AutoUpdate.builder()
+		        .autoUpdate(ClxApi.autoUpdate()
 		                .to("1111")
 		                .add("kw0", "kw1")
 		                .remove("kw2", "kw3")
@@ -118,7 +119,7 @@ public class GroupResponseTest {
 		        .name("mygroup")
 		        .size(72)
 		        .childGroups(Arrays.asList(groupId1, groupId2))
-		        .autoUpdate(AutoUpdate.builder()
+		        .autoUpdate(ClxApi.autoUpdate()
 		                .to("1111")
 		                .add("kw0", "kw1")
 		                .remove("kw2", "kw3")
