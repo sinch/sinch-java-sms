@@ -1,5 +1,7 @@
 package com.clxcommunications.xms;
 
+import javax.annotation.Nonnull;
+
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
@@ -63,6 +65,16 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static InboundsFilter.Builder inboundsFilter() {
 		return new InboundsFilter.Builder();
+	}
+
+	/**
+	 * Returns a freshly created batch delivery report parameter builder.
+	 * 
+	 * @return a builder of batch delivery report queries
+	 */
+	@Nonnull
+	public static BatchDeliveryReportParams.Builder batchDeliveryReportParams() {
+		return new BatchDeliveryReportParams.Builder();
 	}
 
 }

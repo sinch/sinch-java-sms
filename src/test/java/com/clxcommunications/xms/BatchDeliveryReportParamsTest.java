@@ -24,7 +24,7 @@ public class BatchDeliveryReportParamsTest {
 	@Test
 	public void generatesExpectedQueryParametersMinimal() throws Exception {
 		BatchDeliveryReportParams filter =
-		        new BatchDeliveryReportParams.Builder().build();
+		        ClxApi.batchDeliveryReportParams().build();
 
 		List<NameValuePair> actual = filter.toQueryParams();
 
@@ -34,7 +34,7 @@ public class BatchDeliveryReportParamsTest {
 	@Test
 	public void generatesExpectedQueryParametersMaximalish() throws Exception {
 		BatchDeliveryReportParams filter =
-		        new BatchDeliveryReportParams.Builder()
+		        ClxApi.batchDeliveryReportParams()
 		                .fullReport()
 		                .addStatus(DeliveryStatus.EXPIRED,
 		                        DeliveryStatus.DELIVERED)
@@ -54,7 +54,7 @@ public class BatchDeliveryReportParamsTest {
 	        BatchDeliveryReportParams.ReportType reportType, Set<Integer> codes)
 	        throws Exception {
 		BatchDeliveryReportParams filter =
-		        new BatchDeliveryReportParams.Builder()
+		        ClxApi.batchDeliveryReportParams()
 		                .reportType(reportType)
 		                .addStatus(DeliveryStatus.EXPIRED,
 		                        DeliveryStatus.DELIVERED)

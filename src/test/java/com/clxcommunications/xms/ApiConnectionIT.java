@@ -1236,7 +1236,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		BatchDeliveryReportParams filter =
-		        new BatchDeliveryReportParams.Builder()
+		        ClxApi.batchDeliveryReportParams()
 		                .fullReport()
 		                .addStatus(DeliveryStatus.ABORTED,
 		                        DeliveryStatus.DELIVERED)
@@ -1291,7 +1291,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		BatchDeliveryReportParams filter =
-		        new BatchDeliveryReportParams.Builder()
+		        ClxApi.batchDeliveryReportParams()
 		                .fullReport()
 		                .build();
 
