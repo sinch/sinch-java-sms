@@ -37,7 +37,7 @@ public class MtBatchTextSmsUpdateTest {
 		Map<String, ParameterValues> params =
 		        new TreeMap<String, ParameterValues>();
 
-		params.put("newparam", ClxApi.buildSubstitution()
+		params.put("newparam", ClxApi.parameterValues()
 		        .putSubstitution("key1", "value1")
 		        .build());
 

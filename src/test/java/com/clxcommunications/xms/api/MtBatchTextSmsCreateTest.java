@@ -46,7 +46,7 @@ public class MtBatchTextSmsCreateTest {
 	public void canSerializeWithParameters() throws Exception {
 		MtBatchSmsCreate input = minimalBatchBuilder()
 		        .putParameter("param1",
-		                ClxApi.buildSubstitution()
+		                ClxApi.parameterValues()
 		                        .putSubstitution("123", "foo")
 		                        .putSubstitution("234", "bar")
 		                        .build())
@@ -75,7 +75,7 @@ public class MtBatchTextSmsCreateTest {
 	public void canDeserializeWithParameters() throws Exception {
 		MtBatchSmsCreate expected = minimalBatchBuilder()
 		        .putParameter("param1",
-		                ClxApi.buildSubstitution()
+		                ClxApi.parameterValues()
 		                        .putSubstitution("123", "foo")
 		                        .putSubstitution("234", "bar")
 		                        .build())
@@ -92,7 +92,7 @@ public class MtBatchTextSmsCreateTest {
 	public void canSerializeWithParametersAndDefault() throws Exception {
 		MtBatchSmsCreate input = minimalBatchBuilder()
 		        .putParameter("param1",
-		                ClxApi.buildSubstitution()
+		                ClxApi.parameterValues()
 		                        .putSubstitution("123", "foo")
 		                        .putSubstitution("234", "bar")
 		                        .defaultValue("baz")
@@ -123,7 +123,7 @@ public class MtBatchTextSmsCreateTest {
 	public void canDeserializeWithParametersAndDefault() throws Exception {
 		MtBatchSmsCreate expected = minimalBatchBuilder()
 		        .putParameter("param1",
-		                ClxApi.buildSubstitution()
+		                ClxApi.parameterValues()
 		                        .putSubstitution("123", "foo")
 		                        .putSubstitution("234", "bar")
 		                        .defaultValue("baz")

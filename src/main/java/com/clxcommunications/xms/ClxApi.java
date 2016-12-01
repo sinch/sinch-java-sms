@@ -32,7 +32,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 		return new MtBatchBinarySmsUpdate.Builder();
 	}
 
-	public static ParameterValues.Builder buildSubstitution() {
+	public static ParameterValues.Builder parameterValues() {
 		return new ParameterValues.Builder();
 	}
 

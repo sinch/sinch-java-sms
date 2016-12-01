@@ -228,7 +228,7 @@ public class ApiConnectionIT {
 		                .addTo("987654321")
 		                .body("Hello, ${name}!")
 		                .putParameter("name",
-		                        ClxApi.buildSubstitution()
+		                        ClxApi.parameterValues()
 		                                .putSubstitution("123456789", "Jane")
 		                                .defaultValue("world")
 		                                .build())

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+import com.clxcommunications.xms.ClxApi;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -75,7 +76,7 @@ public class JacksonUtils {
 		@Override
 		public ParameterValues convert(JsonNode root,
 		        DeserializationContext ctxt) throws IOException {
-			ParameterValues.Builder builder = new ParameterValues.Builder();
+			ParameterValues.Builder builder = ClxApi.parameterValues();
 
 			if (root.has("default")) {
 				builder.defaultValue(root.get("default").asText());
