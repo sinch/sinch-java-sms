@@ -10,7 +10,9 @@ import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.ParameterValues;
 
 /**
- * A collection of convenient static methods for generating CLX API objects.
+ * A collection of convenient static methods for building XMS objects. Each
+ * method here will return a fresh builder producing the type of XMS object
+ * indicated by the method name.
  */
 public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
