@@ -1,6 +1,6 @@
 package com.clxcommunications.xms.api;
 
-import java.util.List;
+import java.util.Set;
 
 import org.immutables.value.Value;
 
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = TagsImpl.Builder.class)
 public abstract class Tags {
 
-	public abstract List<String> tags();
+	public abstract Set<String> tags();
 
 	public static final Tags of(Iterable<String> tags) {
 		return TagsImpl.builder().tags(tags).build();
