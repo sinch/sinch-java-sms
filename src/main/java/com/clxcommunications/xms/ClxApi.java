@@ -3,6 +3,7 @@ package com.clxcommunications.xms;
 import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
+import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
@@ -32,6 +33,10 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static ParameterValues.Builder buildSubstitution() {
 		return new ParameterValues.Builder();
+	}
+
+	public static GroupCreate.Builder groupCreate() {
+		return new GroupCreate.Builder();
 	}
 
 	public static BatchFilter.Builder batchFilter() {

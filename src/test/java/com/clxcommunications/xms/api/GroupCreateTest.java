@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
+import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.Utils;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 
@@ -20,7 +21,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		GroupCreate input = new GroupCreate.Builder().build();
+		GroupCreate input = ClxApi.groupCreate().build();
 
 		String expected = "{}";
 		String actual = json.writeValueAsString(input);
@@ -33,7 +34,7 @@ public class GroupCreateTest {
 		GroupId groupId1 = TestUtils.freshGroupId();
 		GroupId groupId2 = TestUtils.freshGroupId();
 
-		GroupCreate input = new GroupCreate.Builder()
+		GroupCreate input = ClxApi.groupCreate()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")
@@ -67,7 +68,7 @@ public class GroupCreateTest {
 
 	@Test
 	public void canDeserializeMinimal() throws Exception {
-		GroupCreate expected = new GroupCreate.Builder().build();
+		GroupCreate expected = ClxApi.groupCreate().build();
 
 		String input = json.writeValueAsString(expected);
 
@@ -81,7 +82,7 @@ public class GroupCreateTest {
 		GroupId groupId1 = TestUtils.freshGroupId();
 		GroupId groupId2 = TestUtils.freshGroupId();
 
-		GroupCreate expected = new GroupCreate.Builder()
+		GroupCreate expected = ClxApi.groupCreate()
 		        .name("mygroup")
 		        .addMember("123456789")
 		        .addMember("987654321", "4242424242")

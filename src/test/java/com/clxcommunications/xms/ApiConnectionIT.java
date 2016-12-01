@@ -1710,7 +1710,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups";
 
 		GroupCreate request =
-		        new GroupCreate.Builder()
+		        ClxApi.groupCreate()
 		                .name("mygroup")
 		                .addMember("123456789")
 		                .addMember("987654321", "4242424242")
@@ -1762,7 +1762,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups";
 
 		GroupCreate request =
-		        new GroupCreate.Builder()
+		        ClxApi.groupCreate()
 		                .name("mygroup")
 		                .addMember("123456789")
 		                .addMember("987654321", "4242424242")
@@ -2188,7 +2188,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
-		        new GroupCreate.Builder()
+		        ClxApi.groupCreate()
 		                .name("mygroup")
 		                .addMember("123456789")
 		                .addMember("987654321", "4242424242")
@@ -2240,7 +2240,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupCreate request =
-		        new GroupCreate.Builder()
+		        ClxApi.groupCreate()
 		                .name("mygroup")
 		                .addMember("123456789")
 		                .addMember("987654321", "4242424242")
