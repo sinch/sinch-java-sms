@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
+import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.Utils;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
@@ -23,7 +24,7 @@ public class TagsUpdateTest {
 	@Property
 	public void canSerializeJson(List<String> toAdd, List<String> toRemove)
 	        throws Exception {
-		TagsUpdate input = new TagsUpdate.Builder()
+		TagsUpdate input = ClxApi.tagsUpdate()
 		        .addAllTagInsertions(toAdd)
 		        .addAllTagRemovals(toRemove)
 		        .build();
@@ -53,7 +54,7 @@ public class TagsUpdateTest {
 	@Property
 	public void canDeserializeJson(String[] toAdd, String[] toRemove)
 	        throws Exception {
-		TagsUpdate expected = new TagsUpdate.Builder()
+		TagsUpdate expected = ClxApi.tagsUpdate()
 		        .addTagInsertion(toAdd)
 		        .addTagRemoval(toRemove)
 		        .build();

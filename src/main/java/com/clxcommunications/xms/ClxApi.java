@@ -9,6 +9,7 @@ import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
 import com.clxcommunications.xms.api.MtBatchTextSmsUpdate;
 import com.clxcommunications.xms.api.ParameterValues;
+import com.clxcommunications.xms.api.TagsUpdate;
 
 /**
  * A collection of convenient static methods for building XMS objects. Each
@@ -65,6 +66,16 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 	@Nonnull
 	public static BatchDeliveryReportParams.Builder batchDeliveryReportParams() {
 		return new BatchDeliveryReportParams.Builder();
+	}
+
+	/**
+	 * Returns a freshly created tags update builder.
+	 * 
+	 * @return a builder of tags update requests
+	 */
+	@Nonnull
+	public static TagsUpdate.Builder tagsUpdate() {
+		return new TagsUpdate.Builder();
 	}
 
 }

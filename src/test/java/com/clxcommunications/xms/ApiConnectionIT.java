@@ -1414,7 +1414,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
-		        new TagsUpdate.Builder()
+		        ClxApi.tagsUpdate()
 		                .addTagInsertion("aTag1", "аТаг2")
 		                .addTagRemoval("rTag1", "rТаг2")
 		                .build();
@@ -1447,7 +1447,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
 
 		TagsUpdate request =
-		        new TagsUpdate.Builder()
+		        ClxApi.tagsUpdate()
 		                .addTagInsertion("aTag1", "аТаг2")
 		                .addTagRemoval("rTag1", "rТаг2")
 		                .build();
@@ -2389,7 +2389,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
-		        new TagsUpdate.Builder()
+		        ClxApi.tagsUpdate()
 		                .addTagInsertion("aTag1", "аТаг2")
 		                .addTagRemoval("rTag1", "rТаг2")
 		                .build();
@@ -2422,7 +2422,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId + "/tags";
 
 		TagsUpdate request =
-		        new TagsUpdate.Builder()
+		        ClxApi.tagsUpdate()
 		                .addTagInsertion("aTag1", "аТаг2")
 		                .addTagRemoval("rTag1", "rТаг2")
 		                .build();
