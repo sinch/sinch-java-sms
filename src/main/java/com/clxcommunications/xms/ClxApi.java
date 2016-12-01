@@ -2,9 +2,6 @@ package com.clxcommunications.xms;
 
 import javax.annotation.Nonnull;
 
-import org.threeten.bp.Clock;
-import org.threeten.bp.LocalDate;
-
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
@@ -43,20 +40,6 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static BatchFilter.Builder batchFilter() {
 		return new BatchFilter.Builder();
-	}
-
-	public static BatchFilter filterTodaysBatches() {
-		return new BatchFilter.Builder()
-		        .startDate(LocalDate.now(Clock.systemUTC()))
-		        .build();
-	}
-
-	public static BatchFilter filterYesterdaysBatches() {
-		final LocalDate now = LocalDate.now(Clock.systemUTC());
-		return new BatchFilter.Builder()
-		        .startDate(now.minusDays(1))
-		        .endDate(now)
-		        .build();
 	}
 
 	public static GroupFilter.Builder groupFilter() {
