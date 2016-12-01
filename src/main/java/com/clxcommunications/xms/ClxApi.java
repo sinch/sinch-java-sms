@@ -16,7 +16,7 @@ import com.clxcommunications.xms.api.TagsUpdate;
  * method here will return a fresh builder producing the type of XMS object
  * indicated by the method name.
  */
-public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
+public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 
 	public static MtBatchTextSmsCreate.Builder batchTextSms() {
 		return new MtBatchTextSmsCreate.Builder();
