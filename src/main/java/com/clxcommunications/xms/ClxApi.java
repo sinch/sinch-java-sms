@@ -90,6 +90,16 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	}
 
 	/**
+	 * Returns a freshly created tags update builder.
+	 * 
+	 * @return a builder of tags update requests
+	 */
+	@Nonnull
+	public static TagsUpdate.Builder tagsUpdate() {
+		return new TagsUpdate.Builder();
+	}
+
+	/**
 	 * Returns a freshly created builder of batch filters.
 	 * 
 	 * @return a builder of batch filters
@@ -127,16 +137,6 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	@Nonnull
 	public static BatchDeliveryReportParams.Builder batchDeliveryReportParams() {
 		return new BatchDeliveryReportParams.Builder();
-	}
-
-	/**
-	 * Returns a freshly created tags update builder.
-	 * 
-	 * @return a builder of tags update requests
-	 */
-	@Nonnull
-	public static TagsUpdate.Builder tagsUpdate() {
-		return new TagsUpdate.Builder();
 	}
 
 }
