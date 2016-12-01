@@ -180,7 +180,7 @@ public class ApiConnectionIT {
 		                .from("12345")
 		                .addTo("123456789")
 		                .addTo("987654321")
-		                .body("Hello, world!")
+		                .body("Hello, world! Здравей свят!")
 		                .build();
 
 		MtBatchTextSmsResult expected =
@@ -2834,8 +2834,7 @@ public class ApiConnectionIT {
 		        urlEqualTo(path))
 		                .willReturn(aResponse()
 		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
+		                        .withHeader("Content-Type", "application/json")
 		                        .withBody(body)));
 	}
 
@@ -2873,8 +2872,7 @@ public class ApiConnectionIT {
 		        urlEqualTo(path))
 		                .willReturn(aResponse()
 		                        .withStatus(200)
-		                        .withHeader("Content-Type",
-		                                "application/json; charset=UTF-8")
+		                        .withHeader("Content-Type", "application/json")
 		                        .withBody(body)));
 	}
 
@@ -2911,8 +2909,7 @@ public class ApiConnectionIT {
 		wm.stubFor(post(urlEqualTo(path))
 		        .willReturn(aResponse()
 		                .withStatus(status)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
+		                .withHeader("Content-Type", "application/json")
 		                .withBody(body)));
 	}
 
@@ -2960,8 +2957,7 @@ public class ApiConnectionIT {
 		wm.stubFor(put(urlEqualTo(path))
 		        .willReturn(aResponse()
 		                .withStatus(status)
-		                .withHeader("Content-Type",
-		                        "application/json; charset=UTF-8")
+		                .withHeader("Content-Type", "application/json")
 		                .withBody(body)));
 	}
 

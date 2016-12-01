@@ -2,6 +2,8 @@ package com.clxcommunications.xms;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
@@ -39,6 +41,19 @@ class JsonApiAsyncConsumer<T> extends AsyncCharConsumer<T> {
 	public JsonApiAsyncConsumer(ObjectMapper json, Class<T> jsonClass) {
 		this.json = json;
 		this.jsonClass = jsonClass;
+	}
+
+	@Override
+	protected CharsetDecoder createDecoder(ContentType contentType) {
+		/*
+		 * Force an UTF-8 decoder for JSON since the XMS doesn't explicitly say
+		 * the encoding.
+		 */
+		if ("application/json".equals(contentType.getMimeType())) {
+			return Charset.forName("UTF-8").newDecoder();
+		} else {
+			return super.createDecoder(contentType);
+		}
 	}
 
 	@Override
