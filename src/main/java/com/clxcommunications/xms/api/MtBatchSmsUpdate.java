@@ -69,6 +69,9 @@ public abstract class MtBatchSmsUpdate {
 
 	@OverridingMethodsMustInvokeSuper
 	protected void check() {
+		if (from() != null && from().isEmpty()) {
+			throw new IllegalStateException("empty from address");
+		}
 	}
 
 }
