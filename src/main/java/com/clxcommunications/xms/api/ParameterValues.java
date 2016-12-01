@@ -13,15 +13,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @ValueStylePackage
 @JsonDeserialize(using = JacksonUtils.ParameterValuesDeserializer.class)
 @JsonSerialize(using = JacksonUtils.ParameterValuesSerializer.class)
-public abstract class ParameterValues {
+public interface ParameterValues {
 
 	public static class Builder extends ParameterValuesImpl.Builder {
 
 	}
 
-	public abstract Map<String, String> substitutions();
+	Map<String, String> substitutions();
 
 	@Nullable
-	public abstract String defaultValue();
+	String defaultValue();
 
 }
