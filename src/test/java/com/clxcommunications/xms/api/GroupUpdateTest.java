@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
+import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.Utils;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 
@@ -20,7 +21,7 @@ public class GroupUpdateTest {
 
 	@Test
 	public void canSerializeMinimal() throws Exception {
-		GroupUpdate input = GroupUpdate.builder().build();
+		GroupUpdate input = ClxApi.groupUpdate().build();
 
 		String expected = "{}";
 		String actual = json.writeValueAsString(input);
@@ -34,7 +35,7 @@ public class GroupUpdateTest {
 		GroupId groupId2 = TestUtils.freshGroupId();
 		GroupId groupId3 = TestUtils.freshGroupId();
 
-		GroupUpdate input = GroupUpdate.builder()
+		GroupUpdate input = ClxApi.groupUpdate()
 		        .unsetName()
 		        .addMemberAdd("123456789")
 		        .addMemberRemove("987654321", "4242424242")

@@ -2100,7 +2100,7 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		GroupUpdate request = GroupUpdate.builder()
+		GroupUpdate request = ClxApi.groupUpdate()
 		        .unsetName()
 		        .addMemberAdd("123456789")
 		        .addMemberRemove("987654321")
@@ -2138,7 +2138,7 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		GroupUpdate request = GroupUpdate.builder()
+		GroupUpdate request = ClxApi.groupUpdate()
 		        .unsetName()
 		        .addMemberAdd("123456789")
 		        .addMemberRemove("987654321")

@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @ValueStylePackage
 @JsonSerialize(as = GroupUpdateImpl.class)
 @JsonInclude(Include.NON_EMPTY)
-public abstract class GroupUpdate {
+public interface GroupUpdate {
 
 	public static class Builder extends GroupUpdateImpl.Builder {
 
@@ -44,10 +44,6 @@ public abstract class GroupUpdate {
 			}
 		}
 
-	}
-
-	public static final Builder builder() {
-		return new Builder();
 	}
 
 	/**

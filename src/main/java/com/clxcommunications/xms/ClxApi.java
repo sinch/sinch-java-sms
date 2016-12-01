@@ -3,6 +3,7 @@ package com.clxcommunications.xms;
 import javax.annotation.Nonnull;
 
 import com.clxcommunications.xms.api.GroupCreate;
+import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
 import com.clxcommunications.xms.api.MtBatchBinarySmsUpdate;
 import com.clxcommunications.xms.api.MtBatchTextSmsCreate;
@@ -38,6 +39,10 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "Xms"?
 
 	public static GroupCreate.Builder groupCreate() {
 		return new GroupCreate.Builder();
+	}
+
+	public static GroupUpdate.Builder groupUpdate() {
+		return new GroupUpdate.Builder();
 	}
 
 	public static BatchFilter.Builder batchFilter() {
