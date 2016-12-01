@@ -1621,7 +1621,6 @@ public abstract class ApiConnection implements Closeable {
 	 * 
 	 * @param id
 	 *            identifier of the group to delete
-	 * @return the deleted group
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
 	 * @throws ErrorResponseException
@@ -1631,11 +1630,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupResponse deleteGroup(GroupId id)
+	public void deleteGroup(GroupId id)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
-			return deleteGroupAsync(id, null).get();
+			deleteGroupAsync(id, null).get();
 		} catch (ExecutionException e) {
 			throw Utils.unwrapExecutionException(e);
 		}
@@ -1648,16 +1647,15 @@ public abstract class ApiConnection implements Closeable {
 	 *            the group that should be deleted
 	 * @param callback
 	 *            called at call success, failure, or cancellation
-	 * @return a future containing the deleted group
+	 * @return a future containing nothing
 	 */
-	public Future<GroupResponse> deleteGroupAsync(GroupId id,
-	        FutureCallback<GroupResponse> callback) {
+	public Future<Void> deleteGroupAsync(GroupId id,
+	        FutureCallback<Void> callback) {
 		HttpDelete req = delete(groupEndpoint(id));
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupResponse> consumer =
-		        jsonAsyncConsumer(GroupResponse.class);
+		HttpAsyncResponseConsumer<Void> consumer = new EmptyAsyncConsumer(json);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

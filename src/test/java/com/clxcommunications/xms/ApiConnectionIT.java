@@ -16,6 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.theInstance;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -2324,8 +2325,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupResponse actual = conn.deleteGroup(groupId);
-			assertThat(actual, is(expected));
+			conn.deleteGroup(groupId);
 		} finally {
 			conn.close();
 		}
@@ -2363,19 +2363,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupResponse> testCallback =
-			        new TestCallback<GroupResponse>() {
+			FutureCallback<Void> testCallback =
+			        new TestCallback<Void>() {
 
 				        @Override
-				        public void completed(GroupResponse result) {
-					        assertThat(result, is(expected));
+				        public void completed(Void result) {
+					        assertThat(result, is(nullValue()));
 				        }
 
 			        };
 
-			GroupResponse actual =
-			        conn.deleteGroupAsync(groupId, testCallback).get();
-			assertThat(actual, is(expected));
+			conn.deleteGroupAsync(groupId, testCallback).get();
 		} finally {
 			conn.close();
 		}
