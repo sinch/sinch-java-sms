@@ -21,7 +21,7 @@ public interface TagsUpdate {
 	 * 
 	 * @return a non-null list of tags
 	 */
-	@JsonProperty("to_add")
+	@JsonProperty("add")
 	Set<String> tagInsertions();
 
 	/**
@@ -29,7 +29,7 @@ public interface TagsUpdate {
 	 * 
 	 * @return a non-null list of tags
 	 */
-	@JsonProperty("to_remove")
+	@JsonProperty("remove")
 	Set<String> tagRemovals();
 
 }

@@ -41,8 +41,8 @@ public class TagsUpdateTest {
 
 		String expected = Utils.join("\n",
 		        "{",
-		        "  \"to_add\" : [" + Utils.join(",", escapedToAdd) + "],",
-		        "  \"to_remove\" : [" + Utils.join(",", escapedToRemove) + "]",
+		        "  \"add\" : [" + Utils.join(",", escapedToAdd) + "],",
+		        "  \"remove\" : [" + Utils.join(",", escapedToRemove) + "]",
 		        "}");
 
 		String actual = json.writeValueAsString(input);
