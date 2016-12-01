@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -50,7 +51,6 @@ import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.DeliveryStatus;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
-import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MoBinarySms;
@@ -1912,7 +1912,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId + "/members";
 
-		GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
+		Set<String> expected = new HashSet<String>(
+		        Arrays.asList("mem1", "mem2", "mem3"));
 
 		stubGetResponse(expected, path);
 
@@ -1923,7 +1924,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupMembers actual = conn.fetchGroupMembers(groupId);
+			Set<String> actual = conn.fetchGroupMembers(groupId);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -1939,7 +1940,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId + "/members";
 
-		final GroupMembers expected = GroupMembers.of("mem1", "mem2", "mem3");
+		final Set<String> expected = new HashSet<String>(
+		        Arrays.asList("mem1", "mem2", "mem3"));
 
 		stubGetResponse(expected, path);
 
@@ -1950,17 +1952,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupMembers> testCallback =
-			        new TestCallback<GroupMembers>() {
+			FutureCallback<Set<String>> testCallback =
+			        new TestCallback<Set<String>>() {
 
 				        @Override
-				        public void completed(GroupMembers result) {
+				        public void completed(Set<String> result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			GroupMembers actual =
+			Set<String> actual =
 			        conn.fetchGroupMembersAsync(groupId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {

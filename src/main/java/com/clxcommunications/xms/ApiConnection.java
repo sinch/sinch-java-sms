@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -39,7 +40,6 @@ import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
-import com.clxcommunications.xms.api.GroupMembers;
 import com.clxcommunications.xms.api.GroupResponse;
 import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MoSms;
@@ -1429,7 +1429,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupMembers fetchGroupMembers(GroupId id)
+	public Set<String> fetchGroupMembers(GroupId id)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
@@ -1446,16 +1446,18 @@ public abstract class ApiConnection implements Closeable {
 	 *            the group whose members should be fetched
 	 * @param callback
 	 *            a callback that is invoked when fetching is completed
-	 * @return a future whose result is the fetch response
+	 * @return a future whose result is a set of group members
 	 */
-	public Future<GroupMembers> fetchGroupMembersAsync(GroupId id,
-	        FutureCallback<GroupMembers> callback) {
+	public Future<Set<String>> fetchGroupMembersAsync(GroupId id,
+	        FutureCallback<Set<String>> callback) {
 		HttpGet req = get(groupMembersEndpoint(id));
 
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupMembers> responseConsumer =
-		        jsonAsyncConsumer(GroupMembers.class);
+
+		@SuppressWarnings("unchecked")
+		HttpAsyncResponseConsumer<Set<String>> responseConsumer =
+		        jsonAsyncConsumer(Set.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
