@@ -51,7 +51,7 @@ public abstract class PagedFetcher<T> {
 	 * Asynchronously fetches the page having the given page number.
 	 * 
 	 * @param page
-	 *            page to fetch (staring from zero)
+	 *            page to fetch (starting from zero)
 	 * @param callback
 	 *            request callback
 	 * @return a future providing the requested page
