@@ -91,12 +91,7 @@ public abstract class ApiConnection implements Closeable {
 
 		@Override
 		public ApiConnection build() {
-			ApiConnection conn = super.build();
-
-			conn.json.configure(SerializationFeature.INDENT_OUTPUT,
-			        conn.prettyPrintJson());
-
-			return conn;
+			return super.build();
 		}
 
 		/**
@@ -266,6 +261,9 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Check
 	protected void check() {
+		json.configure(SerializationFeature.INDENT_OUTPUT,
+		        prettyPrintJson());
+
 		if (endpoint().getQuery() != null) {
 			throw new IllegalStateException(
 			        "base endpoint has query component");
