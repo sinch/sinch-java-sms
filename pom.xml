@@ -27,6 +27,11 @@
 		<developerConnection>scm:git:ssh://github.com:clxcommunications/sdk-xms-java.git</developerConnection>
 	</scm>
 
+	<issueManagement>
+		<url>https://github.com/clxcommunications/sdk-xms-java/issues</url>
+		<system>GitHub</system>
+	</issueManagement>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
