@@ -68,8 +68,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * <p>
  * To instantiate this class it is necessary to use a builder, see
  * {@link #builder()}. The builder can be used to configure the connection as
- * necessary, once the connection is opened with {@link Builder#start()} it is
- * necessary to later close the connection using {@link #close()}.
+ * necessary, once the connection is opened with {@link Builder#start()} or
+ * {@link #start()} it is necessary to later close the connection using
+ * {@link #close()}.
  */
 @Value.Immutable(copy = false)
 @ValueStylePackageDirect
@@ -530,8 +531,13 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to create the given batch synchronously. Internally this uses an
-	 * asynchronous call and blocks until it completes.
+	 * Creates the given batch and schedules it for submission. If
+	 * {@link MtBatchTextSmsCreate#sendAt()} returns <code>null</code> then the
+	 * batch submission will begin immediately.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #createBatchAsync(MtBatchTextSmsCreate, FutureCallback)} instead.
 	 * 
 	 * @param sms
 	 *            the batch to create
@@ -556,7 +562,9 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously creates the given text batch.
+	 * Asynchronously creates the given text batch and schedules it for
+	 * submission. If {@link MtBatchTextSmsCreate#sendAt()} returns
+	 * <code>null</code> then the batch submission will begin immediately.
 	 * 
 	 * @param sms
 	 *            the batch to create
@@ -579,8 +587,14 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to create the given batch synchronously. Internally this uses an
-	 * asynchronous call and blocks until it completes.
+	 * Creates the given batch and schedules it for submission. If
+	 * {@link MtBatchBinarySmsCreate#sendAt()} returns <code>null</code> then
+	 * the batch submission will begin immediately.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #createBatchAsync(MtBatchBinarySmsCreate, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param sms
 	 *            the batch to create
@@ -605,7 +619,9 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously creates the given binary batch.
+	 * Asynchronously creates the given binary batch and schedules it for
+	 * submission. If {@link MtBatchBinarySmsCreate#sendAt()} returns
+	 * <code>null</code> then the batch submission will begin immediately.
 	 * 
 	 * @param sms
 	 *            the batch to create
@@ -628,8 +644,13 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to replace the given batch synchronously. Internally this uses
-	 * an asynchronous call and blocks until it completes.
+	 * Replaces the batch with the given identifier. After this method completes
+	 * the batch will match the provided batch description.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #replaceBatchAsync(BatchId, MtBatchTextSmsCreate, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch to replace
@@ -657,7 +678,8 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously replaces the given text batch.
+	 * Asynchronously replaces the batch with the given identifier. On
+	 * completion, the batch will match the provided batch description.
 	 * 
 	 * @param id
 	 *            identifier of the batch to replace
@@ -682,8 +704,13 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to replace the given batch synchronously. Internally this uses
-	 * an asynchronous call and blocks until it completes.
+	 * Replaces the batch with the given identifier. After this method completes
+	 * the batch will match the provided batch description.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #replaceBatchAsync(BatchId, MtBatchBinarySmsCreate, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch to replace
@@ -711,7 +738,8 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Asynchronously replaces the given binary batch.
+	 * Asynchronously replaces the batch with the given identifier. On
+	 * completion, the batch will match the provided batch description.
 	 * 
 	 * @param id
 	 *            identifier of the batch to replace
@@ -736,7 +764,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Updates the given text batch. The update is performed synchronously.
+	 * Updates the given text batch.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #updateBatchAsync(BatchId, MtBatchTextSmsUpdate, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch to update
@@ -790,7 +823,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Updates the given binary batch. The update is performed synchronously.
+	 * Updates the given binary batch.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #updateBatchAsync(BatchId, MtBatchBinarySmsUpdate, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch to update
@@ -844,7 +882,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches the given batch. Blocks until the fetch has completed.
+	 * Fetches the given batch.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchBatchAsync(BatchId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch to fetch
@@ -944,6 +986,10 @@ public abstract class ApiConnection implements Closeable {
 
 	/**
 	 * Cancels the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #cancelBatchAsync(BatchId, FutureCallback)} instead.
 	 * 
 	 * @param batchId
 	 *            identifier of the batch to delete
@@ -991,8 +1037,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to perform a dry run of the given batch. Internally this uses an
-	 * asynchronous call and blocks until it completes.
+	 * Attempts to perform a dry run of the given batch.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #createBatchDryRunAsync(MtBatchSmsCreate, Boolean, Integer, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param sms
 	 *            the batch to dry run
@@ -1062,8 +1112,12 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches a delivery report for the batch with the given batch ID. Blocks
-	 * until the fetch has completed.
+	 * Fetches a delivery report for the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchDeliveryReportAsync(BatchId, BatchDeliveryReportParams, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch whose delivery report to fetch
@@ -1119,7 +1173,12 @@ public abstract class ApiConnection implements Closeable {
 
 	/**
 	 * Fetches a delivery report for the batch with the given batch ID and
-	 * recipient. Blocks until the fetch has completed.
+	 * recipient.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchDeliveryReportAsync(BatchId, String, FutureCallback)}
+	 * instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch
@@ -1173,8 +1232,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Updates the tags of the batch with the given batch ID. Blocks until the
-	 * update has completed.
+	 * Updates the tags of the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #updateTagsAsync(BatchId, TagsUpdate, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch
@@ -1226,8 +1288,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Replaces the tags of the batch with the given batch ID. Blocks until the
-	 * replacement has completed.
+	 * Replaces the tags of the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #replaceTagsAsync(BatchId, Tags, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch
@@ -1279,8 +1344,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches the tags of the batch with the given batch ID. Blocks until the
-	 * retrieval has completed.
+	 * Fetches the tags of the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchTagsAsync(BatchId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the batch
@@ -1328,8 +1396,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to create the given group synchronously. Internally this uses an
-	 * asynchronous call and blocks until it completes.
+	 * Attempts to create the given group synchronously.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #createGroupAsync(GroupCreate, FutureCallback)} instead.
 	 * 
 	 * @param group
 	 *            the group to create
@@ -1376,8 +1447,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attempts to fetch the given group synchronously. Internally this uses an
-	 * asynchronous call and blocks until it completes.
+	 * Attempts to fetch the given group.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchGroupAsync(GroupId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            the group to fetch
@@ -1425,7 +1499,10 @@ public abstract class ApiConnection implements Closeable {
 
 	/**
 	 * Attempts to fetch the members of the given group synchronously.
-	 * Internally this uses an asynchronous call and blocks until it completes.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchGroupMembersAsync(GroupId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            the group whose members should be fetched
@@ -1523,7 +1600,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Updates the given group. The update is performed synchronously.
+	 * Updates the given group.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #updateGroupAsync(GroupId, GroupUpdate, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group to update
@@ -1575,7 +1656,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Replaces the given group. The call is performed synchronously.
+	 * Replaces the given group.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #replaceGroupAsync(GroupId, GroupCreate, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group to replace
@@ -1627,7 +1712,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Deletes the given group. The call is performed synchronously.
+	 * Deletes the given group.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #deleteGroupAsync(GroupId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group to delete
@@ -1672,8 +1761,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Updates the tags of the group with the given identifier. Blocks until the
-	 * update has completed.
+	 * Updates the tags of the group with the given identifier.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #updateTagsAsync(GroupId, TagsUpdate, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group
@@ -1725,8 +1817,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Replaces the tags of the group with the given identifier. Blocks until
-	 * the replacement has completed.
+	 * Replaces the tags of the group with the given identifier.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #replaceTagsAsync(GroupId, Tags, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group
@@ -1778,8 +1873,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches the tags of the group with the given identifier. Blocks until the
-	 * retrieval has completed.
+	 * Fetches the tags of the group with the given identifier.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchTagsAsync(GroupId, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the group
@@ -1876,8 +1974,11 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Fetches the inbound message having the given identifier. Blocks until the
-	 * retrieval has completed.
+	 * Fetches the inbound message having the given identifier.
+	 * <p>
+	 * This method blocks until the request completes and its use is
+	 * discouraged. Please consider using the asynchronous method
+	 * {@link #fetchInboundAsync(String, FutureCallback)} instead.
 	 * 
 	 * @param id
 	 *            identifier of the inbound message

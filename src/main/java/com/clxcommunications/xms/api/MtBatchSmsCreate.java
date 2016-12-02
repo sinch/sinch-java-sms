@@ -41,6 +41,12 @@ public abstract class MtBatchSmsCreate {
 	@JsonProperty("delivery_report")
 	public abstract ReportType deliveryReport();
 
+	/**
+	 * The time this batch should be sent. If <code>null</code> or set to a past
+	 * time then the batch will be sent immediately.
+	 * 
+	 * @return the time when this batch should be sent
+	 */
 	@Nullable
 	@JsonProperty("send_at")
 	public abstract OffsetDateTime sendAt();
