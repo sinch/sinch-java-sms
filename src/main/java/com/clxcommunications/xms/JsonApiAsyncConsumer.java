@@ -1,17 +1,16 @@
 package com.clxcommunications.xms;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.nio.IOControl;
-import org.apache.http.nio.client.methods.AsyncCharConsumer;
+import org.apache.http.nio.client.methods.AsyncByteConsumer;
 import org.apache.http.protocol.HttpContext;
 
 import com.clxcommunications.xms.api.ApiError;
@@ -23,12 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @param <T>
  *            the expected type after deserialization
  */
-class JsonApiAsyncConsumer<T> extends AsyncCharConsumer<T> {
+class JsonApiAsyncConsumer<T> extends AsyncByteConsumer<T> {
 
 	private final ObjectMapper json;
 	private final Class<T> jsonClass;
 	private HttpResponse response;
-	private StringBuilder sb;
+	private ByteInOutStream bios;
 
 	/**
 	 * Builds a new JSON consumer.
@@ -44,50 +43,42 @@ class JsonApiAsyncConsumer<T> extends AsyncCharConsumer<T> {
 	}
 
 	@Override
-	protected CharsetDecoder createDecoder(ContentType contentType) {
-		/*
-		 * Force an UTF-8 decoder for JSON since the XMS doesn't explicitly say
-		 * the encoding.
-		 */
-		if ("application/json".equals(contentType.getMimeType())) {
-			return Charset.forName("UTF-8").newDecoder();
-		} else {
-			return super.createDecoder(contentType);
-		}
-	}
-
-	@Override
-	protected void onCharReceived(CharBuffer buf, IOControl ioctrl)
+	protected void onByteReceived(ByteBuffer buf, IOControl ioctrl)
 	        throws IOException {
-		sb.append(buf.toString());
+		bios.write(buf);
 	}
 
 	@Override
 	protected void onResponseReceived(HttpResponse response)
 	        throws HttpException, IOException {
 		this.response = response;
-		this.sb = new StringBuilder();
+
+		/*
+		 * We'll assume that most responses fit within 1KiB. For larger
+		 * responses the output stream will grow automatically.
+		 */
+		this.bios = new ByteInOutStream(1024);
 	}
 
 	@Override
 	protected T buildResult(HttpContext context) throws Exception {
 		int code = response.getStatusLine().getStatusCode();
-		String content = sb.toString();
+		InputStream inputStream = bios.toInputStream();
 
 		switch (code) {
 		case HttpStatus.SC_OK:
 		case HttpStatus.SC_CREATED:
-			return json.readValue(content, jsonClass);
+			return json.readValue(inputStream, jsonClass);
 		case HttpStatus.SC_BAD_REQUEST:
 		case HttpStatus.SC_FORBIDDEN:
-			ApiError error = json.readValue(content, ApiError.class);
+			ApiError error = json.readValue(inputStream, ApiError.class);
 			throw new ErrorResponseException(error);
 		default:
-			// TODO: Good idea to buffer the response in this case?
-			ContentType contentType =
+			ContentType type =
 			        ContentType.getLenient(response.getEntity());
-			response.setEntity(
-			        new StringEntity(content, contentType));
+			InputStreamEntity entity =
+			        new InputStreamEntity(inputStream, bios.size(), type);
+			response.setEntity(entity);
 			throw new UnexpectedResponseException(response);
 		}
 	}
