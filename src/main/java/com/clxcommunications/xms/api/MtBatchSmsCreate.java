@@ -34,10 +34,6 @@ public abstract class MtBatchSmsCreate {
 	public abstract String from();
 
 	@Nullable
-	@JsonProperty("campaign_id")
-	public abstract String campaignId();
-
-	@Nullable
 	@JsonProperty("delivery_report")
 	public abstract ReportType deliveryReport();
 

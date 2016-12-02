@@ -2,8 +2,6 @@ package com.clxcommunications.xms.api;
 
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,9 +20,6 @@ public abstract class MtBatchTextSmsResult extends MtBatchSmsResult {
 	}
 
 	public abstract String body();
-
-	@Nullable
-	public abstract String campaignId();
 
 	@JsonInclude(Include.NON_EMPTY)
 	public abstract Map<String, ParameterValues> parameters();
