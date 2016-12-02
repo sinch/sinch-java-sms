@@ -89,6 +89,18 @@ public abstract class ApiConnection implements Closeable {
 			return this.endpoint(URI.create(url));
 		}
 
+		/**
+		 * Builds a new, initially stopped, {@link ApiConnection}. Before
+		 * attempting to interact with XMS it is necessary to start the returned
+		 * connection, this is done using {@link ApiConnection#start()}.
+		 * <p>
+		 * The {@link #start()} method is recommended for the common case where
+		 * the built {@link ApiConnection} is immediately started.
+		 * 
+		 * @return a freshly built API connection
+		 * @throws java.lang.IllegalStateException
+		 *             if any required attributes are missing
+		 */
 		@Override
 		public ApiConnection build() {
 			return super.build();
