@@ -77,4 +77,14 @@ public abstract class ReportType {
 		return ReportTypeImpl.of(type);
 	}
 
+	/**
+	 * The string representation of this report type.
+	 * 
+	 * @return a non-null string
+	 */
+	@Override
+	public String toString() {
+		return type();
+	}
+
 }
