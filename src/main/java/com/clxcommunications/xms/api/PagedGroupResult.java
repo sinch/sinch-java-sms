@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = PagedGroupResult.Builder.class)
-public abstract class PagedGroupResult extends Page<GroupResponse> {
+public abstract class PagedGroupResult extends Page<GroupResult> {
 
 	public static class Builder extends PagedGroupResultImpl.Builder {
 
@@ -38,6 +38,6 @@ public abstract class PagedGroupResult extends Page<GroupResponse> {
 
 	@JsonProperty("groups")
 	@Override
-	public abstract List<GroupResponse> content();
+	public abstract List<GroupResult> content();
 
 }

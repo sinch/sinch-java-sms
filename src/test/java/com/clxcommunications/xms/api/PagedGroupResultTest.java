@@ -83,8 +83,8 @@ public class PagedGroupResultTest {
 		OffsetDateTime time2 = OffsetDateTime.now(Clock.systemUTC());
 		String timeString2 = json.writeValueAsString(time2);
 
-		GroupResponse groupResult1 =
-		        new GroupResponse.Builder()
+		GroupResult groupResult1 =
+		        new GroupResult.Builder()
 		                .size(72)
 		                .id(groupId1)
 		                .createdAt(time1)
@@ -92,8 +92,8 @@ public class PagedGroupResultTest {
 		                .name("groupname")
 		                .build();
 
-		GroupResponse groupResult2 =
-		        new GroupResponse.Builder()
+		GroupResult groupResult2 =
+		        new GroupResult.Builder()
 		                .size(20)
 		                .id(groupId2)
 		                .createdAt(time2)
@@ -144,8 +144,8 @@ public class PagedGroupResultTest {
 		GroupId groupId2 = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse groupResult1 =
-		        new GroupResponse.Builder()
+		GroupResult groupResult1 =
+		        new GroupResult.Builder()
 		                .size(72)
 		                .id(groupId1)
 		                .createdAt(time)
@@ -153,8 +153,8 @@ public class PagedGroupResultTest {
 		                .name("groupname")
 		                .build();
 
-		GroupResponse groupResult2 =
-		        new GroupResponse.Builder()
+		GroupResult groupResult2 =
+		        new GroupResult.Builder()
 		                .size(20)
 		                .id(groupId2)
 		                .createdAt(time)

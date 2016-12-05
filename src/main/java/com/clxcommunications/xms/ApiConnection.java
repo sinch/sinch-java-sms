@@ -60,7 +60,7 @@ import com.clxcommunications.xms.api.BatchDeliveryReport;
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
-import com.clxcommunications.xms.api.GroupResponse;
+import com.clxcommunications.xms.api.GroupResult;
 import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MoSms;
 import com.clxcommunications.xms.api.MtBatchBinarySmsCreate;
@@ -1434,7 +1434,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupResponse createGroup(GroupCreate group)
+	public GroupResult createGroup(GroupCreate group)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
@@ -1453,14 +1453,14 @@ public abstract class ApiConnection implements Closeable {
 	 *            a callback that is invoked when creation is completed
 	 * @return a future whose result is the creation response
 	 */
-	public Future<GroupResponse> createGroupAsync(GroupCreate group,
-	        FutureCallback<GroupResponse> callback) {
+	public Future<GroupResult> createGroupAsync(GroupCreate group,
+	        FutureCallback<GroupResult> callback) {
 		HttpPost req = post(groupsEndpoint(), group);
 
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupResponse> responseConsumer =
-		        jsonAsyncConsumer(GroupResponse.class);
+		HttpAsyncResponseConsumer<GroupResult> responseConsumer =
+		        jsonAsyncConsumer(GroupResult.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
@@ -1485,7 +1485,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupResponse fetchGroup(GroupId id)
+	public GroupResult fetchGroup(GroupId id)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
@@ -1504,14 +1504,14 @@ public abstract class ApiConnection implements Closeable {
 	 *            a callback that is invoked when fetching is completed
 	 * @return a future whose result is the fetch response
 	 */
-	public Future<GroupResponse> fetchGroupAsync(GroupId id,
-	        FutureCallback<GroupResponse> callback) {
+	public Future<GroupResult> fetchGroupAsync(GroupId id,
+	        FutureCallback<GroupResult> callback) {
 		HttpGet req = get(groupEndpoint(id));
 
 		HttpAsyncRequestProducer requestProducer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupResponse> responseConsumer =
-		        jsonAsyncConsumer(GroupResponse.class);
+		HttpAsyncResponseConsumer<GroupResult> responseConsumer =
+		        jsonAsyncConsumer(GroupResult.class);
 
 		return httpClient().execute(requestProducer, responseConsumer,
 		        callbackWrapper().wrap(callback));
@@ -1578,13 +1578,13 @@ public abstract class ApiConnection implements Closeable {
 	 *            the group filter
 	 * @return a future page
 	 */
-	public PagedFetcher<GroupResponse> fetchGroups(
+	public PagedFetcher<GroupResult> fetchGroups(
 	        final GroupFilter filter) {
-		return new PagedFetcher<GroupResponse>() {
+		return new PagedFetcher<GroupResult>() {
 
 			@Override
-			Future<Page<GroupResponse>> fetchAsync(int page,
-			        FutureCallback<Page<GroupResponse>> callback) {
+			Future<Page<GroupResult>> fetchAsync(int page,
+			        FutureCallback<Page<GroupResult>> callback) {
 				return fetchGroups(page, filter,
 				        callbackWrapper().wrap(callback));
 			}
@@ -1603,16 +1603,16 @@ public abstract class ApiConnection implements Closeable {
 	 *            the callback to invoke when call is finished
 	 * @return a future page
 	 */
-	private Future<Page<GroupResponse>> fetchGroups(int page,
+	private Future<Page<GroupResult>> fetchGroups(int page,
 	        GroupFilter filter,
-	        FutureCallback<Page<GroupResponse>> callback) {
+	        FutureCallback<Page<GroupResult>> callback) {
 		List<NameValuePair> params = filter.toQueryParams(page);
 		HttpGet req = get(groupsEndpoint(params));
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
 
-		HttpAsyncResponseConsumer<Page<GroupResponse>> consumer =
+		HttpAsyncResponseConsumer<Page<GroupResult>> consumer =
 		        jsonAsyncConsumer(PagedGroupResult.class);
 
 		return httpClient().execute(producer, consumer,
@@ -1640,7 +1640,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupResponse updateGroup(GroupId id, GroupUpdate group)
+	public GroupResult updateGroup(GroupId id, GroupUpdate group)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
@@ -1662,14 +1662,14 @@ public abstract class ApiConnection implements Closeable {
 	 *            called at call success, failure, or cancellation
 	 * @return a future containing the updated group
 	 */
-	public Future<GroupResponse> updateGroupAsync(GroupId id, GroupUpdate group,
-	        FutureCallback<GroupResponse> callback) {
+	public Future<GroupResult> updateGroupAsync(GroupId id, GroupUpdate group,
+	        FutureCallback<GroupResult> callback) {
 		HttpPost req = post(groupEndpoint(id), group);
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupResponse> consumer =
-		        jsonAsyncConsumer(GroupResponse.class);
+		HttpAsyncResponseConsumer<GroupResult> consumer =
+		        jsonAsyncConsumer(GroupResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));
@@ -1696,7 +1696,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws UnexpectedResponseException
 	 *             if the server gave an unexpected response
 	 */
-	public GroupResponse replaceGroup(GroupId id, GroupCreate group)
+	public GroupResult replaceGroup(GroupId id, GroupCreate group)
 	        throws InterruptedException, ConcurrentException,
 	        ErrorResponseException, UnexpectedResponseException {
 		try {
@@ -1718,14 +1718,14 @@ public abstract class ApiConnection implements Closeable {
 	 *            called at call success, failure, or cancellation
 	 * @return a future containing the new group
 	 */
-	public Future<GroupResponse> replaceGroupAsync(GroupId id,
-	        GroupCreate group, FutureCallback<GroupResponse> callback) {
+	public Future<GroupResult> replaceGroupAsync(GroupId id,
+	        GroupCreate group, FutureCallback<GroupResult> callback) {
 		HttpPut req = put(groupEndpoint(id), group);
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<GroupResponse> consumer =
-		        jsonAsyncConsumer(GroupResponse.class);
+		HttpAsyncResponseConsumer<GroupResult> consumer =
+		        jsonAsyncConsumer(GroupResult.class);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

@@ -34,11 +34,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = GroupResponse.Builder.class)
+@JsonDeserialize(builder = GroupResult.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
-public interface GroupResponse {
+public interface GroupResult {
 
-	public static final class Builder extends GroupResponseImpl.Builder {
+	public static final class Builder extends GroupResultImpl.Builder {
 
 	}
 

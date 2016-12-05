@@ -35,7 +35,7 @@ import com.clxcommunications.xms.ApiObjectMapper;
 import com.clxcommunications.xms.ClxApi;
 import com.clxcommunications.xms.Utils;
 
-public class GroupResponseTest {
+public class GroupResultTest {
 
 	private final ApiObjectMapper json = new ApiObjectMapper();
 
@@ -45,7 +45,7 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = new GroupResponse.Builder()
+		GroupResult input = new GroupResult.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(time)
@@ -74,7 +74,7 @@ public class GroupResponseTest {
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
 
-		GroupResponse input = new GroupResponse.Builder()
+		GroupResult input = new GroupResult.Builder()
 		        .id(groupId)
 		        .size(72)
 		        .name("mygroup")
@@ -113,7 +113,7 @@ public class GroupResponseTest {
 		GroupId groupId = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = new GroupResponse.Builder()
+		GroupResult expected = new GroupResult.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(time)
@@ -122,7 +122,7 @@ public class GroupResponseTest {
 
 		String input = json.writeValueAsString(expected);
 
-		GroupResponse actual = json.readValue(input, GroupResponse.class);
+		GroupResult actual = json.readValue(input, GroupResult.class);
 
 		assertThat(actual, is(expected));
 	}
@@ -134,7 +134,7 @@ public class GroupResponseTest {
 		GroupId groupId2 = TestUtils.freshGroupId();
 		OffsetDateTime time = OffsetDateTime.now(Clock.systemUTC());
 
-		GroupResponse expected = new GroupResponse.Builder()
+		GroupResult expected = new GroupResult.Builder()
 		        .id(groupId)
 		        .name("mygroup")
 		        .size(72)
@@ -150,7 +150,7 @@ public class GroupResponseTest {
 
 		String input = json.writeValueAsString(expected);
 
-		GroupResponse actual = json.readValue(input, GroupResponse.class);
+		GroupResult actual = json.readValue(input, GroupResult.class);
 
 		assertThat(actual, is(expected));
 	}

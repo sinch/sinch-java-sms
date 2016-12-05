@@ -71,7 +71,7 @@ import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.DeliveryStatus;
 import com.clxcommunications.xms.api.GroupCreate;
 import com.clxcommunications.xms.api.GroupId;
-import com.clxcommunications.xms.api.GroupResponse;
+import com.clxcommunications.xms.api.GroupResult;
 import com.clxcommunications.xms.api.GroupUpdate;
 import com.clxcommunications.xms.api.MoBinarySms;
 import com.clxcommunications.xms.api.MoSms;
@@ -1741,8 +1741,8 @@ public class ApiConnectionIT {
 		                        .build())
 		                .build();
 
-		GroupResponse expected =
-		        new GroupResponse.Builder()
+		GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -1764,7 +1764,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupResponse actual = conn.createGroup(request);
+			GroupResult actual = conn.createGroup(request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -1793,8 +1793,8 @@ public class ApiConnectionIT {
 		                        .build())
 		                .build();
 
-		final GroupResponse expected =
-		        new GroupResponse.Builder()
+		final GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -1816,17 +1816,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupResponse> testCallback =
-			        new TestCallback<GroupResponse>() {
+			FutureCallback<GroupResult> testCallback =
+			        new TestCallback<GroupResult>() {
 
 				        @Override
-				        public void completed(GroupResponse result) {
+				        public void completed(GroupResult result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			GroupResponse actual =
+			GroupResult actual =
 			        conn.createGroupAsync(request, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -1843,8 +1843,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		GroupResponse expected =
-		        new GroupResponse.Builder()
+		GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -1866,7 +1866,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupResponse actual = conn.fetchGroup(groupId);
+			GroupResult actual = conn.fetchGroup(groupId);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -1882,8 +1882,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		final GroupResponse expected =
-		        new GroupResponse.Builder()
+		final GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -1905,17 +1905,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupResponse> testCallback =
-			        new TestCallback<GroupResponse>() {
+			FutureCallback<GroupResult> testCallback =
+			        new TestCallback<GroupResult>() {
 
 				        @Override
-				        public void completed(GroupResponse result) {
+				        public void completed(GroupResult result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			GroupResponse actual =
+			GroupResult actual =
 			        conn.fetchGroupAsync(groupId, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -1998,7 +1998,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups?page=0";
 		GroupFilter filter = ClxApi.groupFilter().build();
 
-		final Page<GroupResponse> expected =
+		final Page<GroupResult> expected =
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
@@ -2014,19 +2014,19 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<Page<GroupResponse>> testCallback =
-			        new TestCallback<Page<GroupResponse>>() {
+			FutureCallback<Page<GroupResult>> testCallback =
+			        new TestCallback<Page<GroupResult>>() {
 
 				        @Override
-				        public void completed(Page<GroupResponse> result) {
+				        public void completed(Page<GroupResult> result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			PagedFetcher<GroupResponse> fetcher = conn.fetchGroups(filter);
+			PagedFetcher<GroupResult> fetcher = conn.fetchGroups(filter);
 
-			Page<GroupResponse> actual =
+			Page<GroupResult> actual =
 			        fetcher.fetchAsync(0, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -2047,7 +2047,7 @@ public class ApiConnectionIT {
 		String path1 = "/v1/" + spid
 		        + "/groups?page=0&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
-		final Page<GroupResponse> expected1 =
+		final Page<GroupResult> expected1 =
 		        new PagedGroupResult.Builder()
 		                .page(0)
 		                .size(0)
@@ -2060,7 +2060,7 @@ public class ApiConnectionIT {
 		String path2 = "/v1/" + spid
 		        + "/groups?page=1&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
-		final Page<GroupResponse> expected2 =
+		final Page<GroupResult> expected2 =
 		        new PagedGroupResult.Builder()
 		                .page(1)
 		                .size(0)
@@ -2076,11 +2076,11 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<Page<GroupResponse>> testCallback =
-			        new TestCallback<Page<GroupResponse>>() {
+			FutureCallback<Page<GroupResult>> testCallback =
+			        new TestCallback<Page<GroupResult>>() {
 
 				        @Override
-				        public void completed(Page<GroupResponse> result) {
+				        public void completed(Page<GroupResult> result) {
 					        switch (result.page()) {
 					        case 0:
 						        assertThat(result, is(expected1));
@@ -2095,13 +2095,13 @@ public class ApiConnectionIT {
 
 			        };
 
-			PagedFetcher<GroupResponse> fetcher = conn.fetchGroups(filter);
+			PagedFetcher<GroupResult> fetcher = conn.fetchGroups(filter);
 
-			Page<GroupResponse> actual1 =
+			Page<GroupResult> actual1 =
 			        fetcher.fetchAsync(0, testCallback).get();
 			assertThat(actual1, is(expected1));
 
-			Page<GroupResponse> actual2 =
+			Page<GroupResult> actual2 =
 			        fetcher.fetchAsync(1, testCallback).get();
 			assertThat(actual2, is(expected2));
 		} finally {
@@ -2125,7 +2125,7 @@ public class ApiConnectionIT {
 		        .addMemberRemove("987654321")
 		        .build();
 
-		GroupResponse expected = new GroupResponse.Builder()
+		GroupResult expected = new GroupResult.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
@@ -2141,7 +2141,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupResponse actual = conn.updateGroup(groupId, request);
+			GroupResult actual = conn.updateGroup(groupId, request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -2163,7 +2163,7 @@ public class ApiConnectionIT {
 		        .addMemberRemove("987654321")
 		        .build();
 
-		final GroupResponse expected = new GroupResponse.Builder()
+		final GroupResult expected = new GroupResult.Builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
@@ -2179,17 +2179,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupResponse> testCallback =
-			        new TestCallback<GroupResponse>() {
+			FutureCallback<GroupResult> testCallback =
+			        new TestCallback<GroupResult>() {
 
 				        @Override
-				        public void completed(GroupResponse result) {
+				        public void completed(GroupResult result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			GroupResponse actual =
+			GroupResult actual =
 			        conn.updateGroupAsync(groupId, request, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -2219,8 +2219,8 @@ public class ApiConnectionIT {
 		                        .build())
 		                .build();
 
-		GroupResponse expected =
-		        new GroupResponse.Builder()
+		GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2242,7 +2242,7 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			GroupResponse actual = conn.replaceGroup(groupId, request);
+			GroupResult actual = conn.replaceGroup(groupId, request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -2271,8 +2271,8 @@ public class ApiConnectionIT {
 		                        .build())
 		                .build();
 
-		final GroupResponse expected =
-		        new GroupResponse.Builder()
+		final GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2294,17 +2294,17 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			FutureCallback<GroupResponse> testCallback =
-			        new TestCallback<GroupResponse>() {
+			FutureCallback<GroupResult> testCallback =
+			        new TestCallback<GroupResult>() {
 
 				        @Override
-				        public void completed(GroupResponse result) {
+				        public void completed(GroupResult result) {
 					        assertThat(result, is(expected));
 				        }
 
 			        };
 
-			GroupResponse actual = conn
+			GroupResult actual = conn
 			        .replaceGroupAsync(groupId, request, testCallback).get();
 			assertThat(actual, is(expected));
 		} finally {
@@ -2321,8 +2321,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		GroupResponse expected =
-		        new GroupResponse.Builder()
+		GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2359,8 +2359,8 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
-		final GroupResponse expected =
-		        new GroupResponse.Builder()
+		final GroupResult expected =
+		        new GroupResult.Builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
