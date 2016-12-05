@@ -12,7 +12,6 @@
 	<body>
 		<menu name="Developer Notes">
 			<item href="tutorial.html" name="Tutorial" />
-			<item href="hello.html" name="Hello" />
 		</menu>
 		<menu ref="reports" />
 	</body>
