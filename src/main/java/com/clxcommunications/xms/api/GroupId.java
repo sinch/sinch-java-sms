@@ -59,6 +59,7 @@ public abstract class GroupId implements Comparable<GroupId> {
 	 * 
 	 * @return a non-null identifier
 	 */
+	@JsonValue
 	protected abstract String id();
 
 	@Override
@@ -71,7 +72,6 @@ public abstract class GroupId implements Comparable<GroupId> {
 	 * 
 	 * @return a non-null string
 	 */
-	@JsonValue
 	@Override
 	public String toString() {
 		return id();
