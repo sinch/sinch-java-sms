@@ -33,6 +33,14 @@
 		<system>GitHub</system>
 	</issueManagement>
 
+	<developers>
+		<developer>
+			<name>Robert Helgesson</name>
+			<email>robert at chaitsa dot com</email>
+			<url>http://chaitsa.com/</url>
+		</developer>
+	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
