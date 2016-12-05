@@ -72,7 +72,11 @@ public abstract class UpdateValue<T> {
 	@JsonCreator
 	@Nonnull
 	public static <T> UpdateValue<T> set(@Nullable T value) {
-		return UpdateValueImpl.of(value);
+		if (value == null) {
+			return UpdateValue.<T> unset();
+		} else {
+			return UpdateValueImpl.of(value);
+		}
 	}
 
 	/**
