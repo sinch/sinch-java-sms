@@ -27,11 +27,17 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * A page within a paged batch listing.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = PagedBatchResult.Builder.class)
 public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
 
+	/**
+	 * A builder of batch result pages.
+	 */
 	public static class Builder extends PagedBatchResultImpl.Builder {
 
 	}

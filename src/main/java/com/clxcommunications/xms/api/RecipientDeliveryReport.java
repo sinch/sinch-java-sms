@@ -41,29 +41,72 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonTypeName("recipient_delivery_report_sms")
 public interface RecipientDeliveryReport {
 
+	/**
+	 * A builder of recipient delivery reports.
+	 */
 	public static final class Builder
 	        extends RecipientDeliveryReportImpl.Builder {
 
 	}
 
+	/**
+	 * The batch to which this delivery report belongs
+	 * 
+	 * @return a batch identifier
+	 */
 	@JsonProperty("batch_id")
 	BatchId batchId();
 
+	/**
+	 * The recipient to which this delivery report refers.
+	 * 
+	 * @return an MSISDN
+	 */
 	String recipient();
 
+	/**
+	 * The delivery report error code of the message.
+	 * 
+	 * @return a delivery report error code
+	 */
 	int code();
 
+	/**
+	 * The delivery status of the message.
+	 * 
+	 * @return a delivery status
+	 */
 	DeliveryStatus status();
 
+	/**
+	 * A description of the status, if available.
+	 * 
+	 * @return a status description
+	 */
 	@JsonProperty("status_message")
 	@Nullable
 	String statusMessage();
 
+	/**
+	 * The operator MCCMNC, if available.
+	 * 
+	 * @return an operator identifier; <code>null</code> if unknown
+	 */
 	@Nullable
 	String operator();
 
+	/**
+	 * Time when the message reached it's final state.
+	 * 
+	 * @return a date and time
+	 */
 	OffsetDateTime at();
 
+	/**
+	 * The message timestamp as recorded by the network operator.
+	 * 
+	 * @return a date and time
+	 */
 	@JsonProperty("operator_status_at")
 	OffsetDateTime operatorStatusAt();
 

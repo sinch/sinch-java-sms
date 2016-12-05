@@ -61,7 +61,9 @@ public abstract class UpdateValue<T> {
 	}
 
 	/**
-	 * An update value indicating that the value should be changed.
+	 * An update value indicating that the value should be changed. Note,
+	 * setting a <code>null</code> value is equivalent to using
+	 * {@link #unset()}.
 	 * 
 	 * @param value
 	 *            the new value

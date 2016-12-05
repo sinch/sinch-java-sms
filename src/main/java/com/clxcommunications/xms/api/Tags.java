@@ -30,6 +30,9 @@ import org.immutables.value.Value;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * A representation of a set of tags.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = TagsImpl.Builder.class)

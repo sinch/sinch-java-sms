@@ -27,11 +27,17 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * A page within a paged group listing.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = PagedGroupResult.Builder.class)
 public abstract class PagedGroupResult extends Page<GroupResult> {
 
+	/**
+	 * A builder of group result pages.
+	 */
 	public static class Builder extends PagedGroupResultImpl.Builder {
 
 	}

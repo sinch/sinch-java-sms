@@ -28,7 +28,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Objects of this class contain information about a binary SMS batch. The
- * information includes the batch identifier, the creation time, and so on.
+ * information includes the binary body, the batch identifier, the creation
+ * time, and so on.
  */
 @Value.Immutable
 @ValueStylePackage

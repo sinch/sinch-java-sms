@@ -26,6 +26,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * A page within a paged XMS response.
+ * 
+ * @param <T>
+ *            the page element type
+ */
 public abstract class Page<T> implements Iterable<T> {
 
 	/**
@@ -51,6 +57,11 @@ public abstract class Page<T> implements Iterable<T> {
 	@JsonProperty("count")
 	public abstract int totalSize();
 
+	/**
+	 * The page content.
+	 * 
+	 * @return a list of page elements
+	 */
 	public abstract List<T> content();
 
 	/**

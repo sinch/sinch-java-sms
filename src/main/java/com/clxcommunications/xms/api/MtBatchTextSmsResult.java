@@ -29,18 +29,40 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * Objects of this class contain information about a textual SMS batch. The
+ * information includes the text message body, the batch identifier, the
+ * creation time, and so on.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = MtBatchTextSmsResult.Builder.class)
 @JsonTypeName("mt_text")
 public abstract class MtBatchTextSmsResult extends MtBatchSmsResult {
 
+	/**
+	 * Builder of textual batch results.
+	 */
 	public static class Builder extends MtBatchTextSmsResultImpl.Builder {
 
 	}
 
+	/**
+	 * The message text or template. If this describes a template then
+	 * {@link #parameters()} describes the parameter substitutions.
+	 * 
+	 * @return the message to send
+	 */
 	public abstract String body();
 
+	/**
+	 * The message template parameter substitutions. If {@link #body()}
+	 * describes a template then this returns the substitutions for the template
+	 * parameters.
+	 * 
+	 * @return a map from template variable to parameter values
+	 * @see #body()
+	 */
 	@JsonInclude(Include.NON_EMPTY)
 	public abstract Map<String, ParameterValues> parameters();
 

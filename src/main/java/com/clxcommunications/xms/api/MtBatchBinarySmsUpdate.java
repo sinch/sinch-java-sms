@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * A description of updates that can be applied to a binary
+ * A description of updates that can be applied to a binary SMS batch message.
  */
 @Value.Immutable
 @ValueStylePackage
@@ -41,12 +41,30 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonTypeName("mt_binary")
 public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 
+	/**
+	 * A builder of binary batch message updates.
+	 */
 	public static class Builder extends MtBatchBinarySmsUpdateImpl.Builder {
 
+		/**
+		 * Resets the delivery report type to the messaging system default
+		 * value.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetDeliveryReport() {
 			return this.deliveryReport(UpdateValue.<ReportType> unset());
 		}
 
+		/**
+		 * Updates the delivery report type of this batch. If given a
+		 * <code>null</code> reference then this is equivalent to calling
+		 * {@link #unsetDeliveryReport()}.
+		 * 
+		 * @param deliveryReport
+		 *            the new delivery report type or <code>null</code> to unset
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder deliveryReport(ReportType deliveryReport) {
 			if (deliveryReport == null) {
 				return this.unsetDeliveryReport();
@@ -55,10 +73,24 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 			}
 		}
 
+		/**
+		 * Unsets the scheduled send time. This has the effect of immediately
+		 * starting to send the batch.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetSendAt() {
 			return this.sendAt(UpdateValue.<OffsetDateTime> unset());
 		}
 
+		/**
+		 * Updates the scheduled send time. If given a <code>null</code>
+		 * reference then this is equivalent to calling {@link #unsetSendAt()}.
+		 * 
+		 * @param time
+		 *            the new scheduled send time
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder sendAt(OffsetDateTime time) {
 			if (time == null) {
 				return this.unsetSendAt();
@@ -67,10 +99,23 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 			}
 		}
 
+		/**
+		 * Resets the batch expire time to the messaging system default value.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetExpireAt() {
 			return this.expireAt(UpdateValue.<OffsetDateTime> unset());
 		}
 
+		/**
+		 * Updates the batch expire time. If given a <code>null</code> reference
+		 * then this is equivalent to calling {@link #unsetExpireAt()}.
+		 * 
+		 * @param time
+		 *            the new expire time
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder expireAt(OffsetDateTime time) {
 			if (time == null) {
 				return this.unsetExpireAt();
@@ -79,10 +124,23 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 			}
 		}
 
+		/**
+		 * Resets the callback URL to the default callback URL.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetCallbackUrl() {
 			return this.callbackUrl(UpdateValue.<URI> unset());
 		}
 
+		/**
+		 * Updates the callback URL. If given a <code>null</code> reference then
+		 * this is equivalent to calling {@link #unsetCallbackUrl()}.
+		 * 
+		 * @param url
+		 *            the new callback URL
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder callbackUrl(URI url) {
 			if (url == null) {
 				return this.unsetCallbackUrl();
@@ -93,11 +151,21 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 
 	}
 
+	/**
+	 * The updated User Data Header of the message.
+	 * 
+	 * @return a byte array containing the UDH; <code>null</code> if unchanged
+	 */
 	@Nullable
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)
 	public abstract byte[] udh();
 
+	/**
+	 * The updated binary message body.
+	 * 
+	 * @return a byte array containing the body; <code>null</code> if unchanged
+	 */
 	@Nullable
 	public abstract byte[] body();
 

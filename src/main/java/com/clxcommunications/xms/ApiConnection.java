@@ -1071,7 +1071,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @param sms
 	 *            the batch to dry run
 	 * @param perRecipient
-	 *            whether the per recipient result should be populated
+	 *            whether the per-recipient result should be populated
 	 * @param numRecipients
 	 *            the number of recipients to populate
 	 * @return a dry run result
@@ -1102,7 +1102,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @param sms
 	 *            the batch to dry run
 	 * @param perRecipient
-	 *            whether the per recipient result should be populated
+	 *            whether the per-recipient result should be populated
 	 * @param numRecipients
 	 *            the number of recipients to populate
 	 * @param callback

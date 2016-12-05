@@ -27,11 +27,17 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * A description of updates to a set of tags.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = TagsUpdate.Builder.class)
 public interface TagsUpdate {
 
+	/**
+	 * A builder of tag updates
+	 */
 	public static final class Builder extends TagsUpdateImpl.Builder {
 
 	}

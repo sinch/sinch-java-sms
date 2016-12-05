@@ -56,9 +56,22 @@ public abstract class ReportType {
 	public static final ReportType PER_RECIPIENT =
 	        ReportTypeImpl.of("per_recipient");
 
+	/**
+	 * The literal string representation of this report type.
+	 * 
+	 * @return a non-null identifier
+	 */
 	@JsonValue
 	public abstract String type();
 
+	/**
+	 * Builds an immutable {@link ReportType} having the given literal
+	 * representation.
+	 * 
+	 * @param type
+	 *            the report type
+	 * @return a non-null report type
+	 */
 	@JsonCreator
 	public static ReportType of(String type) {
 		return ReportTypeImpl.of(type);

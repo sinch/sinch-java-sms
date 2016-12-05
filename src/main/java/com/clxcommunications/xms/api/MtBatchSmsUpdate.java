@@ -71,18 +71,42 @@ public abstract class MtBatchSmsUpdate {
 	@Nullable
 	public abstract String from();
 
+	/**
+	 * Description of how to update the batch delivery report value.
+	 * 
+	 * @return an update description
+	 * @see MtBatchSmsCreate#deliveryReport()
+	 */
 	@Nullable
 	@JsonProperty("delivery_report")
 	public abstract UpdateValue<ReportType> deliveryReport();
 
+	/**
+	 * Description of how to update the batch send at value.
+	 * 
+	 * @return an update description
+	 * @see MtBatchSmsCreate#sendAt()
+	 */
 	@Nullable
 	@JsonProperty("send_at")
 	public abstract UpdateValue<OffsetDateTime> sendAt();
 
+	/**
+	 * Description of how to update the batch expire at value.
+	 * 
+	 * @return an update description
+	 * @see MtBatchSmsCreate#expireAt()
+	 */
 	@Nullable
 	@JsonProperty("expire_at")
 	public abstract UpdateValue<OffsetDateTime> expireAt();
 
+	/**
+	 * Description of how to update the batch callback URL.
+	 * 
+	 * @return an update description
+	 * @see MtBatchSmsCreate#callbackUrl()
+	 */
 	@Nullable
 	@JsonProperty("callback_url")
 	public abstract UpdateValue<URI> callbackUrl();

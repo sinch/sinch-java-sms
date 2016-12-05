@@ -29,18 +29,36 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * A description of possible substitution values for a template parameter.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(using = JacksonUtils.ParameterValuesDeserializer.class)
 @JsonSerialize(using = JacksonUtils.ParameterValuesSerializer.class)
 public interface ParameterValues {
 
+	/**
+	 * A builder of parameter substitution values.
+	 */
 	public static class Builder extends ParameterValuesImpl.Builder {
 
 	}
 
+	/**
+	 * Describes per-recipient substitutions for a text message template.
+	 * 
+	 * @return map from MSISDNs to textual substitutions
+	 */
 	Map<String, String> substitutions();
 
+	/**
+	 * The default substitution. Used when no matching substitution is found in
+	 * {@link #substitutions()}.
+	 * 
+	 * @return the default value for the parameter; <code>null</code> if no
+	 *         default is set
+	 */
 	@Nullable
 	String defaultValue();
 
