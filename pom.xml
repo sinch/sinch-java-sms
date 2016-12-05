@@ -346,6 +346,14 @@
 						<link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
 					</links>
 				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>default</id>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
 			</plugin>
 		</plugins>
 	</reporting>
