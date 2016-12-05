@@ -30,6 +30,12 @@ public class ConcurrentException extends ApiException {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Builds a new concurrent exception object.
+	 * 
+	 * @param e
+	 *            the cause of this exception
+	 */
 	public ConcurrentException(Throwable e) {
 		super(e);
 	}

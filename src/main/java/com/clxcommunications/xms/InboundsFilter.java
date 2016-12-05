@@ -39,6 +39,9 @@ import org.threeten.bp.LocalDate;
 @ValueStylePackage
 public abstract class InboundsFilter {
 
+	/**
+	 * A builder of inbound messages filter.
+	 */
 	public static class Builder extends InboundsFilterImpl.Builder {
 
 	}

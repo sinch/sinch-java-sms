@@ -28,21 +28,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * A binary mobile originated SMS message.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(as = MoBinarySmsImpl.class)
 @JsonTypeName("mo_binary")
 public abstract class MoBinarySms extends MoSms {
 
+	/**
+	 * A builder of binary MO messages.
+	 */
 	public static final class Builder extends MoBinarySmsImpl.Builder {
 
 	}
 
+	/**
+	 * The User Data Header of the message.
+	 * 
+	 * @return a byte array containing the UDH
+	 */
 	@Nullable
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)
 	public abstract byte[] udh();
 
+	/**
+	 * The binary message body.
+	 * 
+	 * @return a byte array containing the body
+	 */
 	public abstract byte[] body();
 
 }

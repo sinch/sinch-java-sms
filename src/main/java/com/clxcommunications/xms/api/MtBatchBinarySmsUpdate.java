@@ -32,6 +32,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * A description of updates that can be applied to a binary
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonSerialize(as = MtBatchBinarySmsUpdateImpl.class)

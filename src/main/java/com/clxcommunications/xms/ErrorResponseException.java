@@ -27,8 +27,9 @@ import com.clxcommunications.xms.api.ApiError;
  * when some contract of the XMS API has been broken, the error code and text
  * indicates the specifics.
  * <p>
- * For information about specific errors please refer to the API documentation.
- * (TODO reference documentation URL)
+ * For information about specific errors please refer to the <a href=
+ * "https://manage.clxcommunications.com/developers/sms/xmsapi.html#http-errors">XMS
+ * API documentation</a>.
  */
 public class ErrorResponseException extends ApiException {
 
@@ -44,10 +45,20 @@ public class ErrorResponseException extends ApiException {
 		this.text = error.text();
 	}
 
+	/**
+	 * The machine readable error code.
+	 * 
+	 * @return the error code.
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	/**
+	 * The human readable error text.
+	 * 
+	 * @return the error text
+	 */
 	public String getText() {
 		return text;
 	}

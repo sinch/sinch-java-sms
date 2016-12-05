@@ -27,18 +27,41 @@ public abstract class ApiException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Construct a new API exception having no message and no cause.
+	 */
 	public ApiException() {
 		super();
 	}
 
+	/**
+	 * Construct a new API exception having the given message and no cause.
+	 * 
+	 * @param message
+	 *            the exception message
+	 */
 	public ApiException(String message) {
 		super(message);
 	}
 
+	/**
+	 * Construct a new API exception having no message and the given cause.
+	 * 
+	 * @param cause
+	 *            the exception cause
+	 */
 	public ApiException(Throwable cause) {
 		super(cause);
 	}
 
+	/**
+	 * Construct a new API exception having the given message and cause.
+	 * 
+	 * @param message
+	 *            the exception message
+	 * @param cause
+	 *            the exception cause
+	 */
 	public ApiException(String message, Throwable cause) {
 		super(message, cause);
 	}

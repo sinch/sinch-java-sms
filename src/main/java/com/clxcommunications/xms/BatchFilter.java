@@ -39,6 +39,9 @@ import org.threeten.bp.LocalDate;
 @ValueStylePackage
 public abstract class BatchFilter {
 
+	/**
+	 * A builder of batch filters.
+	 */
 	public static class Builder extends BatchFilterImpl.Builder {
 
 	}

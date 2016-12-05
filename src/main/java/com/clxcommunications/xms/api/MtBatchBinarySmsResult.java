@@ -26,20 +26,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * Objects of this class contain information about a binary SMS batch. The
+ * information includes the batch identifier, the creation time, and so on.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(as = MtBatchBinarySmsResultImpl.class)
 @JsonTypeName("mt_binary")
 public abstract class MtBatchBinarySmsResult extends MtBatchSmsResult {
 
+	/**
+	 * Builder of binary batch results.
+	 */
 	public static class Builder extends MtBatchBinarySmsResultImpl.Builder {
 
 	}
 
+	/**
+	 * The User Data Header of the message.
+	 * 
+	 * @return a byte array containing the UDH
+	 */
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)
 	public abstract byte[] udh();
 
+	/**
+	 * The binary message body.
+	 * 
+	 * @return a byte array containing the body
+	 */
 	public abstract byte[] body();
 
 }

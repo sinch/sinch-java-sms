@@ -32,12 +32,20 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * A class describing parameters available during group creation. Groups can be
+ * used within XMS to organize message recipients and easily send batch messages
+ * to all members but referring to the group identifier as message recipient.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = GroupCreate.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupCreate {
 
+	/**
+	 * A builder of group creation descriptions.
+	 */
 	public static final class Builder extends GroupCreateImpl.Builder {
 
 	}
@@ -68,8 +76,8 @@ public interface GroupCreate {
 	Set<GroupId> childGroups();
 
 	/**
-	 * Describes how this group should be auto updated. May be <code>null</code>
-	 * if no auto update is to be supported.
+	 * Describes how this group is auto updated through user interaction. Is
+	 * <code>null</code> if the group is not auto updated.
 	 * 
 	 * @return an auto update description
 	 */

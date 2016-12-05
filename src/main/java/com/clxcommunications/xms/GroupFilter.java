@@ -37,6 +37,9 @@ import org.immutables.value.Value;
 @ValueStylePackage
 public abstract class GroupFilter {
 
+	/**
+	 * A builder of group filters.
+	 */
 	public static class Builder extends GroupFilterImpl.Builder {
 
 	}

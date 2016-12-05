@@ -20,10 +20,20 @@ package com.clxcommunications.xms;
  * #L%
  */
 
+/**
+ * A wrapper of {@link ApiException} for use where checked exceptions cannot be
+ * thrown.
+ */
 public class RuntimeApiException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructs a new runtime API exception wrapping the given API exception.
+	 * 
+	 * @param e
+	 *            the API exception
+	 */
 	public RuntimeApiException(ApiException e) {
 		super(e);
 	}

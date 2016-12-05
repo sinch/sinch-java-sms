@@ -32,18 +32,36 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * A description of updates that should be applied to a group.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonSerialize(as = GroupUpdateImpl.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupUpdate {
 
+	/**
+	 * A builder of group updates.
+	 */
 	public static class Builder extends GroupUpdateImpl.Builder {
 
+		/**
+		 * Unsets the name of the group.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetName() {
 			return this.name(UpdateValue.<String> unset());
 		}
 
+		/**
+		 * Updates the group name to the given name.
+		 * 
+		 * @param name
+		 *            the new group name
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder name(String name) {
 			if (name == null) {
 				return this.unsetName();
@@ -52,10 +70,22 @@ public interface GroupUpdate {
 			}
 		}
 
+		/**
+		 * Unsets the group auto update setting.
+		 * 
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder unsetAutoUpdate() {
 			return this.autoUpdate(UpdateValue.<AutoUpdate> unset());
 		}
 
+		/**
+		 * Updates the group auto update to the one given.
+		 * 
+		 * @param autoUpdate
+		 *            the new auto update setting
+		 * @return this builder for use in a chained invocation
+		 */
 		public Builder autoUpdate(AutoUpdate autoUpdate) {
 			if (autoUpdate == null) {
 				return this.unsetAutoUpdate();

@@ -37,7 +37,10 @@ import com.fasterxml.jackson.databind.deser.std.StdNodeBasedDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-public class JacksonUtils {
+/**
+ * A collection of custom Jackson serializers and deserializers.
+ */
+class JacksonUtils {
 
 	/**
 	 * Jackson deserializer for hex encoded byte arrays.
@@ -64,6 +67,9 @@ public class JacksonUtils {
 
 	};
 
+	/**
+	 * Jackson serializer for hex encoded byte arrays.
+	 */
 	static final class ByteArrayHexSerializer
 	        extends StdScalarSerializer<byte[]> {
 
@@ -84,7 +90,7 @@ public class JacksonUtils {
 	/**
 	 * JSON deserializer of parameter values.
 	 */
-	public static final class ParameterValuesDeserializer
+	static final class ParameterValuesDeserializer
 	        extends StdNodeBasedDeserializer<ParameterValues> {
 
 		private static final long serialVersionUID = 1L;
@@ -119,7 +125,10 @@ public class JacksonUtils {
 
 	}
 
-	public static final class ParameterValuesSerializer
+	/**
+	 * Jackson serializer of parameter values.
+	 */
+	static final class ParameterValuesSerializer
 	        extends StdSerializer<ParameterValues> {
 
 		private static final long serialVersionUID = 1L;

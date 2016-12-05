@@ -27,32 +27,61 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Describes the different types of delivery reports supported by XMS.
+ * <p>
+ * A number of predefined delivery statuses are provided as constants within
+ * this class, for example, {@link #QUEUED} or {@link #FAILED}, but XMS reserves
+ * the right to add new codes in the future.
  */
 @Value.Immutable(builder = false, copy = false, intern = true)
 @ValueStylePackageDirect
 public abstract class DeliveryStatus {
 
+	/**
+	 * Message is queued within REST API system and will be dispatched according
+	 * to the rate of the account.
+	 */
 	public static final DeliveryStatus QUEUED =
 	        DeliveryStatusImpl.of("Queued");
 
+	/**
+	 * Message has been dispatched and accepted for delivery by the SMSC.
+	 */
 	public static final DeliveryStatus DISPATCHED =
 	        DeliveryStatusImpl.of("Dispatched");
 
+	/**
+	 * Message was aborted before reaching SMSC.
+	 */
 	public static final DeliveryStatus ABORTED =
 	        DeliveryStatusImpl.of("Aborted");
 
+	/**
+	 * Message was rejected by SMSC.
+	 */
 	public static final DeliveryStatus REJECTED =
 	        DeliveryStatusImpl.of("Rejected");
 
+	/**
+	 * Message has been delivered.
+	 */
 	public static final DeliveryStatus DELIVERED =
 	        DeliveryStatusImpl.of("Delivered");
 
+	/**
+	 * Message failed to be delivered.
+	 */
 	public static final DeliveryStatus FAILED =
 	        DeliveryStatusImpl.of("Failed");
 
+	/**
+	 * Message expired before delivery.
+	 */
 	public static final DeliveryStatus EXPIRED =
 	        DeliveryStatusImpl.of("Expired");
 
+	/**
+	 * It is not known if message was delivered or not.
+	 */
 	public static final DeliveryStatus UNKNOWN =
 	        DeliveryStatusImpl.of("Unknown");
 

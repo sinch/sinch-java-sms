@@ -29,6 +29,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Base class for mobile originated messages. A mobile originated message can
+ * have either a {@link MoTextSms textual} or a {@link MoBinarySms binary}
+ * message payload.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
@@ -55,20 +60,36 @@ public abstract class MoSms {
 	 */
 	public abstract String from();
 
+	/**
+	 * The recipient of this mobile originated message. For example an MSISDN or
+	 * short code.
+	 * 
+	 * @return the recipient address
+	 */
 	public abstract String to();
 
 	/**
 	 * The MCCMNC of the originating operator, if available.
 	 * 
-	 * @return an MCCMNC
+	 * @return an MCCMNC or <code>null</code> if none is available
 	 */
 	@Nullable
 	public abstract String operator();
 
+	/**
+	 * Timestamp for when this message was sent.
+	 * 
+	 * @return the time of sending
+	 */
 	@JsonProperty("sent_at")
 	@Nullable
 	public abstract OffsetDateTime sentAt();
 
+	/**
+	 * Timestamp for when the messaging system received the message.
+	 * 
+	 * @return the time of receiving
+	 */
 	@JsonProperty("received_at")
 	public abstract OffsetDateTime receivedAt();
 

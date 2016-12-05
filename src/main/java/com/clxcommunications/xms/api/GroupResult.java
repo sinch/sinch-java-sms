@@ -32,12 +32,20 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * Objects of this class contain information about a group. The information
+ * includes creation time stamp and group identifier and it must therefore be
+ * populated by XMS, which is the source of such information.
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = GroupResult.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
 public interface GroupResult {
 
+	/**
+	 * A builder of group results.
+	 */
 	public static final class Builder extends GroupResultImpl.Builder {
 
 	}
@@ -72,13 +80,29 @@ public interface GroupResult {
 	@JsonProperty("child_groups")
 	Set<GroupId> childGroups();
 
+	/**
+	 * Describes how this group is auto updated through user interaction. Is
+	 * <code>null</code> if the group is not auto updated.
+	 * 
+	 * @return an auto update description
+	 */
 	@JsonProperty("auto_update")
 	@Nullable
 	AutoUpdate autoUpdate();
 
+	/**
+	 * The time at which this group was created
+	 * 
+	 * @return a date time
+	 */
 	@JsonProperty("created_at")
 	OffsetDateTime createdAt();
 
+	/**
+	 * The time at which this group was last modified.
+	 * 
+	 * @return a date time
+	 */
 	@JsonProperty("modified_at")
 	OffsetDateTime modifiedAt();
 

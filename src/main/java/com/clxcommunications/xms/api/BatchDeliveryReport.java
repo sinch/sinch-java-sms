@@ -52,6 +52,9 @@ public interface BatchDeliveryReport {
 	@JsonInclude(Include.NON_EMPTY)
 	public interface Status {
 
+		/**
+		 * A builder of batch delivery report statuses.
+		 */
 		public static class Builder
 		        extends BatchDeliveryReportImpl.Status.Builder {
 
@@ -88,6 +91,9 @@ public interface BatchDeliveryReport {
 
 	}
 
+	/**
+	 * A builder of batch delivery reports.
+	 */
 	public static class Builder extends BatchDeliveryReportImpl.Builder {
 
 	}

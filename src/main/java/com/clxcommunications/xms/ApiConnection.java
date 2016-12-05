@@ -96,6 +96,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ValueStylePackageDirect
 public abstract class ApiConnection implements Closeable {
 
+	/**
+	 * A builder of API connections. At a minimum the service plan identifier
+	 * and authentication token must be set.
+	 */
 	public static class Builder extends ApiConnectionImpl.Builder {
 
 		/**

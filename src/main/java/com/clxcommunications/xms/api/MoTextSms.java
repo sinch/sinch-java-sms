@@ -36,6 +36,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonTypeName("mo_text")
 public abstract class MoTextSms extends MoSms {
 
+	/**
+	 * A builder of text MO messages.
+	 */
 	public static final class Builder extends MoTextSmsImpl.Builder {
 
 	}

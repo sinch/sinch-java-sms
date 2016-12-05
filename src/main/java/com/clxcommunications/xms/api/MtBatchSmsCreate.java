@@ -36,6 +36,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Base class for mobile terminated batch messages. A mobile terminated message
+ * can have either a {@link MtBatchTextSmsCreate textual} or a
+ * {@link MtBatchBinarySmsCreate binary} message payload.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
@@ -51,8 +56,18 @@ public abstract class MtBatchSmsCreate {
 	 */
 	public abstract List<String> to();
 
+	/**
+	 * The message originator. May be an MSISDN or short code.
+	 * 
+	 * @return an originator address
+	 */
 	public abstract String from();
 
+	/**
+	 * The type of delivery report to request for this batch.
+	 * 
+	 * @return a type of report or <code>null</code> to use the default type
+	 */
 	@Nullable
 	@JsonProperty("delivery_report")
 	public abstract ReportType deliveryReport();
@@ -67,10 +82,24 @@ public abstract class MtBatchSmsCreate {
 	@JsonProperty("send_at")
 	public abstract OffsetDateTime sendAt();
 
+	/**
+	 * The time at which this batch will expire. Any message not delivered by
+	 * this time will be placed into an expired state and no further delivery
+	 * will be attempted.
+	 * 
+	 * @return the time when this batch expires
+	 */
 	@Nullable
 	@JsonProperty("expire_at")
 	public abstract OffsetDateTime expireAt();
 
+	/**
+	 * The URL to which batch callbacks should be set. If <code>null</code> then
+	 * callbacks will be sent to the default URL.
+	 * 
+	 * @return an URL having a callback listener or <code>null</code> to use the
+	 *         default callback URL
+	 */
 	@Nullable
 	@JsonProperty("callback_url")
 	public abstract URI callbackUrl();

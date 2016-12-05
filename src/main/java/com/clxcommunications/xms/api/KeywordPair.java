@@ -37,14 +37,33 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(as = KeywordPairImpl.class)
 public abstract class KeywordPair {
 
+	/**
+	 * The first keyword.
+	 * 
+	 * @return an SMS keyword or <code>null</code> if no keyword is set
+	 */
 	@Nullable
 	@JsonProperty("first_word")
 	public abstract String firstWord();
 
+	/**
+	 * The second keyword.
+	 * 
+	 * @return an SMS keyword or <code>null</code> if no keyword is set
+	 */
 	@Nullable
 	@JsonProperty("second_word")
 	public abstract String secondWord();
 
+	/**
+	 * Builder of keyword pairs.
+	 * 
+	 * @param firstWord
+	 *            the first keyword
+	 * @param secondWord
+	 *            the second keyword
+	 * @return a keyword pair consisting of the given keywords
+	 */
 	@Nonnull
 	public static KeywordPair of(@Nullable String firstWord,
 	        @Nullable String secondWord) {

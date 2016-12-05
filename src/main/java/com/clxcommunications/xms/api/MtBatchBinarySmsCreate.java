@@ -26,20 +26,44 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * Container of all necessary parameters to create a binary SMS batch message.
+ * <p>
+ * A minimal definition has defined values for
+ * <ul>
+ * <li>{@link #to()},</li>
+ * <li>{@link #from()},</li>
+ * <li>{@link #udh()}, and</li>
+ * <li>{@link #body()}.</li>
+ * </ul>
+ */
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(as = MtBatchBinarySmsCreateImpl.class)
 @JsonTypeName("mt_binary")
 public abstract class MtBatchBinarySmsCreate extends MtBatchSmsCreate {
 
+	/**
+	 * A builder of binary batch messages.
+	 */
 	public static class Builder extends MtBatchBinarySmsCreateImpl.Builder {
 
 	}
 
+	/**
+	 * The User Data Header of the message.
+	 * 
+	 * @return a byte array containing the UDH
+	 */
 	@JsonSerialize(using = JacksonUtils.ByteArrayHexSerializer.class)
 	@JsonDeserialize(using = JacksonUtils.ByteArrayHexDeserializer.class)
 	public abstract byte[] udh();
 
+	/**
+	 * The binary message body.
+	 * 
+	 * @return a byte array containing the body
+	 */
 	public abstract byte[] body();
 
 	@Override
