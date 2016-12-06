@@ -107,11 +107,25 @@ System.out.println("Batch id is " + result.id())
 There is also an asynchronous method corresponding to `createBatch` above, called `createBatchAsync`. This method will return immediately with a `Future<MtBatchTextSmsResult>` return value and takes an extra argument that corresponds to a callback that is invoked when the request actually completes. In the asynchronous setting the above example becomes
 
 ```java
-callback = new FutureCallback<MtBatchTextSmsResult> {
+FutureCallback<MtBatchTextSmsResult> callback = new FutureCallback<MtBatchTextSmsResult> {
 
-    // Stuff goes here.
+    @Override
+    public void failed(Exception ex) {
+        System.err.println("Failed to send " + ex.getMessage());
+    }
+
+    @Override
+    public void completed(BatchDeliveryReport result) {
+        System.out.println("Batch id is " + result.id());
+    }
+
+    @Override
+    public void cancelled() {
+        System.out.println("Cancelled send");
+    }
 
 };
+
 Future<MtBatchTextSmsResult> future =
     conn.createBatchAsync(ClxApi.batchTextSms()
         .from("12345")
@@ -119,6 +133,8 @@ Future<MtBatchTextSmsResult> future =
         .body("Hello, World!")
         .build(), callback)
 ```
+
+The callback that we provided to this method will have one of its methods invoked as soon as the communication with XMS has concluded. Which of the methods that is invoked will depend on how the request went. If all went well then the `completed` method will be called with the result as argument. If some form of exception was thrown during the request then the `failed` method will be called with the exception as argument. For more about error handling see sec. [Handling errors](#Handling_errors). Finally, if the request was canceled, for example using `future.cancel(true)`, then the `cancelled` method is called.
 
 Fetching batches
 ----------------
