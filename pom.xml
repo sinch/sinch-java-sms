@@ -220,6 +220,7 @@
 								<link>https://docs.oracle.com/javase/6/docs/api</link>
 								<link>https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs</link>
 								<link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
+								<link>http://www.threeten.org/threetenbp/apidocs</link>
 							</links>
 						</configuration>
 					</plugin>
@@ -366,6 +367,7 @@
 						<link>https://docs.oracle.com/javase/6/docs/api</link>
 						<link>https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs</link>
 						<link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
+						<link>http://www.threeten.org/threetenbp/apidocs</link>
 					</links>
 				</configuration>
 				<reportSets>
