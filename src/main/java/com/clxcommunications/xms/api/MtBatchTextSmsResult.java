@@ -49,6 +49,9 @@ public abstract class MtBatchTextSmsResult extends MtBatchSmsResult {
 	/**
 	 * The message text or template. If this describes a template then
 	 * {@link #parameters()} describes the parameter substitutions.
+	 * <p>
+	 * See {@link MtBatchTextSmsCreate#body()} for a more thorough description
+	 * of this field.
 	 * 
 	 * @return the message to send
 	 */

@@ -55,6 +55,13 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
 	 * The message text or template. If this describes a template then
 	 * {@link #parameters()} must describe the parameter substitutions.
 	 * <p>
+	 * A parameterized message is a regular text message but having one or more
+	 * named parameters embedded using the syntax <code>${parameter_key}</code>
+	 * where <code>parameter_key</code> is your chosen parameter name. When the
+	 * messaging system is sending the message the template will be expanded and
+	 * any occurrence of <code>${parameter_key}</code> in the message body is
+	 * replaced by the parameter value for the message recipient.
+	 * <p>
 	 * The typical way to use templates is
 	 * 
 	 * <pre>
@@ -70,6 +77,10 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
 	 *             .build())
 	 *     .build();
 	 * </pre>
+	 * 
+	 * and here the recipient with MSISDN 987654321 will receive the message
+	 * "Hello, Jane" while all other recipients would receive "Hello, valued
+	 * customer".
 	 * 
 	 * @return the message to send
 	 */

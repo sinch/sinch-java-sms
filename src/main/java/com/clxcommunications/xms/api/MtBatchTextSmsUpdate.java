@@ -179,9 +179,11 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 
 	/**
 	 * The updated batch message body.
+	 * <p>
+	 * See {@link MtBatchTextSmsCreate#body()} for a more thorough description
+	 * of this field.
 	 * 
 	 * @return the batch message body; <code>null</code> if left unchanged
-	 * @see MtBatchTextSmsCreate#body()
 	 */
 	@Nullable
 	public abstract String body();
