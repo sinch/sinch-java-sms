@@ -25,20 +25,20 @@ Once an API connection has been established it is possible to send requests to X
 
 This SDK has a focus on asynchronous operation and all interaction with XMS happens asynchronously. Therefore, while synchronous methods are supplied within the library their use is discouraged in most practical applications.
 
-The arguments passed to a connection method are sometimes very simple, fetching a previously create batch simply requires the batch identifier as argument. Other times the arguments are complicated, for example to create the batch it may be necessary to supply a large number of arguments that specify destination addresses, the message body, expiry times, and so on. For such complex arguments we use classes whose methods correspond to the different parameters that are relevant for the request. For each such class we also provide a builder class that lets you create the objects in a convenient manner.
+The arguments passed to a connection method are sometimes very simple, fetching a previously create batch simply requires the batch identifier as argument. Other times the arguments are complicated, for example to create the batch it may be necessary to supply a large number of arguments that specify destination addresses, the message body, expiry times, and so on. For such complex arguments we use classes whose methods correspond to the different parameters that are relevant for the request. For each such class we also provide a builder class that lets you create the objects in a convenient manner. The easiest way to access these builders is through the [`ClxApi`](apidocs/index.html?com/clxcommunications/xms/ClxApi.html) class, which collects all builders that are needed for any of the API calls.
 
 These abstract concepts are made concrete in the text that follows.
 
 Connection management
 ---------------------
 
-The first step in using the CLX SDK is to create an API connection object, this object is instantiated from the `ApiConnection` class inside the `com.clxcommunications.xms` package and it describes everything we need in order to talk with the XMS API endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and, as previously mentioned, these will be provided to you when creating an XMS service.
+The first step in using the XMS SDK is to create an API connection object, this object is instantiated from the [`ApiConnection`](apidocs/index.html?com/clxcommunications/xms/ApiConnection.html) class inside the [`com.clxcommunications.xms`](apidocs/index.html?com/clxcommunications/xms/package-summary.html) package and it describes everything we need in order to talk with the XMS API endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and, as previously mentioned, these will be provided to you when creating an XMS service.
 
-Assuming we have been given the service plan identifier "myuser" and authentication token "mytoken" then an API connection `conn` is created using a builder as follows
+Assuming we have been given the service plan identifier "myplan" and authentication token "mytoken" then an API connection `conn` is created using a builder as follows
 
 ```java
 ApiConnection conn = ApiConnection.builder()
-    .user("myuser")
+    .servicePlanId("myplan")
     .token("mytoken")
     .build();
 ```
@@ -53,7 +53,7 @@ Since it is very common to instantiate the API connection and immediately starti
 
 ```java
 ApiConnection conn = ApiConnection.builder()
-    .user("myuser")
+    .servicePlanId("myplan")
     .token("mytoken")
     .start();
 ```
@@ -70,18 +70,20 @@ By default the connection will use `https://api.clxcommunications.com/xms` as XM
 
 ```java
 ApiConnection conn = ApiConnection.builder()
-    .user("myuser")
+    .servicePlanId("myplan")
     .token("mytoken")
     .endpoint("https://my.test.host:3000/my/base/path")
     .build();
 ```
 
-would make the connection object believe that the `batches` endpoint is `https://my.test.host:3000/my/base/path/v1/myuser/batches`.
+would make the connection object believe that the `batches` endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
+
+The HTTP client used by API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
 
 Sending batches
 ---------------
 
-Creating a batch is typically one of the first things one would like to do when starting to use XMS. When creating a batch we specify, at a minimum, the originating address (typically a short code), one or more destination addresses (typically MSISDNs), and the message body. To send a simple hello world message to one recipient then is accomplished using
+Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more destination addresses (typically MSISDNs), and the message body. To send a simple hello world message to one recipient is then accomplished using
 
 ```java
 MtBatchTextSmsResult result =
@@ -92,11 +94,12 @@ MtBatchTextSmsResult result =
         .build())
 ```
 
-You will notice a few things with this code. We are using a `conn` variable that corresponds to an API connection that we assume has been previously created. We are calling the `createBatch` method on that object with a single argument that describes the batch we wish to create.
+You will notice a few things with this code. We are using a `conn` variable that corresponds to an API connection that we assume has been previously created. We are calling the `createBatch` method on the connection with a single argument that describes the batch we wish to create.
 
 Describing the batch is done using an object satisfying the `MtBatchTextSmsCreate` interface. Such objects can most easily be created using the builder returned by `ClxApi.batchTextSms()`. For a batch with a binary body you would similarly describe it using a object satisfying the `MtBatchBinarySmsCreate` interface and typically use `ClxApi.batchBinarySms()` to build such objects.
 
 The return value in this case is a `MtBatchTextSmsResult` object which contains not only the submitted batch information but also information included by XMS, such that the unique batch identifier, the creation time, etc. For example, to simply print the batch identifier we could add the code
+
 ```java
 System.out.println("Batch id is " + result.id())
 ```
@@ -126,23 +129,25 @@ Handling errors
 Custom connections
 ------------------
 
-For most typical use cases the users of the CLX SDK do not have to worry about the internals of the CLX SDK. However, for some specialized cases the SDK does allow deep access.  In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
+For most typical use cases the users of the XMS SDK do not have to worry about its internals. However, for some specialized cases the SDK does allow deep access.  In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
 
-For example, consider a use case where you have two XMS users that you wish to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both users. In practice this may be accomplished with code such at the following.
+For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiDefaultHttpAsyncClient`](apidocs/index.html?com/clxcommunications/xms/ApiDefaultHttpAsyncClient.html).
+
+Thus, sharing the default HTTP client between two connections may in practice be accomplished with code such at the following.
 
 ```java
-HttpClient client = new ApiHttpClient(…);
+HttpClient client = new ApiDefaultHttpAsyncClient();
 client.start()
 
 ApiConnection conn1 = ApiConnection.builder()
     .httpClient(client)
     .token(token1)
-    .user(user1)
+    .servicePlanId(spid1)
     .start();
 ApiConnection conn2 = ApiConnection.builder()
     .httpClient(client)
     .token(token2)
-    .user(user2)
+    .servicePlanId(spid2)
     .start();
 
 // Interact with conn1 and conn2
