@@ -1224,7 +1224,7 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/batches/" + batchId
 		        + "/delivery_report"
-		        + "?type=full&status=Aborted%2CDelivered&code=200%2C300";
+		        + "?type=summary&status=Aborted%2CDelivered&code=200%2C300";
 
 		final BatchDeliveryReport expected =
 		        new BatchDeliveryReport.Builder()
@@ -1256,7 +1256,7 @@ public class ApiConnectionIT {
 
 		BatchDeliveryReportParams filter =
 		        ClxApi.batchDeliveryReportParams()
-		                .fullReport()
+		                .summaryReport()
 		                .addStatus(DeliveryStatus.ABORTED,
 		                        DeliveryStatus.DELIVERED)
 		                .addCode(200, 300)
