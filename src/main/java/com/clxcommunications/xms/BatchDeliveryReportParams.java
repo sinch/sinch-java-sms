@@ -70,6 +70,7 @@ public abstract class BatchDeliveryReportParams {
 		 * Request a summary delivery report.
 		 * 
 		 * @return this builder for use in a chained invocation
+		 * @see ReportType#SUMMARY
 		 */
 		public Builder summaryReport() {
 			return this.reportType(ReportType.SUMMARY);
@@ -79,6 +80,7 @@ public abstract class BatchDeliveryReportParams {
 		 * Request a full delivery report.
 		 * 
 		 * @return this builder for use in a chained invocation
+		 * @see ReportType#FULL
 		 */
 		public Builder fullReport() {
 			return this.reportType(ReportType.FULL);
