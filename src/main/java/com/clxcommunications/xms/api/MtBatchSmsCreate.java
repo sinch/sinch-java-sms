@@ -119,6 +119,12 @@ public abstract class MtBatchSmsCreate {
 			throw new IllegalStateException("no destination");
 		}
 
+		for (String to : to()) {
+			if (to.isEmpty()) {
+				throw new IllegalStateException("contains empty destination");
+			}
+		}
+
 		if (from().isEmpty()) {
 			throw new IllegalStateException("empty from address");
 		}

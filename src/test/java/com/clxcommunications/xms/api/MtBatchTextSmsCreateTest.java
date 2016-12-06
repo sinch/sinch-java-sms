@@ -156,6 +156,33 @@ public class MtBatchTextSmsCreateTest {
 		assertThat(actual, is(expected));
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void requiresToAddress() throws Exception {
+		ClxApi.batchTextSms()
+		        .from("1234")
+		        .body("body")
+		        .build();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void requiresNonEmptyToAddress() throws Exception {
+		ClxApi.batchTextSms()
+		        .from("1234")
+		        .addTo("987654321")
+		        .addTo("")
+		        .body("body")
+		        .build();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void requiresNonEmptyFromAddress() throws Exception {
+		ClxApi.batchTextSms()
+		        .from("")
+		        .addTo("987654321")
+		        .body("body")
+		        .build();
+	}
+
 	private static MtBatchTextSmsCreate.Builder minimalBatchBuilder() {
 		return ClxApi.batchTextSms()
 		        .from("1234")
