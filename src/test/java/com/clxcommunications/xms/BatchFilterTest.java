@@ -20,8 +20,12 @@ package com.clxcommunications.xms;
  * #L%
  */
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 import java.util.List;
 import java.util.Set;
@@ -38,6 +42,16 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 
 @RunWith(JUnitQuickcheck.class)
 public class BatchFilterTest {
+
+	@Test
+	public void canGenerateMinimal() throws Exception {
+		BatchFilter filter = ClxApi.batchFilter().build();
+
+		List<NameValuePair> actual = filter.toQueryParams(4);
+
+		assertThat(actual, containsInAnyOrder(
+		        (NameValuePair) new BasicNameValuePair("page", "4")));
+	}
 
 	@Test
 	public void canGenerateQueryParameters() throws Exception {
@@ -60,10 +74,28 @@ public class BatchFilterTest {
 		        new BasicNameValuePair("tags", "tag1,таг2")));
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void rejectsFromWithComma() throws Exception {
+		ClxApi.batchFilter()
+		        .addFrom("hello,world")
+		        .build();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void rejectsTagWithComma() throws Exception {
+		ClxApi.batchFilter()
+		        .addTag("hello,world")
+		        .build();
+	}
+
 	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> from, Set<String> tags, LocalDate startDate,
 	        LocalDate endDate) throws Exception {
+		// Constrain `from` and `tags` to strings not containing ','
+		assumeThat(from, not(hasItem(containsString(","))));
+		assumeThat(tags, not(hasItem(containsString(","))));
+
 		BatchFilter filter = ClxApi.batchFilter()
 		        .pageSize(pageSize)
 		        .from(from)

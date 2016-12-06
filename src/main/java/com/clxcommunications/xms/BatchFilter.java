@@ -91,6 +91,7 @@ public abstract class BatchFilter {
 	/**
 	 * Verifies that the object is in a reasonable state.
 	 */
+	@Value.Check
 	protected void check() {
 		for (String s : from()) {
 			if (s.contains(",")) {
