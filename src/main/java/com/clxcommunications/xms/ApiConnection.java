@@ -447,6 +447,10 @@ public abstract class ApiConnection implements Closeable {
 	 * @param clazz
 	 *            the class whose JSON representation is consumed
 	 * @return an HTTP consumer
+	 * @param <T>
+	 *            the result class of the consumer
+	 * @param <P>
+	 *            the class actually consumed by the consumer
 	 */
 	@SuppressWarnings("unchecked")
 	private <T, P extends T> JsonApiAsyncConsumer<T> jsonAsyncConsumer(

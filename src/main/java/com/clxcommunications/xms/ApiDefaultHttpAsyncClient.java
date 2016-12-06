@@ -60,14 +60,16 @@ public final class ApiDefaultHttpAsyncClient
 	private final CloseableHttpAsyncClient client;
 
 	/**
-	 * Creates a new HTTP async client suitable for communicating with XMS.
+	 * Creates a new HTTP asynchronous client suitable for communicating with
+	 * XMS.
 	 */
 	public ApiDefaultHttpAsyncClient() {
 		this(false);
 	}
 
 	/**
-	 * Creates a new HTTP async client suitable for communicating with XMS.
+	 * Creates a new HTTP asynchronous client suitable for communicating with
+	 * XMS.
 	 * 
 	 * @param startedInternally
 	 *            whether this object was created inside this SDK
