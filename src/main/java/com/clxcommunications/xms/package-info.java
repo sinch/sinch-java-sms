@@ -39,13 +39,13 @@
  * 
  *     public static void main(String[] args) {
  *         ApiConnection conn = ApiConnection.builder()
- *                 .username("my username")
+ *                 .servicePlanId("my spid")
  *                 .token("my token")
  *                 .start();
  * 
  *         try {
  *             MtBatchTextSmsResult result =
- *                     conn.createBatch(ClxApi.buildBatchTextSms()
+ *                     conn.createBatch(ClxApi.batchTextSms()
  *                             .from("my short code")
  *                             .addTo("my destination")
  *                             .body("my message")
