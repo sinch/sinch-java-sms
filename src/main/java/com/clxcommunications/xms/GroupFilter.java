@@ -63,6 +63,7 @@ public abstract class GroupFilter {
 	 */
 	public abstract Set<String> tags();
 
+	@Value.Check
 	protected void check() {
 		for (String s : tags()) {
 			if (s.contains(",")) {

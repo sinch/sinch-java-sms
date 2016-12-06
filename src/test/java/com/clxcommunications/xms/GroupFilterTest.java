@@ -20,8 +20,12 @@ package com.clxcommunications.xms;
  * #L%
  */
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 import java.util.List;
 import java.util.Set;
@@ -39,6 +43,16 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 public class GroupFilterTest {
 
 	@Test
+	public void canGenerateMinimal() throws Exception {
+		GroupFilter filter = ClxApi.groupFilter().build();
+
+		List<NameValuePair> actual = filter.toQueryParams(4);
+
+		assertThat(actual, containsInAnyOrder(
+		        (NameValuePair) new BasicNameValuePair("page", "4")));
+	}
+
+	@Test
 	public void canGenerateQueryParameters() throws Exception {
 		GroupFilter filter = ClxApi.groupFilter()
 		        .pageSize(20)
@@ -53,9 +67,19 @@ public class GroupFilterTest {
 		        new BasicNameValuePair("tags", "tag1,таг2")));
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void rejectsTagWithComma() throws Exception {
+		ClxApi.groupFilter()
+		        .addTag("hello,world")
+		        .build();
+	}
+
 	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
 	        Set<String> tags) throws Exception {
+		// Constrain `tags` to strings not containing ','
+		assumeThat(tags, not(hasItem(containsString(","))));
+
 		GroupFilter filter = ClxApi.groupFilter()
 		        .pageSize(pageSize)
 		        .tags(tags)
