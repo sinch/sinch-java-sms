@@ -1,5 +1,3 @@
-package com.clxcommunications.xms;
-
 /*-
  * #%L
  * SDK for CLX XMS
@@ -19,6 +17,7 @@ package com.clxcommunications.xms;
  * limitations under the License.
  * #L%
  */
+package com.clxcommunications.xms;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;

@@ -1,8 +1,3 @@
-/**
- * A collection of classes that are used in the test suite.
- */
-package com.clxcommunications.testsupport;
-
 /*-
  * #%L
  * SDK for CLX XMS
@@ -22,3 +17,8 @@ package com.clxcommunications.testsupport;
  * limitations under the License.
  * #L%
  */
+
+/**
+ * A collection of classes that are used in the test suite.
+ */
+package com.clxcommunications.testsupport;

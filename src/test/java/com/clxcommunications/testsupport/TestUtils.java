@@ -1,5 +1,3 @@
-package com.clxcommunications.testsupport;
-
 /*-
  * #%L
  * SDK for CLX XMS
@@ -19,6 +17,7 @@ package com.clxcommunications.testsupport;
  * limitations under the License.
  * #L%
  */
+package com.clxcommunications.testsupport;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;

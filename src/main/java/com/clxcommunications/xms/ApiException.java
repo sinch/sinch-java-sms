@@ -1,5 +1,3 @@
-package com.clxcommunications.xms;
-
 /*-
  * #%L
  * SDK for CLX XMS
@@ -19,6 +17,7 @@ package com.clxcommunications.xms;
  * limitations under the License.
  * #L%
  */
+package com.clxcommunications.xms;
 
 /**
  * Base class for all exceptions specific to the CLX SDK.

@@ -155,6 +155,7 @@
 				<version>1.10</version>
 				<configuration>
 					<licenseName>apache_v2</licenseName>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 					<roots>
 						<root>src</root>
 					</roots>

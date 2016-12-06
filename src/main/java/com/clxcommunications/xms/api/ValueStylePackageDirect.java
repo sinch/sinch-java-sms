@@ -1,5 +1,3 @@
-package com.clxcommunications.xms.api;
-
 /*-
  * #%L
  * SDK for CLX XMS
@@ -19,6 +17,7 @@ package com.clxcommunications.xms.api;
  * limitations under the License.
  * #L%
  */
+package com.clxcommunications.xms.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
