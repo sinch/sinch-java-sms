@@ -20,8 +20,12 @@ package com.clxcommunications.xms;
  * #L%
  */
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 import java.util.List;
 import java.util.Set;
@@ -40,9 +44,20 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 public class InboundsFilterTest {
 
 	@Test
+	public void canGenerateMinimal() throws Exception {
+		InboundsFilter filter = ClxApi.inboundsFilter().build();
+
+		List<NameValuePair> actual = filter.toQueryParams(2);
+
+		assertThat(actual, containsInAnyOrder(
+		        (NameValuePair) new BasicNameValuePair("page", "2")));
+	}
+
+	@Test
 	public void canGenerateQueryParameters() throws Exception {
 		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(20)
+		        .addTo("12345", "9876")
 		        .startDate(LocalDate.of(2010, 11, 12))
 		        .endDate(LocalDate.of(2011, 11, 12))
 		        .build();
@@ -51,17 +66,29 @@ public class InboundsFilterTest {
 
 		assertThat(actual, containsInAnyOrder(
 		        (NameValuePair) new BasicNameValuePair("page", "4"),
+		        new BasicNameValuePair("to", "12345,9876"),
 		        new BasicNameValuePair("page_size", "20"),
 		        new BasicNameValuePair("start_date", "2010-11-12"),
 		        new BasicNameValuePair("end_date", "2011-11-12")));
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void rejectsToWithComma() throws Exception {
+		ClxApi.inboundsFilter()
+		        .addTo("123,456")
+		        .build();
+	}
+
 	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
-	        Set<String> tags, LocalDate startDate, LocalDate endDate)
+	        Set<String> to, LocalDate startDate, LocalDate endDate)
 	        throws Exception {
+		// Constrain `to` to strings not containing ','
+		assumeThat(to, not(hasItem(containsString(","))));
+
 		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(pageSize)
+		        .to(to)
 		        .startDate(startDate)
 		        .endDate(endDate)
 		        .build();

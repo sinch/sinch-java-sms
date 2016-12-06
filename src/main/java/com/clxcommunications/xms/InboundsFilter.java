@@ -84,6 +84,7 @@ public abstract class InboundsFilter {
 	/**
 	 * Verifies that this filter is in a reasonable state.
 	 */
+	@Value.Check
 	protected void check() {
 		for (String s : to()) {
 			if (s.contains(",")) {
