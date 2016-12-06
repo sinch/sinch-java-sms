@@ -31,9 +31,11 @@ import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.client.HttpAsyncClient;
+import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 
 /**
  * The default HTTP client used in API connections. It is configured in a way
@@ -77,9 +79,18 @@ public final class ApiDefaultHttpAsyncClient
 	ApiDefaultHttpAsyncClient(boolean startedInternally) {
 		this.startedInternally = startedInternally;
 
+		// Allow TLSv1.2 protocol only
+		SSLIOSessionStrategy sslSessionStrategy =
+		        new SSLIOSessionStrategy(
+		                SSLContexts.createSystemDefault(),
+		                new String[] { "TLSv1.2" },
+		                null,
+		                SSLIOSessionStrategy.getDefaultHostnameVerifier());
+
 		// TODO: Is this a good default setup?
 		this.client =
 		        HttpAsyncClients.custom()
+		                .setSSLStrategy(sslSessionStrategy)
 		                .disableCookieManagement()
 		                .setMaxConnPerRoute(DEFAULT_MAX_CONN)
 		                .setMaxConnTotal(DEFAULT_MAX_CONN)
