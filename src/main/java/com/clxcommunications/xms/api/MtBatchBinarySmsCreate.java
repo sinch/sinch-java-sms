@@ -65,10 +65,4 @@ public abstract class MtBatchBinarySmsCreate extends MtBatchSmsCreate {
 	 */
 	public abstract byte[] body();
 
-	@Override
-	@Value.Check
-	protected void check() {
-		super.check();
-	}
-
 }

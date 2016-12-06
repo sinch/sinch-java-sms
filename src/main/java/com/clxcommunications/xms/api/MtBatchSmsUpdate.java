@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import org.immutables.value.Value;
 import org.threeten.bp.OffsetDateTime;
 
 import com.clxcommunications.xms.UpdateValue;
@@ -110,7 +111,11 @@ public abstract class MtBatchSmsUpdate {
 	@JsonProperty("callback_url")
 	public abstract UpdateValue<URI> callbackUrl();
 
+	/**
+	 * Validates that this object is in a correct state.
+	 */
 	@OverridingMethodsMustInvokeSuper
+	@Value.Check
 	protected void check() {
 		if (from() != null && from().isEmpty()) {
 			throw new IllegalStateException("empty from address");

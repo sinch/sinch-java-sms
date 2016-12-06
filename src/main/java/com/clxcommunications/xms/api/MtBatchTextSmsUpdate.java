@@ -195,10 +195,4 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 	@Nullable
 	public abstract UpdateValue<Map<String, ParameterValues>> parameters();
 
-	@Override
-	@Value.Check
-	protected void check() {
-		super.check();
-	}
-
 }

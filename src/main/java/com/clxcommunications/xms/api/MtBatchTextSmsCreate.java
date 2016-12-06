@@ -86,10 +86,4 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
 	@JsonInclude(Include.NON_EMPTY)
 	public abstract Map<String, ParameterValues> parameters();
 
-	@Override
-	@Value.Check
-	protected void check() {
-		super.check();
-	}
-
 }

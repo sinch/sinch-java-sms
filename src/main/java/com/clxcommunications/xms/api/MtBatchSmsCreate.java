@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import org.immutables.value.Value;
 import org.threeten.bp.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -112,6 +113,7 @@ public abstract class MtBatchSmsCreate {
 	public abstract Set<String> tags();
 
 	@OverridingMethodsMustInvokeSuper
+	@Value.Check
 	protected void check() {
 		if (to().isEmpty()) {
 			throw new IllegalStateException("no destination");

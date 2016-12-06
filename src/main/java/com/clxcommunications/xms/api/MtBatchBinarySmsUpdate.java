@@ -168,10 +168,4 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 	@Nullable
 	public abstract byte[] body();
 
-	@Override
-	@Value.Check
-	protected void check() {
-		super.check();
-	}
-
 }
