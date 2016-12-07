@@ -35,6 +35,7 @@ import java.util.concurrent.Future;
 import javax.annotation.Nonnull;
 
 import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
@@ -297,8 +298,7 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	@Value.Check
 	protected void check() {
-		json.configure(SerializationFeature.INDENT_OUTPUT,
-		        prettyPrintJson());
+		json.configure(SerializationFeature.INDENT_OUTPUT, prettyPrintJson());
 
 		if (endpoint().getQuery() != null) {
 			throw new IllegalStateException(
@@ -368,7 +368,7 @@ public abstract class ApiConnection implements Closeable {
 
 	@Nonnull
 	private URI batchesEndpoint() {
-		return endpoint("/batches", Collections.<NameValuePair> emptyList());
+		return endpoint("/batches");
 	}
 
 	@Nonnull
@@ -379,9 +379,7 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI batchDeliveryReportEndpoint(BatchId batchId,
 	        List<NameValuePair> params) {
-		return endpoint(
-		        "/batches/" + batchId + "/delivery_report",
-		        params);
+		return endpoint("/batches/" + batchId + "/delivery_report", params);
 	}
 
 	@Nonnull
@@ -510,16 +508,18 @@ public abstract class ApiConnection implements Closeable {
 	}
 
 	/**
-	 * Attaches the headers that XMS require.
+	 * Decorates the given request with headers that XMS require.
 	 * 
 	 * @param req
 	 *            the request to which the headers should be added
 	 * @return the given request object
 	 */
 	private <T extends HttpRequest> T withStandardHeaders(T req) {
-		req.setHeader("Authorization", "Bearer " + token());
-		req.setHeader("Accept", ContentType.APPLICATION_JSON.toString());
+		req.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token());
+		req.setHeader(HttpHeaders.ACCEPT,
+		        ContentType.APPLICATION_JSON.toString());
 		req.setHeader("X-CLX-SDK-Version", Version.VERSION);
+
 		return req;
 	}
 
