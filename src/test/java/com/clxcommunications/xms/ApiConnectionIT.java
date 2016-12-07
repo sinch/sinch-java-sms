@@ -2120,8 +2120,8 @@ public class ApiConnectionIT {
 
 		GroupUpdate request = ClxApi.groupUpdate()
 		        .unsetName()
-		        .addMemberAdd("123456789")
-		        .addMemberRemove("987654321")
+		        .addMemberInsertion("123456789")
+		        .addMemberRemoval("987654321")
 		        .build();
 
 		GroupResult expected = new GroupResult.Builder()
@@ -2158,8 +2158,8 @@ public class ApiConnectionIT {
 
 		GroupUpdate request = ClxApi.groupUpdate()
 		        .unsetName()
-		        .addMemberAdd("123456789")
-		        .addMemberRemove("987654321")
+		        .addMemberInsertion("123456789")
+		        .addMemberRemoval("987654321")
 		        .build();
 
 		final GroupResult expected = new GroupResult.Builder()

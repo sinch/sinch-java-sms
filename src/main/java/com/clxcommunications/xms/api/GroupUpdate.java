@@ -109,7 +109,7 @@ public interface GroupUpdate {
 	 * @return a non-null list of group members
 	 */
 	@JsonProperty("add")
-	public abstract Set<String> memberAdd();
+	public abstract Set<String> memberInsertions();
 
 	/**
 	 * The MSISDNs that should be removed from this group.
@@ -117,7 +117,7 @@ public interface GroupUpdate {
 	 * @return a non-null list of group members
 	 */
 	@JsonProperty("remove")
-	public abstract Set<String> memberRemove();
+	public abstract Set<String> memberRemovals();
 
 	/**
 	 * The child groups that should be added to this group.
@@ -125,7 +125,7 @@ public interface GroupUpdate {
 	 * @return a non-null list of group IDs
 	 */
 	@JsonProperty("child_groups_add")
-	public abstract Set<GroupId> childGroupsAdd();
+	public abstract Set<GroupId> childGroupInsertions();
 
 	/**
 	 * The child groups that should be removed from this group.
@@ -133,7 +133,7 @@ public interface GroupUpdate {
 	 * @return a non-null list of group IDs
 	 */
 	@JsonProperty("child_groups_remove")
-	public abstract Set<GroupId> childGroupsRemove();
+	public abstract Set<GroupId> childGroupRemovals();
 
 	/**
 	 * Identifier of a group whose members should be added to this group.
