@@ -26,6 +26,7 @@ import java.util.concurrent.Future;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
@@ -36,6 +37,7 @@ import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
+import org.threeten.bp.Duration;
 
 /**
  * The default HTTP client used in API connections. It is configured in a way
@@ -44,6 +46,11 @@ import org.apache.http.ssl.SSLContexts;
  */
 public final class ApiDefaultHttpAsyncClient
         implements HttpAsyncClient, Closeable {
+
+	/**
+	 * The default limit for the socket and connect timeout.
+	 */
+	private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
 	/**
 	 * The default maximum number of simultaneous connections to open towards
@@ -87,6 +94,12 @@ public final class ApiDefaultHttpAsyncClient
 		                null,
 		                SSLIOSessionStrategy.getDefaultHostnameVerifier());
 
+		RequestConfig requestConfig =
+		        RequestConfig.custom()
+		                .setConnectTimeout((int) DEFAULT_TIMEOUT.toMillis())
+		                .setSocketTimeout((int) DEFAULT_TIMEOUT.toMillis())
+		                .build();
+
 		// TODO: Is this a good default setup?
 		this.client =
 		        HttpAsyncClients.custom()
@@ -94,6 +107,7 @@ public final class ApiDefaultHttpAsyncClient
 		                .disableCookieManagement()
 		                .setMaxConnPerRoute(DEFAULT_MAX_CONN)
 		                .setMaxConnTotal(DEFAULT_MAX_CONN)
+		                .setDefaultRequestConfig(requestConfig)
 		                .build();
 	}
 
