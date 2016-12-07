@@ -34,7 +34,7 @@ public class RuntimeApiException extends RuntimeException {
 	 *            the API exception
 	 */
 	public RuntimeApiException(ApiException e) {
-		super(e);
+		super(e.getMessage(), e);
 	}
 
 }
