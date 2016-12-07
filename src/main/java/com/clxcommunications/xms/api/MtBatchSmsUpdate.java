@@ -52,7 +52,7 @@ public abstract class MtBatchSmsUpdate {
 	 */
 	@Nullable
 	@JsonProperty("to_add")
-	public abstract List<String> toAdd();
+	public abstract List<String> recipientInsertions();
 
 	/**
 	 * The message destinations to remove from the batch.
@@ -61,7 +61,7 @@ public abstract class MtBatchSmsUpdate {
 	 */
 	@Nullable
 	@JsonProperty("to_remove")
-	public abstract List<String> toRemove();
+	public abstract List<String> recipientRemovals();
 
 	/**
 	 * The message originator.

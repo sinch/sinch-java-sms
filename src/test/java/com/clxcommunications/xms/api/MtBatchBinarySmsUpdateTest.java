@@ -52,7 +52,7 @@ public class MtBatchBinarySmsUpdateTest {
 	public void canSerializeWithUpdatedFields() throws Exception {
 		MtBatchSmsUpdate input = ClxApi.batchBinarySmsUpdate()
 		        .from("1234")
-		        .addToAdd("987654321")
+		        .addRecipientInsertion("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))
 		        .udh(new byte[] { 1, 2, 3, 4 })
 		        .deliveryReport(UpdateValue.<ReportType> unset())
