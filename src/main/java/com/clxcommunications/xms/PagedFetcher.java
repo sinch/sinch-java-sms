@@ -189,6 +189,8 @@ public abstract class PagedFetcher<T> {
 								cause = Utils.unwrapExecutionException(e);
 							} catch (ErrorResponseException einner) {
 								cause = einner;
+							} catch (UnauthorizedException einner) {
+								cause = einner;
 							} catch (UnexpectedResponseException einner) {
 								cause = einner;
 							}

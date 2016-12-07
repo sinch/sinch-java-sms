@@ -112,10 +112,12 @@ public final class Utils {
 	 * @return returns <code>e</code>
 	 * @throws ErrorResponseException
 	 * @throws UnexpectedResponseException
+	 * @throws UnauthorizedException
 	 * @throws ExecutionException
 	 */
 	static ConcurrentException unwrapExecutionException(ExecutionException e)
-	        throws ErrorResponseException, UnexpectedResponseException {
+	        throws ErrorResponseException, UnexpectedResponseException,
+	        UnauthorizedException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
 		} else if (e.getCause() instanceof Error) {
@@ -124,6 +126,8 @@ public final class Utils {
 			throw (ErrorResponseException) e.getCause();
 		} else if (e.getCause() instanceof UnexpectedResponseException) {
 			throw (UnexpectedResponseException) e.getCause();
+		} else if (e.getCause() instanceof UnauthorizedException) {
+			throw (UnauthorizedException) e.getCause();
 		} else {
 			return new ConcurrentException(e.getCause());
 		}

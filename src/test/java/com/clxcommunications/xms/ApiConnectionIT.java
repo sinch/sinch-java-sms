@@ -54,6 +54,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.eclipse.jetty.util.ConcurrentArrayQueue;
@@ -368,6 +369,36 @@ public class ApiConnectionIT {
 			fail("Expected exception, got none");
 		} catch (ConcurrentException e) {
 			assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));
+		} finally {
+			conn.close();
+		}
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void canHandleBatchCreateWithUnauthorized() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+
+		MtBatchTextSmsCreate request =
+		        ClxApi.batchTextSms()
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
+		                .body("Hello, world!")
+		                .build();
+
+		String path = "/v1/" + spid + "/batches";
+
+		stubPostResponse("", path, HttpStatus.SC_UNAUTHORIZED);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			conn.createBatch(request);
+			fail("Expected exception, got none");
 		} finally {
 			conn.close();
 		}

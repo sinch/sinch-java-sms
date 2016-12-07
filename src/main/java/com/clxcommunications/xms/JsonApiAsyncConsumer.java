@@ -92,6 +92,8 @@ class JsonApiAsyncConsumer<T> extends AsyncByteConsumer<T> {
 		case HttpStatus.SC_FORBIDDEN:
 			ApiError error = json.readValue(inputStream, ApiError.class);
 			throw new ErrorResponseException(error);
+		case HttpStatus.SC_UNAUTHORIZED:
+			throw new UnauthorizedException();
 		default:
 			ContentType type =
 			        ContentType.getLenient(response.getEntity());
