@@ -49,16 +49,11 @@ public abstract class PagedFetcher<T> {
 	 * @return the fetched page
 	 * @throws ConcurrentException
 	 *             if another checked exception occurred during execution
-	 * @throws ErrorResponseException
-	 *             if the HTTP endpoint returned an error message
-	 * @throws UnexpectedResponseException
-	 *             if the HTTP endpoint responded with an unexpected message
-	 * @throws InterruptedException
-	 *             if the fetch was interrupted before completing
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	@Nonnull
-	Page<T> fetch(int page) throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	Page<T> fetch(int page) throws InterruptedException, ApiException {
 		try {
 			return fetchAsync(page, null).get();
 		} catch (ExecutionException e) {

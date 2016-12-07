@@ -571,16 +571,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch creation result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchTextSmsResult createBatch(MtBatchTextSmsCreate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return createBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
@@ -628,16 +623,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch creation result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchBinarySmsResult createBatch(MtBatchBinarySmsCreate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return createBatchAsync(sms, null).get();
 		} catch (ExecutionException e) {
@@ -686,17 +676,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch submission result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchTextSmsResult replaceBatch(BatchId id,
 	        MtBatchTextSmsCreate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -746,17 +731,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a batch submission result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchBinarySmsResult replaceBatch(BatchId id,
 	        MtBatchBinarySmsCreate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return replaceBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -805,17 +785,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the batch with the updates applied
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchTextSmsResult updateBatch(BatchId id,
 	        MtBatchTextSmsUpdate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -864,17 +839,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the batch with the updates applied
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchBinarySmsResult updateBatch(BatchId id,
 	        MtBatchBinarySmsUpdate sms)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return updateBatchAsync(id, sms, null).get();
 		} catch (ExecutionException e) {
@@ -920,16 +890,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the desired batch
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchSmsResult fetchBatch(BatchId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchBatchAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -1023,16 +988,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the cancelled batch
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchSmsResult cancelBatch(BatchId batchId)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return cancelBatchAsync(batchId, null).get();
 		} catch (ExecutionException e) {
@@ -1080,17 +1040,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a dry run result
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MtBatchDryRunResult createBatchDryRun(MtBatchSmsCreate sms,
 	        Boolean perRecipient, Integer numRecipients)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return createBatchDryRunAsync(sms, perRecipient, numRecipients,
 			        null).get();
@@ -1153,17 +1108,12 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the desired delivery report
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public BatchDeliveryReport fetchDeliveryReport(BatchId id,
 	        BatchDeliveryReportParams filter)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchDeliveryReportAsync(id, filter, null).get();
 		} catch (ExecutionException e) {
@@ -1214,16 +1164,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the desired delivery report
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public RecipientDeliveryReport fetchDeliveryReport(BatchId id,
-	        String recipient) throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        String recipient) throws InterruptedException, ApiException {
 		try {
 			return fetchDeliveryReportAsync(id, recipient, null).get();
 		} catch (ExecutionException e) {
@@ -1272,16 +1217,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the updated set of tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags updateTags(BatchId id, TagsUpdate tags)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return updateTagsAsync(id, tags, null).get();
 		} catch (ExecutionException e) {
@@ -1328,16 +1268,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the new set of tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags replaceTags(BatchId id, Tags tags)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return replaceTagsAsync(id, tags, null).get();
 		} catch (ExecutionException e) {
@@ -1382,16 +1317,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the batch tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags fetchTags(BatchId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchTagsAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -1434,16 +1364,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return a created group
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public GroupResult createGroup(GroupCreate group)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return createGroupAsync(group, null).get();
 		} catch (ExecutionException e) {
@@ -1485,16 +1410,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the fetched group
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public GroupResult fetchGroup(GroupId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchGroupAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -1536,16 +1456,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the fetched members
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Set<String> fetchGroupMembers(GroupId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchGroupMembersAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -1640,16 +1555,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the group with the updates applied
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public GroupResult updateGroup(GroupId id, GroupUpdate group)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return updateGroupAsync(id, group, null).get();
 		} catch (ExecutionException e) {
@@ -1696,16 +1606,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the new group
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public GroupResult replaceGroup(GroupId id, GroupCreate group)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return replaceGroupAsync(id, group, null).get();
 		} catch (ExecutionException e) {
@@ -1749,16 +1654,11 @@ public abstract class ApiConnection implements Closeable {
 	 *            identifier of the group to delete
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public void deleteGroup(GroupId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			deleteGroupAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -1801,16 +1701,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the updated set of tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags updateTags(GroupId id, TagsUpdate tags)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return updateTagsAsync(id, tags, null).get();
 		} catch (ExecutionException e) {
@@ -1857,16 +1752,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the new set of tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags replaceTags(GroupId id, Tags tags)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return replaceTagsAsync(id, tags, null).get();
 		} catch (ExecutionException e) {
@@ -1911,16 +1801,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the batch tags
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public Tags fetchTags(GroupId id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchTagsAsync(id, null).get();
 		} catch (ExecutionException e) {
@@ -2012,16 +1897,11 @@ public abstract class ApiConnection implements Closeable {
 	 * @return the fetched message
 	 * @throws InterruptedException
 	 *             if the current thread was interrupted while waiting
-	 * @throws ErrorResponseException
-	 *             if the server response indicated an error
-	 * @throws ConcurrentException
-	 *             if the send threw an unknown exception
-	 * @throws UnexpectedResponseException
-	 *             if the server gave an unexpected response
+	 * @throws ApiException
+	 *             if an error occurred while communicating with XMS
 	 */
 	public MoSms fetchInbound(String id)
-	        throws InterruptedException, ConcurrentException,
-	        ErrorResponseException, UnexpectedResponseException {
+	        throws InterruptedException, ApiException {
 		try {
 			return fetchInboundAsync(id, null).get();
 		} catch (ExecutionException e) {
