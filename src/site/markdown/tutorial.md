@@ -76,9 +76,9 @@ ApiConnection conn = ApiConnection.builder()
     .build();
 ```
 
-would make the connection object believe that the `batches` endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
+would make the connection object believe that the [`batches`](https://manage.clxcommunications.com/developers/sms/xmsapi.html#batches-endpoint) endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
 
-The HTTP client used by API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
+The HTTP client used by the API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
 
 Sending batches
 ---------------
@@ -136,11 +136,47 @@ Future<MtBatchTextSmsResult> future =
 
 The callback that we provided to this method will have one of its methods invoked as soon as the communication with XMS has concluded. Which of the methods that is invoked will depend on how the request went. If all went well then the `completed` method will be called with the result as argument. If some form of exception was thrown during the request then the `failed` method will be called with the exception as argument. For more about error handling see sec. [Handling errors](#Handling_errors). Finally, if the request was canceled, for example using `future.cancel(true)`, then the `cancelled` method is called.
 
-Fetching batches
-----------------
+Listing batches
+---------------
+
+Once you have created a few batches it may be interesting to retrieve a list of all your batches. Retrieving listings of batches is done through a _paged result_. This means that a single request to XMS may not retrieve all batches. As a result, when calling the `fetchBatches` method on your connection object it will not simply return a list of batches but rather a [`PagedFetcher`](apidocs/index.html?com/clxcommunications/xms/PagedFetcher.html) object. The paged fetcher in turn can be used to fetch specific pages, iterate over all pages, or directly iterate over all batches while transparently performing necessary page requests.
+
+To limit the number of fetched batches it is also possible to supply a filter that will restrict the fetched batches, for example to those sent after a particular date or having a specific tag or sender.
+
+More specifically, to print the identifier of each batch sent on 2016-12-01 and having the "signup-notification" tag we may write something like the following.
+
+```java
+BatchFilter filter = ClxApi.batchFilter()
+    .addTag("signup-notification")
+    .startDate(LocalDate.of(2016, 12, 1))
+    .endDate(LocalDate.of(2016, 12, 2))
+    .build();
+
+PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
+
+for (MtBatchTextSmsResult batch : fetcher.elements()) {
+    System.out.println("Batch ID: " + batch.id());
+}
+```
 
 Handling errors
 ---------------
+
+Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK are
+
+[`ConcurrentException`](apidocs/index.html?com/clxcommunications/xms/ConcurrentException.html)
+:   This exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
+
+[`ErrorResponseException`](apidocs/index.html?com/clxcommunications/xms/ErrorResponseException.html)
+:   If the XMS server responded with a JSON error object containing an error code and error description.
+
+[`UnauthorizedException`](apidocs/index.html?com/clxcommunications/xms/UnauthorizedException.html)
+:   Thrown if an incorrect authentication token was provided for the service plan.
+
+[`UnexpectedResponseException`](apidocs/index.html?com/clxcommunications/xms/UnexpectedResponseException.html)
+:   If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the exception object will contain the complete HTTP response.
+
+each of these exceptions inherit from the base class [`ApiException`](apidocs/index.html?com/clxcommunications/xms/ApiException.html).
 
 Custom connections
 ------------------
