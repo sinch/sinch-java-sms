@@ -64,8 +64,8 @@ public class MtBatchBinarySmsCreateTest {
 
 	private static MtBatchBinarySmsCreate.Builder minimalBatchBuilder() {
 		return ClxApi.batchBinarySms()
-		        .from("1234")
-		        .addTo("987654321")
+		        .sender("1234")
+		        .addRecipient("987654321")
 		        .body("Hello, world!".getBytes(TestUtils.US_ASCII))
 		        .udh(new byte[] { 1, 2, 3, 4 });
 	}

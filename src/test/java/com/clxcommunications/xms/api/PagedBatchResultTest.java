@@ -82,8 +82,8 @@ public class PagedBatchResultTest {
 
 		MtBatchSmsResult batchResult1 =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(false)
 		                .id(batchId1)
@@ -157,8 +157,8 @@ public class PagedBatchResultTest {
 
 		MtBatchSmsResult batchResult1 =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(false)
 		                .id(batchId1)

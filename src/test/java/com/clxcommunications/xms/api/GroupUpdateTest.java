@@ -61,7 +61,7 @@ public class GroupUpdateTest {
 		        .childGroupInsertions(Arrays.asList(groupId1, groupId2))
 		        .addChildGroupRemoval(groupId3)
 		        .autoUpdate(ClxApi.autoUpdate()
-		                .to("1111")
+		                .recipient("1111")
 		                .add("kw0", "kw1")
 		                .remove("kw2", "kw3")
 		                .build())

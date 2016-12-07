@@ -61,7 +61,7 @@ public class MtBatchTextSmsUpdateTest {
 		        .build());
 
 		MtBatchSmsUpdate input = ClxApi.batchTextSmsUpdate()
-		        .from("1234")
+		        .sender("1234")
 		        .addRecipientInsertion("987654321")
 		        .body("Hello, world!")
 		        .parameters(UpdateValue.set(params))
@@ -84,7 +84,7 @@ public class MtBatchTextSmsUpdateTest {
 	@Test
 	public void canSerializeWithUnsetParameters() throws Exception {
 		MtBatchSmsUpdate input = ClxApi.batchTextSmsUpdate()
-		        .from("1234")
+		        .sender("1234")
 		        .addRecipientInsertion("987654321")
 		        .body("Hello, world!")
 		        .unsetParameters()

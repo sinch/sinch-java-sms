@@ -57,7 +57,8 @@ public abstract class MoSms {
 	 * 
 	 * @return an originating address
 	 */
-	public abstract String from();
+	@JsonProperty("from")
+	public abstract String sender();
 
 	/**
 	 * The recipient of this mobile originated message. For example an MSISDN or
@@ -65,7 +66,8 @@ public abstract class MoSms {
 	 * 
 	 * @return the recipient address
 	 */
-	public abstract String to();
+	@JsonProperty("to")
+	public abstract String recipient();
 
 	/**
 	 * The MCCMNC of the originating operator, if available.

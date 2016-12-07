@@ -147,17 +147,17 @@ public class ApiConnectionIT {
 
 		MtBatchBinarySmsCreate request =
 		        ClxApi.batchBinarySms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("body".getBytes(TestUtils.US_ASCII))
 		                .udh("udh".getBytes(TestUtils.US_ASCII))
 		                .build();
 
 		MtBatchBinarySmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
-		                .from(request.from())
-		                .to(request.to())
+		                .sender(request.sender())
+		                .recipients(request.recipients())
 		                .body(request.body())
 		                .udh(request.udh())
 		                .canceled(false)
@@ -195,16 +195,16 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("Hello, world! Здравей свят!")
 		                .build();
 
 		MtBatchTextSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from(request.from())
-		                .to(request.to())
+		                .sender(request.sender())
+		                .recipients(request.recipients())
 		                .body(request.body())
 		                .canceled(false)
 		                .id(batchId)
@@ -241,9 +241,9 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("Hello, ${name}!")
 		                .putParameter("name",
 		                        ClxApi.parameterValues()
@@ -254,8 +254,8 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from(request.from())
-		                .to(request.to())
+		                .sender(request.sender())
+		                .recipients(request.recipients())
 		                .body(request.body())
 		                .parameters(request.parameters())
 		                .canceled(false)
@@ -290,9 +290,9 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("Hello, world!")
 		                .build();
 
@@ -327,9 +327,9 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("Hello, world!")
 		                .build();
 
@@ -381,17 +381,17 @@ public class ApiConnectionIT {
 
 		MtBatchBinarySmsCreate request =
 		        ClxApi.batchBinarySms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("body".getBytes(TestUtils.US_ASCII))
 		                .udh("udh".getBytes(TestUtils.US_ASCII))
 		                .build();
 
 		MtBatchBinarySmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
-		                .from(request.from())
-		                .to(request.to())
+		                .sender(request.sender())
+		                .recipients(request.recipients())
 		                .body(request.body())
 		                .udh(request.udh())
 		                .canceled(false)
@@ -429,16 +429,16 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsCreate request =
 		        ClxApi.batchTextSms()
-		                .from("12345")
-		                .addTo("123456789")
-		                .addTo("987654321")
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
 		                .body("Hello, world!")
 		                .build();
 
 		MtBatchTextSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from(request.from())
-		                .to(request.to())
+		                .sender(request.sender())
+		                .recipients(request.recipients())
 		                .body(request.body())
 		                .canceled(false)
 		                .id(batchId)
@@ -475,7 +475,7 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsUpdate request =
 		        ClxApi.batchTextSmsUpdate()
-		                .from("12345")
+		                .sender("12345")
 		                .body("Hello, world!")
 		                .unsetDeliveryReport()
 		                .unsetExpireAt()
@@ -483,8 +483,8 @@ public class ApiConnectionIT {
 
 		MtBatchTextSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from(request.from())
-		                .addTo("123")
+		                .sender(request.sender())
+		                .addRecipient("123")
 		                .body(request.body())
 		                .canceled(false)
 		                .id(batchId)
@@ -525,15 +525,15 @@ public class ApiConnectionIT {
 
 		MtBatchBinarySmsUpdate request =
 		        ClxApi.batchBinarySmsUpdate()
-		                .from("12345")
+		                .sender("12345")
 		                .body("howdy".getBytes(TestUtils.US_ASCII))
 		                .unsetExpireAt()
 		                .build();
 
 		MtBatchBinarySmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
-		                .from(request.from())
-		                .addTo("123")
+		                .sender(request.sender())
+		                .addRecipient("123")
 		                .body(request.body())
 		                .udh((byte) 1, (byte) 0xff)
 		                .canceled(false)
@@ -573,8 +573,8 @@ public class ApiConnectionIT {
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(false)
 		                .id(batchId)
@@ -611,8 +611,8 @@ public class ApiConnectionIT {
 
 		final MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(false)
 		                .id(batchId)
@@ -660,8 +660,8 @@ public class ApiConnectionIT {
 
 		final MtBatchSmsResult expected =
 		        new MtBatchBinarySmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body((byte) 0xf0, (byte) 0x0f)
 		                .udh((byte) 0x50, (byte) 0x05)
 		                .canceled(false)
@@ -824,8 +824,8 @@ public class ApiConnectionIT {
 
 		MtBatchSmsResult expected =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(true)
 		                .id(batchId)
@@ -865,8 +865,8 @@ public class ApiConnectionIT {
 		// Set up the first request (the one that will be delayed).
 		MtBatchSmsResult expected1 =
 		        new MtBatchTextSmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
 		                .canceled(true)
 		                .id(TestUtils.freshBatchId())
@@ -889,8 +889,8 @@ public class ApiConnectionIT {
 		// Set up the second request.
 		MtBatchSmsResult expected2 =
 		        new MtBatchBinarySmsResult.Builder()
-		                .from("12345")
-		                .addTo("123456789", "987654321")
+		                .sender("12345")
+		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!".getBytes())
 		                .udh((byte) 1)
 		                .canceled(true)
@@ -1641,8 +1641,8 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/dry_run";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
-		        .from("1234")
-		        .addTo("987654321")
+		        .sender("1234")
+		        .addRecipient("987654321")
 		        .body("Hello, world!")
 		        .build();
 
@@ -1679,8 +1679,8 @@ public class ApiConnectionIT {
 		        + "?per_recipient=true&number_of_recipients=5";
 
 		MtBatchSmsCreate request = ClxApi.batchTextSms()
-		        .from("1234")
-		        .addTo("987654321")
+		        .sender("1234")
+		        .addRecipient("987654321")
 		        .body("Hello, world!")
 		        .build();
 
@@ -1734,7 +1734,7 @@ public class ApiConnectionIT {
 		                .addMember("987654321", "4242424242")
 		                .addTag("tag1", "таг2")
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -1746,7 +1746,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -1786,7 +1786,7 @@ public class ApiConnectionIT {
 		                .addMember("987654321", "4242424242")
 		                .addTag("tag1", "таг2")
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -1798,7 +1798,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -1848,7 +1848,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -1887,7 +1887,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2212,7 +2212,7 @@ public class ApiConnectionIT {
 		                .addMember("987654321", "4242424242")
 		                .addTag("tag1", "таг2")
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2224,7 +2224,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2264,7 +2264,7 @@ public class ApiConnectionIT {
 		                .addMember("987654321", "4242424242")
 		                .addTag("tag1", "таг2")
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2276,7 +2276,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2326,7 +2326,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2364,7 +2364,7 @@ public class ApiConnectionIT {
 		                .name("mygroup")
 		                .size(72)
 		                .autoUpdate(ClxApi.autoUpdate()
-		                        .to("1111")
+		                        .recipient("1111")
 		                        .add("kw0", "kw1")
 		                        .remove("kw2", "kw3")
 		                        .build())
@@ -2657,7 +2657,7 @@ public class ApiConnectionIT {
 	public void canListInboundsWithTwoPages() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
 		InboundsFilter filter = ClxApi.inboundsFilter()
-		        .addTo("10101")
+		        .addRecipient("10101")
 		        .build();
 		String inboundsId1 = TestUtils.freshSmsId();
 		String inboundsId2 = TestUtils.freshSmsId();
@@ -2673,8 +2673,8 @@ public class ApiConnectionIT {
 		                .size(1)
 		                .totalSize(2)
 		                .addContent(new MoTextSms.Builder()
-		                        .from("987654321")
-		                        .to("54321")
+		                        .sender("987654321")
+		                        .recipient("54321")
 		                        .id(inboundsId1)
 		                        .receivedAt(time1)
 		                        .sentAt(time2)
@@ -2693,8 +2693,8 @@ public class ApiConnectionIT {
 		                .size(1)
 		                .totalSize(2)
 		                .addContent(new MoBinarySms.Builder()
-		                        .from("123456789")
-		                        .to("12345")
+		                        .sender("123456789")
+		                        .recipient("12345")
 		                        .id(inboundsId2)
 		                        .receivedAt(time2)
 		                        .sentAt(time1)
@@ -2757,8 +2757,8 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
 		MoSms expected = new MoBinarySms.Builder()
-		        .from("123456789")
-		        .to("12345")
+		        .sender("123456789")
+		        .recipient("12345")
 		        .id(inboundsId)
 		        .receivedAt(time1)
 		        .sentAt(time2)
@@ -2795,8 +2795,8 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
 		final MoSms expected = new MoBinarySms.Builder()
-		        .from("123456789")
-		        .to("12345")
+		        .sender("123456789")
+		        .recipient("12345")
 		        .id(inboundsId)
 		        .receivedAt(time1)
 		        .sentAt(time2)

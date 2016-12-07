@@ -46,8 +46,8 @@
  *         try {
  *             MtBatchTextSmsResult result =
  *                     conn.createBatch(ClxApi.batchTextSms()
- *                             .from("my short code")
- *                             .addTo("my destination")
+ *                             .sender("my short code")
+ *                             .addRecipient("my destination")
  *                             .body("my message")
  *                             .build());
  * 

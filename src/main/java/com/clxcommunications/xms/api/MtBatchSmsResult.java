@@ -62,15 +62,17 @@ public abstract class MtBatchSmsResult {
 	 * 
 	 * @return a non-empty list of recipients
 	 */
-	public abstract List<String> to();
+	@JsonProperty("to")
+	public abstract List<String> recipients();
 
 	/**
 	 * The message originator. May be an MSISDN or short code.
 	 * 
 	 * @return an originator address
 	 */
+	@JsonProperty("from")
 	@Nullable
-	public abstract String from();
+	public abstract String sender();
 
 	/**
 	 * The type of delivery report used for this batch.

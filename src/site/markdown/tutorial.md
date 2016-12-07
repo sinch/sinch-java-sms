@@ -27,7 +27,7 @@ This SDK has a focus on asynchronous operation and all interaction with XMS happ
 
 The arguments passed to a connection method are sometimes very simple, fetching a previously create batch simply requires the batch identifier as argument. Other times the arguments are complicated, for example to create the batch it may be necessary to supply a large number of arguments that specify destination addresses, the message body, expiry times, and so on. For such complex arguments we use classes whose methods correspond to the different parameters that are relevant for the request. For each such class we also provide a builder class that lets you create the objects in a convenient manner. The easiest way to access these builders is through the [`ClxApi`](apidocs/index.html?com/clxcommunications/xms/ClxApi.html) class, which collects all builders that are needed for any of the API calls.
 
-These abstract concepts are made concrete in the text that follows.
+In general the terms used in XMS carry through to the Java API with one major exception. The REST API uses the terms _to_ and _from_ to indicate a message originator and message destination, respectively. In the Java API these are instead denoted _recipient_ and _sender_. The cause of this name change is to have less confusing and more idiomatic Java method names.
 
 Connection management
 ---------------------
@@ -83,13 +83,13 @@ The HTTP client used by API connection is by default restricted to only connect 
 Sending batches
 ---------------
 
-Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more destination addresses (typically MSISDNs), and the message body. To send a simple hello world message to one recipient is then accomplished using
+Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more recipient addresses (typically MSISDNs), and the message body. To send a simple hello world message to one recipient is then accomplished using
 
 ```java
 MtBatchTextSmsResult result =
     conn.createBatch(ClxApi.batchTextSms()
-        .from("12345")
-        .addTo("987654321")
+        .sender("12345")
+        .addRecipient("987654321")
         .body("Hello, World!")
         .build())
 ```
@@ -128,8 +128,8 @@ FutureCallback<MtBatchTextSmsResult> callback = new FutureCallback<MtBatchTextSm
 
 Future<MtBatchTextSmsResult> future =
     conn.createBatchAsync(ClxApi.batchTextSms()
-        .from("12345")
-        .addTo("987654321")
+        .sender("12345")
+        .addRecipient("987654321")
         .body("Hello, World!")
         .build(), callback)
 ```

@@ -164,8 +164,8 @@ public class MtBatchTextSmsResultTest {
 
 	private static MtBatchTextSmsResult.Builder minimalBatchBuilder() {
 		return new MtBatchTextSmsResult.Builder()
-		        .from("1234")
-		        .addTo("987654321")
+		        .sender("1234")
+		        .addRecipient("987654321")
 		        .body("Hello, world!")
 		        .canceled(false)
 		        .id(TestUtils.freshBatchId());

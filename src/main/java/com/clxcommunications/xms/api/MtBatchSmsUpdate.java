@@ -69,7 +69,8 @@ public abstract class MtBatchSmsUpdate {
 	 * @return an MSISDN or short code
 	 */
 	@Nullable
-	public abstract String from();
+	@JsonProperty("from")
+	public abstract String sender();
 
 	/**
 	 * Description of how to update the batch delivery report value.
@@ -117,7 +118,7 @@ public abstract class MtBatchSmsUpdate {
 	@OverridingMethodsMustInvokeSuper
 	@Value.Check
 	protected void check() {
-		if (from() != null && from().isEmpty()) {
+		if (sender() != null && sender().isEmpty()) {
 			throw new IllegalStateException("empty from address");
 		}
 	}

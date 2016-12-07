@@ -24,6 +24,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.immutables.value.Value;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
@@ -76,7 +77,8 @@ public abstract class AutoUpdate {
 	 * 
 	 * @return a non-null MSISDN or short code
 	 */
-	public abstract String to();
+	@JsonProperty("to")
+	public abstract String recipient();
 
 	/**
 	 * The keyword trigger used to add a member.

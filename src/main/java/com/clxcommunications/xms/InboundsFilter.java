@@ -78,14 +78,14 @@ public abstract class InboundsFilter {
 	 * 
 	 * @return a set of message destinations
 	 */
-	public abstract Set<String> to();
+	public abstract Set<String> recipients();
 
 	/**
 	 * Verifies that this filter is in a reasonable state.
 	 */
 	@Value.Check
 	protected void check() {
-		for (String s : to()) {
+		for (String s : recipients()) {
 			if (s.contains(",")) {
 				throw new IllegalStateException("to contains comma");
 			}
@@ -120,8 +120,9 @@ public abstract class InboundsFilter {
 			        new BasicNameValuePair("end_date", endDate().toString()));
 		}
 
-		if (!to().isEmpty()) {
-			params.add(new BasicNameValuePair("to", Utils.join(",", to())));
+		if (!recipients().isEmpty()) {
+			params.add(new BasicNameValuePair("to",
+			        Utils.join(",", recipients())));
 		}
 
 		return params;

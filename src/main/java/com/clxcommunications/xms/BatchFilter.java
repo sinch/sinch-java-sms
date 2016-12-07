@@ -78,7 +78,7 @@ public abstract class BatchFilter {
 	 * 
 	 * @return a non-null set of origins
 	 */
-	public abstract Set<String> from();
+	public abstract Set<String> senders();
 
 	/**
 	 * Limits results to batches having <em>any</em> the given tags.
@@ -92,7 +92,7 @@ public abstract class BatchFilter {
 	 */
 	@Value.Check
 	protected void check() {
-		for (String s : from()) {
+		for (String s : senders()) {
 			if (s.contains(",")) {
 				throw new IllegalStateException("from contains comma");
 			}
@@ -133,9 +133,9 @@ public abstract class BatchFilter {
 			        endDate().toString()));
 		}
 
-		if (!from().isEmpty()) {
+		if (!senders().isEmpty()) {
 			params.add(new BasicNameValuePair("from",
-			        Utils.join(",", from())));
+			        Utils.join(",", senders())));
 		}
 
 		if (!tags().isEmpty()) {

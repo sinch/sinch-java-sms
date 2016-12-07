@@ -33,8 +33,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * <p>
  * A minimal definition has defined values for
  * <ul>
- * <li>{@link #to()},</li>
- * <li>{@link #from()},</li>
+ * <li>{@link #recipients()},</li>
+ * <li>{@link #sender()},</li>
  * <li>{@link #body()}.</li>
  * </ul>
  */
@@ -66,8 +66,8 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
 	 * 
 	 * <pre>
 	 * ClxApi.batchTextSms()
-	 *     .from("12345")
-	 *     .addTo("987654321")
+	 *     .sender("12345")
+	 *     .addRecipient("987654321")
 	 *     // Other initialization
 	 *     .body("Hello, ${name}")
 	 *     .putParameter("name",

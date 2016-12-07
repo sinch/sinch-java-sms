@@ -42,8 +42,8 @@ public class MoTextSmsTest {
 		String body = "Здравей, свят!";
 
 		MoSms input = new MoTextSms.Builder()
-		        .to("12345")
-		        .from("987654321")
+		        .recipient("12345")
+		        .sender("987654321")
 		        .body(body)
 		        .id(smsId)
 		        .keyword("KWD")
@@ -72,8 +72,8 @@ public class MoTextSmsTest {
 		OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
 
 		MoSms expected = new MoTextSms.Builder()
-		        .to("12345")
-		        .from("987654321")
+		        .recipient("12345")
+		        .sender("987654321")
 		        .body("Hello, world!")
 		        .id(smsId)
 		        .receivedAt(receivedAt)

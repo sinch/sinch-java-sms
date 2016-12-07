@@ -56,7 +56,7 @@ public class InboundsFilterTest {
 	public void canGenerateQueryParameters() throws Exception {
 		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(20)
-		        .addTo("12345", "9876")
+		        .addRecipient("12345", "9876")
 		        .startDate(LocalDate.of(2010, 11, 12))
 		        .endDate(LocalDate.of(2011, 11, 12))
 		        .build();
@@ -74,7 +74,7 @@ public class InboundsFilterTest {
 	@Test(expected = IllegalStateException.class)
 	public void rejectsToWithComma() throws Exception {
 		ClxApi.inboundsFilter()
-		        .addTo("123,456")
+		        .addRecipient("123,456")
 		        .build();
 	}
 
@@ -87,7 +87,7 @@ public class InboundsFilterTest {
 
 		InboundsFilter filter = ClxApi.inboundsFilter()
 		        .pageSize(pageSize)
-		        .to(to)
+		        .recipients(to)
 		        .startDate(startDate)
 		        .endDate(endDate)
 		        .build();

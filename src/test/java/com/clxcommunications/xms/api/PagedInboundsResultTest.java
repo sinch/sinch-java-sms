@@ -84,8 +84,8 @@ public class PagedInboundsResultTest {
 
 		MoSms inboundsResult1 =
 		        new MoTextSms.Builder()
-		                .from("987654321")
-		                .to("54321")
+		                .sender("987654321")
+		                .recipient("54321")
 		                .id(inboundsId1)
 		                .receivedAt(time1)
 		                .sentAt(time2)
@@ -94,8 +94,8 @@ public class PagedInboundsResultTest {
 
 		MoSms inboundsResult2 =
 		        new MoBinarySms.Builder()
-		                .from("123456789")
-		                .to("12345")
+		                .sender("123456789")
+		                .recipient("12345")
 		                .id(inboundsId2)
 		                .receivedAt(time2)
 		                .sentAt(time1)
@@ -154,8 +154,8 @@ public class PagedInboundsResultTest {
 
 		MoSms inboundsResult1 =
 		        new MoBinarySms.Builder()
-		                .from("987654321")
-		                .to("54321")
+		                .sender("987654321")
+		                .recipient("54321")
 		                .id(inboundsId1)
 		                .receivedAt(time1)
 		                .sentAt(time2)
@@ -165,8 +165,8 @@ public class PagedInboundsResultTest {
 
 		MoSms inboundsResult2 =
 		        new MoTextSms.Builder()
-		                .from("123456789")
-		                .to("12345")
+		                .sender("123456789")
+		                .recipient("12345")
 		                .id(inboundsId2)
 		                .receivedAt(time2)
 		                .sentAt(time1)

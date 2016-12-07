@@ -30,8 +30,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * <p>
  * A minimal definition has defined values for
  * <ul>
- * <li>{@link #to()},</li>
- * <li>{@link #from()},</li>
+ * <li>{@link #recipients()},</li>
+ * <li>{@link #sender()},</li>
  * <li>{@link #udh()}, and</li>
  * <li>{@link #body()}.</li>
  * </ul>

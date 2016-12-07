@@ -56,7 +56,7 @@ public class BatchFilterTest {
 	public void canGenerateQueryParameters() throws Exception {
 		BatchFilter filter = ClxApi.batchFilter()
 		        .pageSize(20)
-		        .addFrom("12345", "6789")
+		        .addSender("12345", "6789")
 		        .addTag("tag1", "таг2")
 		        .startDate(LocalDate.of(2010, 10, 11))
 		        .endDate(LocalDate.of(2011, 10, 11))
@@ -76,7 +76,7 @@ public class BatchFilterTest {
 	@Test(expected = IllegalStateException.class)
 	public void rejectsFromWithComma() throws Exception {
 		ClxApi.batchFilter()
-		        .addFrom("hello,world")
+		        .addSender("hello,world")
 		        .build();
 	}
 
@@ -89,15 +89,15 @@ public class BatchFilterTest {
 
 	@Property
 	public void generatesValidQueryParameters(int page, int pageSize,
-	        Set<String> from, Set<String> tags, LocalDate startDate,
+	        Set<String> senders, Set<String> tags, LocalDate startDate,
 	        LocalDate endDate) throws Exception {
-		// Constrain `from` and `tags` to strings not containing ','
-		assumeThat(from, not(hasItem(containsString(","))));
+		// Constrain `senders` and `tags` to strings not containing ','
+		assumeThat(senders, not(hasItem(containsString(","))));
 		assumeThat(tags, not(hasItem(containsString(","))));
 
 		BatchFilter filter = ClxApi.batchFilter()
 		        .pageSize(pageSize)
-		        .from(from)
+		        .senders(senders)
 		        .tags(tags)
 		        .startDate(startDate)
 		        .endDate(endDate)

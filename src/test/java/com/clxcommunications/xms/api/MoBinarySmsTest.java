@@ -44,8 +44,8 @@ public class MoBinarySmsTest {
 		byte[] udh = new byte[] { 0, 1, 2, 3 };
 
 		MoSms input = new MoBinarySms.Builder()
-		        .to("12345")
-		        .from("987654321")
+		        .recipient("12345")
+		        .sender("987654321")
 		        .body(body)
 		        .udh(udh)
 		        .id(smsId)
@@ -96,8 +96,8 @@ public class MoBinarySmsTest {
 		byte[] udh = new byte[] { 0, 1, 2, 3 };
 
 		MoSms expected = new MoBinarySms.Builder()
-		        .to("12345")
-		        .from("987654321")
+		        .recipient("12345")
+		        .sender("987654321")
 		        .body(body)
 		        .udh(udh)
 		        .id(smsId)

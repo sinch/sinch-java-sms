@@ -54,14 +54,16 @@ public abstract class MtBatchSmsCreate {
 	 * 
 	 * @return a non-empty list of recipients
 	 */
-	public abstract List<String> to();
+	@JsonProperty("to")
+	public abstract List<String> recipients();
 
 	/**
 	 * The message originator. May be an MSISDN or short code.
 	 * 
 	 * @return an originator address
 	 */
-	public abstract String from();
+	@JsonProperty("from")
+	public abstract String sender();
 
 	/**
 	 * The type of delivery report to request for this batch.
@@ -115,17 +117,17 @@ public abstract class MtBatchSmsCreate {
 	@OverridingMethodsMustInvokeSuper
 	@Value.Check
 	protected void check() {
-		if (to().isEmpty()) {
+		if (recipients().isEmpty()) {
 			throw new IllegalStateException("no destination");
 		}
 
-		for (String to : to()) {
+		for (String to : recipients()) {
 			if (to.isEmpty()) {
 				throw new IllegalStateException("contains empty destination");
 			}
 		}
 
-		if (from().isEmpty()) {
+		if (sender().isEmpty()) {
 			throw new IllegalStateException("empty from address");
 		}
 	}
