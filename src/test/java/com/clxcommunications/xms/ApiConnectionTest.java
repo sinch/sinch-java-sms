@@ -142,11 +142,9 @@ public class ApiConnectionTest {
 		        .servicePlanId("spid")
 		        .build();
 
-		assertThat(conn.httpClient(),
-		        is(instanceOf(ApiDefaultHttpAsyncClient.class)));
+		assertThat(conn.httpClient(), is(instanceOf(ApiHttpAsyncClient.class)));
 
-		ApiDefaultHttpAsyncClient client =
-		        (ApiDefaultHttpAsyncClient) conn.httpClient();
+		ApiHttpAsyncClient client = (ApiHttpAsyncClient) conn.httpClient();
 
 		assertThat(client.isRunning(), is(false));
 
@@ -183,8 +181,8 @@ public class ApiConnectionTest {
 	}
 
 	@Test
-	public void leavesExternalApiDefaultHttpClientAlone() throws Exception {
-		ApiDefaultHttpAsyncClient client = new ApiDefaultHttpAsyncClient();
+	public void leavesExternalApiHttpClientAlone() throws Exception {
+		ApiHttpAsyncClient client = ApiHttpAsyncClient.of();
 
 		ApiConnection conn = ApiConnection.builder()
 		        .token("token")

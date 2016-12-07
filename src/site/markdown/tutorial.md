@@ -147,12 +147,12 @@ Custom connections
 
 For most typical use cases the users of the XMS SDK do not have to worry about its internals. However, for some specialized cases the SDK does allow deep access.  In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
 
-For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiDefaultHttpAsyncClient`](apidocs/index.html?com/clxcommunications/xms/ApiDefaultHttpAsyncClient.html).
+For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiHttpAsyncClient`](apidocs/index.html?com/clxcommunications/xms/ApiHttpAsyncClient.html).
 
 Thus, sharing the default HTTP client between two connections may in practice be accomplished with code such at the following.
 
 ```java
-HttpClient client = new ApiDefaultHttpAsyncClient();
+HttpClient client = ApiHttpAsyncClient.of();
 client.start()
 
 ApiConnection conn1 = ApiConnection.builder()

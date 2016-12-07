@@ -23,6 +23,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.Future;
 
+import javax.annotation.Nonnull;
+
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -40,12 +42,15 @@ import org.apache.http.ssl.SSLContexts;
 import org.threeten.bp.Duration;
 
 /**
- * The default HTTP client used in API connections. It is configured in a way
- * suitable for communicating with XMS and is therefore most applicable for
+ * An asynchronous HTTP client used in API connections. It is configured in a
+ * way suitable for communicating with XMS and is therefore most applicable for
  * communicating with a single HTTP host.
+ * <p>
+ * It is in most cases sufficient to let {@link ApiConnection} create and manage
+ * the HTTP client. If necessary, however, it is possible to create and manage
+ * this type of connections manually.
  */
-public final class ApiDefaultHttpAsyncClient
-        implements HttpAsyncClient, Closeable {
+public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
 	/**
 	 * The default limit for the socket and connect timeout.
@@ -71,19 +76,11 @@ public final class ApiDefaultHttpAsyncClient
 	/**
 	 * Creates a new HTTP asynchronous client suitable for communicating with
 	 * XMS.
-	 */
-	public ApiDefaultHttpAsyncClient() {
-		this(false);
-	}
-
-	/**
-	 * Creates a new HTTP asynchronous client suitable for communicating with
-	 * XMS.
 	 * 
 	 * @param startedInternally
 	 *            whether this object was created inside this SDK
 	 */
-	ApiDefaultHttpAsyncClient(boolean startedInternally) {
+	ApiHttpAsyncClient(boolean startedInternally) {
 		this.startedInternally = startedInternally;
 
 		// Allow TLSv1.2 protocol only
@@ -109,6 +106,17 @@ public final class ApiDefaultHttpAsyncClient
 		                .setMaxConnTotal(DEFAULT_MAX_CONN)
 		                .setDefaultRequestConfig(requestConfig)
 		                .build();
+	}
+
+	/**
+	 * Creates a new asynchronous HTTP client suitable for communicating with
+	 * XMS.
+	 * 
+	 * @return a newly constructed HTTP client
+	 */
+	@Nonnull
+	public static ApiHttpAsyncClient of() {
+		return new ApiHttpAsyncClient(false);
 	}
 
 	/**
