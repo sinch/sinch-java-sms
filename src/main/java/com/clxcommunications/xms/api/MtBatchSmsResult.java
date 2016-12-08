@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 
 import org.threeten.bp.OffsetDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -137,70 +136,5 @@ public abstract class MtBatchSmsResult {
 	 *         otherwise
 	 */
 	public abstract boolean canceled();
-
-	/**
-	 * Whether this object corresponds to a text batch.
-	 * 
-	 * @return <code>true</code> if text batch; <code>false</code> otherwise
-	 */
-	@JsonIgnore
-	public final boolean isTextBatch() {
-		return this instanceof MtBatchTextSmsResult;
-	}
-
-	/**
-	 * Whether this object corresponds to a binary batch.
-	 * 
-	 * @return <code>true</code> if binary batch; <code>false</code> otherwise
-	 */
-	@JsonIgnore
-	public final boolean isBinaryBatch() {
-		return this instanceof MtBatchBinarySmsResult;
-	}
-
-	/**
-	 * Casts and returns this batch as a text batch. Note, if this object is not
-	 * actually a text batch then this will throw a {@link ClassCastException}.
-	 * <p>
-	 * Use of this method should typically be preceded by a call to
-	 * {@link #isTextBatch()}. For example
-	 * 
-	 * <pre>
-	 * if (batch.isTextBatch()) {
-	 *     String body = batch.asTextBatch().body();
-	 * }
-	 * </pre>
-	 * 
-	 * @return this object cast to a text batch
-	 * @throws ClassCastException
-	 *             if this is not actually a text batch
-	 */
-	@JsonIgnore
-	public final MtBatchTextSmsResult asTextBatch() {
-		return (MtBatchTextSmsResult) this;
-	}
-
-	/**
-	 * Casts and returns this batch as a binary batch. Note, if this object is
-	 * not actually a binary batch then this will throw a
-	 * {@link ClassCastException}.
-	 * <p>
-	 * Use of this method should typically be preceded by a call to
-	 * {@link #isBinaryBatch()}. For example
-	 * 
-	 * <pre>
-	 * if (batch.isBinaryBatch()) {
-	 *     byte[] body = batch.asBinaryBatch().body();
-	 * }
-	 * </pre>
-	 * 
-	 * @return this object cast to a binary batch
-	 * @throws ClassCastException
-	 *             if this is not actually a binary batch
-	 */
-	@JsonIgnore
-	public final MtBatchBinarySmsResult asBinaryBatch() {
-		return (MtBatchBinarySmsResult) this;
-	}
 
 }
