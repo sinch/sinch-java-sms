@@ -26,11 +26,13 @@ import java.nio.ByteBuffer;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.RequestLine;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.methods.AsyncByteConsumer;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpCoreContext;
 
 import com.clxcommunications.xms.api.ApiError;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,6 +94,10 @@ class JsonApiAsyncConsumer<T> extends AsyncByteConsumer<T> {
 		case HttpStatus.SC_FORBIDDEN:
 			ApiError error = json.readValue(inputStream, ApiError.class);
 			throw new ErrorResponseException(error);
+		case HttpStatus.SC_NOT_FOUND:
+			HttpCoreContext coreContext = HttpCoreContext.adapt(context);
+			RequestLine requestLine = coreContext.getRequest().getRequestLine();
+			throw new NotFoundException(requestLine.getUri());
 		case HttpStatus.SC_UNAUTHORIZED:
 			throw new UnauthorizedException();
 		default:

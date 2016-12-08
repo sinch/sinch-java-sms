@@ -116,16 +116,20 @@ public final class Utils {
 	 *             if the server gave an unexpected response
 	 * @throws UnauthorizedException
 	 *             if the server refused access
+	 * @throws NotFoundException
+	 *             if the desired resource was not found
 	 */
 	static ConcurrentException unwrapExecutionException(ExecutionException e)
 	        throws ErrorResponseException, UnexpectedResponseException,
-	        UnauthorizedException {
+	        UnauthorizedException, NotFoundException {
 		if (e.getCause() instanceof RuntimeException) {
 			throw (RuntimeException) e.getCause();
 		} else if (e.getCause() instanceof Error) {
 			throw (Error) e.getCause();
 		} else if (e.getCause() instanceof ErrorResponseException) {
 			throw (ErrorResponseException) e.getCause();
+		} else if (e.getCause() instanceof NotFoundException) {
+			throw (NotFoundException) e.getCause();
 		} else if (e.getCause() instanceof UnexpectedResponseException) {
 			throw (UnexpectedResponseException) e.getCause();
 		} else if (e.getCause() instanceof UnauthorizedException) {

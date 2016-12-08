@@ -838,7 +838,7 @@ public class ApiConnectionIT {
 	}
 
 	@Test
-	public void canHandle404WhenFetchingBatch() throws Exception {
+	public void canHandle404WhenFetchingBatchSync() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
 		BatchId batchId = TestUtils.freshBatchId();
 
@@ -848,6 +848,79 @@ public class ApiConnectionIT {
 		        urlEqualTo(path))
 		                .willReturn(aResponse()
 		                        .withStatus(404)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())
+		                        .withBody("BAD")));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			conn.fetchBatch(batchId);
+			fail("Expected exception, got none");
+		} catch (NotFoundException e) {
+			assertThat(e.getPath(), is(path));
+		} finally {
+			conn.close();
+		}
+	}
+
+	@Test
+	public void canHandle404WhenFetchingBatchAsync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		final String path = "/v1/" + spid + "/batches/" + batchId;
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(404)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())
+		                        .withBody("BAD")));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		FutureCallback<MtBatchSmsResult> callback =
+		        new TestCallback<MtBatchSmsResult>() {
+
+			        @Override
+			        public void failed(Exception e) {
+				        assertThat(e, is(instanceOf(NotFoundException.class)));
+				        assertThat(((NotFoundException) e).getPath(), is(path));
+			        }
+
+		        };
+
+		try {
+			conn.fetchBatchAsync(batchId, callback).get();
+			fail("Expected exception, got none");
+		} catch (ExecutionException e) {
+			assertThat(e.getCause(), is(instanceOf(NotFoundException.class)));
+		} finally {
+			conn.close();
+		}
+	}
+
+	@Test
+	public void canHandle500WhenFetchingBatch() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/v1/" + spid + "/batches/" + batchId;
+
+		wm.stubFor(get(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(500)
 		                        .withHeader("Content-Type",
 		                                ContentType.TEXT_PLAIN.toString())
 		                        .withBody("BAD")));
@@ -912,7 +985,7 @@ public class ApiConnectionIT {
 			assertThat(ure.getResponse(), notNullValue());
 
 			assertThat(ure.getResponse().getStatusLine()
-			        .getStatusCode(), is(404));
+			        .getStatusCode(), is(500));
 
 			assertThat(
 			        ure.getResponse().getEntity().getContentType().getValue(),
