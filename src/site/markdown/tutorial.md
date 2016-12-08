@@ -143,11 +143,11 @@ Once you have created a few batches it may be interesting to retrieve a list of 
 
 To limit the number of fetched batches it is also possible to supply a filter that will restrict the fetched batches, for example to those sent after a particular date or having a specific tag or sender.
 
-More specifically, to print the identifier of each batch sent on 2016-12-01 and having the "signup-notification" tag we may write something like the following.
+More specifically, to print the identifier of each batch sent on 2016-12-01 and having the tag "signup_notification", we may write something like the following.
 
 ```java
 BatchFilter filter = ClxApi.batchFilter()
-    .addTag("signup-notification")
+    .addTag("signup_notification")
     .startDate(LocalDate.of(2016, 12, 1))
     .endDate(LocalDate.of(2016, 12, 2))
     .build();
