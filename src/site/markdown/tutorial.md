@@ -162,21 +162,51 @@ for (MtBatchTextSmsResult batch : fetcher.elements()) {
 Handling errors
 ---------------
 
-Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK are
+Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK all inherit from [`ApiException`](apidocs/index.html?com/clxcommunications/xms/ApiException.html) and they are
 
 [`ConcurrentException`](apidocs/index.html?com/clxcommunications/xms/ConcurrentException.html)
-:   This exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
+:   In synchronous API calls this exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
 
 [`ErrorResponseException`](apidocs/index.html?com/clxcommunications/xms/ErrorResponseException.html)
 :   If the XMS server responded with a JSON error object containing an error code and error description.
 
+[`NotFoundException`](apidocs/index.html?com/clxcommunications/xms/NotFoundException.html)
+:   If the XMS server response indicated that the desired resource does not exist. In other words, if the server responded with HTTP status 404 Not Found. During a fetch batch or group operation this exception would typically indicate that the batch or group identifier is incorrect.
+
 [`UnauthorizedException`](apidocs/index.html?com/clxcommunications/xms/UnauthorizedException.html)
-:   Thrown if an incorrect authentication token was provided for the service plan.
+:   Thrown if the XMS server determined that the authentication token was invalid for the service plan.
 
 [`UnexpectedResponseException`](apidocs/index.html?com/clxcommunications/xms/UnexpectedResponseException.html)
-:   If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the exception object will contain the complete HTTP response.
+:   If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the complete HTTP response can be retrieved from the exception object using the [`getResponse`](apidocs/com/clxcommunications/xms/UnexpectedResponseException.html#getResponse--) method.
 
-each of these exceptions inherit from the base class [`ApiException`](apidocs/index.html?com/clxcommunications/xms/ApiException.html).
+In asynchronous requests `ConcurrentException` is not used and the `failed` method in your callback will receive, for example, `JsonParseException` unwrapped. Thus, if you wish to handle `JsonParseException` in a special way in asynchronous code then the `failed` method in the callback could read
+
+```java
+@Override
+public void failed(Exception ex) {
+    if (ex instanceof JsonParseException) {
+        System.err.println("Server sent invalid JSON");
+    } else {
+        System.err.println("Failed to send " + ex.getMessage());
+    }
+}
+```
+
+while the equivalent synchronous error handling would have to examine the `ConcurrentException` as per
+
+```java
+try {
+    // Invoke synchronous API connection call here.
+} catch (ConcurrentException ex) {
+    if (ex.getCause() instanceof JsonParseException) {
+        System.err.println("Server sent invalid JSON");
+    } else {
+        System.err.println("Failed to send " + ex.getCause().getMessage());
+    }
+} catch (Exception ex) {
+    System.err.println("Failed to send " + ex.getMessage());
+}
+```
 
 Custom connections
 ------------------
@@ -210,10 +240,3 @@ client.close();
 ```
 
 Do note that the `start` and `stop` methods of the `client` variable are called explicitly. This differs from the typical case where starting and stopping the API connection will also start and stop the underlying HTTP connection.
-
-Glossary
---------
-
-Term   | Meaning
--------|--------
-MSISDN | Mobile Subscriber ISDN Number
