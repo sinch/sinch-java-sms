@@ -374,6 +374,69 @@ public class ApiConnectionIT {
 		}
 	}
 
+	@Test
+	public void canHandleAsyncBatchCreateWithInvalidJson() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		MtBatchTextSmsCreate request =
+		        ClxApi.batchTextSms()
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
+		                .body("Hello, world!")
+		                .build();
+
+		String response = String.join("\n",
+		        "{",
+		        "  'to': [",
+		        "    '123456789',",
+		        "    '987654321'",
+		        "  ],",
+		        "  'body': 'Hello, world!',",
+		        "  'type' 'mt_text',",
+		        "  'canceled': false,",
+		        "  'id': '" + batchId + "',",
+		        "  'from': '12345',",
+		        "  'created_at': '2016-10-02T09:34:28.542Z',",
+		        "  'modified_at': '2016-10-02T09:34:28.542Z'",
+		        "}").replace('\'', '"');
+
+		String path = "/v1/" + spid + "/batches";
+
+		wm.stubFor(post(urlEqualTo(path))
+		        .willReturn(aResponse()
+		                .withStatus(201)
+		                .withHeader("Content-Type",
+		                        "application/json; charset=UTF-8")
+		                .withBody(response)));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		FutureCallback<MtBatchTextSmsResult> callback =
+		        new TestCallback<MtBatchTextSmsResult>() {
+
+			        @Override
+			        public void failed(Exception e) {
+				        assertThat(e, is(instanceOf(JsonParseException.class)));
+			        }
+
+		        };
+
+		try {
+			conn.createBatchAsync(request, callback).get();
+			fail("Expected exception, got none");
+		} catch (ExecutionException e) {
+			assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));
+		} finally {
+			conn.close();
+		}
+	}
+
 	@Test(expected = UnauthorizedException.class)
 	public void canHandleBatchCreateWithUnauthorized() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
@@ -399,6 +462,50 @@ public class ApiConnectionIT {
 		try {
 			conn.createBatch(request);
 			fail("Expected exception, got none");
+		} finally {
+			conn.close();
+		}
+	}
+
+	@Test
+	public void canHandleAsyncBatchCreateWithUnauthorized() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+
+		MtBatchTextSmsCreate request =
+		        ClxApi.batchTextSms()
+		                .sender("12345")
+		                .addRecipient("123456789")
+		                .addRecipient("987654321")
+		                .body("Hello, world!")
+		                .build();
+
+		String path = "/v1/" + spid + "/batches";
+
+		stubPostResponse("", path, HttpStatus.SC_UNAUTHORIZED);
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("toktok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		FutureCallback<MtBatchTextSmsResult> callback =
+		        new TestCallback<MtBatchTextSmsResult>() {
+
+			        @Override
+			        public void failed(Exception e) {
+				        assertThat(e,
+				                is(instanceOf(UnauthorizedException.class)));
+			        }
+
+		        };
+
+		try {
+			conn.createBatchAsync(request, callback).get();
+			fail("Expected exception, got none");
+		} catch (ExecutionException e) {
+			assertThat(e.getCause(),
+			        is(instanceOf(UnauthorizedException.class)));
 		} finally {
 			conn.close();
 		}
