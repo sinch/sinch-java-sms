@@ -93,11 +93,11 @@ public final class Utils {
 	 * {@link RuntimeException runtime exception} or {@link Error error} and
 	 * directly re-throw it.
 	 * <p>
-	 * For checked exceptions we directly throw {@link ErrorResponseException}
-	 * and {@link UnexpectedResponseException}. Any other checked exception is
-	 * wrapped in a {@link ConcurrentException}, which is subsequently returned.
-	 * Since {@link ConcurrentException} is returned we facilitate the following
-	 * use:
+	 * For checked exceptions we directly throw {@link ErrorResponseException},
+	 * {@link UnexpectedResponseException}, and {@link UnauthorizedException}.
+	 * Any other checked exception is wrapped in a {@link ConcurrentException},
+	 * which is subsequently returned. Since {@link ConcurrentException} is
+	 * returned we facilitate the following use:
 	 * 
 	 * <pre>
 	 * try {
@@ -109,11 +109,13 @@ public final class Utils {
 	 * 
 	 * @param e
 	 *            the exception to examine
-	 * @return returns <code>e</code>
+	 * @return a new wrapper of the cause of <code>e</code>
 	 * @throws ErrorResponseException
+	 *             if the server response indicated an error
 	 * @throws UnexpectedResponseException
+	 *             if the server gave an unexpected response
 	 * @throws UnauthorizedException
-	 * @throws ExecutionException
+	 *             if the server refused access
 	 */
 	static ConcurrentException unwrapExecutionException(ExecutionException e)
 	        throws ErrorResponseException, UnexpectedResponseException,
