@@ -115,7 +115,7 @@ FutureCallback<MtBatchTextSmsResult> callback = new FutureCallback<MtBatchTextSm
     }
 
     @Override
-    public void completed(BatchDeliveryReport result) {
+    public void completed(MtBatchTextSmsResult result) {
         System.out.println("Batch id is " + result.id());
     }
 
@@ -131,10 +131,49 @@ Future<MtBatchTextSmsResult> future =
         .sender("12345")
         .addRecipient("987654321")
         .body("Hello, World!")
-        .build(), callback)
+        .build(), callback);
 ```
 
 The callback that we provided to this method will have one of its methods invoked as soon as the communication with XMS has concluded. Which of the methods that is invoked will depend on how the request went. If all went well then the `completed` method will be called with the result as argument. If some form of exception was thrown during the request then the `failed` method will be called with the exception as argument. For more about error handling see sec. [Handling errors](#Handling_errors). Finally, if the request was canceled, for example using `future.cancel(true)`, then the `cancelled` method is called.
+
+Fetching batches
+----------------
+
+If you have a batch identifier and would like to retrieve information concerning that batch then it is sufficient to use the `fetchBatch` or `fetchBatchAsync` method. Thus, if the desired batch identifier is available in the variable `batchId` then one could write
+
+```java
+BatchId batchId = // …
+MtBatchSmsResult result = conn.fetchBatch(batchId)
+System.out.println("Batch id is " + result.id());
+```
+
+Note, since `fetchBatch` does not know ahead of time whether the fetched batch is textual or binary it returns a value of the type `MtBatchSmsResult`. This type is the base class of `MtBatchTextSmsResult` and `MtBatchBinarySmsResult` and if the message body is desired then the result would have to be cast to one of these.
+
+The asynchronous case is not much more complicated
+
+```java
+FutureCallback<MtBatchSmsResult> callback = new FutureCallback<MtBatchSmsResult> {
+
+    @Override
+    public void failed(Exception ex) {
+        // …
+    }
+
+    @Override
+    public void completed(MtBatchSmsResult result) {
+        System.out.println("Batch id is " + result.id());
+    }
+
+    @Override
+    public void cancelled() {
+        // …
+    }
+
+};
+
+BatchId batchId = // …
+Future<MtBatchTextSmsResult> future = conn.fetchBatchAsync(batchId, callback);
+```
 
 Listing batches
 ---------------
@@ -158,6 +197,11 @@ for (MtBatchTextSmsResult batch : fetcher.elements()) {
     System.out.println("Batch ID: " + batch.id());
 }
 ```
+
+Other XMS requests
+------------------
+
+We have only shown explicitly how to create, list and fetch batches but the same principles apply to all other XMS calls within the SDK. For example, to fetch a group one could use the previously given instructions for fetching batches and simply use `fetchGroup` with a group identifier.
 
 Handling errors
 ---------------
