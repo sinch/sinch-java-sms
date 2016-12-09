@@ -43,6 +43,19 @@ public abstract class InboundsFilter {
 	 */
 	public static class Builder extends InboundsFilterImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link InboundsFilter} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final InboundsFilter.Builder builder() {
+		return new Builder();
 	}
 
 	/**

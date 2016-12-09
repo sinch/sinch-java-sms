@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,6 +41,19 @@ public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
 	 */
 	public static class Builder extends PagedBatchResultImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link PagedBatchResult} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final PagedBatchResult.Builder builder() {
+		return new Builder();
 	}
 
 	@JsonProperty("batches")

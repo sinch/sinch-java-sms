@@ -102,6 +102,9 @@ public abstract class ApiConnection implements Closeable {
 	 */
 	public static class Builder extends ApiConnectionImpl.Builder {
 
+		Builder() {
+		}
+
 		/**
 		 * Initializes the endpoint from the given URL string. The URL should
 		 * not contain query or fragment components.

@@ -22,6 +22,7 @@ package com.clxcommunications.xms.api;
 import java.net.URI;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -44,6 +45,9 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 	 * A builder of text batch message updates.
 	 */
 	public static class Builder extends MtBatchTextSmsUpdateImpl.Builder {
+
+		Builder() {
+		}
 
 		/**
 		 * Resets the delivery report type to the messaging system default
@@ -175,6 +179,16 @@ public abstract class MtBatchTextSmsUpdate extends MtBatchSmsUpdate {
 			}
 		}
 
+	}
+
+	/**
+	 * Creates a builder of {@link MtBatchTextSmsUpdate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MtBatchTextSmsUpdate.Builder builder() {
+		return new Builder();
 	}
 
 	/**

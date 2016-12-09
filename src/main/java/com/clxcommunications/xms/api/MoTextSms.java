@@ -19,6 +19,7 @@
  */
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -40,6 +41,20 @@ public abstract class MoTextSms extends MoSms {
 	 */
 	public static final class Builder extends MoTextSmsImpl.Builder {
 
+		Builder() {
+
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link MoTextSms} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MoTextSms.Builder builder() {
+		return new Builder();
 	}
 
 	/**

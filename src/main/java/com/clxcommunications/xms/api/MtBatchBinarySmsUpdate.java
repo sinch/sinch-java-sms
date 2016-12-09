@@ -21,6 +21,7 @@ package com.clxcommunications.xms.api;
 
 import java.net.URI;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -44,6 +45,9 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 	 * A builder of binary batch message updates.
 	 */
 	public static class Builder extends MtBatchBinarySmsUpdateImpl.Builder {
+
+		Builder() {
+		}
 
 		/**
 		 * Resets the delivery report type to the messaging system default
@@ -148,6 +152,16 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
 			}
 		}
 
+	}
+
+	/**
+	 * Creates a builder of {@link MtBatchBinarySmsUpdate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MtBatchBinarySmsUpdate.Builder builder() {
+		return new Builder();
 	}
 
 	/**

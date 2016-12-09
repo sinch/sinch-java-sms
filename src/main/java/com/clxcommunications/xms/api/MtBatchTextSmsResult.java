@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,6 +46,19 @@ public abstract class MtBatchTextSmsResult extends MtBatchSmsResult {
 	 */
 	public static class Builder extends MtBatchTextSmsResultImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link MtBatchTextSmsResult} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MtBatchTextSmsResult.Builder builder() {
+		return new Builder();
 	}
 
 	/**

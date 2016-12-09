@@ -21,6 +21,7 @@ package com.clxcommunications.xms.api;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -38,12 +39,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @ValueStylePackage
 @JsonSerialize(as = GroupUpdateImpl.class)
 @JsonInclude(Include.NON_EMPTY)
-public interface GroupUpdate {
+public abstract class GroupUpdate {
 
 	/**
 	 * A builder of group updates.
 	 */
 	public static class Builder extends GroupUpdateImpl.Builder {
+
+		Builder() {
+		}
 
 		/**
 		 * Unsets the name of the group.
@@ -93,6 +97,16 @@ public interface GroupUpdate {
 			}
 		}
 
+	}
+
+	/**
+	 * Creates a builder of {@link GroupUpdate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final GroupUpdate.Builder builder() {
+		return new Builder();
 	}
 
 	/**

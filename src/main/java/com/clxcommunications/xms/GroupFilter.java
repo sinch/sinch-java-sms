@@ -41,6 +41,19 @@ public abstract class GroupFilter {
 	 */
 	public static class Builder extends GroupFilterImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link GroupFilter} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final GroupFilter.Builder builder() {
+		return new Builder();
 	}
 
 	/**

@@ -21,6 +21,7 @@ package com.clxcommunications.xms.api;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -40,13 +41,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @ValueStylePackage
 @JsonDeserialize(builder = GroupResult.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
-public interface GroupResult {
+public abstract class GroupResult {
 
 	/**
 	 * A builder of group results.
 	 */
 	public static final class Builder extends GroupResultImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link GroupResult} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final GroupResult.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -54,7 +68,7 @@ public interface GroupResult {
 	 * 
 	 * @return a non-null group ID
 	 */
-	GroupId id();
+	public abstract GroupId id();
 
 	/**
 	 * The group name.
@@ -62,14 +76,14 @@ public interface GroupResult {
 	 * @return a non-null group name
 	 */
 	@Nullable
-	String name();
+	public abstract String name();
 
 	/**
 	 * The number of members in the group.
 	 * 
 	 * @return a non-negative group size
 	 */
-	int size();
+	public abstract int size();
 
 	/**
 	 * This group's child groups.
@@ -77,7 +91,7 @@ public interface GroupResult {
 	 * @return a non-null list of child groups
 	 */
 	@JsonProperty("child_groups")
-	Set<GroupId> childGroups();
+	public abstract Set<GroupId> childGroups();
 
 	/**
 	 * Describes how this group is auto updated through user interaction. Is
@@ -87,7 +101,7 @@ public interface GroupResult {
 	 */
 	@JsonProperty("auto_update")
 	@Nullable
-	AutoUpdate autoUpdate();
+	public abstract AutoUpdate autoUpdate();
 
 	/**
 	 * The time at which this group was created
@@ -95,7 +109,7 @@ public interface GroupResult {
 	 * @return a date time
 	 */
 	@JsonProperty("created_at")
-	OffsetDateTime createdAt();
+	public abstract OffsetDateTime createdAt();
 
 	/**
 	 * The time at which this group was last modified.
@@ -103,6 +117,6 @@ public interface GroupResult {
 	 * @return a date time
 	 */
 	@JsonProperty("modified_at")
-	OffsetDateTime modifiedAt();
+	public abstract OffsetDateTime modifiedAt();
 
 }

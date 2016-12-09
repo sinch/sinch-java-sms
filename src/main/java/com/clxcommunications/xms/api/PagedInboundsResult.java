@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,6 +41,19 @@ public abstract class PagedInboundsResult extends Page<MoSms> {
 	 */
 	public static class Builder extends PagedInboundsResultImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link PagedInboundsResult} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final PagedInboundsResult.Builder builder() {
+		return new Builder();
 	}
 
 	@JsonProperty("inbounds")

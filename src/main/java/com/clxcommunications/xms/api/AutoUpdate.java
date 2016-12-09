@@ -19,6 +19,7 @@
  */
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -42,6 +43,9 @@ public abstract class AutoUpdate {
 	 */
 	@NotThreadSafe
 	public static class Builder extends AutoUpdateImpl.Builder {
+
+		Builder() {
+		}
 
 		/**
 		 * The keyword trigger to use for adding a number to a group.
@@ -69,6 +73,16 @@ public abstract class AutoUpdate {
 			return this.remove(KeywordPair.of(firstWord, secondWord));
 		}
 
+	}
+
+	/**
+	 * Creates a builder of {@link AutoUpdate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final AutoUpdate.Builder builder() {
+		return new Builder();
 	}
 
 	/**

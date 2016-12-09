@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,12 +42,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @ValueStylePackage
 @JsonDeserialize(builder = MtBatchDryRunResult.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
-public interface MtBatchDryRunResult {
+public abstract class MtBatchDryRunResult {
 
 	/**
 	 * A builder of batch dry-run results.
 	 */
 	public static final class Builder extends MtBatchDryRunResultImpl.Builder {
+
+		Builder() {
+		}
 
 	}
 
@@ -54,13 +59,26 @@ public interface MtBatchDryRunResult {
 	 */
 	@Value.Immutable
 	@JsonDeserialize(builder = PerRecipient.Builder.class)
-	public interface PerRecipient {
+	public static abstract class PerRecipient {
 
 		/**
 		 * A builder of per-recipient dry-run results.
 		 */
 		public static final class Builder extends PerRecipientImpl.Builder {
 
+			Builder() {
+			}
+
+		}
+
+		/**
+		 * Creates a builder of {@link PerRecipient} instances.
+		 * 
+		 * @return a builder
+		 */
+		@Nonnull
+		public static final PerRecipient.Builder builder() {
+			return new Builder();
 		}
 
 		/**
@@ -68,7 +86,7 @@ public interface MtBatchDryRunResult {
 		 * 
 		 * @return an MSISDN
 		 */
-		String recipient();
+		public abstract String recipient();
 
 		/**
 		 * The number of message parts that were sent to this recipient.
@@ -76,7 +94,7 @@ public interface MtBatchDryRunResult {
 		 * @return a positive integer
 		 */
 		@JsonProperty("number_of_parts")
-		int numberOfParts();
+		public abstract int numberOfParts();
 
 		/**
 		 * The message body sent to this recipient. This includes template
@@ -84,7 +102,7 @@ public interface MtBatchDryRunResult {
 		 * 
 		 * @return a message body
 		 */
-		String body();
+		public abstract String body();
 
 		/**
 		 * The message encoding that will be applied for this recipient. This is
@@ -92,8 +110,18 @@ public interface MtBatchDryRunResult {
 		 * 
 		 * @return a string describing the encoding
 		 */
-		String encoding();
+		public abstract String encoding();
 
+	}
+
+	/**
+	 * Creates a builder of {@link MtBatchDryRunResult} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MtBatchDryRunResult.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -102,7 +130,7 @@ public interface MtBatchDryRunResult {
 	 * @return a non-negative number
 	 */
 	@JsonProperty("number_of_recipients")
-	int numberOfRecipients();
+	public abstract int numberOfRecipients();
 
 	/**
 	 * The total number of individual messages of the batch.
@@ -110,7 +138,7 @@ public interface MtBatchDryRunResult {
 	 * @return a non-negative number
 	 */
 	@JsonProperty("number_of_messages")
-	int numberOfMessages();
+	public abstract int numberOfMessages();
 
 	/**
 	 * Information on a per-recipient level. When requesting a dry-run this will
@@ -120,6 +148,6 @@ public interface MtBatchDryRunResult {
 	 * @return a, possibly empty, list of per-recipient batch data
 	 */
 	@JsonProperty("per_recipient")
-	List<PerRecipient> perRecipient();
+	public abstract List<PerRecipient> perRecipient();
 
 }

@@ -21,6 +21,7 @@ package com.clxcommunications.xms.api;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -35,13 +36,26 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @ValueStylePackage
 @JsonDeserialize(using = JacksonUtils.ParameterValuesDeserializer.class)
 @JsonSerialize(using = JacksonUtils.ParameterValuesSerializer.class)
-public interface ParameterValues {
+public abstract class ParameterValues {
 
 	/**
 	 * A builder of parameter substitution values.
 	 */
 	public static class Builder extends ParameterValuesImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link ParameterValues} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final ParameterValues.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -49,7 +63,7 @@ public interface ParameterValues {
 	 * 
 	 * @return map from MSISDNs to textual substitutions
 	 */
-	Map<String, String> substitutions();
+	public abstract Map<String, String> substitutions();
 
 	/**
 	 * The default substitution. Used when no matching substitution is found in
@@ -59,6 +73,6 @@ public interface ParameterValues {
 	 *         default is set
 	 */
 	@Nullable
-	String defaultValue();
+	public abstract String defaultValue();
 
 }

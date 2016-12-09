@@ -19,6 +19,7 @@
  */
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
@@ -38,7 +39,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = RecipientDeliveryReport.Builder.class)
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonTypeName("recipient_delivery_report_sms")
-public interface RecipientDeliveryReport {
+public abstract class RecipientDeliveryReport {
 
 	/**
 	 * A builder of recipient delivery reports.
@@ -46,6 +47,19 @@ public interface RecipientDeliveryReport {
 	public static final class Builder
 	        extends RecipientDeliveryReportImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link RecipientDeliveryReport} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final RecipientDeliveryReport.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -54,28 +68,28 @@ public interface RecipientDeliveryReport {
 	 * @return a batch identifier
 	 */
 	@JsonProperty("batch_id")
-	BatchId batchId();
+	public abstract BatchId batchId();
 
 	/**
 	 * The recipient to which this delivery report refers.
 	 * 
 	 * @return an MSISDN
 	 */
-	String recipient();
+	public abstract String recipient();
 
 	/**
 	 * The delivery report error code of the message.
 	 * 
 	 * @return a delivery report error code
 	 */
-	int code();
+	public abstract int code();
 
 	/**
 	 * The delivery status of the message.
 	 * 
 	 * @return a delivery status
 	 */
-	DeliveryStatus status();
+	public abstract DeliveryStatus status();
 
 	/**
 	 * A description of the status, if available.
@@ -84,7 +98,7 @@ public interface RecipientDeliveryReport {
 	 */
 	@JsonProperty("status_message")
 	@Nullable
-	String statusMessage();
+	public abstract String statusMessage();
 
 	/**
 	 * The operator MCCMNC, if available.
@@ -92,14 +106,14 @@ public interface RecipientDeliveryReport {
 	 * @return an operator identifier; <code>null</code> if unknown
 	 */
 	@Nullable
-	String operator();
+	public abstract String operator();
 
 	/**
 	 * Time when the message reached it's final state.
 	 * 
 	 * @return a date and time
 	 */
-	OffsetDateTime at();
+	public abstract OffsetDateTime at();
 
 	/**
 	 * The message timestamp as recorded by the network operator.
@@ -107,6 +121,6 @@ public interface RecipientDeliveryReport {
 	 * @return a date and time
 	 */
 	@JsonProperty("operator_status_at")
-	OffsetDateTime operatorStatusAt();
+	public abstract OffsetDateTime operatorStatusAt();
 
 }

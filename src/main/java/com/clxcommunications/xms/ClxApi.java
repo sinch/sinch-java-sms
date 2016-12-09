@@ -45,7 +45,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static MtBatchTextSmsCreate.Builder batchTextSms() {
-		return new MtBatchTextSmsCreate.Builder();
+		return MtBatchTextSmsCreate.builder();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static MtBatchTextSmsUpdate.Builder batchTextSmsUpdate() {
-		return new MtBatchTextSmsUpdate.Builder();
+		return MtBatchTextSmsUpdate.builder();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static MtBatchBinarySmsCreate.Builder batchBinarySms() {
-		return new MtBatchBinarySmsCreate.Builder();
+		return MtBatchBinarySmsCreate.builder();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static MtBatchBinarySmsUpdate.Builder batchBinarySmsUpdate() {
-		return new MtBatchBinarySmsUpdate.Builder();
+		return MtBatchBinarySmsUpdate.builder();
 	}
 
 	/**
@@ -86,7 +86,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static ParameterValues.Builder parameterValues() {
-		return new ParameterValues.Builder();
+		return ParameterValues.builder();
 	}
 
 	/**
@@ -96,7 +96,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static GroupCreate.Builder groupCreate() {
-		return new GroupCreate.Builder();
+		return GroupCreate.builder();
 	}
 
 	/**
@@ -107,7 +107,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static AutoUpdate.Builder autoUpdate() {
-		return new AutoUpdate.Builder();
+		return AutoUpdate.builder();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static GroupUpdate.Builder groupUpdate() {
-		return new GroupUpdate.Builder();
+		return GroupUpdate.builder();
 	}
 
 	/**
@@ -127,7 +127,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static TagsUpdate.Builder tagsUpdate() {
-		return new TagsUpdate.Builder();
+		return TagsUpdate.builder();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static BatchFilter.Builder batchFilter() {
-		return new BatchFilter.Builder();
+		return BatchFilter.builder();
 	}
 
 	/**
@@ -147,7 +147,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static GroupFilter.Builder groupFilter() {
-		return new GroupFilter.Builder();
+		return GroupFilter.builder();
 	}
 
 	/**
@@ -157,7 +157,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static InboundsFilter.Builder inboundsFilter() {
-		return new InboundsFilter.Builder();
+		return InboundsFilter.builder();
 	}
 
 	/**
@@ -167,7 +167,7 @@ public final class ClxApi { // TODO Maybe rename this to, e.g., "ApiBuilders"?
 	 */
 	@Nonnull
 	public static BatchDeliveryReportParams.Builder batchDeliveryReportParams() {
-		return new BatchDeliveryReportParams.Builder();
+		return BatchDeliveryReportParams.builder();
 	}
 
 }

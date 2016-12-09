@@ -65,6 +65,9 @@ public abstract class BatchDeliveryReportParams {
 	 */
 	public static class Builder extends BatchDeliveryReportParamsImpl.Builder {
 
+		Builder() {
+		}
+
 		/**
 		 * Request a summary delivery report.
 		 * 
@@ -85,6 +88,16 @@ public abstract class BatchDeliveryReportParams {
 			return this.reportType(ReportType.FULL);
 		}
 
+	}
+
+	/**
+	 * Creates a builder of {@link BatchDeliveryReportParams} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final BatchDeliveryReportParams.Builder builder() {
+		return new Builder();
 	}
 
 	/**

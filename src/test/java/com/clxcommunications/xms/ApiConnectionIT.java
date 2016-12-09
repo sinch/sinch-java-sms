@@ -156,7 +156,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchBinarySmsResult expected =
-		        new MtBatchBinarySmsResult.Builder()
+		        MtBatchBinarySmsResult.builder()
 		                .sender(request.sender())
 		                .recipients(request.recipients())
 		                .body(request.body())
@@ -203,7 +203,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchTextSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender(request.sender())
 		                .recipients(request.recipients())
 		                .body(request.body())
@@ -254,7 +254,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchTextSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender(request.sender())
 		                .recipients(request.recipients())
 		                .body(request.body())
@@ -422,7 +422,8 @@ public class ApiConnectionIT {
 
 			        @Override
 			        public void failed(Exception e) {
-				        assertThat(e, is(instanceOf(JsonParseException.class)));
+				        assertThat(e,
+				                is(instanceOf(JsonParseException.class)));
 			        }
 
 		        };
@@ -527,7 +528,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchBinarySmsResult expected =
-		        new MtBatchBinarySmsResult.Builder()
+		        MtBatchBinarySmsResult.builder()
 		                .sender(request.sender())
 		                .recipients(request.recipients())
 		                .body(request.body())
@@ -574,7 +575,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchTextSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender(request.sender())
 		                .recipients(request.recipients())
 		                .body(request.body())
@@ -620,7 +621,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchTextSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender(request.sender())
 		                .addRecipient("123")
 		                .body(request.body())
@@ -669,7 +670,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		MtBatchBinarySmsResult expected =
-		        new MtBatchBinarySmsResult.Builder()
+		        MtBatchBinarySmsResult.builder()
 		                .sender(request.sender())
 		                .addRecipient("123")
 		                .body(request.body())
@@ -710,7 +711,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
@@ -748,7 +749,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
@@ -797,7 +798,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		final MtBatchSmsResult expected =
-		        new MtBatchBinarySmsResult.Builder()
+		        MtBatchBinarySmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body((byte) 0xf0, (byte) 0x0f)
@@ -1034,7 +1035,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/batches/" + batchId;
 
 		MtBatchSmsResult expected =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
@@ -1075,7 +1076,7 @@ public class ApiConnectionIT {
 
 		// Set up the first request (the one that will be delayed).
 		MtBatchSmsResult expected1 =
-		        new MtBatchTextSmsResult.Builder()
+		        MtBatchTextSmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!")
@@ -1099,7 +1100,7 @@ public class ApiConnectionIT {
 
 		// Set up the second request.
 		MtBatchSmsResult expected2 =
-		        new MtBatchBinarySmsResult.Builder()
+		        MtBatchBinarySmsResult.builder()
 		                .sender("12345")
 		                .addRecipient("123456789", "987654321")
 		                .body("Hello, world!".getBytes())
@@ -1162,7 +1163,7 @@ public class ApiConnectionIT {
 		BatchFilter filter = ClxApi.batchFilter().build();
 
 		final Page<MtBatchSmsResult> expected =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(0)
 		                .size(0)
 		                .totalSize(0)
@@ -1208,7 +1209,7 @@ public class ApiConnectionIT {
 		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(0)
 		                .size(0)
 		                .totalSize(2)
@@ -1220,7 +1221,7 @@ public class ApiConnectionIT {
 		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(1)
 		                .size(0)
 		                .totalSize(2)
@@ -1280,12 +1281,12 @@ public class ApiConnectionIT {
 		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(0)
 		                .size(1)
 		                .totalSize(2)
 		                .addContent(
-		                        new MtBatchTextSmsResult.Builder()
+		                        MtBatchTextSmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body("body")
 		                                .canceled(false)
@@ -1298,19 +1299,19 @@ public class ApiConnectionIT {
 		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(1)
 		                .size(2)
 		                .totalSize(2)
 		                .addContent(
-		                        new MtBatchBinarySmsResult.Builder()
+		                        MtBatchBinarySmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body((byte) 0)
 		                                .udh((byte) 1)
 		                                .canceled(false)
 		                                .build())
 		                .addContent(
-		                        new MtBatchTextSmsResult.Builder()
+		                        MtBatchTextSmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body("body")
 		                                .canceled(false)
@@ -1358,12 +1359,12 @@ public class ApiConnectionIT {
 		String path1 = "/v1/" + spid + "/batches?page=0";
 
 		final Page<MtBatchSmsResult> expected1 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(0)
 		                .size(1)
 		                .totalSize(3)
 		                .addContent(
-		                        new MtBatchTextSmsResult.Builder()
+		                        MtBatchTextSmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body("body")
 		                                .canceled(false)
@@ -1376,19 +1377,19 @@ public class ApiConnectionIT {
 		String path2 = "/v1/" + spid + "/batches?page=1";
 
 		final Page<MtBatchSmsResult> expected2 =
-		        new PagedBatchResult.Builder()
+		        PagedBatchResult.builder()
 		                .page(1)
 		                .size(2)
 		                .totalSize(3)
 		                .addContent(
-		                        new MtBatchBinarySmsResult.Builder()
+		                        MtBatchBinarySmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body((byte) 0)
 		                                .udh((byte) 1)
 		                                .canceled(false)
 		                                .build())
 		                .addContent(
-		                        new MtBatchTextSmsResult.Builder()
+		                        MtBatchTextSmsResult.builder()
 		                                .id(TestUtils.freshBatchId())
 		                                .body("body")
 		                                .canceled(false)
@@ -1437,18 +1438,18 @@ public class ApiConnectionIT {
 		        + "?type=summary&status=Aborted%2CDelivered&code=200%2C300";
 
 		final BatchDeliveryReport expected =
-		        new BatchDeliveryReport.Builder()
+		        BatchDeliveryReport.builder()
 		                .batchId(batchId)
 		                .totalMessageCount(1010)
 		                .addStatus(
-		                        new BatchDeliveryReport.Status.Builder()
+		                        BatchDeliveryReport.Status.builder()
 		                                .code(200)
 		                                .status(DeliveryStatus.ABORTED)
 		                                .count(10)
 		                                .addRecipient("rec1", "rec2")
 		                                .build())
 		                .addStatus(
-		                        new BatchDeliveryReport.Status.Builder()
+		                        BatchDeliveryReport.Status.builder()
 		                                .code(300)
 		                                .status(DeliveryStatus.DELIVERED)
 		                                .count(20)
@@ -1492,18 +1493,18 @@ public class ApiConnectionIT {
 		        + "/delivery_report?type=full";
 
 		final BatchDeliveryReport expected =
-		        new BatchDeliveryReport.Builder()
+		        BatchDeliveryReport.builder()
 		                .batchId(batchId)
 		                .totalMessageCount(1010)
 		                .addStatus(
-		                        new BatchDeliveryReport.Status.Builder()
+		                        BatchDeliveryReport.Status.builder()
 		                                .code(200)
 		                                .status(DeliveryStatus.ABORTED)
 		                                .count(10)
 		                                .addRecipient("rec1", "rec2")
 		                                .build())
 		                .addStatus(
-		                        new BatchDeliveryReport.Status.Builder()
+		                        BatchDeliveryReport.Status.builder()
 		                                .code(300)
 		                                .status(DeliveryStatus.DELIVERED)
 		                                .count(20)
@@ -1555,7 +1556,7 @@ public class ApiConnectionIT {
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
-		        new RecipientDeliveryReport.Builder()
+		        RecipientDeliveryReport.builder()
 		                .batchId(batchId)
 		                .recipient(recipient)
 		                .code(200)
@@ -1595,7 +1596,7 @@ public class ApiConnectionIT {
 		        + "/delivery_report/" + recipient;
 
 		final RecipientDeliveryReport expected =
-		        new RecipientDeliveryReport.Builder()
+		        RecipientDeliveryReport.builder()
 		                .batchId(batchId)
 		                .recipient(recipient)
 		                .code(200)
@@ -1858,7 +1859,7 @@ public class ApiConnectionIT {
 		        .build();
 
 		final MtBatchDryRunResult expected =
-		        new MtBatchDryRunResult.Builder()
+		        MtBatchDryRunResult.builder()
 		                .numberOfRecipients(20)
 		                .numberOfMessages(200)
 		                .build();
@@ -1896,7 +1897,7 @@ public class ApiConnectionIT {
 		        .build();
 
 		final MtBatchDryRunResult expected =
-		        new MtBatchDryRunResult.Builder()
+		        MtBatchDryRunResult.builder()
 		                .numberOfRecipients(20)
 		                .numberOfMessages(200)
 		                .build();
@@ -1952,7 +1953,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2004,7 +2005,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		final GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2054,7 +2055,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2093,7 +2094,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		final GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2209,7 +2210,7 @@ public class ApiConnectionIT {
 		GroupFilter filter = ClxApi.groupFilter().build();
 
 		final Page<GroupResult> expected =
-		        new PagedGroupResult.Builder()
+		        PagedGroupResult.builder()
 		                .page(0)
 		                .size(0)
 		                .totalSize(0)
@@ -2258,7 +2259,7 @@ public class ApiConnectionIT {
 		        + "/groups?page=0&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResult> expected1 =
-		        new PagedGroupResult.Builder()
+		        PagedGroupResult.builder()
 		                .page(0)
 		                .size(0)
 		                .totalSize(2)
@@ -2271,7 +2272,7 @@ public class ApiConnectionIT {
 		        + "/groups?page=1&tags=tag1%2C%D1%82%D0%B0%D0%B32";
 
 		final Page<GroupResult> expected2 =
-		        new PagedGroupResult.Builder()
+		        PagedGroupResult.builder()
 		                .page(1)
 		                .size(0)
 		                .totalSize(2)
@@ -2335,7 +2336,7 @@ public class ApiConnectionIT {
 		        .addMemberRemoval("987654321")
 		        .build();
 
-		GroupResult expected = new GroupResult.Builder()
+		GroupResult expected = GroupResult.builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
@@ -2373,7 +2374,7 @@ public class ApiConnectionIT {
 		        .addMemberRemoval("987654321")
 		        .build();
 
-		final GroupResult expected = new GroupResult.Builder()
+		final GroupResult expected = GroupResult.builder()
 		        .size(72)
 		        .id(groupId)
 		        .createdAt(OffsetDateTime.now(Clock.systemUTC()))
@@ -2430,7 +2431,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2482,7 +2483,7 @@ public class ApiConnectionIT {
 		                .build();
 
 		final GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2532,7 +2533,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2570,7 +2571,7 @@ public class ApiConnectionIT {
 		String path = "/v1/" + spid + "/groups/" + groupId;
 
 		final GroupResult expected =
-		        new GroupResult.Builder()
+		        GroupResult.builder()
 		                .id(groupId)
 		                .name("mygroup")
 		                .size(72)
@@ -2827,7 +2828,7 @@ public class ApiConnectionIT {
 		InboundsFilter filter = ClxApi.inboundsFilter().build();
 
 		final Page<MoSms> expected =
-		        new PagedInboundsResult.Builder()
+		        PagedInboundsResult.builder()
 		                .page(0)
 		                .size(0)
 		                .totalSize(0)
@@ -2879,11 +2880,11 @@ public class ApiConnectionIT {
 		String path1 = "/v1/" + spid + "/inbounds?page=0&to=10101";
 
 		final Page<MoSms> expected1 =
-		        new PagedInboundsResult.Builder()
+		        PagedInboundsResult.builder()
 		                .page(0)
 		                .size(1)
 		                .totalSize(2)
-		                .addContent(new MoTextSms.Builder()
+		                .addContent(MoTextSms.builder()
 		                        .sender("987654321")
 		                        .recipient("54321")
 		                        .id(inboundsId1)
@@ -2899,11 +2900,11 @@ public class ApiConnectionIT {
 		String path2 = "/v1/" + spid + "/inbounds?page=1&to=10101";
 
 		final Page<MoSms> expected2 =
-		        new PagedInboundsResult.Builder()
+		        PagedInboundsResult.builder()
 		                .page(1)
 		                .size(1)
 		                .totalSize(2)
-		                .addContent(new MoBinarySms.Builder()
+		                .addContent(MoBinarySms.builder()
 		                        .sender("123456789")
 		                        .recipient("12345")
 		                        .id(inboundsId2)
@@ -2967,7 +2968,7 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
-		MoSms expected = new MoBinarySms.Builder()
+		MoSms expected = MoBinarySms.builder()
 		        .sender("123456789")
 		        .recipient("12345")
 		        .id(inboundsId)
@@ -3005,7 +3006,7 @@ public class ApiConnectionIT {
 
 		String path = "/v1/" + spid + "/inbounds/" + smsId;
 
-		final MoSms expected = new MoBinarySms.Builder()
+		final MoSms expected = MoBinarySms.builder()
 		        .sender("123456789")
 		        .recipient("12345")
 		        .id(inboundsId)

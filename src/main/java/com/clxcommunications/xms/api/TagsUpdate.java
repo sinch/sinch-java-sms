@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,13 +34,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = TagsUpdate.Builder.class)
-public interface TagsUpdate {
+public abstract class TagsUpdate {
 
 	/**
 	 * A builder of tag updates
 	 */
 	public static final class Builder extends TagsUpdateImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link TagsUpdate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final TagsUpdate.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -47,7 +62,7 @@ public interface TagsUpdate {
 	 * @return a non-null list of tags
 	 */
 	@JsonProperty("add")
-	Set<String> tagInsertions();
+	public abstract Set<String> tagInsertions();
 
 	/**
 	 * A set of tags to remove from a given object.
@@ -55,6 +70,6 @@ public interface TagsUpdate {
 	 * @return a non-null list of tags
 	 */
 	@JsonProperty("remove")
-	Set<String> tagRemovals();
+	public abstract Set<String> tagRemovals();
 
 }

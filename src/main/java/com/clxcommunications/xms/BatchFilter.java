@@ -43,6 +43,19 @@ public abstract class BatchFilter {
 	 */
 	public static class Builder extends BatchFilterImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link BatchFilter} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final BatchFilter.Builder builder() {
+		return new Builder();
 	}
 
 	/**

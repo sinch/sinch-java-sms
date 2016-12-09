@@ -19,6 +19,8 @@
  */
 package com.clxcommunications.xms.api;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -47,6 +49,19 @@ public abstract class MtBatchBinarySmsCreate extends MtBatchSmsCreate {
 	 */
 	public static class Builder extends MtBatchBinarySmsCreateImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link MtBatchBinarySmsCreate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final MtBatchBinarySmsCreate.Builder builder() {
+		return new Builder();
 	}
 
 	/**

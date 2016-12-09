@@ -40,13 +40,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @ValueStylePackage
 @JsonDeserialize(builder = GroupCreate.Builder.class)
 @JsonInclude(Include.NON_EMPTY)
-public interface GroupCreate {
+public abstract class GroupCreate {
 
 	/**
 	 * A builder of group creation descriptions.
 	 */
 	public static final class Builder extends GroupCreateImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link GroupCreate} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final GroupCreate.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -55,7 +68,7 @@ public interface GroupCreate {
 	 * @return the group name
 	 */
 	@Nullable
-	String name();
+	public abstract String name();
 
 	/**
 	 * The MSISDNs that belong to this group.
@@ -63,7 +76,7 @@ public interface GroupCreate {
 	 * @return a non-null list of group members
 	 */
 	@Nonnull
-	Set<String> members();
+	public abstract Set<String> members();
 
 	/**
 	 * A collection of child groups that belong to this group.
@@ -72,7 +85,7 @@ public interface GroupCreate {
 	 */
 	@Nonnull
 	@JsonProperty("child_groups")
-	Set<GroupId> childGroups();
+	public abstract Set<GroupId> childGroups();
 
 	/**
 	 * Describes how this group is auto updated through user interaction. Is
@@ -82,7 +95,7 @@ public interface GroupCreate {
 	 */
 	@Nullable
 	@JsonProperty("auto_update")
-	AutoUpdate autoUpdate();
+	public abstract AutoUpdate autoUpdate();
 
 	/**
 	 * The tags associated to this group.
@@ -90,6 +103,6 @@ public interface GroupCreate {
 	 * @return a non-null set of tags
 	 */
 	@Nonnull
-	Set<String> tags();
+	public abstract Set<String> tags();
 
 }

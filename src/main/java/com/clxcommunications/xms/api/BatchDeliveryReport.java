@@ -21,6 +21,8 @@ package com.clxcommunications.xms.api;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,7 +43,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonInclude(Include.NON_EMPTY)
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonTypeName("delivery_report_sms")
-public interface BatchDeliveryReport {
+public abstract class BatchDeliveryReport {
 
 	/**
 	 * A description of the messages having a given delivery state.
@@ -49,7 +51,7 @@ public interface BatchDeliveryReport {
 	@Value.Immutable
 	@JsonDeserialize(builder = BatchDeliveryReport.Status.Builder.class)
 	@JsonInclude(Include.NON_EMPTY)
-	public interface Status {
+	public static abstract class Status {
 
 		/**
 		 * A builder of batch delivery report statuses.
@@ -57,6 +59,19 @@ public interface BatchDeliveryReport {
 		public static class Builder
 		        extends BatchDeliveryReportImpl.Status.Builder {
 
+			Builder() {
+			}
+
+		}
+
+		/**
+		 * Creates a builder of {@link Status} instances.
+		 * 
+		 * @return a builder
+		 */
+		@Nonnull
+		public static final Status.Builder builder() {
+			return new Builder();
 		}
 
 		/**
@@ -64,21 +79,21 @@ public interface BatchDeliveryReport {
 		 * 
 		 * @return a status code
 		 */
-		int code();
+		public abstract int code();
 
 		/**
 		 * The delivery status for this bucket.
 		 * 
 		 * @return a non-null delivery status
 		 */
-		DeliveryStatus status();
+		public abstract DeliveryStatus status();
 
 		/**
 		 * The number of individual messages in this status bucket.
 		 * 
 		 * @return a positive integer
 		 */
-		int count();
+		public abstract int count();
 
 		/**
 		 * The recipients having this status. Note, this is non-empty only if a
@@ -86,7 +101,7 @@ public interface BatchDeliveryReport {
 		 * 
 		 * @return a non-null list of recipients
 		 */
-		List<String> recipients();
+		public abstract List<String> recipients();
 
 	}
 
@@ -95,6 +110,19 @@ public interface BatchDeliveryReport {
 	 */
 	public static class Builder extends BatchDeliveryReportImpl.Builder {
 
+		Builder() {
+		}
+
+	}
+
+	/**
+	 * Creates a builder of {@link BatchDeliveryReport} instances.
+	 * 
+	 * @return a builder
+	 */
+	@Nonnull
+	public static final BatchDeliveryReport.Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -103,7 +131,7 @@ public interface BatchDeliveryReport {
 	 * @return a non-null batch identifier
 	 */
 	@JsonProperty("batch_id")
-	BatchId batchId();
+	public abstract BatchId batchId();
 
 	/**
 	 * The total number of messages in the batch. This is including message
@@ -112,7 +140,7 @@ public interface BatchDeliveryReport {
 	 * @return a positive integer
 	 */
 	@JsonProperty("total_message_count")
-	int totalMessageCount();
+	public abstract int totalMessageCount();
 
 	/**
 	 * A list of {@link Status statuses} for the batch. Only non-empty statuses
@@ -121,6 +149,6 @@ public interface BatchDeliveryReport {
 	 * 
 	 * @return a list of statuses
 	 */
-	List<Status> statuses();
+	public abstract List<Status> statuses();
 
 }
