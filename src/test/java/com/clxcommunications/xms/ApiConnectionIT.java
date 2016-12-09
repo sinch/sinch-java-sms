@@ -2613,6 +2613,299 @@ public class ApiConnectionIT {
 	}
 
 	@Test
+	public void canHandle400WhenDeletingGroupSync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+		String path = "/v1/" + spid + "/groups/" + groupId;
+
+		ApiError apiError = ApiError.of("syntax_constraint_violation",
+		        "The syntax constraint was violated");
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(400)
+		                        .withHeader("Content-Type", "application/json")
+		                        .withBody(json.writeValueAsBytes(apiError))));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			conn.deleteGroup(groupId);
+			fail("Expected exception, got none");
+		} catch (ErrorResponseException e) {
+			assertThat(e.getCode(), is(apiError.code()));
+			assertThat(e.getText(), is(apiError.text()));
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
+	public void canHandle401WhenDeletingGroupSync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+		String path = "/v1/" + spid + "/groups/" + groupId;
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(401)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			conn.deleteGroup(groupId);
+			fail("Expected exception, got none");
+		} catch (UnauthorizedException e) {
+			// This exception is expected.
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
+	public void canHandle401WhenDeletingGroupAsync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		final String path = "/v1/" + spid + "/groups/" + groupId;
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(401)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		FutureCallback<Void> callback =
+		        new TestCallback<Void>() {
+
+			        @Override
+			        public void failed(Exception e) {
+				        assertThat(e,
+				                is(instanceOf(UnauthorizedException.class)));
+			        }
+
+		        };
+
+		try {
+			conn.deleteGroupAsync(groupId, callback).get();
+			fail("Expected exception, got none");
+		} catch (ExecutionException e) {
+			assertThat(e.getCause(),
+			        is(instanceOf(UnauthorizedException.class)));
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
+	public void canHandle404WhenDeletingGroupSync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+		String path = "/v1/" + spid + "/groups/" + groupId;
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(404)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		try {
+			conn.deleteGroup(groupId);
+			fail("Expected exception, got none");
+		} catch (NotFoundException e) {
+			assertThat(e.getPath(), is(path));
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
+	public void canHandle404WhenDeletingGroupAsync() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		final String path = "/v1/" + spid + "/groups/" + groupId;
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(404)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		FutureCallback<Void> callback =
+		        new TestCallback<Void>() {
+
+			        @Override
+			        public void failed(Exception e) {
+				        assertThat(e, is(instanceOf(NotFoundException.class)));
+				        NotFoundException nfe = (NotFoundException) e;
+				        assertThat(nfe.getPath(), is(path));
+			        }
+
+		        };
+
+		try {
+			conn.deleteGroupAsync(groupId, callback).get();
+			fail("Expected exception, got none");
+		} catch (ExecutionException e) {
+			assertThat(e.getCause(), is(instanceOf(NotFoundException.class)));
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
+	public void canHandle500WhenDeletingGroup() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		GroupId groupId = TestUtils.freshGroupId();
+
+		String path = "/v1/" + spid + "/groups/" + groupId;
+
+		wm.stubFor(delete(
+		        urlEqualTo(path))
+		                .willReturn(aResponse()
+		                        .withStatus(500)
+		                        .withHeader("Content-Type",
+		                                ContentType.TEXT_PLAIN.toString())
+		                        .withBody("BAD")));
+
+		ApiConnection conn = ApiConnection.builder()
+		        .servicePlanId(spid)
+		        .token("tok")
+		        .endpoint("http://localhost:" + wm.port())
+		        .start();
+
+		/*
+		 * The exception we'll receive in the callback. Need to store it to
+		 * verify that it is the same exception as received from #get().
+		 */
+		final AtomicReference<Exception> failException =
+		        new AtomicReference<Exception>();
+
+		try {
+			/*
+			 * Used to make sure callback and test thread are agreeing about the
+			 * failException variable.
+			 */
+			final CountDownLatch latch = new CountDownLatch(1);
+
+			FutureCallback<Void> testCallback =
+			        new TestCallback<Void>() {
+
+				        @Override
+				        public void failed(Exception exception) {
+					        if (!failException.compareAndSet(null,
+					                exception)) {
+						        fail("failed called multiple times");
+					        }
+
+					        latch.countDown();
+				        }
+
+			        };
+
+			Future<Void> future =
+			        conn.deleteGroupAsync(groupId, testCallback);
+
+			// Give plenty of time for the callback to be called.
+			latch.await();
+
+			future.get();
+			fail("unexpected future get success");
+		} catch (ExecutionException ee) {
+			/*
+			 * The exception cause should be the same as we received in the
+			 * callback.
+			 */
+			assertThat(failException.get(), is(theInstance(ee.getCause())));
+			assertThat(ee.getCause(),
+			        is(instanceOf(UnexpectedResponseException.class)));
+
+			UnexpectedResponseException ure =
+			        (UnexpectedResponseException) ee.getCause();
+
+			HttpResponse response = ure.getResponse();
+			assertThat(response, notNullValue());
+			assertThat(response.getStatusLine().getStatusCode(), is(500));
+			assertThat(response.getEntity().getContentType().getValue(),
+			        is(ContentType.TEXT_PLAIN.toString()));
+
+			byte[] buf = new byte[100];
+			int read;
+
+			InputStream contentStream = null;
+			try {
+				contentStream = response.getEntity().getContent();
+				read = contentStream.read(buf);
+			} catch (IOException ioe) {
+				throw new AssertionError(
+				        "unexpected exception: " + ioe.getMessage(), ioe);
+			} finally {
+				if (contentStream != null) {
+					try {
+						contentStream.close();
+					} catch (IOException ioe) {
+						throw new AssertionError(
+						        "unexpected exception: " + ioe.getMessage(),
+						        ioe);
+					}
+				}
+			}
+
+			assertThat(read, is(3));
+			assertThat(Arrays.copyOf(buf, 3),
+			        is(new byte[] { 'B', 'A', 'D' }));
+		} finally {
+			conn.close();
+		}
+
+		verifyDeleteRequest(path);
+	}
+
+	@Test
 	public void canUpdateGroupTagsSync() throws Exception {
 		String spid = TestUtils.freshServicePlanId();
 		GroupId groupId = TestUtils.freshGroupId();

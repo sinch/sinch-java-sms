@@ -25,11 +25,13 @@ import java.nio.CharBuffer;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.RequestLine;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,8 +91,13 @@ class EmptyAsyncConsumer extends AsyncCharConsumer<Void> {
 		case HttpStatus.SC_FORBIDDEN:
 			ApiError error = json.readValue(content, ApiError.class);
 			throw new ErrorResponseException(error);
+		case HttpStatus.SC_NOT_FOUND:
+			HttpCoreContext coreContext = HttpCoreContext.adapt(context);
+			RequestLine rl = coreContext.getRequest().getRequestLine();
+			throw new NotFoundException(rl.getUri());
+		case HttpStatus.SC_UNAUTHORIZED:
+			throw new UnauthorizedException();
 		default:
-			// TODO: Good idea to buffer the response in this case?
 			ContentType contentType =
 			        ContentType.getLenient(response.getEntity());
 			response.setEntity(
