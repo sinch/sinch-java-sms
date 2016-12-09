@@ -24,15 +24,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nonnull;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 import com.clxcommunications.xms.api.BatchId;
 import com.clxcommunications.xms.api.GroupId;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * A few utils that are handy to have around in the test suite.
@@ -101,57 +96,11 @@ public final class TestUtils {
 	 * 
 	 * @param expected
 	 *            a JSON encoded string
-	 * @return a non-null Hamcrest matcher
+	 * @return a Hamcrest matcher
 	 */
+	@Nonnull
 	public static Matcher<String> jsonEqualTo(final String expected) {
-		return new BaseMatcher<String>() {
-
-			private final ObjectMapper om = new ObjectMapper();
-
-			{
-				om.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
-				om.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			}
-
-			private JsonNode readJsonNode(String expected) {
-				try {
-					return om.readValue(expected, JsonNode.class);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-
-			@Override
-			public boolean matches(Object item) {
-				if (item == null) {
-					return false;
-				}
-
-				if (!(item instanceof String)) {
-					return false;
-				}
-
-				JsonNode expectedNode = readJsonNode(expected);
-				JsonNode actualNode = readJsonNode((String) item);
-
-				return expectedNode.equals(actualNode);
-			}
-
-			@Override
-			public void describeTo(Description description) {
-				description.appendValue(readJsonNode(expected));
-			}
-
-			@Override
-			public void describeMismatch(Object item, Description description) {
-				if (item instanceof String) {
-					item = readJsonNode((String) item);
-				}
-
-				super.describeMismatch(item, description);
-			}
-
-		};
+		return new JsonEqualTo(expected);
 	}
 
 }
