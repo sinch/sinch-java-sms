@@ -67,8 +67,8 @@ public class GroupResultTest {
 	@Test
 	public void canSerializeMaximalish() throws Exception {
 		GroupId groupId = TestUtils.freshGroupId();
-		GroupId groupId1 = TestUtils.freshGroupId();
-		GroupId groupId2 = TestUtils.freshGroupId();
+		GroupId gid1 = TestUtils.freshGroupId();
+		GroupId gid2 = TestUtils.freshGroupId();
 
 		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
 		        542000000, ZoneOffset.UTC);
@@ -77,7 +77,7 @@ public class GroupResultTest {
 		        .id(groupId)
 		        .size(72)
 		        .name("mygroup")
-		        .childGroups(Arrays.asList(groupId1, groupId2))
+		        .childGroups(Arrays.asList(gid1, gid2))
 		        .autoUpdate(ClxApi.autoUpdate()
 		                .recipient("1111")
 		                .add("kw0", "kw1")
@@ -92,7 +92,7 @@ public class GroupResultTest {
 		        "  'id': '" + groupId + "',",
 		        "  'name': 'mygroup',",
 		        "  'size': 72,",
-		        "  'child_groups': [ '" + groupId1 + "', '" + groupId2 + "' ],",
+		        "  'child_groups': [ '" + gid1 + "', '" + gid2 + "' ],",
 		        "  'auto_update': {",
 		        "    'to': '1111',",
 		        "    'add': { 'first_word': 'kw0', 'second_word': 'kw1' },",

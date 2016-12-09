@@ -54,8 +54,8 @@ class JacksonUtils {
 		}
 
 		@Override
-		protected byte[] _deserialize(String value, DeserializationContext ctxt)
-		        throws IOException {
+		protected byte[] _deserialize(String value,
+		        DeserializationContext ctxt) throws IOException {
 			try {
 				return Hex.decodeHex(value.toCharArray());
 			} catch (DecoderException e) {

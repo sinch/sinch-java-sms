@@ -96,8 +96,8 @@ class JsonApiAsyncConsumer<T> extends AsyncByteConsumer<T> {
 			throw new ErrorResponseException(error);
 		case HttpStatus.SC_NOT_FOUND:
 			HttpCoreContext coreContext = HttpCoreContext.adapt(context);
-			RequestLine requestLine = coreContext.getRequest().getRequestLine();
-			throw new NotFoundException(requestLine.getUri());
+			RequestLine rl = coreContext.getRequest().getRequestLine();
+			throw new NotFoundException(rl.getUri());
 		case HttpStatus.SC_UNAUTHORIZED:
 			throw new UnauthorizedException();
 		default:

@@ -70,8 +70,8 @@ public class BatchDeliveryReportParamsTest {
 
 	@Property
 	public void generatesValidQueryParameters(
-	        BatchDeliveryReportParams.ReportType reportType, Set<Integer> codes)
-	        throws Exception {
+	        BatchDeliveryReportParams.ReportType reportType,
+	        Set<Integer> codes) throws Exception {
 		BatchDeliveryReportParams filter =
 		        ClxApi.batchDeliveryReportParams()
 		                .reportType(reportType)

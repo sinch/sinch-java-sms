@@ -54,6 +54,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
@@ -550,7 +551,8 @@ public class ApiConnectionIT {
 		        .start();
 
 		try {
-			MtBatchBinarySmsResult actual = conn.replaceBatch(batchId, request);
+			MtBatchBinarySmsResult actual =
+			        conn.replaceBatch(batchId, request);
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -896,7 +898,8 @@ public class ApiConnectionIT {
 			        @Override
 			        public void failed(Exception e) {
 				        assertThat(e, is(instanceOf(NotFoundException.class)));
-				        assertThat(((NotFoundException) e).getPath(), is(path));
+				        NotFoundException nfe = (NotFoundException) e;
+				        assertThat(nfe.getPath(), is(path));
 			        }
 
 		        };
@@ -969,27 +972,22 @@ public class ApiConnectionIT {
 
 			future.get();
 			fail("unexpected future get success");
-		} catch (ExecutionException executionException) {
+		} catch (ExecutionException ee) {
 			/*
 			 * The exception cause should be the same as we received in the
 			 * callback.
 			 */
-			assertThat(failException.get(),
-			        is(theInstance(executionException.getCause())));
-
-			assertThat(executionException.getCause(),
+			assertThat(failException.get(), is(theInstance(ee.getCause())));
+			assertThat(ee.getCause(),
 			        is(instanceOf(UnexpectedResponseException.class)));
 
 			UnexpectedResponseException ure =
-			        (UnexpectedResponseException) executionException.getCause();
+			        (UnexpectedResponseException) ee.getCause();
 
-			assertThat(ure.getResponse(), notNullValue());
-
-			assertThat(ure.getResponse().getStatusLine()
-			        .getStatusCode(), is(500));
-
-			assertThat(
-			        ure.getResponse().getEntity().getContentType().getValue(),
+			HttpResponse response = ure.getResponse();
+			assertThat(response, notNullValue());
+			assertThat(response.getStatusLine().getStatusCode(), is(500));
+			assertThat(response.getEntity().getContentType().getValue(),
 			        is(ContentType.TEXT_PLAIN.toString()));
 
 			byte[] buf = new byte[100];
@@ -997,13 +995,11 @@ public class ApiConnectionIT {
 
 			InputStream contentStream = null;
 			try {
-				contentStream = ure.getResponse().getEntity().getContent();
+				contentStream = response.getEntity().getContent();
 				read = contentStream.read(buf);
 			} catch (IOException ioe) {
 				throw new AssertionError(
-				        "unexpected exception: "
-				                + ioe.getMessage(),
-				        ioe);
+				        "unexpected exception: " + ioe.getMessage(), ioe);
 			} finally {
 				if (contentStream != null) {
 					try {
@@ -1564,7 +1560,8 @@ public class ApiConnectionIT {
 		                .statusMessage("this is the status")
 		                .operator("10101")
 		                .at(OffsetDateTime.now())
-		                .operatorStatusAt(OffsetDateTime.now(Clock.systemUTC()))
+		                .operatorStatusAt(
+		                        OffsetDateTime.now(Clock.systemUTC()))
 		                .build();
 
 		stubGetResponse(expected, path);
@@ -1604,7 +1601,8 @@ public class ApiConnectionIT {
 		                .statusMessage("this is the status")
 		                .operator("10101")
 		                .at(OffsetDateTime.now())
-		                .operatorStatusAt(OffsetDateTime.now(Clock.systemUTC()))
+		                .operatorStatusAt(
+		                        OffsetDateTime.now(Clock.systemUTC()))
 		                .build();
 
 		stubGetResponse(expected, path);
@@ -1772,8 +1770,9 @@ public class ApiConnectionIT {
 
 			        };
 
-			Tags actual =
-			        conn.replaceTagsAsync(batchId, request, testCallback).get();
+			Tags actual = conn
+			        .replaceTagsAsync(batchId, request, testCallback)
+			        .get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -1921,9 +1920,9 @@ public class ApiConnectionIT {
 
 			        };
 
-			MtBatchDryRunResult actual =
-			        conn.createBatchDryRunAsync(request, true, 5, testCallback)
-			                .get();
+			MtBatchDryRunResult actual = conn
+			        .createBatchDryRunAsync(request, true, 5, testCallback)
+			        .get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -2401,7 +2400,8 @@ public class ApiConnectionIT {
 			        };
 
 			GroupResult actual =
-			        conn.updateGroupAsync(groupId, request, testCallback).get();
+			        conn.updateGroupAsync(groupId, request, testCallback)
+			                .get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -2516,7 +2516,8 @@ public class ApiConnectionIT {
 			        };
 
 			GroupResult actual = conn
-			        .replaceGroupAsync(groupId, request, testCallback).get();
+			        .replaceGroupAsync(groupId, request, testCallback)
+			        .get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -2747,8 +2748,9 @@ public class ApiConnectionIT {
 
 			        };
 
-			Tags actual =
-			        conn.replaceTagsAsync(groupId, request, testCallback).get();
+			Tags actual = conn
+			        .replaceTagsAsync(groupId, request, testCallback)
+			        .get();
 			assertThat(actual, is(expected));
 		} finally {
 			conn.close();
@@ -3165,7 +3167,8 @@ public class ApiConnectionIT {
 		                        matching("application/json; charset=UTF-8"))
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer toktok")));
+		                .withHeader("Authorization",
+		                        equalTo("Bearer toktok")));
 	}
 
 	/**
@@ -3213,7 +3216,8 @@ public class ApiConnectionIT {
 		                        matching("application/json; charset=UTF-8"))
 		                .withHeader("Accept",
 		                        equalTo("application/json; charset=UTF-8"))
-		                .withHeader("Authorization", equalTo("Bearer toktok")));
+		                .withHeader("Authorization",
+		                        equalTo("Bearer toktok")));
 	}
 
 }

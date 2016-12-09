@@ -31,7 +31,8 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
  * Generator of ThreeTen OffsetDateTime. Acts as a thin wrapper of the Java 8
  * OffsetDateTime generator.
  */
-public class ThreeTenOffsetDateTimeGenerator extends Generator<OffsetDateTime> {
+public class ThreeTenOffsetDateTimeGenerator
+        extends Generator<OffsetDateTime> {
 
 	private final OffsetDateTimeGenerator java8generator =
 	        new OffsetDateTimeGenerator();
@@ -47,7 +48,8 @@ public class ThreeTenOffsetDateTimeGenerator extends Generator<OffsetDateTime> {
 	@Override
 	public OffsetDateTime generate(SourceOfRandomness random,
 	        GenerationStatus status) {
-		java.time.OffsetDateTime time = java8generator.generate(random, status);
+		java.time.OffsetDateTime time =
+		        java8generator.generate(random, status);
 
 		return OffsetDateTime.parse(time.toString());
 	}

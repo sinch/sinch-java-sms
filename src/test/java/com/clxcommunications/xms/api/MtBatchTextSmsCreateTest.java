@@ -56,7 +56,8 @@ public class MtBatchTextSmsCreateTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
+		MtBatchSmsCreate actual =
+		        json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
@@ -102,7 +103,8 @@ public class MtBatchTextSmsCreateTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
+		MtBatchSmsCreate actual =
+		        json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}
@@ -151,7 +153,8 @@ public class MtBatchTextSmsCreateTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSmsCreate actual = json.readValue(input, MtBatchSmsCreate.class);
+		MtBatchSmsCreate actual =
+		        json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
 	}

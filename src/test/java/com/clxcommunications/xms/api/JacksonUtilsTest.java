@@ -33,7 +33,8 @@ import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 public class JacksonUtilsTest {
 
 	@Test
-	public void byteArrayHexSerializerCanSerializeByteArray() throws Exception {
+	public void byteArrayHexSerializerCanSerializeByteArray()
+	        throws Exception {
 		ObjectMapper mapper =
 		        serMapper(new JacksonUtils.ByteArrayHexSerializer());
 

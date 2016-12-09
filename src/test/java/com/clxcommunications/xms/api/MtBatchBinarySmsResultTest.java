@@ -58,7 +58,8 @@ public class MtBatchBinarySmsResultTest {
 
 		String input = json.writeValueAsString(expected);
 
-		MtBatchSmsResult actual = json.readValue(input, MtBatchSmsResult.class);
+		MtBatchSmsResult actual =
+		        json.readValue(input, MtBatchSmsResult.class);
 
 		assertThat(actual, is(expected));
 	}

@@ -193,7 +193,8 @@ public abstract class ApiConnection implements Closeable {
 		if (httpClient() instanceof ApiHttpAsyncClient) {
 			((ApiHttpAsyncClient) httpClient()).start();
 		} else {
-			log.debug("Not starting HTTP client since it was given externally");
+			log.debug("Not starting HTTP client since it"
+			        + " was given externally");
 		}
 	}
 
@@ -1684,7 +1685,8 @@ public abstract class ApiConnection implements Closeable {
 
 		HttpAsyncRequestProducer producer =
 		        new BasicAsyncRequestProducer(endpointHost(), req);
-		HttpAsyncResponseConsumer<Void> consumer = new EmptyAsyncConsumer(json);
+		HttpAsyncResponseConsumer<Void> consumer =
+		        new EmptyAsyncConsumer(json);
 
 		return httpClient().execute(producer, consumer,
 		        callbackWrapper().wrap(callback));

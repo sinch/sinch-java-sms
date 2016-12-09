@@ -142,7 +142,8 @@ public class ApiConnectionTest {
 		        .servicePlanId("spid")
 		        .build();
 
-		assertThat(conn.httpClient(), is(instanceOf(ApiHttpAsyncClient.class)));
+		assertThat(conn.httpClient(),
+		        is(instanceOf(ApiHttpAsyncClient.class)));
 
 		ApiHttpAsyncClient client = (ApiHttpAsyncClient) conn.httpClient();
 
