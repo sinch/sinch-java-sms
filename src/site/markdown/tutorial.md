@@ -14,7 +14,7 @@ A great benefit of the XMS API is that it allows you to easily create and send _
 
 To use XMS it is necessary to have a _service plan identifier_ and an _authentication token_, which can be obtained by creating an XMS service plan.
 
-For full documentation of the XMS API please refer to the [REST API documentation site](https://manage.clxcommunications.com/developers/sms/xmsapi.html). The documentation site contains up-to-date information about, for example, status and error codes.
+For full documentation of the XMS API please refer to the [REST API documentation site](https://www.clxcommunications.com/docs/sms/http-rest.html). The documentation site contains up-to-date information about, for example, status and error codes.
 
 Interacting with XMS through Java
 ---------------------------------
@@ -76,7 +76,7 @@ ApiConnection conn = ApiConnection.builder()
     .build();
 ```
 
-would make the connection object believe that the [`batches`](https://manage.clxcommunications.com/developers/sms/xmsapi.html#batches-endpoint) endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
+would make the connection object believe that the [`batches`](https://www.clxcommunications.com/docs/sms/http-rest.html#batches-endpoint) endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
 
 The HTTP client used by the API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
 
