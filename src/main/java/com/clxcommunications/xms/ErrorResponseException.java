@@ -27,7 +27,7 @@ import com.clxcommunications.xms.api.ApiError;
  * indicates the specifics.
  * <p>
  * For information about specific errors please refer to the <a href=
- * "https://manage.clxcommunications.com/developers/sms/xmsapi.html#http-errors">XMS
+ * "https://www.clxcommunications.com/docs/sms/http-rest.html#http-errors">XMS
  * API documentation</a>.
  */
 public class ErrorResponseException extends ApiException {
