@@ -39,6 +39,9 @@
 			<name>Robert Helgesson</name>
 			<email>robert at chaitsa dot com</email>
 			<url>http://chaitsa.com/</url>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 	</developers>
 
