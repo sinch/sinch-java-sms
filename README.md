@@ -1,9 +1,12 @@
-XMS REST API SDK
-================
+REST API SDK for SMS
+====================
 
 This is the Java SDK for the CLX Communications REST API (also called
-XMS) for batch SMS messaging. It provides an asynchronous Java API
-that provides convenient access to all the features of XMS.
+XMS) for sending and receiving single or batch SMS messages. It also
+supports scheduled sends, organizing your frequent recipients into
+groups, and customizing your message for each recipient using
+parameterization. It offers an asynchronous Java API that provides
+convenient access to all the features of the XMS REST API.
 
 The library is compatible with Java 6 and later.
 
