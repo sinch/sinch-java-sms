@@ -25,7 +25,7 @@
 	<scm>
 		<url>https://github.com/clxcommunications/sdk-xms-java</url>
 		<connection>scm:git:git://github.com/clxcommunications/sdk-xms-java.git</connection>
-		<developerConnection>scm:git:ssh://github.com:clxcommunications/sdk-xms-java.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:clxcommunications/sdk-xms-java.git</developerConnection>
 	</scm>
 
 	<issueManagement>
