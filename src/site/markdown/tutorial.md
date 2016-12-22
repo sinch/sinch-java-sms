@@ -98,7 +98,7 @@ You will notice a few things with this code. We are using a `conn` variable that
 
 Describing the batch is done using an object satisfying the `MtBatchTextSmsCreate` interface. Such objects can most easily be created using the builder returned by `ClxApi.batchTextSms()`. For a batch with a binary body you would similarly describe it using a object satisfying the `MtBatchBinarySmsCreate` interface and typically use `ClxApi.batchBinarySms()` to build such objects.
 
-The return value in this case is a `MtBatchTextSmsResult` object which contains not only the submitted batch information but also information included by XMS, such that the unique batch identifier, the creation time, etc. For example, to simply print the batch identifier we could add the code
+The return value in this case is a `MtBatchTextSmsResult` object that contains not only the submitted batch information but also information included by XMS, such that the unique batch identifier, the creation time, etc. For example, to simply print the batch identifier we could add the code
 
 ```java
 System.out.println("Batch id is " + result.id())
