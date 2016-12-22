@@ -136,6 +136,24 @@ Future<MtBatchTextSmsResult> future =
 
 The callback that we provided to this method will have one of its methods invoked as soon as the communication with XMS has concluded. Which of the methods that is invoked will depend on how the request went. If all went well then the `completed` method will be called with the result as argument. If some form of exception was thrown during the request then the `failed` method will be called with the exception as argument. For more about error handling see sec. [Handling errors](#Handling_errors). Finally, if the request was canceled, for example using `future.cancel(true)`, then the `cancelled` method is called.
 
+It is not much harder to create a more complicated batch, for example, here we create a parameterized message with multiple recipients and a scheduled send time:
+
+```java
+MtBatchTextSmsResult result =
+    conn.createBatch(ClxApi.batchTextSms()
+        .sender("12345")
+        .addRecipient("987654321", "123456789", "555555555")
+        .body("Hello, ${name}!")
+        .putParameter("name",
+            ClxApi.parameterValues()
+                .putSubstitution("987654321", "Mary")
+                .putSubstitution("123456789", "Joe")
+                .defaultValue("valued customer")
+                .build())
+        .sendAt(OffsetDateTime.of(2016, 12, 20, 10, 0, 0, 0, ZoneOffset.UTC))
+        .build())
+```
+
 Fetching batches
 ----------------
 
