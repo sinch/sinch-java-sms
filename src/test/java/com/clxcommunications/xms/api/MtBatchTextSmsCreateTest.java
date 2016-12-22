@@ -23,6 +23,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.ZoneOffset;
 
 import com.clxcommunications.testsupport.TestUtils;
 import com.clxcommunications.xms.ApiObjectMapper;
@@ -157,6 +159,32 @@ public class MtBatchTextSmsCreateTest {
 		        json.readValue(input, MtBatchSmsCreate.class);
 
 		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void canSerializeWithDatesAndTags() throws Exception {
+		MtBatchSmsCreate input = minimalBatchBuilder()
+		        .sendAt(OffsetDateTime.of(2016, 12, 1, 10, 20, 30, 0,
+		                ZoneOffset.UTC))
+		        .expireAt(OffsetDateTime.of(2016, 12, 20, 10, 0, 0, 0,
+		                ZoneOffset.UTC))
+		        .addTag("tag1", "tag2")
+		        .build();
+
+		String expected = Utils.join("\n",
+		        "{",
+		        "  'type': 'mt_text',",
+		        "  'from': '1234',",
+		        "  'to': [ '987654321' ],",
+		        "  'body': 'Hello, world!',",
+		        "  'send_at': '2016-12-01T10:20:30Z',",
+		        "  'expire_at': '2016-12-20T10:00:00Z',",
+		        "  'tags': ['tag1', 'tag2']",
+		        "}").replace('\'', '"');
+
+		String actual = json.writeValueAsString(input);
+
+		assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
 	}
 
 	@Test(expected = IllegalStateException.class)
