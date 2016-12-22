@@ -109,14 +109,14 @@ public abstract class BatchDeliveryReportParams {
 	public abstract ReportType reportType();
 
 	/**
-	 * A set of delivery statuses that should be fetches.
+	 * A set of delivery statuses that should be fetched.
 	 * 
 	 * @return the delivery statuses
 	 */
 	public abstract Set<DeliveryStatus> statuses();
 
 	/**
-	 * A set of status codes that should be fetches.
+	 * A set of status codes that should be fetched.
 	 * 
 	 * @return the status codes
 	 */
