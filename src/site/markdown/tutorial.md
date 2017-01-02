@@ -83,7 +83,7 @@ The HTTP client used by the API connection is by default restricted to only conn
 Sending batches
 ---------------
 
-Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more recipient addresses (typically MSISDNs), and the message body. To send a simple hello world message to one recipient is then accomplished using
+Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more recipient addresses (typically MSISDNs), and the message body. Sending a simple hello world message to one recipient is then accomplished using
 
 ```java
 MtBatchTextSmsResult result =
