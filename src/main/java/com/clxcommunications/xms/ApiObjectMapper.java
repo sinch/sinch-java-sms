@@ -61,6 +61,7 @@ public class ApiObjectMapper extends ObjectMapper {
 		 * string representation."
 		 */
 		disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
 		configure(SerializationFeature.INDENT_OUTPUT, prettyPrint);
 	}
