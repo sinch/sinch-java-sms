@@ -116,11 +116,12 @@ public abstract class RecipientDeliveryReport {
 	public abstract OffsetDateTime at();
 
 	/**
-	 * The message timestamp as recorded by the network operator.
+	 * The message timestamp as recorded by the network operator, if message dispatched.
 	 * 
-	 * @return a date and time
+	 * @return a date and time if message dispatched; <code>null</code> otherwise
 	 */
 	@JsonProperty("operator_status_at")
+	@Nullable
 	public abstract OffsetDateTime operatorStatusAt();
 
 }

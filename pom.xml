@@ -75,7 +75,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>animal-sniffer-maven-plugin</artifactId>
-				<version>1.15</version>
+				<version>1.16</version>
 				<configuration>
 					<signature>
 						<groupId>org.codehaus.mojo.signature</groupId>
@@ -306,18 +306,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.lidalia</groupId>
-			<artifactId>slf4j-test</artifactId>
-			<version>1.1.0</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>[1.7,2)</version>
 			<scope>test</scope>
-			<!-- The slf4j-test library tries to use an old Guava version but will work fine 
-				with the later version pulled in by WireMock. -->
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -98,8 +98,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import uk.org.lidalia.slf4jtest.TestLoggerFactoryResetRule;
-
 public class ApiConnectionIT {
 
 	/**
@@ -136,10 +134,6 @@ public class ApiConnectionIT {
 	        WireMockConfiguration.options()
 	                .dynamicPort()
 	                .dynamicHttpsPort());
-
-	@Rule
-	public TestLoggerFactoryResetRule testLoggerFactoryResetRule =
-	        new TestLoggerFactoryResetRule();
 
 	@Test
 	public void canCreateBinaryBatch() throws Exception {

@@ -98,4 +98,36 @@ public class ApiObjectMapperTest {
 		assertThat(result.getTime(), is(time));
 	}
 
+	@Test
+	public void testOffsetNotChangedWhenDeserialize() throws Exception {
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 
+		        542000000, ZoneOffset.of("+01:00"));
+
+		String input = Utils.join("\n", 
+		        "{",
+		        "  'time': '2016-10-02T09:34:28.542+01:00'",
+		        "}").replace('\'', '"');
+
+		MapperTestClass result = json.readValue(input, MapperTestClass.class);
+
+		assertThat(result.getTime(), is(time));
+	}
+
+	@Test
+	public void testOffsetNotChangedWhenSerialize() throws Exception {
+		OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 
+		        542000000, ZoneOffset.of("+01:00"));
+		MapperTestClass input = new MapperTestClass();
+		input.setTime(time);
+
+		String expected = Utils.join("\n", 
+		        "{",
+		        "  'time': '2016-10-02T09:34:28.542+01:00'",
+		        "}").replace('\'', '"');
+
+		String actual = json.writeValueAsString(input);
+
+		assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
+	}
+
 }
