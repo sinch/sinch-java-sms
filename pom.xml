@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.clxcommunications</groupId>
 	<artifactId>sdk-xms</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SDK for CLX XMS</name>
 	<description>Library providing a Java API for the CLX Communications HTTP REST Messaging API.</description>
@@ -25,7 +25,7 @@
 		<url>https://github.com/clxcommunications/sdk-xms-java</url>
 		<connection>scm:git:git://github.com/clxcommunications/sdk-xms-java.git</connection>
 		<developerConnection>scm:git:git@github.com:clxcommunications/sdk-xms-java.git</developerConnection>
-	  <tag>v1.0.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<issueManagement>
