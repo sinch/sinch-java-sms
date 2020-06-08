@@ -1,13 +1,14 @@
 # REST API SDK for SMS
 
-This is the Java SDK for the Sinch REST API (also called
-XMS) for sending and receiving single or batch SMS messages. It also
+Sinch Java SMS helper library, moved from https://github.com/clxcommunications/sdk-xms-java
+
+This is the Java SDK for the Sinch REST SMS API for sending and receiving single or batch SMS messages. It also
 supports scheduled sends, organizing your frequent recipients into
 groups, and customizing your message for each recipient using
 parameterization. It offers an asynchronous Java API that provides
-convenient access to all the features of the XMS REST API.
+convenient access to all the features of the SMS REST API.
 
-The library is compatible with Java 6 and later.
+The library is compatible with Java 8 and later.
 
 ## Using
 
@@ -15,7 +16,7 @@ To use this SDK in your own Java project you can put
 
 ```xml
 <dependency>
-  <groupId>com.clxcommunications</groupId>
+  <groupId>com.sinch</groupId>
   <artifactId>sdk-xms</artifactId>
   <version>XYZ</version>
 </dependency>
@@ -29,7 +30,7 @@ This project uses the Maven build tool and the typical Maven goals are
 supported. To install the package to your local Maven repository it
 therefore is sufficient to execute
 
-    $ mvn install
+    $ mvn clean install
 
 in your terminal. The project will then be compiled and tested before
 finally being installed in your local repository.
