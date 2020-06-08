@@ -8,7 +8,7 @@ public class Example {
 
   private static final String SERVICE_PLAN_ID = "SERVICE_PLAN_ID";
   private static final String TOKEN = "SERVICE_TOKEN";
-  private static final String [] RECIPIENTS = {"15417909456", "14047691562"}  ;
+  private static final String [] RECIPIENTS = {"1232323131", "3213123"}  ;
   private static final String SENDER = "SENDER";
 
   public static void main(String[] args) {
