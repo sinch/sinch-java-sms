@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.clxcommunications.xms;
+package com.sinch.xms;
 
 
 /**

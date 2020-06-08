@@ -62,6 +62,7 @@ public abstract class MtBatchSmsCreate {
 	 * 
 	 * @return an originator address
 	 */
+	@Nullable
 	@JsonProperty("from")
 	public abstract String sender();
 
@@ -127,7 +128,7 @@ public abstract class MtBatchSmsCreate {
 			}
 		}
 
-		if (sender().isEmpty()) {
+		if (sender() != null && sender().isEmpty()) {
 			throw new IllegalStateException("empty from address");
 		}
 	}
