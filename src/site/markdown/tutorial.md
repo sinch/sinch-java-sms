@@ -1,12 +1,10 @@
-Tutorial
-========
+# Tutorial
 
-The purpose of this document is to present the basic concepts of the CLX Communications HTTP REST Messaging API and how to use it from Java using the HTTP REST Messaging API SDK.
+The purpose of this document is to present the basic concepts of the Sinch HTTP REST Messaging API and how to use it from Java using the HTTP REST Messaging API SDK.
 
-HTTP REST Messaging API basics
-------------------------------
+## HTTP REST Messaging API basics
 
-HTTP REST Messaging API is a REST API that is provided by CLX Communications for sending and receiving SMS messages. It also provides various other services supporting this task such as managing groups of recipients, tagging, and so forth.
+HTTP REST Messaging API is a REST API that is provided by Sinch for sending and receiving SMS messages. It also provides various other services supporting this task such as managing groups of recipients, tagging, and so forth.
 
 Note, for brevity we will in this document refer to HTTP REST Messaging API as _XMS API_ and the HTTP REST Messaging API service or HTTP endpoint as _XMS_.
 
@@ -16,8 +14,7 @@ To use XMS it is necessary to have a _service plan identifier_ and an _authentic
 
 For full documentation of the XMS API please refer to the [REST API documentation site](https://www.clxcommunications.com/docs/sms/http-rest.html). The documentation site contains up-to-date information about, for example, status and error codes.
 
-Interacting with XMS through Java
----------------------------------
+## Interacting with XMS through Java
 
 Using this Java SDK, all interaction with XMS happens through an _API connection_, which can be created using the service plan identifier and authentication token. Further configuration can be performed on the API connection but in the typical case a service plan identifier and authentication token is sufficient.
 
@@ -29,8 +26,7 @@ The arguments passed to a connection method are sometimes very simple, fetching 
 
 In general the terms used in XMS carry through to the Java API with one major exception. The REST API uses the terms _to_ and _from_ to indicate a message originator and message destination, respectively. In the Java API these are instead denoted _recipient_ and _sender_. The cause of this name change is to have less confusing and more idiomatic Java method names.
 
-Connection management
----------------------
+## Connection management
 
 The first step in using the XMS SDK is to create an API connection object, this object is instantiated from the [`ApiConnection`](apidocs/index.html?com/clxcommunications/xms/ApiConnection.html) class inside the [`com.clxcommunications.xms`](apidocs/index.html?com/clxcommunications/xms/package-summary.html) package and it describes everything we need in order to talk with the XMS API endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and, as previously mentioned, these will be provided to you when creating an XMS service.
 
@@ -80,8 +76,7 @@ would make the connection object believe that the [`batches`](https://www.clxcom
 
 The HTTP client used by the API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
 
-Sending batches
----------------
+## Sending batches
 
 Creating a batch is typically one of the first things one would like to do when starting to use XMS. To create a batch we must specify, at a minimum, the originating address (typically a short code), one or more recipient addresses (typically MSISDNs), and the message body. Sending a simple hello world message to one recipient is then accomplished using
 
@@ -154,8 +149,7 @@ MtBatchTextSmsResult result =
         .build())
 ```
 
-Fetching batches
-----------------
+## Fetching batches
 
 If you have a batch identifier and would like to retrieve information concerning that batch then it is sufficient to use the `fetchBatch` or `fetchBatchAsync` method. Thus, if the desired batch identifier is available in the variable `batchId` then one could write
 
@@ -193,8 +187,7 @@ BatchId batchId = // …
 Future<MtBatchTextSmsResult> future = conn.fetchBatchAsync(batchId, callback);
 ```
 
-Listing batches
----------------
+## Listing batches
 
 Once you have created a few batches it may be interesting to retrieve a list of all your batches. Retrieving listings of batches is done through a _paged result_. This means that a single request to XMS may not retrieve all batches. As a result, when calling the `fetchBatches` method on your connection object it will not simply return a list of batches but rather a [`PagedFetcher`](apidocs/index.html?com/clxcommunications/xms/PagedFetcher.html) object. The paged fetcher in turn can be used to fetch specific pages, iterate over all pages, or directly iterate over all batches while transparently performing necessary page requests.
 
@@ -216,30 +209,28 @@ for (MtBatchTextSmsResult batch : fetcher.elements()) {
 }
 ```
 
-Other XMS requests
-------------------
+## Other XMS requests
 
 We have only shown explicitly how to create, list and fetch batches but the same principles apply to all other XMS calls within the SDK. For example, to fetch a group one could use the previously given instructions for fetching batches and simply use `fetchGroup` with a group identifier.
 
-Handling errors
----------------
+## Handling errors
 
 Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK all inherit from [`ApiException`](apidocs/index.html?com/clxcommunications/xms/ApiException.html) and they are
 
 [`ConcurrentException`](apidocs/index.html?com/clxcommunications/xms/ConcurrentException.html)
-:   In synchronous API calls this exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
+: In synchronous API calls this exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
 
 [`ErrorResponseException`](apidocs/index.html?com/clxcommunications/xms/ErrorResponseException.html)
-:   If the XMS server responded with a JSON error object containing an error code and error description.
+: If the XMS server responded with a JSON error object containing an error code and error description.
 
 [`NotFoundException`](apidocs/index.html?com/clxcommunications/xms/NotFoundException.html)
-:   If the XMS server response indicated that the desired resource does not exist. In other words, if the server responded with HTTP status 404 Not Found. During a fetch batch or group operation this exception would typically indicate that the batch or group identifier is incorrect.
+: If the XMS server response indicated that the desired resource does not exist. In other words, if the server responded with HTTP status 404 Not Found. During a fetch batch or group operation this exception would typically indicate that the batch or group identifier is incorrect.
 
 [`UnauthorizedException`](apidocs/index.html?com/clxcommunications/xms/UnauthorizedException.html)
-:   Thrown if the XMS server determined that the authentication token was invalid for the service plan.
+: Thrown if the XMS server determined that the authentication token was invalid for the service plan.
 
 [`UnexpectedResponseException`](apidocs/index.html?com/clxcommunications/xms/UnexpectedResponseException.html)
-:   If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the complete HTTP response can be retrieved from the exception object using the [`getResponse`](apidocs/com/clxcommunications/xms/UnexpectedResponseException.html#getResponse--) method.
+: If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the complete HTTP response can be retrieved from the exception object using the [`getResponse`](apidocs/com/clxcommunications/xms/UnexpectedResponseException.html#getResponse--) method.
 
 In asynchronous requests `ConcurrentException` is not used and the `failed` method in your callback will receive, for example, `JsonParseException` unwrapped. Thus, if you wish to handle `JsonParseException` in a special way in asynchronous code then the `failed` method in the callback could read
 
@@ -270,10 +261,9 @@ try {
 }
 ```
 
-Custom connections
-------------------
+## Custom connections
 
-For most typical use cases the users of the XMS SDK do not have to worry about its internals. However, for some specialized cases the SDK does allow deep access.  In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
+For most typical use cases the users of the XMS SDK do not have to worry about its internals. However, for some specialized cases the SDK does allow deep access. In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
 
 For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiHttpAsyncClient`](apidocs/index.html?com/clxcommunications/xms/ApiHttpAsyncClient.html).
 

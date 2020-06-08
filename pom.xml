@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.clxcommunications</groupId>
+	<groupId>com.sinch</groupId>
 	<artifactId>sdk-xms</artifactId>
 	<version>1.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>SDK for CLX XMS</name>
-	<description>Library providing a Java API for the CLX Communications HTTP REST Messaging API.</description>
+	<name>SDK for Sinch SMS</name>
+	<description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
 	<url>https://github.com/clxcommunications/sdk-xms-java</url>
 	<inceptionYear>2016</inceptionYear>
 	<organization>
-		<name>CLX Communications</name>
-		<url>https://www.clxcommunications.com/</url>
+		<name>Sinch</name>
+		<url>https://www.sinch.com/</url>
 	</organization>
 	<licenses>
 		<license>
@@ -48,8 +48,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.testSource>1.8</maven.compiler.testSource>
 		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
@@ -71,29 +71,6 @@
 
 	<build>
 		<plugins>
-			<!-- Used to verify Java 6 compatibility -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>animal-sniffer-maven-plugin</artifactId>
-				<version>1.16</version>
-				<configuration>
-					<signature>
-						<groupId>org.codehaus.mojo.signature</groupId>
-						<artifactId>java16</artifactId>
-						<version>1.0</version>
-					</signature>
-				</configuration>
-				<executions>
-					<execution>
-						<id>ensure-java-1.6-class-library</id>
-						<phase>test</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- Used mainly to generate the Version class -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -141,7 +118,35 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.9</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
 
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
@@ -207,7 +212,6 @@
 							</execution>
 						</executions>
 					</plugin>
-
 					<plugin>
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<version>2.10.4</version>
@@ -278,6 +282,12 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>[1.9,2)</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.googlejavaformat</groupId>
+			<artifactId>google-java-format</artifactId>
+			<version>1.8</version>
 		</dependency>
 
 		<dependency>

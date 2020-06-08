@@ -1,8 +1,8 @@
 <!--
   #%L
-  SDK for CLX XMS
+  SDK for Sinch SMS
   %%
-  Copyright (C) 2016 CLX Communications
+  Copyright (C) 2016 Sinch
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 		<release version="1.0.0" date="2016-12-12" description="First release">
 			<action type="add" dev="rycee">
 				This is the first stable release of the Java
-				SDK for CLX Communications HTTP REST Messaging API.
+				SDK for Sinch HTTP REST Messaging API.
 			</action>
 		</release>
 	</body>

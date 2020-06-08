@@ -1,7 +1,6 @@
-REST API SDK for SMS
-====================
+# REST API SDK for SMS
 
-This is the Java SDK for the CLX Communications REST API (also called
+This is the Java SDK for the Sinch REST API (also called
 XMS) for sending and receiving single or batch SMS messages. It also
 supports scheduled sends, organizing your frequent recipients into
 groups, and customizing your message for each recipient using
@@ -10,8 +9,7 @@ convenient access to all the features of the XMS REST API.
 
 The library is compatible with Java 6 and later.
 
-Using
------
+## Using
 
 To use this SDK in your own Java project you can put
 
@@ -25,8 +23,7 @@ To use this SDK in your own Java project you can put
 
 in your POM file, with `XYZ` replaced by the desired version.
 
-Building and installing
------------------------
+## Building and installing
 
 This project uses the Maven build tool and the typical Maven goals are
 supported. To install the package to your local Maven repository it
@@ -40,8 +37,7 @@ finally being installed in your local repository.
 Note that Java 8 is required to build and run the test suite. The
 installed JAR file is Java 6 compatible, however.
 
-Developing in Eclipse
----------------------
+## Developing in Eclipse
 
 To import the project into Eclipse it is necessary to install the m2e
 plugin and the m2e-apt connector. Both are available at the Eclipse
@@ -53,8 +49,7 @@ with screenshots.
 After this initial setup development in Eclipse should be reasonably
 straight forward.
 
-License
--------
+## License
 
 This project is licensed under the Apache License Version 2.0. See the
 LICENSE.txt file for the license text.
