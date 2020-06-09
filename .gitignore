@@ -10,4 +10,5 @@
 /pom.xml.versionsBackup
 /release.properties
 /target
-.idea
+.ide
+sdk-xms.iml
