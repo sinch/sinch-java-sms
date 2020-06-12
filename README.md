@@ -25,7 +25,7 @@ With Maven
 
 With Gradle 
 ```xml
-compile group: 'com.sinch', name: 'sdk-sms', version: '1.0.3'
+implementation 'com.sinch:sdk-sms:1.0.3'
 ```
 
 ## Building and installing
