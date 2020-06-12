@@ -13,7 +13,6 @@ public class Example {
   private static final String SENDER = "SENDER";
 
   public static void main(String[] args) {
-
     try (ApiConnection conn =
         ApiConnection.builder().servicePlanId(SERVICE_PLAN_ID).token(TOKEN).start()) {
 
