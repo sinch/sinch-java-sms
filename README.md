@@ -1,7 +1,5 @@
 # REST API SDK for SMS
 
-Sinch Java SMS helper library, moved from https://github.com/clxcommunications/sdk-xms-java
-
 This is the Java SDK for the Sinch REST SMS API for sending and receiving single or batch SMS messages. It also
 supports scheduled sends, organizing your frequent recipients into
 groups, and customizing your message for each recipient using
