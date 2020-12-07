@@ -42,7 +42,7 @@ Build .jar file
 
     $ mvn package
 
-It will give you `sdk-sms-1.0.3-SNAPSHOT-jar-with-dependencies.jar`
+It will give you `sdk-sms-1.0.4-SNAPSHOT-jar-with-dependencies.jar`
 
 To skip local test 
     

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sinch</groupId>
 	<artifactId>sdk-sms</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SDK for Sinch SMS</name>
 	<description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
@@ -98,7 +98,7 @@
 				<configuration>
 					<reportOutputDirectory>.</reportOutputDirectory>
 					<destDir>docs</destDir>
-					<source>7</source>
+					<source>8</source>
 					<show>public</show>
 					<nohelp>true</nohelp>
 					<author>true</author>
@@ -168,7 +168,7 @@
 					<dependency>
 						<groupId>org.apache.maven.doxia</groupId>
 						<artifactId>doxia-module-markdown</artifactId>
-						<version>1.7</version>
+						<version>1.9.1</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -364,7 +364,7 @@
 				<configuration>
 					<sourcepath>src/main/java:target/generated-sources</sourcepath>
 					<links>
-						<link>https://docs.oracle.com/javase/6/docs/api</link>
+						<link>https://docs.oracle.com/javase/8/docs/api</link>
 						<link>https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs</link>
 						<link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
 						<link>http://www.threeten.org/threetenbp/apidocs</link>
