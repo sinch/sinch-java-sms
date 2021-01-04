@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,9 +22,9 @@ package com.sinch.xms;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.Future;
-
 import javax.annotation.Nonnull;
-
+import org.apache.http.HeaderElement;
+import org.apache.http.HeaderElementIterator;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -33,10 +33,12 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.nio.client.HttpAsyncClient;
 import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
 import org.threeten.bp.Duration;
@@ -45,6 +47,7 @@ import org.threeten.bp.Duration;
  * An asynchronous HTTP client used in API connections. It is configured in a
  * way suitable for communicating with XMS and is therefore most applicable for
  * communicating with a single HTTP host.
+ *
  * <p>
  * It is in most cases sufficient to let {@link ApiConnection} create and manage
  * the HTTP client. If necessary, however, it is possible to create and manage
@@ -52,31 +55,25 @@ import org.threeten.bp.Duration;
  */
 public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
-	/**
-	 * The default limit for the socket and connect timeout.
-	 */
+	/** The default limit for the socket and connect timeout. */
 	private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
 	/**
 	 * The default maximum number of simultaneous connections to open towards
 	 * the XMS endpoint.
 	 */
-	private static final int DEFAULT_MAX_CONN = 10;
+	private static final int DEFAULT_MAX_CONN = 100;
 
-	/**
-	 * Whether this client was started internally by {@link ApiConnection}.
-	 */
+	/** Whether this client was started internally by {@link ApiConnection}. */
 	private boolean startedInternally;
 
-	/**
-	 * The underlying actual HTTP client.
-	 */
+	/** The underlying actual HTTP client. */
 	private final CloseableHttpAsyncClient client;
 
 	/**
 	 * Creates a new HTTP asynchronous client suitable for communicating with
 	 * XMS.
-	 * 
+	 *
 	 * @param startedInternally
 	 *            whether this object was created inside this SDK
 	 */
@@ -84,34 +81,41 @@ public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 		this.startedInternally = startedInternally;
 
 		// Allow TLSv1.2 protocol only
-		SSLIOSessionStrategy sslSessionStrategy =
-		        new SSLIOSessionStrategy(
-		                SSLContexts.createSystemDefault(),
-		                new String[] { "TLSv1.2" },
-		                null,
-		                SSLIOSessionStrategy.getDefaultHostnameVerifier());
+		SSLIOSessionStrategy sslSessionStrategy = new SSLIOSessionStrategy(
+				SSLContexts.createSystemDefault(), new String[]{"TLSv1.2"},
+				null, SSLIOSessionStrategy.getDefaultHostnameVerifier());
 
-		RequestConfig requestConfig =
-		        RequestConfig.custom()
-		                .setConnectTimeout((int) DEFAULT_TIMEOUT.toMillis())
-		                .setSocketTimeout((int) DEFAULT_TIMEOUT.toMillis())
-		                .build();
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setConnectTimeout((int) DEFAULT_TIMEOUT.toMillis())
+				.setSocketTimeout((int) DEFAULT_TIMEOUT.toMillis()).build();
 
 		// TODO: Is this a good default setup?
-		this.client =
-		        HttpAsyncClients.custom()
-		                .setSSLStrategy(sslSessionStrategy)
-		                .disableCookieManagement()
-		                .setMaxConnPerRoute(DEFAULT_MAX_CONN)
-		                .setMaxConnTotal(DEFAULT_MAX_CONN)
-		                .setDefaultRequestConfig(requestConfig)
-		                .build();
+		this.client = HttpAsyncClients.custom()
+				.setSSLStrategy(sslSessionStrategy).disableCookieManagement()
+				.setMaxConnPerRoute(DEFAULT_MAX_CONN)
+				.setMaxConnTotal(DEFAULT_MAX_CONN).setKeepAliveStrategy(
+						(HttpResponse response, HttpContext context) -> {
+							HeaderElementIterator it = new BasicHeaderElementIterator(
+									response.headerIterator(
+											HTTP.CONN_KEEP_ALIVE));
+							while (it.hasNext()) {
+								HeaderElement he = it.nextElement();
+								String param = he.getName();
+								String value = he.getValue();
+								if (value != null
+										&& param.equalsIgnoreCase("timeout")) {
+									return Long.parseLong(value) * 1000;
+								}
+							}
+							return 5_000;
+						})
+				.setDefaultRequestConfig(requestConfig).build();
 	}
 
 	/**
 	 * Creates a new asynchronous HTTP client suitable for communicating with
 	 * XMS.
-	 * 
+	 *
 	 * @return a newly constructed HTTP client
 	 */
 	@Nonnull
@@ -121,7 +125,7 @@ public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
 	/**
 	 * Whether this object was created inside the SDK.
-	 * 
+	 *
 	 * @return <code>true</code> if internally generated, <code>false</code>
 	 *         otherwise
 	 */
@@ -131,23 +135,21 @@ public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
 	/**
 	 * Whether this client is started.
-	 * 
+	 *
 	 * @return <code>true</code> if started, <code>false</code> otherwise
 	 */
 	public boolean isRunning() {
 		return client.isRunning();
 	}
 
-	/**
-	 * Starts this client.
-	 */
+	/** Starts this client. */
 	public void start() {
 		client.start();
 	}
 
 	/**
 	 * Closes this client and releases any held resources.
-	 * 
+	 *
 	 * @throws IOException
 	 *             if an I/O error occurs
 	 */
@@ -158,41 +160,40 @@ public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
 	@Override
 	public <T> Future<T> execute(HttpAsyncRequestProducer requestProducer,
-	        HttpAsyncResponseConsumer<T> responseConsumer, HttpContext context,
-	        FutureCallback<T> callback) {
+			HttpAsyncResponseConsumer<T> responseConsumer, HttpContext context,
+			FutureCallback<T> callback) {
 		return client.execute(requestProducer, responseConsumer, context,
-		        callback);
+				callback);
 	}
 
 	@Override
 	public <T> Future<T> execute(HttpAsyncRequestProducer requestProducer,
-	        HttpAsyncResponseConsumer<T> responseConsumer,
-	        FutureCallback<T> callback) {
+			HttpAsyncResponseConsumer<T> responseConsumer,
+			FutureCallback<T> callback) {
 		return client.execute(requestProducer, responseConsumer, callback);
 	}
 
 	@Override
 	public Future<HttpResponse> execute(HttpHost target, HttpRequest request,
-	        HttpContext context, FutureCallback<HttpResponse> callback) {
+			HttpContext context, FutureCallback<HttpResponse> callback) {
 		return client.execute(target, request, context, callback);
 	}
 
 	@Override
 	public Future<HttpResponse> execute(HttpHost target, HttpRequest request,
-	        FutureCallback<HttpResponse> callback) {
+			FutureCallback<HttpResponse> callback) {
 		return client.execute(target, request, callback);
 	}
 
 	@Override
 	public Future<HttpResponse> execute(HttpUriRequest request,
-	        HttpContext context, FutureCallback<HttpResponse> callback) {
+			HttpContext context, FutureCallback<HttpResponse> callback) {
 		return client.execute(request, context, callback);
 	}
 
 	@Override
 	public Future<HttpResponse> execute(HttpUriRequest request,
-	        FutureCallback<HttpResponse> callback) {
+			FutureCallback<HttpResponse> callback) {
 		return client.execute(request, callback);
 	}
-
 }
