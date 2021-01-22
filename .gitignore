@@ -12,3 +12,6 @@
 /target
 .ide
 sdk-xms.iml
+docs/
+.sts4-cache/classpath-data.json
+.idea
