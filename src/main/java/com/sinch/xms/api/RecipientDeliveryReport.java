@@ -19,17 +19,15 @@
  */
 package com.sinch.xms.api;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.immutables.value.Value;
-import org.threeten.bp.OffsetDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.immutables.value.Value;
+import org.threeten.bp.OffsetDateTime;
 
 /**
  * Representation of a delivery report for a specific recipient.
@@ -44,8 +42,7 @@ public abstract class RecipientDeliveryReport {
 	/**
 	 * A builder of recipient delivery reports.
 	 */
-	public static final class Builder
-	        extends RecipientDeliveryReportImpl.Builder {
+	public static final class Builder extends RecipientDeliveryReportImpl.Builder {
 
 		Builder() {
 		}
@@ -116,12 +113,22 @@ public abstract class RecipientDeliveryReport {
 	public abstract OffsetDateTime at();
 
 	/**
-	 * The message timestamp as recorded by the network operator, if message dispatched.
+	 * The message timestamp as recorded by the network operator, if message
+	 * dispatched.
 	 * 
 	 * @return a date and time if message dispatched; <code>null</code> otherwise
 	 */
 	@JsonProperty("operator_status_at")
 	@Nullable
 	public abstract OffsetDateTime operatorStatusAt();
+
+	/**
+	 * The optional client identifier attached to this message.
+	 * 
+	 * @return a client reference id
+	 */
+	@Nullable
+	@JsonProperty("client_reference")
+	public abstract String clientReference();
 
 }
