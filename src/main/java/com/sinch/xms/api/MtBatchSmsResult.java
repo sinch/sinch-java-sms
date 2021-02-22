@@ -158,13 +158,4 @@ public abstract class MtBatchSmsResult {
 	@JsonProperty("dlt_template_id")
 	public abstract String dltTemplateId();
 
-	/**
-	 * The DLT template category.
-	 * 
-	 * @return a template category
-	 */
-	@Nullable
-	@JsonProperty("dlt_template_category")
-	public abstract Integer dltTemplateCategory();
-
 }
