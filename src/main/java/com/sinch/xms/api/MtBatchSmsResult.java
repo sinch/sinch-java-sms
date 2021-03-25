@@ -19,29 +19,22 @@
  */
 package com.sinch.xms.api;
 
-import java.net.URI;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.threeten.bp.OffsetDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.net.URI;
+import java.util.List;
+import javax.annotation.Nullable;
+import org.threeten.bp.OffsetDateTime;
 
 /**
  * Base class for batch description classes. This contains the fields common for
  * both {@link MtBatchTextSmsResult textual} and {@link MtBatchBinarySmsResult
  * binary} batches.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
-@JsonSubTypes({
-        @Type(MtBatchTextSmsResult.class),
-        @Type(MtBatchBinarySmsResult.class)
-})
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(MtBatchTextSmsResult.class), @Type(MtBatchBinarySmsResult.class) })
 public abstract class MtBatchSmsResult {
 
 	MtBatchSmsResult() {
@@ -91,8 +84,8 @@ public abstract class MtBatchSmsResult {
 	public abstract URI callbackUrl();
 
 	/**
-	 * The scheduled time this batch will be sent. If <code>null</code> or set
-	 * to a past time then the batch is sent immediately.
+	 * The scheduled time this batch will be sent. If <code>null</code> or set to a
+	 * past time then the batch is sent immediately.
 	 * 
 	 * @return the time when this batch will be sent
 	 */
@@ -101,8 +94,8 @@ public abstract class MtBatchSmsResult {
 	public abstract OffsetDateTime sendAt();
 
 	/**
-	 * The time when this batch will expire. Any message not delivered by this
-	 * time will be placed into an expired state and no further delivery will be
+	 * The time when this batch will expire. Any message not delivered by this time
+	 * will be placed into an expired state and no further delivery will be
 	 * attempted.
 	 * 
 	 * @return the time when this batch expires
@@ -136,5 +129,33 @@ public abstract class MtBatchSmsResult {
 	 *         otherwise
 	 */
 	public abstract boolean canceled();
+
+	/**
+	 * The client identifier to attach to this message. If set, it will be added in
+	 * the delivery report/callback of this batch.
+	 * 
+	 * @return a client reference id
+	 */
+	@Nullable
+	@JsonProperty("client_reference")
+	public abstract String clientReference();
+
+	/**
+	 * The DLT principal entity identifier to attach to this message.
+	 * 
+	 * @return a principal entity id
+	 */
+	@Nullable
+	@JsonProperty("dlt_principal_entity_id")
+	public abstract String dltPrincipalEntity();
+
+	/**
+	 * The DLT template identifier to attach to this message.
+	 * 
+	 * @return a template id
+	 */
+	@Nullable
+	@JsonProperty("dlt_template_id")
+	public abstract String dltTemplateId();
 
 }

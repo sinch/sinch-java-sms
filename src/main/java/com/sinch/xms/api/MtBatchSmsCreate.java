@@ -19,34 +19,27 @@
  */
 package com.sinch.xms.api;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import org.immutables.value.Value;
-import org.threeten.bp.OffsetDateTime;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.net.URI;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+import org.immutables.value.Value;
+import org.threeten.bp.OffsetDateTime;
 
 /**
  * Base class for mobile terminated batch messages. A mobile terminated message
  * can have either a {@link MtBatchTextSmsCreate textual} or a
  * {@link MtBatchBinarySmsCreate binary} message payload.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
-@JsonSubTypes({
-        @Type(MtBatchTextSmsCreate.class),
-        @Type(MtBatchBinarySmsCreate.class)
-})
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(MtBatchTextSmsCreate.class), @Type(MtBatchBinarySmsCreate.class) })
 public abstract class MtBatchSmsCreate {
 
 	/**
@@ -86,9 +79,9 @@ public abstract class MtBatchSmsCreate {
 	public abstract OffsetDateTime sendAt();
 
 	/**
-	 * The time at which this batch will expire. Any message not delivered by
-	 * this time will be placed into an expired state and no further delivery
-	 * will be attempted.
+	 * The time at which this batch will expire. Any message not delivered by this
+	 * time will be placed into an expired state and no further delivery will be
+	 * attempted.
 	 * 
 	 * @return the time when this batch expires
 	 */
@@ -97,8 +90,8 @@ public abstract class MtBatchSmsCreate {
 	public abstract OffsetDateTime expireAt();
 
 	/**
-	 * The URL to which batch callbacks should be sent. If <code>null</code>
-	 * then callbacks will be sent to the default URL.
+	 * The URL to which batch callbacks should be sent. If <code>null</code> then
+	 * callbacks will be sent to the default URL.
 	 * 
 	 * @return an URL having a callback listener or <code>null</code> to use the
 	 *         default callback URL
@@ -111,9 +104,40 @@ public abstract class MtBatchSmsCreate {
 	 * The tags that should be attached to this message.
 	 * 
 	 * @return a non-null set of tags
+	 * 
+	 * @deprecated client reference should be used instead
 	 */
+	@Deprecated
 	@JsonInclude(Include.NON_EMPTY)
 	public abstract Set<String> tags();
+
+	/**
+	 * The client identifier to attach to this message. If set, it will be added in
+	 * the delivery report/callback of this batch.
+	 * 
+	 * @return a client reference id
+	 */
+	@Nullable
+	@JsonProperty("client_reference")
+	public abstract String clientReference();
+
+	/**
+	 * The DLT principal entity identifier to attach to this message.
+	 * 
+	 * @return a principal entity id
+	 */
+	@Nullable
+	@JsonProperty("dlt_principal_entity_id")
+	public abstract String dltPrincipalEntity();
+
+	/**
+	 * The DLT template identifier to attach to this message.
+	 * 
+	 * @return a template id
+	 */
+	@Nullable
+	@JsonProperty("dlt_template_id")
+	public abstract String dltTemplateId();
 
 	@OverridingMethodsMustInvokeSuper
 	@Value.Check

@@ -19,12 +19,6 @@
  */
 package com.sinch.xms.api;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.immutables.value.Value;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,6 +26,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.immutables.value.Value;
 
 /**
  * A batch delivery report.
@@ -56,8 +54,7 @@ public abstract class BatchDeliveryReport {
 		/**
 		 * A builder of batch delivery report statuses.
 		 */
-		public static class Builder
-		        extends BatchDeliveryReportImpl.Status.Builder {
+		public static class Builder extends BatchDeliveryReportImpl.Status.Builder {
 
 			Builder() {
 			}
@@ -143,12 +140,21 @@ public abstract class BatchDeliveryReport {
 	public abstract int totalMessageCount();
 
 	/**
-	 * A list of {@link Status statuses} for the batch. Only non-empty statuses
-	 * are present here, that is, for each member status there is at least one
-	 * message having the state.
+	 * A list of {@link Status statuses} for the batch. Only non-empty statuses are
+	 * present here, that is, for each member status there is at least one message
+	 * having the state.
 	 * 
 	 * @return a list of statuses
 	 */
 	public abstract List<Status> statuses();
+
+	/**
+	 * The optional client identifier attached to this message.
+	 * 
+	 * @return a client reference id
+	 */
+	@Nullable
+	@JsonProperty("client_reference")
+	public abstract String clientReference();
 
 }

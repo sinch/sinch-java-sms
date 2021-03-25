@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sinch</groupId>
 	<artifactId>sdk-sms</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SDK for Sinch SMS</name>
 	<description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
