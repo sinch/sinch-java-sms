@@ -20,7 +20,7 @@
 package com.sinch.xms;
 
 /**
- * Base class for all exceptions specific to the CLX SDK.
+ * Base class for all exceptions specific to the Sinch SDK.
  */
 public abstract class ApiException extends Exception {
 
@@ -36,8 +36,7 @@ public abstract class ApiException extends Exception {
 	/**
 	 * Construct a new API exception having the given message and no cause.
 	 * 
-	 * @param message
-	 *            the exception message
+	 * @param message the exception message
 	 */
 	public ApiException(String message) {
 		super(message);
@@ -46,8 +45,7 @@ public abstract class ApiException extends Exception {
 	/**
 	 * Construct a new API exception having no message and the given cause.
 	 * 
-	 * @param cause
-	 *            the exception cause
+	 * @param cause the exception cause
 	 */
 	public ApiException(Throwable cause) {
 		super(cause);
@@ -56,10 +54,8 @@ public abstract class ApiException extends Exception {
 	/**
 	 * Construct a new API exception having the given message and cause.
 	 * 
-	 * @param message
-	 *            the exception message
-	 * @param cause
-	 *            the exception cause
+	 * @param message the exception message
+	 * @param cause   the exception cause
 	 */
 	public ApiException(String message, Throwable cause) {
 		super(message, cause);
