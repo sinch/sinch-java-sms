@@ -26,14 +26,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule;
 
 /**
- * A Jackson object mapper suitable for use with the CLX REST API objects.
+ * A Jackson object mapper suitable for use with the Sinch REST API objects.
  */
 public class ApiObjectMapper extends ObjectMapper {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Creates an object mapper suitable for the CLX REST API. This mapper will
+	 * Creates an object mapper suitable for the Sinch REST API. This mapper will
 	 * serialize pretty printed JSON.
 	 */
 	public ApiObjectMapper() {
@@ -41,10 +41,9 @@ public class ApiObjectMapper extends ObjectMapper {
 	}
 
 	/**
-	 * Creates an object mapper suitable for the CLX REST API.
+	 * Creates an object mapper suitable for the Sinch REST API.
 	 * 
-	 * @param prettyPrint
-	 *            whether serialized JSON should be pretty printed
+	 * @param prettyPrint whether serialized JSON should be pretty printed
 	 */
 	public ApiObjectMapper(boolean prettyPrint) {
 		registerModule(new ThreeTenModule());
@@ -55,10 +54,10 @@ public class ApiObjectMapper extends ObjectMapper {
 		/*
 		 * From jackson-datatype-threetenbp README.md:
 		 * 
-		 * "Most JSR-310 types are serialized as numbers (integers or decimals
-		 * as appropriate) if the SerializationFeature#WRITE_DATES_AS_TIMESTAMPS
-		 * feature is enabled, and otherwise are serialized in standard ISO-8601
-		 * string representation."
+		 * "Most JSR-310 types are serialized as numbers (integers or decimals as
+		 * appropriate) if the SerializationFeature#WRITE_DATES_AS_TIMESTAMPS feature is
+		 * enabled, and otherwise are serialized in standard ISO-8601 string
+		 * representation."
 		 */
 		disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);

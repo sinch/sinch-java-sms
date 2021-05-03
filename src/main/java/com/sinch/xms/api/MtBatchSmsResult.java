@@ -158,4 +158,26 @@ public abstract class MtBatchSmsResult {
 	@JsonProperty("dlt_template_id")
 	public abstract String dltTemplateId();
 
+	/**
+	 * The type of number of the message originator. Valid values are 0 to 6. This
+	 * is optional and used for overriding the automatic detection of type of
+	 * number. If provided then from_npi must also be set.
+	 * 
+	 * @return the type of number for the originator address
+	 */
+	@JsonProperty("from_ton")
+	@Nullable
+	public abstract Integer senderTon();
+
+	/**
+	 * The numbering plan identification of the message originator. Valid values are
+	 * 0 to 18. This is optional and used for overriding the automatic detection. If
+	 * provided then from_ton must also be set.
+	 * 
+	 * @return the numbering plan identification for the originator address
+	 */
+	@JsonProperty("from_npi")
+	@Nullable
+	public abstract Integer senderNpi();
+
 }
