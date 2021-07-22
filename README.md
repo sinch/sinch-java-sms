@@ -6,7 +6,7 @@ groups, and customizing your message for each recipient using
 parameterization. It offers an asynchronous Java API that provides
 convenient access to all the features of the SMS REST API.
 
-The library is compatible with Java 8 and later.
+### The library is compatible with Java 8 and later.
 
 ## Using
 
