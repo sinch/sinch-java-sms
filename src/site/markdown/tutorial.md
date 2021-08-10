@@ -62,7 +62,7 @@ Note, it is important to close down the API connection when it is no longer need
 conn.close();
 ```
 
-By default the connection will use `https://api.clxcommunications.com/xms` as XMS endpoint. This can be overridden using the `endpoint` method in the API connection builder. For example, the code
+By default the connection will use `https://us.sms.api.sinch.com/xms` as XMS endpoint. This can be overridden using the `endpoint` method in the API connection builder. For example, the code
 
 ```java
 ApiConnection conn = ApiConnection.builder()
