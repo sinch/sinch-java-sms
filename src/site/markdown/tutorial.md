@@ -12,7 +12,7 @@ A great benefit of the XMS API is that it allows you to easily create and send _
 
 To use XMS it is necessary to have a _service plan identifier_ and an _authentication token_, which can be obtained by creating an XMS service plan.
 
-For full documentation of the XMS API please refer to the [REST API documentation site](https://www.clxcommunications.com/docs/sms/http-rest.html). The documentation site contains up-to-date information about, for example, status and error codes.
+For full documentation of the XMS API please refer to the [REST API documentation site](https://developers.sinch.com/docs/sms/api-reference/). The documentation site contains up-to-date information about, for example, status and error codes.
 
 ## Interacting with XMS through Java
 
@@ -22,13 +22,13 @@ Once an API connection has been established it is possible to send requests to X
 
 This SDK has a focus on asynchronous operation and all interaction with XMS happens asynchronously. Therefore, while synchronous methods are supplied within the library their use is discouraged in most practical applications.
 
-The arguments passed to a connection method are sometimes very simple, fetching a previously create batch simply requires the batch identifier as argument. Other times the arguments are complicated, for example to create the batch it may be necessary to supply a large number of arguments that specify destination addresses, the message body, expiry times, and so on. For such complex arguments we use classes whose methods correspond to the different parameters that are relevant for the request. For each such class we also provide a builder class that lets you create the objects in a convenient manner. The easiest way to access these builders is through the [`ClxApi`](apidocs/index.html?com/clxcommunications/xms/ClxApi.html) class, which collects all builders that are needed for any of the API calls.
+The arguments passed to a connection method are sometimes very simple, fetching a previously create batch simply requires the batch identifier as argument. Other times the arguments are complicated, for example to create the batch it may be necessary to supply a large number of arguments that specify destination addresses, the message body, expiry times, and so on. For such complex arguments we use classes whose methods correspond to the different parameters that are relevant for the request. For each such class we also provide a builder class that lets you create the objects in a convenient manner. The easiest way to access these builders is through the [`SinchSMSApi`](apidocs/index.html?com/sinch/xms/SinchSMSApi.html) class, which collects all builders that are needed for any of the API calls.
 
 In general the terms used in XMS carry through to the Java API with one major exception. The REST API uses the terms _to_ and _from_ to indicate a message originator and message destination, respectively. In the Java API these are instead denoted _recipient_ and _sender_. The cause of this name change is to have less confusing and more idiomatic Java method names.
 
 ## Connection management
 
-The first step in using the XMS SDK is to create an API connection object, this object is instantiated from the [`ApiConnection`](apidocs/index.html?com/clxcommunications/xms/ApiConnection.html) class inside the [`com.clxcommunications.xms`](apidocs/index.html?com/clxcommunications/xms/package-summary.html) package and it describes everything we need in order to talk with the XMS API endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and, as previously mentioned, these will be provided to you when creating an XMS service.
+The first step in using the XMS SDK is to create an API connection object, this object is instantiated from the [`ApiConnection`](apidocs/index.html?com/sinch/xms/ApiConnection.html) class inside the [`com.sinch.xms`](apidocs/index.html?com/sinch/xms/package-summary.html) package and it describes everything we need in order to talk with the XMS API endpoint. The minimal amount of information needed are the service plan identifier and the authentication token and, as previously mentioned, these will be provided to you when creating an XMS service.
 
 Assuming we have been given the service plan identifier "myplan" and authentication token "mytoken" then an API connection `conn` is created using a builder as follows
 
@@ -72,9 +72,9 @@ ApiConnection conn = ApiConnection.builder()
     .build();
 ```
 
-would make the connection object believe that the [`batches`](https://www.clxcommunications.com/docs/sms/http-rest.html#batches-endpoint) endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
+would make the connection object believe that the [`batches`](https://developers.sinch.com/docs/sms/api-reference/sms/tag/Batches/) endpoint is `https://my.test.host:3000/my/base/path/v1/myplan/batches`.
 
-The HTTP client used by the API connection is by default restricted to only connect to HTTPS through TLSv1.2, it is therefore required to use a version of Java that supports this protocol. All versions of Java since [Java 6u121](http://www.oracle.com/technetwork/java/javase/overview-156328.html#R160_121) support TLSv1.2.
+The HTTP client used by the API connection is by default restricted to only connect to HTTPS through TLSv1.2, and required Java version is 8 or later.
 
 ## Sending batches
 
@@ -82,7 +82,7 @@ Creating a batch is typically one of the first things one would like to do when 
 
 ```java
 MtBatchTextSmsResult result =
-    conn.createBatch(ClxApi.batchTextSms()
+    conn.createBatch(SinchSMSApi.batchTextSms()
         .sender("12345")
         .addRecipient("987654321")
         .body("Hello, World!")
@@ -122,7 +122,7 @@ FutureCallback<MtBatchTextSmsResult> callback = new FutureCallback<MtBatchTextSm
 };
 
 Future<MtBatchTextSmsResult> future =
-    conn.createBatchAsync(ClxApi.batchTextSms()
+    conn.createBatchAsync(SinchSMSApi.batchTextSms()
         .sender("12345")
         .addRecipient("987654321")
         .body("Hello, World!")
@@ -135,7 +135,7 @@ It is not much harder to create a more complicated batch, for example, here we c
 
 ```java
 MtBatchTextSmsResult result =
-    conn.createBatch(ClxApi.batchTextSms()
+    conn.createBatch(SinchSMSApi.batchTextSms()
         .sender("12345")
         .addRecipient("987654321", "123456789", "555555555")
         .body("Hello, ${name}!")
@@ -189,14 +189,14 @@ Future<MtBatchTextSmsResult> future = conn.fetchBatchAsync(batchId, callback);
 
 ## Listing batches
 
-Once you have created a few batches it may be interesting to retrieve a list of all your batches. Retrieving listings of batches is done through a _paged result_. This means that a single request to XMS may not retrieve all batches. As a result, when calling the `fetchBatches` method on your connection object it will not simply return a list of batches but rather a [`PagedFetcher`](apidocs/index.html?com/clxcommunications/xms/PagedFetcher.html) object. The paged fetcher in turn can be used to fetch specific pages, iterate over all pages, or directly iterate over all batches while transparently performing necessary page requests.
+Once you have created a few batches it may be interesting to retrieve a list of all your batches. Retrieving listings of batches is done through a _paged result_. This means that a single request to XMS may not retrieve all batches. As a result, when calling the `fetchBatches` method on your connection object it will not simply return a list of batches but rather a [`PagedFetcher`](apidocs/index.html?com/sinch/xms/PagedFetcher.html) object. The paged fetcher in turn can be used to fetch specific pages, iterate over all pages, or directly iterate over all batches while transparently performing necessary page requests.
 
 To limit the number of fetched batches it is also possible to supply a filter that will restrict the fetched batches, for example to those sent after a particular date or having a specific tag or sender.
 
 More specifically, to print the identifier of each batch sent on 2016-12-01 and having the tag "signup_notification", we may write something like the following.
 
 ```java
-BatchFilter filter = ClxApi.batchFilter()
+BatchFilter filter = SinchSMSApi.batchFilter()
     .addTag("signup_notification")
     .startDate(LocalDate.of(2016, 12, 1))
     .endDate(LocalDate.of(2016, 12, 2))
@@ -215,22 +215,22 @@ We have only shown explicitly how to create, list and fetch batches but the same
 
 ## Handling errors
 
-Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK all inherit from [`ApiException`](apidocs/index.html?com/clxcommunications/xms/ApiException.html) and they are
+Any error that occurs during an API operation will result in an exception being thrown. The exceptions produced specifically by the SDK all inherit from [`ApiException`](apidocs/index.html?com/sinch/xms/ApiException.html) and they are
 
-[`ConcurrentException`](apidocs/index.html?com/clxcommunications/xms/ConcurrentException.html)
+[`ConcurrentException`](apidocs/index.html?com/sinch/xms/ConcurrentException.html)
 : In synchronous API calls this exception wraps other checked exceptions that may occur during an XMS request, for example if the XMS server response contains invalid JSON then this exception will be thrown and calling `getCause()` on this exception will return a `JsonParseException` object coming from the [Jackson](http://wiki.fasterxml.com/JacksonHome) JSON library.
 
-[`ErrorResponseException`](apidocs/index.html?com/clxcommunications/xms/ErrorResponseException.html)
+[`ErrorResponseException`](apidocs/index.html?com/sinch/xms/ErrorResponseException.html)
 : If the XMS server responded with a JSON error object containing an error code and error description.
 
-[`NotFoundException`](apidocs/index.html?com/clxcommunications/xms/NotFoundException.html)
+[`NotFoundException`](apidocs/index.html?com/sinch/xms/NotFoundException.html)
 : If the XMS server response indicated that the desired resource does not exist. In other words, if the server responded with HTTP status 404 Not Found. During a fetch batch or group operation this exception would typically indicate that the batch or group identifier is incorrect.
 
-[`UnauthorizedException`](apidocs/index.html?com/clxcommunications/xms/UnauthorizedException.html)
+[`UnauthorizedException`](apidocs/index.html?com/sinch/xms/UnauthorizedException.html)
 : Thrown if the XMS server determined that the authentication token was invalid for the service plan.
 
-[`UnexpectedResponseException`](apidocs/index.html?com/clxcommunications/xms/UnexpectedResponseException.html)
-: If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the complete HTTP response can be retrieved from the exception object using the [`getResponse`](apidocs/com/clxcommunications/xms/UnexpectedResponseException.html#getResponse--) method.
+[`UnexpectedResponseException`](apidocs/index.html?com/sinch/xms/UnexpectedResponseException.html)
+: If the HTTP response from XMS server had an HTTP status that the SDK did not expect and cannot handle, the complete HTTP response can be retrieved from the exception object using the [`getResponse`](apidocs/com/sinch/xms/UnexpectedResponseException.html#getResponse--) method.
 
 In asynchronous requests `ConcurrentException` is not used and the `failed` method in your callback will receive, for example, `JsonParseException` unwrapped. Thus, if you wish to handle `JsonParseException` in a special way in asynchronous code then the `failed` method in the callback could read
 
