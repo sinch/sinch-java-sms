@@ -22,6 +22,7 @@ package com.sinch.xms;
 import javax.annotation.Nonnull;
 
 import com.sinch.xms.api.AutoUpdate;
+import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupUpdate;
 import com.sinch.xms.api.MtBatchBinarySmsCreate;
@@ -78,6 +79,21 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
 		return MtBatchBinarySmsUpdate.builder();
 	}
 
+	/**
+	 * Returns a freshly created builder for delivery feedback.
+	 *
+	 * @return a builder of delivery feedback
+	 */
+	@Nonnull
+	public static FeedbackDeliveryCreate.Builder deliveryFeedback() {
+		return FeedbackDeliveryCreate.builder();
+	}
+
+	/**
+	 * Returns a freshly created builder for text message updates.
+	 *
+	 * @return a builder of text message updates
+	 */
 	/**
 	 * Returns a freshly created builder of text message parameter
 	 * substitutions.

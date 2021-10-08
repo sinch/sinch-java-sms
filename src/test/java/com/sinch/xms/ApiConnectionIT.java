@@ -54,6 +54,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.sinch.xms.api.FeedbackDeliveryCreate;
+import com.sinch.xms.api.MtBatchDeliveryFeedbackResult;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
@@ -1626,6 +1628,35 @@ public class ApiConnectionIT {
 		}
 
 		verifyGetRequest(path);
+	}
+
+	@Test
+	public void canCreateDeliveryFeedback() throws Exception {
+		String spid = TestUtils.freshServicePlanId();
+		BatchId batchId = TestUtils.freshBatchId();
+
+		String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_feedback";
+
+		FeedbackDeliveryCreate request =
+		        SinchSMSApi.deliveryFeedback()
+						.addRecipient("+15551231234","+15551256344")
+				.build();
+
+		MtBatchDeliveryFeedbackResult expected = MtBatchDeliveryFeedbackResult.builder()
+				.build();
+
+		stubPostResponse(expected, path, 200);
+
+		try (ApiConnection conn = ApiConnection.builder()
+				.servicePlanId(spid)
+				.token("toktok")
+				.endpoint("http://localhost:" + wm.port())
+				.start()) {
+			MtBatchDeliveryFeedbackResult actual = conn.createDeliveryFeedback(batchId, request);
+			assertThat(actual, is(expected));
+		}
+
+		verifyPostRequest(path, request);
 	}
 
 	@Test

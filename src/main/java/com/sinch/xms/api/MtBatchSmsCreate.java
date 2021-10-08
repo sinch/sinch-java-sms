@@ -101,6 +101,18 @@ public abstract class MtBatchSmsCreate {
 	public abstract URI callbackUrl();
 
 	/**
+	 * The URL to which batch callbacks should be sent. If <code>null</code> then
+	 * callbacks will be sent to the default URL.
+	 *
+	 * @return an URL having a callback listener or <code>null</code> to use the
+	 *         default callback URL
+	 */
+	@Nullable
+	@JsonProperty("feedback_enabled")
+	public abstract Boolean feedbackEnabled();
+
+
+	/**
 	 * The tags that should be attached to this message.
 	 * 
 	 * @return a non-null set of tags

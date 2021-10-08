@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sinch.xms.api.BatchDeliveryReport;
 import com.sinch.xms.api.BatchId;
+import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupId;
 import com.sinch.xms.api.GroupResult;
@@ -31,6 +32,7 @@ import com.sinch.xms.api.MoSms;
 import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsResult;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
+import com.sinch.xms.api.MtBatchDeliveryFeedbackResult;
 import com.sinch.xms.api.MtBatchDryRunResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
@@ -61,6 +63,7 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -375,6 +378,11 @@ public abstract class ApiConnection implements Closeable {
 	@Nonnull
 	private URI batchRecipientDeliveryReportEndpoint(BatchId batchId, String recipient) {
 		return endpoint("/batches/" + batchId + "/delivery_report/" + recipient);
+	}
+
+	@Nonnull
+	private URI batchDeliveryFeedbackEndpoint(BatchId batchId) {
+		return endpoint("/batches/" + batchId + "/delivery_feedback");
 	}
 
 	@Nonnull
@@ -1051,6 +1059,34 @@ public abstract class ApiConnection implements Closeable {
 		return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
 	}
 
+	public MtBatchDeliveryFeedbackResult createDeliveryFeedback(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate) throws InterruptedException, ApiException {
+		try {
+			return createDeliveryFeedbackAsync(id, feedbackDeliveryCreate, null).get();
+		} catch (ExecutionException e) {
+			throw Utils.unwrapExecutionException(e);
+		}
+	}
+
+	/**
+	 * Fetches a delivery feedback for the batch with the given batch ID and recipients
+	 *
+	 * 	 * @param id        identifier of the batch
+	 * 	 * @param recipients MSISDN of recipients
+	 * 	 * @param callback  a callback that is activated at call completion
+	 * 	 * @return 200
+	 */
+	public Future<MtBatchDeliveryFeedbackResult> createDeliveryFeedbackAsync(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate,
+																			FutureCallback<MtBatchDeliveryFeedbackResult> callback) {
+
+		HttpPost req = post(batchDeliveryFeedbackEndpoint(id), feedbackDeliveryCreate);
+
+		HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
+
+		HttpAsyncResponseConsumer<MtBatchDeliveryFeedbackResult> consumer = jsonAsyncConsumer(MtBatchDeliveryFeedbackResult.class);
+
+		return httpClient().execute(producer,consumer,callbackWrapper().wrap(callback));
+	}
+
 	/**
 	 * Updates the tags of the batch with the given batch ID.
 	 * <p>
@@ -1145,7 +1181,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws InterruptedException if the current thread was interrupted while
 	 *                              waiting
 	 * @throws ApiException         if an error occurred while communicating with
-	 *                              XMS
+	 *                              XMSIncoming SMS
 	 */
 	public Tags fetchTags(BatchId id) throws InterruptedException, ApiException {
 		try {
