@@ -1,6 +1,5 @@
 package com.sinch.xms.api;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.immutables.value.Value;
 
@@ -10,7 +9,6 @@ import java.util.List;
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = FeedbackDeliveryCreate.Builder.class)
-@JsonTypeName("delivery_feedback")
 public abstract class FeedbackDeliveryCreate {
 
     /**

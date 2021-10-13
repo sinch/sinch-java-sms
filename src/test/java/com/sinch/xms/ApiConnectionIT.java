@@ -1641,21 +1641,16 @@ public class ApiConnectionIT {
 		        SinchSMSApi.deliveryFeedback()
 						.addRecipient("+15551231234","+15551256344")
 				.build();
-
-		MtBatchDeliveryFeedbackResult expected = MtBatchDeliveryFeedbackResult.builder()
-				.build();
-
-		stubPostResponse(expected, path, 200);
-
-		try (ApiConnection conn = ApiConnection.builder()
+		ApiConnection conn = ApiConnection.builder()
 				.servicePlanId(spid)
-				.token("toktok")
+				.token("tok")
 				.endpoint("http://localhost:" + wm.port())
-				.start()) {
-			MtBatchDeliveryFeedbackResult actual = conn.createDeliveryFeedback(batchId, request);
-			assertThat(actual, is(expected));
+				.start();
+		try {
+			conn.createDeliveryFeedback(batchId, request);
+		} finally {
+			conn.close();
 		}
-
 		verifyPostRequest(path, request);
 	}
 

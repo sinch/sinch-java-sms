@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sinch.xms.api.BatchDeliveryReport;
 import com.sinch.xms.api.BatchId;
+import com.sinch.xms.api.EmptyResult;
 import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupId;
@@ -32,7 +33,6 @@ import com.sinch.xms.api.MoSms;
 import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsResult;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
-import com.sinch.xms.api.MtBatchDeliveryFeedbackResult;
 import com.sinch.xms.api.MtBatchDryRunResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
@@ -63,7 +63,6 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -1059,32 +1058,42 @@ public abstract class ApiConnection implements Closeable {
 		return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
 	}
 
-	public MtBatchDeliveryFeedbackResult createDeliveryFeedback(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate) throws InterruptedException, ApiException {
-		try {
-			return createDeliveryFeedbackAsync(id, feedbackDeliveryCreate, null).get();
-		} catch (ExecutionException e) {
-			throw Utils.unwrapExecutionException(e);
-		}
+	/**
+	 * Create a delivery feedback for the batch with the given batch ID.
+	 * <p>
+	 * This method blocks until the request completes and its use is discouraged.
+	 * Please consider using the asynchronous method
+	 * {@link #createDeliveryFeedbackAsync(BatchId, FeedbackDeliveryCreate, FutureCallback)}
+	 * instead.
+	 *
+	 * @param id     identifier of the batch
+	 * @param feedbackDeliveryCreate  controlling the response content
+	 * @throws InterruptedException if the current thread was interrupted while
+	 *                              waiting
+	 * @throws ApiException         if an error occurred while communicating with
+	 *                              XMS
+	 */
+	public void createDeliveryFeedback(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate) throws InterruptedException, ApiException {
+		createDeliveryFeedbackAsync(id, feedbackDeliveryCreate, null);
 	}
 
 	/**
-	 * Fetches a delivery feedback for the batch with the given batch ID and recipients
+	 * Create a delivery feedback for the batch with the given batch ID and recipients
 	 *
 	 * 	 * @param id        identifier of the batch
-	 * 	 * @param recipients MSISDN of recipients
+	 * 	 * @param feedbackDeliveryCreate
 	 * 	 * @param callback  a callback that is activated at call completion
-	 * 	 * @return 200
 	 */
-	public Future<MtBatchDeliveryFeedbackResult> createDeliveryFeedbackAsync(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate,
-																			FutureCallback<MtBatchDeliveryFeedbackResult> callback) {
+	public void createDeliveryFeedbackAsync(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate,
+																			FutureCallback<EmptyResult> callback) {
 
 		HttpPost req = post(batchDeliveryFeedbackEndpoint(id), feedbackDeliveryCreate);
 
 		HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
 
-		HttpAsyncResponseConsumer<MtBatchDeliveryFeedbackResult> consumer = jsonAsyncConsumer(MtBatchDeliveryFeedbackResult.class);
+		HttpAsyncResponseConsumer<EmptyResult> consumer = jsonAsyncConsumer(EmptyResult.class);
 
-		return httpClient().execute(producer,consumer,callbackWrapper().wrap(callback));
+		httpClient().execute(producer,consumer,callbackWrapper().wrap(callback));
 	}
 
 	/**
@@ -1181,7 +1190,7 @@ public abstract class ApiConnection implements Closeable {
 	 * @throws InterruptedException if the current thread was interrupted while
 	 *                              waiting
 	 * @throws ApiException         if an error occurred while communicating with
-	 *                              XMSIncoming SMS
+	 *                              XMS
 	 */
 	public Tags fetchTags(BatchId id) throws InterruptedException, ApiException {
 		try {

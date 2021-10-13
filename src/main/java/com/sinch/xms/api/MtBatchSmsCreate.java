@@ -101,11 +101,9 @@ public abstract class MtBatchSmsCreate {
 	public abstract URI callbackUrl();
 
 	/**
-	 * The URL to which batch callbacks should be sent. If <code>null</code> then
-	 * callbacks will be sent to the default URL.
+	 * The boolean value which determines if feedback is allowed to sent
 	 *
-	 * @return an URL having a callback listener or <code>null</code> to use the
-	 *         default callback URL
+	 * @return boolean value
 	 */
 	@Nullable
 	@JsonProperty("feedback_enabled")

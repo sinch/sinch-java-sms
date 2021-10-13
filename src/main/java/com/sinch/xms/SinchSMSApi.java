@@ -90,11 +90,6 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
 	}
 
 	/**
-	 * Returns a freshly created builder for text message updates.
-	 *
-	 * @return a builder of text message updates
-	 */
-	/**
 	 * Returns a freshly created builder of text message parameter
 	 * substitutions.
 	 * 
