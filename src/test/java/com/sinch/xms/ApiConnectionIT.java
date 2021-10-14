@@ -3423,8 +3423,7 @@ public class ApiConnectionIT {
   }
 
   /**
-   * <<<<<<< Updated upstream ======= Helper that sets up WireMock to respond to a POST using a JSON
-   * body.
+   * Helper that sets up WireMock to respond to a POST without a JSON body.
    *
    * @param path the path on which to listen
    * @param status the response HTTP status
@@ -3439,8 +3438,7 @@ public class ApiConnectionIT {
   }
 
   /**
-   * >>>>>>> Stashed changes Helper that sets up WireMock to verify that a request matches a given
-   * object in JSON format.
+   * Helper that sets up WireMock to verify that a request matches a given object in JSON format.
    *
    * @param path the request path to match
    * @param request the request object whose JSON serialization should match
