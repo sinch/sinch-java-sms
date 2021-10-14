@@ -7,9 +7,8 @@ import org.immutables.value.Value;
 @ValueStylePackage
 @JsonDeserialize(builder = EmptyResult.Builder.class)
 public class EmptyResult {
-    public static final class Builder extends EmptyResultImpl.Builder {
+  public static final class Builder extends EmptyResultImpl.Builder {
 
-        Builder() {
-        }
-    }
+    Builder() {}
+  }
 }
