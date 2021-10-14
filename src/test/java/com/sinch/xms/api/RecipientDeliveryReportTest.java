@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,79 +22,75 @@ package com.sinch.xms.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import com.sinch.testsupport.TestUtils;
+import com.sinch.xms.ApiObjectMapper;
+import com.sinch.xms.Utils;
 import org.junit.Test;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
 
-import com.sinch.testsupport.TestUtils;
-import com.sinch.xms.ApiObjectMapper;
-import com.sinch.xms.Utils;
-
 public class RecipientDeliveryReportTest {
 
-	private final ApiObjectMapper json = new ApiObjectMapper();
+  private final ApiObjectMapper json = new ApiObjectMapper();
 
-	@Test
-	public void canSerialize() throws Exception {
-		OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
-		        542000000, ZoneOffset.UTC);
-		OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28,
-		        542000000, ZoneOffset.UTC);
+  @Test
+  public void canSerialize() throws Exception {
+    OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
-		RecipientDeliveryReport input =
-		        new RecipientDeliveryReport.Builder()
-		                .batchId(BatchId.of("batchid"))
-		                .recipient("12345")
-		                .code(10)
-		                .status(DeliveryStatus.DELIVERED)
-		                .statusMessage("status message")
-		                .at(time1)
-		                .operatorStatusAt(time2)
-		                .operator("818181")
-		                .build();
+    RecipientDeliveryReport input =
+        new RecipientDeliveryReport.Builder()
+            .batchId(BatchId.of("batchid"))
+            .recipient("12345")
+            .code(10)
+            .status(DeliveryStatus.DELIVERED)
+            .statusMessage("status message")
+            .at(time1)
+            .operatorStatusAt(time2)
+            .operator("818181")
+            .build();
 
-		String expected = Utils.join("\n",
-		        "{",
-		        "  'batch_id': 'batchid',",
-		        "  'recipient': '12345',",
-		        "  'type': 'recipient_delivery_report_sms',",
-		        "  'code': 10,",
-		        "  'status': 'Delivered',",
-		        "  'status_message': 'status message',",
-		        "  'operator': '818181',",
-		        "  'at': '2016-10-02T09:34:28.542Z',",
-		        "  'operator_status_at': '2016-11-02T09:34:28.542Z'",
-		        "}").replace('\'', '"');
+    String expected =
+        Utils.join(
+                "\n",
+                "{",
+                "  'batch_id': 'batchid',",
+                "  'recipient': '12345',",
+                "  'type': 'recipient_delivery_report_sms',",
+                "  'code': 10,",
+                "  'status': 'Delivered',",
+                "  'status_message': 'status message',",
+                "  'operator': '818181',",
+                "  'at': '2016-10-02T09:34:28.542Z',",
+                "  'operator_status_at': '2016-11-02T09:34:28.542Z'",
+                "}")
+            .replace('\'', '"');
 
-		String actual = json.writeValueAsString(input);
+    String actual = json.writeValueAsString(input);
 
-		assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
-	}
+    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
+  }
 
-	@Test
-	public void canDeserialize() throws Exception {
-		OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28,
-		        542000000, ZoneOffset.UTC);
-		OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28,
-		        542000000, ZoneOffset.UTC);
+  @Test
+  public void canDeserialize() throws Exception {
+    OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
-		RecipientDeliveryReport expected =
-		        new RecipientDeliveryReport.Builder()
-		                .batchId(BatchId.of("batchid"))
-		                .recipient("1235")
-		                .code(10)
-		                .status(DeliveryStatus.DELIVERED)
-		                .statusMessage("status message")
-		                .at(time1)
-		                .operatorStatusAt(time2)
-		                .build();
+    RecipientDeliveryReport expected =
+        new RecipientDeliveryReport.Builder()
+            .batchId(BatchId.of("batchid"))
+            .recipient("1235")
+            .code(10)
+            .status(DeliveryStatus.DELIVERED)
+            .statusMessage("status message")
+            .at(time1)
+            .operatorStatusAt(time2)
+            .build();
 
-		String input = json.writeValueAsString(expected);
+    String input = json.writeValueAsString(expected);
 
-		RecipientDeliveryReport actual =
-		        json.readValue(input, RecipientDeliveryReport.class);
+    RecipientDeliveryReport actual = json.readValue(input, RecipientDeliveryReport.class);
 
-		assertThat(actual, is(expected));
-	}
-
+    assertThat(actual, is(expected));
+  }
 }
