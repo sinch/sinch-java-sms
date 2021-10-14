@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,93 +22,97 @@ package com.sinch.xms.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.sinch.testsupport.TestUtils;
+import com.sinch.xms.ApiObjectMapper;
+import com.sinch.xms.Utils;
 import org.junit.Test;
 import org.threeten.bp.Clock;
 import org.threeten.bp.OffsetDateTime;
 
-import com.sinch.testsupport.TestUtils;
-import com.sinch.xms.ApiObjectMapper;
-import com.sinch.xms.Utils;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 public class MoBinarySmsTest {
 
-	private final ApiObjectMapper json = new ApiObjectMapper();
+  private final ApiObjectMapper json = new ApiObjectMapper();
 
-	@Test
-	public void canSerializeJson() throws Exception {
-		String smsId = TestUtils.freshSmsId();
-		OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
-		String receivedAtString = json.writeValueAsString(receivedAt);
-		byte[] body = TestUtils.UTF_8.encode("Здравей, свят!").array();
-		byte[] udh = new byte[] { 0, 1, 2, 3 };
+  @Test
+  public void canSerializeJson() throws Exception {
+    String smsId = TestUtils.freshSmsId();
+    OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
+    String receivedAtString = json.writeValueAsString(receivedAt);
+    byte[] body = TestUtils.UTF_8.encode("Здравей, свят!").array();
+    byte[] udh = new byte[] {0, 1, 2, 3};
 
-		MoSms input = new MoBinarySms.Builder()
-		        .recipient("12345")
-		        .sender("987654321")
-		        .body(body)
-		        .udh(udh)
-		        .id(smsId)
-		        .receivedAt(receivedAt)
-		        .build();
+    MoSms input =
+        new MoBinarySms.Builder()
+            .recipient("12345")
+            .sender("987654321")
+            .body(body)
+            .udh(udh)
+            .id(smsId)
+            .receivedAt(receivedAt)
+            .build();
 
-		String expected = Utils.join("\n",
-		        "{",
-		        "  \"type\": \"mo_binary\",",
-		        "  \"to\": \"12345\",",
-		        "  \"from\": \"987654321\",",
-		        "  \"id\": \"" + smsId + "\",",
-		        "  \"received_at\": " + receivedAtString + ",",
-		        "  \"body\": \"0JfQtNGA0LDQstC10LksINGB0LLRj9GCIQAAAAAAAA==\",",
-		        "  \"udh\": \"00010203\"",
-		        "}");
+    String expected =
+        Utils.join(
+            "\n",
+            "{",
+            "  \"type\": \"mo_binary\",",
+            "  \"to\": \"12345\",",
+            "  \"from\": \"987654321\",",
+            "  \"id\": \"" + smsId + "\",",
+            "  \"received_at\": " + receivedAtString + ",",
+            "  \"body\": \"0JfQtNGA0LDQstC10LksINGB0LLRj9GCIQAAAAAAAA==\",",
+            "  \"udh\": \"00010203\"",
+            "}");
 
-		String actual = json.writeValueAsString(input);
+    String actual = json.writeValueAsString(input);
 
-		assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
-	}
+    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
+  }
 
-	@Test(expected = JsonMappingException.class)
-	public void throwsWhenGettingNonHexUdh() throws Exception {
-		String smsId = TestUtils.freshSmsId();
-		OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
-		String receivedAtString = json.writeValueAsString(receivedAt);
+  @Test(expected = JsonMappingException.class)
+  public void throwsWhenGettingNonHexUdh() throws Exception {
+    String smsId = TestUtils.freshSmsId();
+    OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
+    String receivedAtString = json.writeValueAsString(receivedAt);
 
-		String input = Utils.join("\n",
-		        "{",
-		        "  \"type\": \"mo_binary\",",
-		        "  \"to\": \"12345\",",
-		        "  \"from\": \"987654321\",",
-		        "  \"id\": \"" + smsId + "\",",
-		        "  \"received_at\": " + receivedAtString + ",",
-		        "  \"body\": \"0JfQtNGA0LDQstC10LksINGB0LLRj9GCIQAAAAAAAA==\",",
-		        "  \"udh\": \"blahblah\"",
-		        "}");
+    String input =
+        Utils.join(
+            "\n",
+            "{",
+            "  \"type\": \"mo_binary\",",
+            "  \"to\": \"12345\",",
+            "  \"from\": \"987654321\",",
+            "  \"id\": \"" + smsId + "\",",
+            "  \"received_at\": " + receivedAtString + ",",
+            "  \"body\": \"0JfQtNGA0LDQstC10LksINGB0LLRj9GCIQAAAAAAAA==\",",
+            "  \"udh\": \"blahblah\"",
+            "}");
 
-		json.readValue(input, MoBinarySms.class);
-	}
+    json.readValue(input, MoBinarySms.class);
+  }
 
-	@Test
-	public void canDeserializeJson() throws Exception {
-		String smsId = TestUtils.freshSmsId();
-		OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
-		byte[] body = new byte[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
-		byte[] udh = new byte[] { 0, 1, 2, 3 };
+  @Test
+  public void canDeserializeJson() throws Exception {
+    String smsId = TestUtils.freshSmsId();
+    OffsetDateTime receivedAt = OffsetDateTime.now(Clock.systemUTC());
+    byte[] body = new byte[] {10, 20, 30, 40, 50, 60, 70, 80, 90};
+    byte[] udh = new byte[] {0, 1, 2, 3};
 
-		MoSms expected = new MoBinarySms.Builder()
-		        .recipient("12345")
-		        .sender("987654321")
-		        .body(body)
-		        .udh(udh)
-		        .id(smsId)
-		        .receivedAt(receivedAt)
-		        .build();
+    MoSms expected =
+        new MoBinarySms.Builder()
+            .recipient("12345")
+            .sender("987654321")
+            .body(body)
+            .udh(udh)
+            .id(smsId)
+            .receivedAt(receivedAt)
+            .build();
 
-		String input = json.writeValueAsString(expected);
+    String input = json.writeValueAsString(expected);
 
-		MoSms actual = json.readValue(input, MoSms.class);
+    MoSms actual = json.readValue(input, MoSms.class);
 
-		assertThat(actual, is(expected));
-	}
-
+    assertThat(actual, is(expected));
+  }
 }

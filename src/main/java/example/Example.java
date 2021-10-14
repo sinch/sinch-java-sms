@@ -35,11 +35,12 @@ public class Example {
           group.id(), SinchSMSApi.groupUpdate().addMemberInsertion("15418888", "323232").build());
 
       // Sending a message to the group
-      batch = conn.createBatch(
-          SinchSMSApi.batchTextSms()
-              .addRecipient(group.id().toString())
-              .body("Something good")
-              .build());
+      batch =
+          conn.createBatch(
+              SinchSMSApi.batchTextSms()
+                  .addRecipient(group.id().toString())
+                  .body("Something good")
+                  .build());
 
       System.out.println("Successfully sent batch " + batch.id());
     } catch (Exception e) {

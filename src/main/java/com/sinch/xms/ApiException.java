@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,46 +19,41 @@
  */
 package com.sinch.xms;
 
-/**
- * Base class for all exceptions specific to the Sinch SDK.
- */
+/** Base class for all exceptions specific to the Sinch SDK. */
 public abstract class ApiException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a new API exception having no message and no cause.
-	 */
-	public ApiException() {
-		super();
-	}
+  /** Construct a new API exception having no message and no cause. */
+  public ApiException() {
+    super();
+  }
 
-	/**
-	 * Construct a new API exception having the given message and no cause.
-	 * 
-	 * @param message the exception message
-	 */
-	public ApiException(String message) {
-		super(message);
-	}
+  /**
+   * Construct a new API exception having the given message and no cause.
+   *
+   * @param message the exception message
+   */
+  public ApiException(String message) {
+    super(message);
+  }
 
-	/**
-	 * Construct a new API exception having no message and the given cause.
-	 * 
-	 * @param cause the exception cause
-	 */
-	public ApiException(Throwable cause) {
-		super(cause);
-	}
+  /**
+   * Construct a new API exception having no message and the given cause.
+   *
+   * @param cause the exception cause
+   */
+  public ApiException(Throwable cause) {
+    super(cause);
+  }
 
-	/**
-	 * Construct a new API exception having the given message and cause.
-	 * 
-	 * @param message the exception message
-	 * @param cause   the exception cause
-	 */
-	public ApiException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
+  /**
+   * Construct a new API exception having the given message and cause.
+   *
+   * @param message the exception message
+   * @param cause the exception cause
+   */
+  public ApiException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

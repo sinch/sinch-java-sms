@@ -44,156 +44,158 @@ import org.apache.http.ssl.SSLContexts;
 import org.threeten.bp.Duration;
 
 /**
- * An asynchronous HTTP client used in API connections. It is configured in a
- * way suitable for communicating with XMS and is therefore most applicable for
- * communicating with a single HTTP host.
+ * An asynchronous HTTP client used in API connections. It is configured in a way suitable for
+ * communicating with XMS and is therefore most applicable for communicating with a single HTTP
+ * host.
  *
- * <p>
- * It is in most cases sufficient to let {@link ApiConnection} create and manage
- * the HTTP client. If necessary, however, it is possible to create and manage
- * this type of connections manually.
+ * <p>It is in most cases sufficient to let {@link ApiConnection} create and manage the HTTP client.
+ * If necessary, however, it is possible to create and manage this type of connections manually.
  */
 public class ApiHttpAsyncClient implements HttpAsyncClient, Closeable {
 
-	/** The default limit for the socket and connect timeout. */
-	private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
+  /** The default limit for the socket and connect timeout. */
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
-	/**
-	 * The default maximum number of simultaneous connections to open towards
-	 * the XMS endpoint.
-	 */
-	private static final int DEFAULT_MAX_CONN = 100;
+  /** The default maximum number of simultaneous connections to open towards the XMS endpoint. */
+  private static final int DEFAULT_MAX_CONN = 100;
 
-	/** Whether this client was started internally by {@link ApiConnection}. */
-	private boolean startedInternally;
+  /** Whether this client was started internally by {@link ApiConnection}. */
+  private boolean startedInternally;
 
-	/** The underlying actual HTTP client. */
-	private final CloseableHttpAsyncClient client;
+  /** The underlying actual HTTP client. */
+  private final CloseableHttpAsyncClient client;
 
-	/**
-	 * Creates a new HTTP asynchronous client suitable for communicating with
-	 * XMS.
-	 *
-	 * @param startedInternally
-	 *            whether this object was created inside this SDK
-	 */
-	ApiHttpAsyncClient(boolean startedInternally) {
-		this.startedInternally = startedInternally;
+  /**
+   * Creates a new HTTP asynchronous client suitable for communicating with XMS.
+   *
+   * @param startedInternally whether this object was created inside this SDK
+   */
+  ApiHttpAsyncClient(boolean startedInternally) {
+    this.startedInternally = startedInternally;
 
-		// Allow TLSv1.2 protocol only
-		SSLIOSessionStrategy sslSessionStrategy = new SSLIOSessionStrategy(
-				SSLContexts.createSystemDefault(), new String[]{"TLSv1.2"},
-				null, SSLIOSessionStrategy.getDefaultHostnameVerifier());
+    // Allow TLSv1.2 protocol only
+    SSLIOSessionStrategy sslSessionStrategy =
+        new SSLIOSessionStrategy(
+            SSLContexts.createSystemDefault(),
+            new String[] {"TLSv1.2"},
+            null,
+            SSLIOSessionStrategy.getDefaultHostnameVerifier());
 
-		RequestConfig requestConfig = RequestConfig.custom()
-				.setConnectTimeout((int) DEFAULT_TIMEOUT.toMillis())
-				.setSocketTimeout((int) DEFAULT_TIMEOUT.toMillis()).build();
+    RequestConfig requestConfig =
+        RequestConfig.custom()
+            .setConnectTimeout((int) DEFAULT_TIMEOUT.toMillis())
+            .setSocketTimeout((int) DEFAULT_TIMEOUT.toMillis())
+            .build();
 
-		// TODO: Is this a good default setup?
-		this.client = HttpAsyncClients.custom()
-				.setSSLStrategy(sslSessionStrategy).disableCookieManagement()
-				.setMaxConnPerRoute(DEFAULT_MAX_CONN)
-				.setMaxConnTotal(DEFAULT_MAX_CONN).setKeepAliveStrategy(
-						(HttpResponse response, HttpContext context) -> {
-							HeaderElementIterator it = new BasicHeaderElementIterator(
-									response.headerIterator(
-											HTTP.CONN_KEEP_ALIVE));
-							while (it.hasNext()) {
-								HeaderElement he = it.nextElement();
-								String param = he.getName();
-								String value = he.getValue();
-								if (value != null
-										&& param.equalsIgnoreCase("timeout")) {
-									return Long.parseLong(value) * 1000;
-								}
-							}
-							return 5_000;
-						})
-				.setDefaultRequestConfig(requestConfig).build();
-	}
+    // TODO: Is this a good default setup?
+    this.client =
+        HttpAsyncClients.custom()
+            .setSSLStrategy(sslSessionStrategy)
+            .disableCookieManagement()
+            .setMaxConnPerRoute(DEFAULT_MAX_CONN)
+            .setMaxConnTotal(DEFAULT_MAX_CONN)
+            .setKeepAliveStrategy(
+                (HttpResponse response, HttpContext context) -> {
+                  HeaderElementIterator it =
+                      new BasicHeaderElementIterator(response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+                  while (it.hasNext()) {
+                    HeaderElement he = it.nextElement();
+                    String param = he.getName();
+                    String value = he.getValue();
+                    if (value != null && param.equalsIgnoreCase("timeout")) {
+                      return Long.parseLong(value) * 1000;
+                    }
+                  }
+                  return 5_000;
+                })
+            .setDefaultRequestConfig(requestConfig)
+            .build();
+  }
 
-	/**
-	 * Creates a new asynchronous HTTP client suitable for communicating with
-	 * XMS.
-	 *
-	 * @return a newly constructed HTTP client
-	 */
-	@Nonnull
-	public static ApiHttpAsyncClient of() {
-		return new ApiHttpAsyncClient(false);
-	}
+  /**
+   * Creates a new asynchronous HTTP client suitable for communicating with XMS.
+   *
+   * @return a newly constructed HTTP client
+   */
+  @Nonnull
+  public static ApiHttpAsyncClient of() {
+    return new ApiHttpAsyncClient(false);
+  }
 
-	/**
-	 * Whether this object was created inside the SDK.
-	 *
-	 * @return <code>true</code> if internally generated, <code>false</code>
-	 *         otherwise
-	 */
-	boolean isStartedInternally() {
-		return startedInternally;
-	}
+  /**
+   * Whether this object was created inside the SDK.
+   *
+   * @return <code>true</code> if internally generated, <code>false</code> otherwise
+   */
+  boolean isStartedInternally() {
+    return startedInternally;
+  }
 
-	/**
-	 * Whether this client is started.
-	 *
-	 * @return <code>true</code> if started, <code>false</code> otherwise
-	 */
-	public boolean isRunning() {
-		return client.isRunning();
-	}
+  /**
+   * Whether this client is started.
+   *
+   * @return <code>true</code> if started, <code>false</code> otherwise
+   */
+  public boolean isRunning() {
+    return client.isRunning();
+  }
 
-	/** Starts this client. */
-	public void start() {
-		client.start();
-	}
+  /** Starts this client. */
+  public void start() {
+    client.start();
+  }
 
-	/**
-	 * Closes this client and releases any held resources.
-	 *
-	 * @throws IOException
-	 *             if an I/O error occurs
-	 */
-	@Override
-	public void close() throws IOException {
-		client.close();
-	}
+  /**
+   * Closes this client and releases any held resources.
+   *
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  public void close() throws IOException {
+    client.close();
+  }
 
-	@Override
-	public <T> Future<T> execute(HttpAsyncRequestProducer requestProducer,
-			HttpAsyncResponseConsumer<T> responseConsumer, HttpContext context,
-			FutureCallback<T> callback) {
-		return client.execute(requestProducer, responseConsumer, context,
-				callback);
-	}
+  @Override
+  public <T> Future<T> execute(
+      HttpAsyncRequestProducer requestProducer,
+      HttpAsyncResponseConsumer<T> responseConsumer,
+      HttpContext context,
+      FutureCallback<T> callback) {
+    return client.execute(requestProducer, responseConsumer, context, callback);
+  }
 
-	@Override
-	public <T> Future<T> execute(HttpAsyncRequestProducer requestProducer,
-			HttpAsyncResponseConsumer<T> responseConsumer,
-			FutureCallback<T> callback) {
-		return client.execute(requestProducer, responseConsumer, callback);
-	}
+  @Override
+  public <T> Future<T> execute(
+      HttpAsyncRequestProducer requestProducer,
+      HttpAsyncResponseConsumer<T> responseConsumer,
+      FutureCallback<T> callback) {
+    return client.execute(requestProducer, responseConsumer, callback);
+  }
 
-	@Override
-	public Future<HttpResponse> execute(HttpHost target, HttpRequest request,
-			HttpContext context, FutureCallback<HttpResponse> callback) {
-		return client.execute(target, request, context, callback);
-	}
+  @Override
+  public Future<HttpResponse> execute(
+      HttpHost target,
+      HttpRequest request,
+      HttpContext context,
+      FutureCallback<HttpResponse> callback) {
+    return client.execute(target, request, context, callback);
+  }
 
-	@Override
-	public Future<HttpResponse> execute(HttpHost target, HttpRequest request,
-			FutureCallback<HttpResponse> callback) {
-		return client.execute(target, request, callback);
-	}
+  @Override
+  public Future<HttpResponse> execute(
+      HttpHost target, HttpRequest request, FutureCallback<HttpResponse> callback) {
+    return client.execute(target, request, callback);
+  }
 
-	@Override
-	public Future<HttpResponse> execute(HttpUriRequest request,
-			HttpContext context, FutureCallback<HttpResponse> callback) {
-		return client.execute(request, context, callback);
-	}
+  @Override
+  public Future<HttpResponse> execute(
+      HttpUriRequest request, HttpContext context, FutureCallback<HttpResponse> callback) {
+    return client.execute(request, context, callback);
+  }
 
-	@Override
-	public Future<HttpResponse> execute(HttpUriRequest request,
-			FutureCallback<HttpResponse> callback) {
-		return client.execute(request, callback);
-	}
+  @Override
+  public Future<HttpResponse> execute(
+      HttpUriRequest request, FutureCallback<HttpResponse> callback) {
+    return client.execute(request, callback);
+  }
 }

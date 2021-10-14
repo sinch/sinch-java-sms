@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,22 +19,17 @@
  */
 package com.sinch.xms;
 
-/**
- * A wrapper of {@link ApiException} for use where checked exceptions cannot be
- * thrown.
- */
+/** A wrapper of {@link ApiException} for use where checked exceptions cannot be thrown. */
 public class RuntimeApiException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructs a new runtime API exception wrapping the given API exception.
-	 * 
-	 * @param e
-	 *            the API exception
-	 */
-	public RuntimeApiException(ApiException e) {
-		super(e.getMessage(), e);
-	}
-
+  /**
+   * Constructs a new runtime API exception wrapping the given API exception.
+   *
+   * @param e the API exception
+   */
+  public RuntimeApiException(ApiException e) {
+    super(e.getMessage(), e);
+  }
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,14 +19,6 @@
  */
 package com.sinch.xms.api;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import com.sinch.xms.SinchSMSApi;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,124 +27,108 @@ import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdNodeBasedDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.sinch.xms.SinchSMSApi;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
-/**
- * A collection of custom Jackson serializers and deserializers.
- */
+/** A collection of custom Jackson serializers and deserializers. */
 class JacksonUtils {
 
-	/**
-	 * Jackson deserializer for hex encoded byte arrays.
-	 */
-	static final class ByteArrayHexDeserializer
-	        extends FromStringDeserializer<byte[]> {
+  /** Jackson deserializer for hex encoded byte arrays. */
+  static final class ByteArrayHexDeserializer extends FromStringDeserializer<byte[]> {
 
-		private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-		public ByteArrayHexDeserializer() {
-			super(byte[].class);
-		}
+    public ByteArrayHexDeserializer() {
+      super(byte[].class);
+    }
 
-		@Override
-		protected byte[] _deserialize(String value,
-		        DeserializationContext ctxt) throws IOException {
-			try {
-				return Hex.decodeHex(value.toCharArray());
-			} catch (DecoderException e) {
-				return (byte[]) ctxt.handleWeirdStringValue(handledType(),
-				        value, e.getMessage());
-			}
-		}
+    @Override
+    protected byte[] _deserialize(String value, DeserializationContext ctxt) throws IOException {
+      try {
+        return Hex.decodeHex(value.toCharArray());
+      } catch (DecoderException e) {
+        return (byte[]) ctxt.handleWeirdStringValue(handledType(), value, e.getMessage());
+      }
+    }
+  }
+  ;
 
-	};
+  /** Jackson serializer for hex encoded byte arrays. */
+  static final class ByteArrayHexSerializer extends StdScalarSerializer<byte[]> {
 
-	/**
-	 * Jackson serializer for hex encoded byte arrays.
-	 */
-	static final class ByteArrayHexSerializer
-	        extends StdScalarSerializer<byte[]> {
+    private static final long serialVersionUID = 1L;
 
-		private static final long serialVersionUID = 1L;
+    public ByteArrayHexSerializer() {
+      super(byte[].class);
+    }
 
-		public ByteArrayHexSerializer() {
-			super(byte[].class);
-		}
+    @Override
+    public void serialize(byte[] value, JsonGenerator gen, SerializerProvider provider)
+        throws IOException {
+      gen.writeString(Hex.encodeHexString(value));
+    }
+  }
+  ;
 
-		@Override
-		public void serialize(byte[] value, JsonGenerator gen,
-		        SerializerProvider provider) throws IOException {
-			gen.writeString(Hex.encodeHexString(value));
-		}
+  /** JSON deserializer of parameter values. */
+  static final class ParameterValuesDeserializer extends StdNodeBasedDeserializer<ParameterValues> {
 
-	};
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * JSON deserializer of parameter values.
-	 */
-	static final class ParameterValuesDeserializer
-	        extends StdNodeBasedDeserializer<ParameterValues> {
+    public ParameterValuesDeserializer() {
+      super(ParameterValues.class);
+    }
 
-		private static final long serialVersionUID = 1L;
+    @Override
+    public ParameterValues convert(JsonNode root, DeserializationContext ctxt) throws IOException {
+      ParameterValues.Builder builder = SinchSMSApi.parameterValues();
 
-		public ParameterValuesDeserializer() {
-			super(ParameterValues.class);
-		}
+      if (root.has("default")) {
+        builder.defaultValue(root.get("default").asText());
+      }
 
-		@Override
-		public ParameterValues convert(JsonNode root,
-		        DeserializationContext ctxt) throws IOException {
-			ParameterValues.Builder builder = SinchSMSApi.parameterValues();
+      Iterator<Entry<String, JsonNode>> it = root.fields();
+      while (it.hasNext()) {
+        Entry<String, JsonNode> entry = it.next();
 
-			if (root.has("default")) {
-				builder.defaultValue(root.get("default").asText());
-			}
+        if ("default".equals(entry.getKey())) {
+          builder.defaultValue(entry.getValue().asText());
+        } else {
+          builder.putSubstitution(entry.getKey(), entry.getValue().asText());
+        }
+      }
 
-			Iterator<Entry<String, JsonNode>> it = root.fields();
-			while (it.hasNext()) {
-				Entry<String, JsonNode> entry = it.next();
+      return builder.build();
+    }
+  }
 
-				if ("default".equals(entry.getKey())) {
-					builder.defaultValue(entry.getValue().asText());
-				} else {
-					builder.putSubstitution(entry.getKey(),
-					        entry.getValue().asText());
-				}
-			}
+  /** Jackson serializer of parameter values. */
+  static final class ParameterValuesSerializer extends StdSerializer<ParameterValues> {
 
-			return builder.build();
-		}
+    private static final long serialVersionUID = 1L;
 
-	}
+    public ParameterValuesSerializer() {
+      super(ParameterValues.class);
+    }
 
-	/**
-	 * Jackson serializer of parameter values.
-	 */
-	static final class ParameterValuesSerializer
-	        extends StdSerializer<ParameterValues> {
+    @Override
+    public void serialize(ParameterValues value, JsonGenerator gen, SerializerProvider provider)
+        throws IOException {
+      gen.writeStartObject();
 
-		private static final long serialVersionUID = 1L;
+      for (Entry<String, String> entry : value.substitutions().entrySet()) {
+        gen.writeStringField(entry.getKey(), entry.getValue());
+      }
 
-		public ParameterValuesSerializer() {
-			super(ParameterValues.class);
-		}
+      if (value.defaultValue() != null) {
+        gen.writeStringField("default", value.defaultValue());
+      }
 
-		@Override
-		public void serialize(ParameterValues value, JsonGenerator gen,
-		        SerializerProvider provider) throws IOException {
-			gen.writeStartObject();
-
-			for (Entry<String, String> entry : value.substitutions()
-			        .entrySet()) {
-				gen.writeStringField(entry.getKey(), entry.getValue());
-			}
-
-			if (value.defaultValue() != null) {
-				gen.writeStringField("default", value.defaultValue());
-			}
-
-			gen.writeEndObject();
-		}
-
-	}
-
+      gen.writeEndObject();
+    }
+  }
 }
