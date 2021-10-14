@@ -37,7 +37,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.theInstance;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -85,6 +85,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -1596,7 +1597,7 @@ public class ApiConnectionIT {
   }
 
   @Test
-  public void canCreateDeliveryFeedback() throws Exception {
+  public void canCreateDeliveryFeedbackSync() throws Exception {
     String spid = TestUtils.freshServicePlanId();
     BatchId batchId = TestUtils.freshBatchId();
 
@@ -1604,16 +1605,51 @@ public class ApiConnectionIT {
 
     FeedbackDeliveryCreate request =
         SinchSMSApi.deliveryFeedback().addRecipient("+15551231234", "+15551256344").build();
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
-            .token("tok")
+            .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-    try {
+            .start()) {
+
+      stubPostResponse(path, 202);
+
       conn.createDeliveryFeedback(batchId, request);
-    } finally {
-      conn.close();
+    }
+    verifyPostRequest(path, request);
+  }
+
+  @Test
+  public void canCreateDeliveryFeedbackAsync() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+
+    String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_feedback";
+
+    FeedbackDeliveryCreate request =
+        SinchSMSApi.deliveryFeedback().addRecipient("+15551231234", "+15551256344").build();
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start()) {
+
+      stubPostResponse(path, 202);
+
+      final AtomicBoolean callbackCompleted = new AtomicBoolean(false);
+      FutureCallback<Void> testCallback =
+          new TestCallback<Void>() {
+
+            @Override
+            public void completed(Void result) {
+              callbackCompleted.set(true);
+            }
+          };
+
+      Void actual = conn.createDeliveryFeedbackAsync(batchId, request, testCallback).get();
+      assertThat(actual, nullValue());
+      assertThat(callbackCompleted.get(), is(true));
     }
     verifyPostRequest(path, request);
   }
@@ -3387,7 +3423,24 @@ public class ApiConnectionIT {
   }
 
   /**
-   * Helper that sets up WireMock to verify that a request matches a given object in JSON format.
+   * <<<<<<< Updated upstream ======= Helper that sets up WireMock to respond to a POST using a JSON
+   * body.
+   *
+   * @param path the path on which to listen
+   * @param status the response HTTP status
+   * @throws JsonProcessingException if the given response object could not be serialized
+   */
+  private void stubPostResponse(String path, int status) throws JsonProcessingException {
+
+    wm.stubFor(
+        post(urlEqualTo(path))
+            .willReturn(
+                aResponse().withStatus(status).withHeader("Content-Type", "application/json")));
+  }
+
+  /**
+   * >>>>>>> Stashed changes Helper that sets up WireMock to verify that a request matches a given
+   * object in JSON format.
    *
    * @param path the request path to match
    * @param request the request object whose JSON serialization should match

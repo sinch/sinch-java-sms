@@ -83,6 +83,8 @@ class JsonApiAsyncConsumer<T> extends AsyncByteConsumer<T> {
       case HttpStatus.SC_OK:
       case HttpStatus.SC_CREATED:
         return json.readValue(inputStream, jsonClass);
+      case HttpStatus.SC_ACCEPTED:
+        return null;
       case HttpStatus.SC_BAD_REQUEST:
       case HttpStatus.SC_FORBIDDEN:
         ApiError error = json.readValue(inputStream, ApiError.class);
