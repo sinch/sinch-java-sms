@@ -1040,7 +1040,7 @@ public abstract class ApiConnection implements Closeable {
    * FeedbackDeliveryCreate, FutureCallback)} instead.
    *
    * @param id identifier of the batch
-   * @param feedbackDeliveryCreate controlling the response content
+   * @param feedbackDeliveryCreate create delivery feedback input with recipients
    * @throws InterruptedException if the current thread was interrupted while waiting
    * @throws ApiException if an error occurred while communicating with XMS
    */
@@ -1056,8 +1056,10 @@ public abstract class ApiConnection implements Closeable {
   /**
    * Create a delivery feedback for the batch with the given batch ID and recipients
    *
-   * <p>* @param id identifier of the batch * @param feedbackDeliveryCreate * @param callback a
-   * callback that is activated at call completion
+   * @param id identifier of the batch
+   * @param feedbackDeliveryCreate create delivery feedback input with recipients
+   * @param callback  callback that is activated at call completion
+   * @return a future yielding no value
    */
   public Future<Void> createDeliveryFeedbackAsync(
       BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate, FutureCallback<Void> callback) {

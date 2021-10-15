@@ -26,5 +26,10 @@ public abstract class FeedbackDeliveryCreate {
     return new Builder();
   }
 
+  /**
+   * The list of recipients.
+   *
+   * @return a list of strings containing recipients
+   */
   public abstract List<String> recipients();
 }
