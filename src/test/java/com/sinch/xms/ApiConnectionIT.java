@@ -3434,7 +3434,7 @@ public class ApiConnectionIT {
     wm.stubFor(
         post(urlEqualTo(path))
             .willReturn(
-                aResponse().withStatus(status).withHeader("Content-Type", "application/json")));
+                aResponse().withStatus(status)));
   }
 
   /**
