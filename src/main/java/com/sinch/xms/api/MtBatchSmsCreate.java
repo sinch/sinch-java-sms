@@ -98,6 +98,15 @@ public abstract class MtBatchSmsCreate {
   public abstract URI callbackUrl();
 
   /**
+   * The boolean value which determines if feedback is allowed to be sent
+   *
+   * @return boolean value
+   */
+  @Nullable
+  @JsonProperty("feedback_enabled")
+  public abstract Boolean feedbackEnabled();
+
+  /**
    * The tags that should be attached to this message.
    *
    * @return a non-null set of tags

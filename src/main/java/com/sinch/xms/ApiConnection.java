@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sinch.xms.api.BatchDeliveryReport;
 import com.sinch.xms.api.BatchId;
+import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupId;
 import com.sinch.xms.api.GroupResult;
@@ -360,6 +361,11 @@ public abstract class ApiConnection implements Closeable {
   @Nonnull
   private URI batchRecipientDeliveryReportEndpoint(BatchId batchId, String recipient) {
     return endpoint("/batches/" + batchId + "/delivery_report/" + recipient);
+  }
+
+  @Nonnull
+  private URI batchDeliveryFeedbackEndpoint(BatchId batchId) {
+    return endpoint("/batches/" + batchId + "/delivery_feedback");
   }
 
   @Nonnull
@@ -1022,6 +1028,47 @@ public abstract class ApiConnection implements Closeable {
 
     HttpAsyncResponseConsumer<RecipientDeliveryReport> consumer =
         jsonAsyncConsumer(RecipientDeliveryReport.class);
+
+    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
+  }
+
+  /**
+   * Create a delivery feedback for the batch with the given batch ID.
+   *
+   * <p>This method blocks until the request completes and its use is discouraged. Please consider
+   * using the asynchronous method {@link #createDeliveryFeedbackAsync(BatchId,
+   * FeedbackDeliveryCreate, FutureCallback)} instead.
+   *
+   * @param id identifier of the batch
+   * @param feedbackDeliveryCreate create delivery feedback input with recipients
+   * @throws InterruptedException if the current thread was interrupted while waiting
+   * @throws ApiException if an error occurred while communicating with XMS
+   */
+  public Void createDeliveryFeedback(BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate)
+      throws InterruptedException, ApiException {
+    try {
+      return createDeliveryFeedbackAsync(id, feedbackDeliveryCreate, null).get();
+    } catch (ExecutionException e) {
+      throw Utils.unwrapExecutionException(e);
+    }
+  }
+
+  /**
+   * Create a delivery feedback for the batch with the given batch ID and recipients
+   *
+   * @param id identifier of the batch
+   * @param feedbackDeliveryCreate create delivery feedback input with recipients
+   * @param callback  callback that is activated at call completion
+   * @return a future yielding no value
+   */
+  public Future<Void> createDeliveryFeedbackAsync(
+      BatchId id, FeedbackDeliveryCreate feedbackDeliveryCreate, FutureCallback<Void> callback) {
+
+    HttpPost req = post(batchDeliveryFeedbackEndpoint(id), feedbackDeliveryCreate);
+
+    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
+
+    HttpAsyncResponseConsumer<Void> consumer = jsonAsyncConsumer(Void.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }

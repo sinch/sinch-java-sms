@@ -37,7 +37,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.theInstance;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -49,6 +49,7 @@ import com.sinch.xms.api.ApiError;
 import com.sinch.xms.api.BatchDeliveryReport;
 import com.sinch.xms.api.BatchId;
 import com.sinch.xms.api.DeliveryStatus;
+import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupId;
 import com.sinch.xms.api.GroupResult;
@@ -84,6 +85,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -1592,6 +1594,64 @@ public class ApiConnectionIT {
     }
 
     verifyGetRequest(path);
+  }
+
+  @Test
+  public void canCreateDeliveryFeedbackSync() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+
+    String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_feedback";
+
+    FeedbackDeliveryCreate request =
+        SinchSMSApi.deliveryFeedback().addRecipient("+15551231234", "+15551256344").build();
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start()) {
+
+      stubPostResponse(path, 202);
+
+      conn.createDeliveryFeedback(batchId, request);
+    }
+    verifyPostRequest(path, request);
+  }
+
+  @Test
+  public void canCreateDeliveryFeedbackAsync() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+
+    String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_feedback";
+
+    FeedbackDeliveryCreate request =
+        SinchSMSApi.deliveryFeedback().addRecipient("+15551231234", "+15551256344").build();
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start()) {
+
+      stubPostResponse(path, 202);
+
+      final AtomicBoolean callbackCompleted = new AtomicBoolean(false);
+      FutureCallback<Void> testCallback =
+          new TestCallback<Void>() {
+
+            @Override
+            public void completed(Void result) {
+              callbackCompleted.set(true);
+            }
+          };
+
+      Void actual = conn.createDeliveryFeedbackAsync(batchId, request, testCallback).get();
+      assertThat(actual, nullValue());
+      assertThat(callbackCompleted.get(), is(true));
+    }
+    verifyPostRequest(path, request);
   }
 
   @Test
@@ -3360,6 +3420,21 @@ public class ApiConnectionIT {
                     .withStatus(status)
                     .withHeader("Content-Type", "application/json")
                     .withBody(body)));
+  }
+
+  /**
+   * Helper that sets up WireMock to respond to a POST without a JSON body.
+   *
+   * @param path the path on which to listen
+   * @param status the response HTTP status
+   * @throws JsonProcessingException if the given response object could not be serialized
+   */
+  private void stubPostResponse(String path, int status) throws JsonProcessingException {
+
+    wm.stubFor(
+        post(urlEqualTo(path))
+            .willReturn(
+                aResponse().withStatus(status)));
   }
 
   /**

@@ -20,6 +20,7 @@
 package com.sinch.xms;
 
 import com.sinch.xms.api.AutoUpdate;
+import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupUpdate;
 import com.sinch.xms.api.MtBatchBinarySmsCreate;
@@ -74,6 +75,16 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
   @Nonnull
   public static MtBatchBinarySmsUpdate.Builder batchBinarySmsUpdate() {
     return MtBatchBinarySmsUpdate.builder();
+  }
+
+  /**
+   * Returns a freshly created builder for delivery feedback.
+   *
+   * @return a builder of delivery feedback
+   */
+  @Nonnull
+  public static FeedbackDeliveryCreate.Builder deliveryFeedback() {
+    return FeedbackDeliveryCreate.builder();
   }
 
   /**
