@@ -3431,10 +3431,7 @@ public class ApiConnectionIT {
    */
   private void stubPostResponse(String path, int status) throws JsonProcessingException {
 
-    wm.stubFor(
-        post(urlEqualTo(path))
-            .willReturn(
-                aResponse().withStatus(status)));
+    wm.stubFor(post(urlEqualTo(path)).willReturn(aResponse().withStatus(status)));
   }
 
   /**

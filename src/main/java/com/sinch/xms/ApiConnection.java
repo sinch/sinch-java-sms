@@ -1058,7 +1058,7 @@ public abstract class ApiConnection implements Closeable {
    *
    * @param id identifier of the batch
    * @param feedbackDeliveryCreate create delivery feedback input with recipients
-   * @param callback  callback that is activated at call completion
+   * @param callback callback that is activated at call completion
    * @return a future yielding no value
    */
   public Future<Void> createDeliveryFeedbackAsync(
