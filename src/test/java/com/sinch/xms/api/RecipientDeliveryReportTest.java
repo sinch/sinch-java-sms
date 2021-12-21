@@ -48,6 +48,9 @@ public class RecipientDeliveryReportTest {
             .at(time1)
             .operatorStatusAt(time2)
             .operator("818181")
+            .encoding("GSM")
+            .clientReference("client_ref")
+            .numberOfMessageParts(1)
             .build();
 
     String expected =
@@ -62,7 +65,42 @@ public class RecipientDeliveryReportTest {
                 "  'status_message': 'status message',",
                 "  'operator': '818181',",
                 "  'at': '2016-10-02T09:34:28.542Z',",
-                "  'operator_status_at': '2016-11-02T09:34:28.542Z'",
+                "  'operator_status_at': '2016-11-02T09:34:28.542Z',",
+                "  'client_reference': 'client_ref',",
+                "  'encoding': 'GSM',",
+                "  'number_of_message_parts': 1",
+                "}")
+            .replace('\'', '"');
+
+    String actual = json.writeValueAsString(input);
+
+    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
+  }
+
+  @Test
+  public void canSerializeMandatoryFields() throws Exception {
+    OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+
+    RecipientDeliveryReport input =
+        new RecipientDeliveryReport.Builder()
+            .batchId(BatchId.of("batchid"))
+            .recipient("12345")
+            .code(10)
+            .status(DeliveryStatus.DELIVERED)
+            .at(time1)
+            .build();
+
+    String expected =
+        Utils.join(
+                "\n",
+                "{",
+                "  'batch_id': 'batchid',",
+                "  'recipient': '12345',",
+                "  'type': 'recipient_delivery_report_sms',",
+                "  'code': 10,",
+                "  'status': 'Delivered',",
+                "  'at': '2016-10-02T09:34:28.542Z'",
                 "}")
             .replace('\'', '"');
 
@@ -85,6 +123,30 @@ public class RecipientDeliveryReportTest {
             .statusMessage("status message")
             .at(time1)
             .operatorStatusAt(time2)
+            .encoding("GSM")
+            .numberOfMessageParts(1)
+            .clientReference("client_ref")
+            .build();
+
+    String input = json.writeValueAsString(expected);
+
+    RecipientDeliveryReport actual = json.readValue(input, RecipientDeliveryReport.class);
+
+    assertThat(actual, is(expected));
+  }
+
+  @Test
+  public void canDeserializeMandatoryFields() throws Exception {
+    OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+
+    RecipientDeliveryReport expected =
+        new RecipientDeliveryReport.Builder()
+            .batchId(BatchId.of("batchid"))
+            .recipient("1235")
+            .code(10)
+            .status(DeliveryStatus.DELIVERED)
+            .at(time1)
             .build();
 
     String input = json.writeValueAsString(expected);

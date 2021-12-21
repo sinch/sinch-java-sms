@@ -123,4 +123,12 @@ public abstract class RecipientDeliveryReport {
   @Nullable
   @JsonProperty("client_reference")
   public abstract String clientReference();
+
+  @Nullable
+  @JsonProperty("encoding")
+  public abstract String encoding();
+
+  @Nullable
+  @JsonProperty("number_of_message_parts")
+  public abstract Integer numberOfMessageParts();
 }
