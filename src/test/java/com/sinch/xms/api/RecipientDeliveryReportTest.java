@@ -80,7 +80,6 @@ public class RecipientDeliveryReportTest {
   @Test
   public void canSerializeMandatoryFields() throws Exception {
     OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
-    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
     RecipientDeliveryReport input =
         new RecipientDeliveryReport.Builder()
@@ -138,7 +137,6 @@ public class RecipientDeliveryReportTest {
   @Test
   public void canDeserializeMandatoryFields() throws Exception {
     OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
-    OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
     RecipientDeliveryReport expected =
         new RecipientDeliveryReport.Builder()
