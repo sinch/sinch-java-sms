@@ -127,6 +127,22 @@ public abstract class MtBatchSmsCreate {
   public abstract String clientReference();
 
   /**
+   * Shows message on screen without user interaction while not saving the message to the inbox.
+   * Defaults to false.
+   */
+  @Nullable
+  @JsonProperty("flash_message")
+  public abstract Boolean flashMessage();
+
+  /**
+   * Message will be dispatched only if it is not split to more parts than Max Number of Message
+   * Parts. Defaults to false.
+   */
+  @Nullable
+  @JsonProperty("max_number_of_message_parts")
+  public abstract Integer maxNumberOfMessageParts();
+
+  /**
    * The DLT principal entity identifier to attach to this message.
    *
    * @return a principal entity id
