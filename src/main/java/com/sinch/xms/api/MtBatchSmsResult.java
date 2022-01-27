@@ -137,7 +137,11 @@ public abstract class MtBatchSmsResult {
   @JsonProperty("client_reference")
   public abstract String clientReference();
 
-  /** Shows message on screen without user interaction while not saving the message to the inbox. */
+  /**
+   * Shows message on screen without user interaction while not saving the message to the inbox.
+   *
+   * @return boolean indicating if it's a flash message
+   */
   @Nullable
   @JsonProperty("flash_message")
   public abstract Boolean flashMessage();
@@ -145,6 +149,8 @@ public abstract class MtBatchSmsResult {
   /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
    * Parts.
+   *
+   * @return the maximum allowed number of message parts
    */
   @Nullable
   @JsonProperty("max_number_of_message_parts")

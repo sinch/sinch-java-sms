@@ -129,6 +129,8 @@ public abstract class MtBatchSmsCreate {
   /**
    * Shows message on screen without user interaction while not saving the message to the inbox.
    * Defaults to false.
+   *
+   * @return boolean indicating if it's a flash message
    */
   @Nullable
   @JsonProperty("flash_message")
@@ -137,6 +139,8 @@ public abstract class MtBatchSmsCreate {
   /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
    * Parts. Defaults to false.
+   *
+   * @return the maximum allowed number of message parts
    */
   @Nullable
   @JsonProperty("max_number_of_message_parts")
