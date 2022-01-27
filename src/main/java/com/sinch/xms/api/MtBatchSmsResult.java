@@ -70,6 +70,7 @@ public abstract class MtBatchSmsResult {
    *
    * @return a type of report, <code>ReportType.NONE</code> if not provided
    */
+  @JsonProperty("delivery_report")
   public abstract ReportType deliveryReport();
 
   /**
