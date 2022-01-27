@@ -71,6 +71,7 @@ import com.sinch.xms.api.PagedBatchResult;
 import com.sinch.xms.api.PagedGroupResult;
 import com.sinch.xms.api.PagedInboundsResult;
 import com.sinch.xms.api.RecipientDeliveryReport;
+import com.sinch.xms.api.ReportType;
 import com.sinch.xms.api.Tags;
 import com.sinch.xms.api.TagsUpdate;
 import java.io.IOException;
@@ -152,6 +153,8 @@ public class ApiConnectionIT {
             .body(request.body())
             .udh(request.udh())
             .canceled(false)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .id(batchId)
             .createdAt(time)
             .modifiedAt(time)
@@ -194,6 +197,8 @@ public class ApiConnectionIT {
 
     MtBatchTextSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender(request.sender())
             .recipients(request.recipients())
             .body(request.body())
@@ -246,6 +251,8 @@ public class ApiConnectionIT {
 
     MtBatchTextSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender(request.sender())
             .recipients(request.recipients())
             .body(request.body())
@@ -533,6 +540,8 @@ public class ApiConnectionIT {
             .recipients(request.recipients())
             .body(request.body())
             .udh(request.udh())
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .canceled(false)
             .id(batchId)
             .createdAt(time)
@@ -576,6 +585,8 @@ public class ApiConnectionIT {
 
     MtBatchTextSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender(request.sender())
             .recipients(request.recipients())
             .body(request.body())
@@ -622,6 +633,8 @@ public class ApiConnectionIT {
 
     MtBatchTextSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender(request.sender())
             .addRecipient("123")
             .body(request.body())
@@ -675,6 +688,8 @@ public class ApiConnectionIT {
             .addRecipient("123")
             .body(request.body())
             .udh((byte) 1, (byte) 0xff)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .canceled(false)
             .id(batchId)
             .createdAt(time)
@@ -712,6 +727,8 @@ public class ApiConnectionIT {
 
     final MtBatchSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender("12345")
             .addRecipient("123456789", "987654321")
             .body("Hello, world!")
@@ -750,6 +767,8 @@ public class ApiConnectionIT {
 
     final MtBatchSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender("12345")
             .addRecipient("123456789", "987654321")
             .body("Hello, world!")
@@ -801,6 +820,8 @@ public class ApiConnectionIT {
             .addRecipient("123456789", "987654321")
             .body((byte) 0xf0, (byte) 0x0f)
             .udh((byte) 0x50, (byte) 0x05)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .canceled(false)
             .id(batchId)
             .createdAt(time)
@@ -1018,6 +1039,8 @@ public class ApiConnectionIT {
 
     MtBatchSmsResult expected =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender("12345")
             .addRecipient("123456789", "987654321")
             .body("Hello, world!")
@@ -1058,6 +1081,8 @@ public class ApiConnectionIT {
     // Set up the first request (the one that will be delayed).
     MtBatchSmsResult expected1 =
         MtBatchTextSmsResult.builder()
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .sender("12345")
             .addRecipient("123456789", "987654321")
             .body("Hello, world!")
@@ -1086,6 +1111,8 @@ public class ApiConnectionIT {
             .addRecipient("123456789", "987654321")
             .body("Hello, world!".getBytes())
             .udh((byte) 1)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .canceled(true)
             .id(TestUtils.freshBatchId())
             .createdAt(OffsetDateTime.now())
@@ -1252,6 +1279,8 @@ public class ApiConnectionIT {
             .totalSize(2)
             .addContent(
                 MtBatchTextSmsResult.builder()
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .id(TestUtils.freshBatchId())
                     .body("body")
                     .canceled(false)
@@ -1274,9 +1303,13 @@ public class ApiConnectionIT {
                     .body((byte) 0)
                     .udh((byte) 1)
                     .canceled(false)
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .build())
             .addContent(
                 MtBatchTextSmsResult.builder()
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .id(TestUtils.freshBatchId())
                     .body("body")
                     .canceled(false)
@@ -1329,6 +1362,8 @@ public class ApiConnectionIT {
             .totalSize(3)
             .addContent(
                 MtBatchTextSmsResult.builder()
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .id(TestUtils.freshBatchId())
                     .body("body")
                     .canceled(false)
@@ -1351,9 +1386,13 @@ public class ApiConnectionIT {
                     .body((byte) 0)
                     .udh((byte) 1)
                     .canceled(false)
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .build())
             .addContent(
                 MtBatchTextSmsResult.builder()
+                    .flashMessage(false)
+                    .deliveryReport(ReportType.NONE)
                     .id(TestUtils.freshBatchId())
                     .body("body")
                     .canceled(false)
