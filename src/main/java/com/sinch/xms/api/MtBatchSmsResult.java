@@ -142,9 +142,8 @@ public abstract class MtBatchSmsResult {
    *
    * @return boolean indicating if it's a flash message
    */
-  @Nullable
   @JsonProperty("flash_message")
-  public abstract Boolean flashMessage();
+  public abstract boolean flashMessage();
 
   /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
