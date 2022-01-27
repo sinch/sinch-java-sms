@@ -68,9 +68,8 @@ public abstract class MtBatchSmsResult {
   /**
    * The type of delivery report used for this batch.
    *
-   * @return a type of report or <code>null</code> for the default type
+   * @return a type of report, <code>ReportType.NONE</code> if not provided
    */
-  @Nullable
   public abstract ReportType deliveryReport();
 
   /**
