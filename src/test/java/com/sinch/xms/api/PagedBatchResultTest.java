@@ -80,6 +80,8 @@ public class PagedBatchResultTest {
             .id(batchId1)
             .createdAt(smsTime)
             .modifiedAt(smsTime)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .build();
 
     MtBatchSmsResult batchResult2 =
@@ -88,6 +90,8 @@ public class PagedBatchResultTest {
             .id(batchId2)
             .body("foobar".getBytes(TestUtils.US_ASCII))
             .udh(new byte[] {1, 2, 3})
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .build();
 
     PagedBatchResult input =
@@ -117,6 +121,8 @@ public class PagedBatchResultTest {
                 "      'canceled': false,",
                 "      'id': '" + batchId1 + "',",
                 "      'from': '12345',",
+                "      'flash_message': false,",
+                "      'delivery_report': 'none',",
                 "      'created_at': " + smsTimeString + ",",
                 "      'modified_at': " + smsTimeString + "",
                 "    },",
@@ -131,6 +137,8 @@ public class PagedBatchResultTest {
                 "      'canceled': false,",
                 "      'id': '" + batchId2 + "',",
                 "      'from': '12345',",
+                "      'flash_message': false,",
+                "      'delivery_report': 'none',",
                 "      'created_at': " + smsTimeString + ",",
                 "      'modified_at': " + smsTimeString + "",
                 "    }",
@@ -156,6 +164,8 @@ public class PagedBatchResultTest {
             .body("Hello, world!")
             .canceled(false)
             .id(batchId1)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .createdAt(smsTime)
             .modifiedAt(smsTime)
             .build();
@@ -164,6 +174,8 @@ public class PagedBatchResultTest {
         new MtBatchBinarySmsResult.Builder()
             .using(batchResult1)
             .id(batchId2)
+            .flashMessage(false)
+            .deliveryReport(ReportType.NONE)
             .body("Hello, again!".getBytes())
             .udh("udh".getBytes())
             .build();
