@@ -98,7 +98,8 @@ public abstract class MtBatchSmsCreate {
   public abstract URI callbackUrl();
 
   /**
-   * The boolean value which determines if feedback is allowed to be sent
+   * Send feedback if your system can confirm successful message delivery. Feedback can only be
+   * provided if feedback_enabled was set when batch was submitted.
    *
    * @return boolean value
    */

@@ -146,8 +146,8 @@ public abstract class MtBatchSmsResult {
   public abstract boolean flashMessage();
 
   /**
-   * Send feedback if your system can confirm successful message delivery.
-   * Feedback can only be provided if feedback_enabled was set when batch was submitted.
+   * Send feedback if your system can confirm successful message delivery. Feedback can only be
+   * provided if feedback_enabled was set when batch was submitted.
    *
    * @return boolean indicating if feedback is enabled
    */
