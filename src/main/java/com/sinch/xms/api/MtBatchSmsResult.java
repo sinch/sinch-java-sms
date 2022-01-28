@@ -146,6 +146,15 @@ public abstract class MtBatchSmsResult {
   public abstract boolean flashMessage();
 
   /**
+   * Send feedback if your system can confirm successful message delivery.
+   * Feedback can only be provided if feedback_enabled was set when batch was submitted.
+   *
+   * @return boolean indicating if feedback is enabled
+   */
+  @JsonProperty("feedback_enabled")
+  public abstract boolean feedbackEnabled();
+
+  /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
    * Parts.
    *
