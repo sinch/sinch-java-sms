@@ -43,6 +43,7 @@ public class MtBatchBinarySmsResultTest {
                 "  'from': '1234',",
                 "  'to': [ '987654321' ],",
                 "  'canceled': false,",
+                "  'feedback_enabled': false,",
                 "  'flash_message': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
@@ -72,6 +73,7 @@ public class MtBatchBinarySmsResultTest {
         .sender("1234")
         .addRecipient("987654321")
         .flashMessage(false)
+        .feedbackEnabled(false)
         .deliveryReport(ReportType.NONE)
         .body("Hello, world!".getBytes(TestUtils.US_ASCII))
         .udh(new byte[] {1, 2, 3, 4})

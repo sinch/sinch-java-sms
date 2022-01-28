@@ -103,7 +103,7 @@ public class ApiConnectionIT {
 
   /**
    * A convenient {@link FutureCallback} for use in tests. By default all callback methods will call
-   * {@link #fail(String)}. Override the one that should succeed.
+   * {@link #failed(Exception)}. Override the one that should succeed.
    *
    * @param <T> the callback result type
    */
@@ -154,6 +154,7 @@ public class ApiConnectionIT {
             .udh(request.udh())
             .canceled(false)
             .flashMessage(false)
+            .feedbackEnabled(false)
             .deliveryReport(ReportType.NONE)
             .id(batchId)
             .createdAt(time)
@@ -3413,7 +3414,6 @@ public class ApiConnectionIT {
    *
    * @param response the response to give, serialized to JSON
    * @param path the path on which to listen
-   * @param status the response HTTP status
    * @throws JsonProcessingException if the given response object could not be serialized
    */
   private void stubDeleteResponse(Object response, String path) throws JsonProcessingException {

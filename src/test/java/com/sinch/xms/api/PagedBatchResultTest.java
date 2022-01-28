@@ -81,6 +81,7 @@ public class PagedBatchResultTest {
             .createdAt(smsTime)
             .modifiedAt(smsTime)
             .flashMessage(false)
+            .feedbackEnabled(false)
             .deliveryReport(ReportType.NONE)
             .build();
 
@@ -91,6 +92,7 @@ public class PagedBatchResultTest {
             .body("foobar".getBytes(TestUtils.US_ASCII))
             .udh(new byte[] {1, 2, 3})
             .flashMessage(false)
+            .feedbackEnabled(false)
             .deliveryReport(ReportType.NONE)
             .build();
 
@@ -119,6 +121,7 @@ public class PagedBatchResultTest {
                 "      ],",
                 "      'body': 'Hello, world!',",
                 "      'canceled': false,",
+                "      'feedback_enabled': false,",
                 "      'id': '" + batchId1 + "',",
                 "      'from': '12345',",
                 "      'flash_message': false,",
@@ -135,6 +138,7 @@ public class PagedBatchResultTest {
                 "      'body': 'Zm9vYmFy',",
                 "      'udh': '010203',",
                 "      'canceled': false,",
+                "      'feedback_enabled': false,",
                 "      'id': '" + batchId2 + "',",
                 "      'from': '12345',",
                 "      'flash_message': false,",
@@ -165,6 +169,7 @@ public class PagedBatchResultTest {
             .canceled(false)
             .id(batchId1)
             .flashMessage(false)
+            .feedbackEnabled(false)
             .deliveryReport(ReportType.NONE)
             .createdAt(smsTime)
             .modifiedAt(smsTime)
@@ -175,6 +180,7 @@ public class PagedBatchResultTest {
             .using(batchResult1)
             .id(batchId2)
             .flashMessage(false)
+            .feedbackEnabled(false)
             .deliveryReport(ReportType.NONE)
             .body("Hello, again!".getBytes())
             .udh("udh".getBytes())

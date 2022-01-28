@@ -45,6 +45,7 @@ public class MtBatchTextSmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
+                "  'feedback_enabled': false,",
                 "  'flash_message': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "'",
@@ -89,6 +90,7 @@ public class MtBatchTextSmsResultTest {
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
                 "  'flash_message': false,",
+                "  'feedback_enabled': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
                 "  'parameters': {",
@@ -146,6 +148,7 @@ public class MtBatchTextSmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
+                "  'feedback_enabled': false,",
                 "  'flash_message': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
@@ -189,6 +192,7 @@ public class MtBatchTextSmsResultTest {
         .sender("1234")
         .addRecipient("987654321")
         .flashMessage(false)
+        .feedbackEnabled(false)
         .deliveryReport(ReportType.NONE)
         .body("Hello, world!")
         .canceled(false)
