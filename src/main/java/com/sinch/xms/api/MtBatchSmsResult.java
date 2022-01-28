@@ -151,8 +151,9 @@ public abstract class MtBatchSmsResult {
    *
    * @return boolean indicating if feedback is enabled
    */
+  @Nullable
   @JsonProperty("feedback_enabled")
-  public abstract boolean feedbackEnabled();
+  public abstract Boolean feedbackEnabled();
 
   /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
