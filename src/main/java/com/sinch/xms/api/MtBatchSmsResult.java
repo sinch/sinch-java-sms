@@ -68,9 +68,9 @@ public abstract class MtBatchSmsResult {
   /**
    * The type of delivery report used for this batch.
    *
-   * @return a type of report or <code>null</code> for the default type
+   * @return a type of report, <code>ReportType.NONE</code> if not provided
    */
-  @Nullable
+  @JsonProperty("delivery_report")
   public abstract ReportType deliveryReport();
 
   /**
@@ -136,6 +136,34 @@ public abstract class MtBatchSmsResult {
   @Nullable
   @JsonProperty("client_reference")
   public abstract String clientReference();
+
+  /**
+   * Shows message on screen without user interaction while not saving the message to the inbox.
+   *
+   * @return boolean indicating if it's a flash message
+   */
+  @JsonProperty("flash_message")
+  public abstract boolean flashMessage();
+
+  /**
+   * Send feedback if your system can confirm successful message delivery. Feedback can only be
+   * provided if feedback_enabled was set when batch was submitted.
+   *
+   * @return boolean indicating if feedback is enabled
+   */
+  @Nullable
+  @JsonProperty("feedback_enabled")
+  public abstract Boolean feedbackEnabled();
+
+  /**
+   * Message will be dispatched only if it is not split to more parts than Max Number of Message
+   * Parts.
+   *
+   * @return the maximum allowed number of message parts
+   */
+  @Nullable
+  @JsonProperty("max_number_of_message_parts")
+  public abstract Integer maxNumberOfMessageParts();
 
   /**
    * The DLT principal entity identifier to attach to this message.

@@ -45,6 +45,9 @@ public class MtBatchTextSmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
+                "  'feedback_enabled': false,",
+                "  'flash_message': false,",
+                "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "'",
                 "}")
             .replace('\'', '"');
@@ -86,6 +89,9 @@ public class MtBatchTextSmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
+                "  'flash_message': false,",
+                "  'feedback_enabled': false,",
+                "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
                 "  'parameters': {",
                 "    'param1': {",
@@ -142,6 +148,9 @@ public class MtBatchTextSmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'canceled': false,",
+                "  'feedback_enabled': false,",
+                "  'flash_message': false,",
+                "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
                 "  'parameters': {",
                 "    'param1': {",
@@ -182,6 +191,9 @@ public class MtBatchTextSmsResultTest {
     return new MtBatchTextSmsResult.Builder()
         .sender("1234")
         .addRecipient("987654321")
+        .flashMessage(false)
+        .feedbackEnabled(false)
+        .deliveryReport(ReportType.NONE)
         .body("Hello, world!")
         .canceled(false)
         .id(TestUtils.freshBatchId());

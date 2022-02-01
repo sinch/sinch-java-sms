@@ -98,7 +98,8 @@ public abstract class MtBatchSmsCreate {
   public abstract URI callbackUrl();
 
   /**
-   * The boolean value which determines if feedback is allowed to be sent
+   * Send feedback if your system can confirm successful message delivery. Feedback can only be
+   * provided if feedback_enabled was set when batch was submitted.
    *
    * @return boolean value
    */
@@ -125,6 +126,26 @@ public abstract class MtBatchSmsCreate {
   @Nullable
   @JsonProperty("client_reference")
   public abstract String clientReference();
+
+  /**
+   * Shows message on screen without user interaction while not saving the message to the inbox.
+   * Defaults to false.
+   *
+   * @return boolean indicating if it's a flash message
+   */
+  @Nullable
+  @JsonProperty("flash_message")
+  public abstract Boolean flashMessage();
+
+  /**
+   * Message will be dispatched only if it is not split to more parts than Max Number of Message
+   * Parts. Defaults to false.
+   *
+   * @return the maximum allowed number of message parts
+   */
+  @Nullable
+  @JsonProperty("max_number_of_message_parts")
+  public abstract Integer maxNumberOfMessageParts();
 
   /**
    * The DLT principal entity identifier to attach to this message.
