@@ -18,14 +18,14 @@ With Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </dependency>
 ```
 
 With Gradle
 
 ```xml
-implementation 'com.sinch:sdk-sms:1.0.6'
+implementation 'com.sinch:sdk-sms:1.0.7'
 ```
 
 ## Building and installing
@@ -43,7 +43,7 @@ Build .jar file
 
     $ mvn package
 
-It will give you `sdk-sms-1.0.6-jar-with-dependencies.jar`
+It will give you `sdk-sms-1.0.7-jar-with-dependencies.jar`
 
 To skip local test
 

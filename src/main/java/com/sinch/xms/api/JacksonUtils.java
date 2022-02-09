@@ -54,7 +54,8 @@ class JacksonUtils {
         return (byte[]) ctxt.handleWeirdStringValue(handledType(), value, e.getMessage());
       }
     }
-  };
+  }
+  ;
 
   /** Jackson serializer for hex encoded byte arrays. */
   static final class ByteArrayHexSerializer extends StdScalarSerializer<byte[]> {
@@ -70,7 +71,8 @@ class JacksonUtils {
         throws IOException {
       gen.writeString(Hex.encodeHexString(value));
     }
-  };
+  }
+  ;
 
   /** JSON deserializer of parameter values. */
   static final class ParameterValuesDeserializer extends StdNodeBasedDeserializer<ParameterValues> {
