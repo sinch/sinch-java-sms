@@ -19,11 +19,16 @@
  */
 package com.sinch.xms;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule;
+import com.sinch.xms.api.BatchId;
+import com.sinch.xms.api.DeliveryStatus;
+import com.sinch.xms.api.GroupId;
+import com.sinch.xms.api.ReportType;
 
 /** A Jackson object mapper suitable for use with the Sinch REST API objects. */
 public class ApiObjectMapper extends ObjectMapper {
@@ -61,5 +66,21 @@ public class ApiObjectMapper extends ObjectMapper {
     disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
     configure(SerializationFeature.INDENT_OUTPUT, prettyPrint);
+
+    /*
+     * Since jackson databind version 2.12 the @JsonValue is no longer ignored in inclusion settings
+     * https://github.com/FasterXML/jackson-databind/issues/2909
+     * to restore previous behaviour config override is needed
+     */
+    configOverride(BatchId.class)
+        .setInclude(JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL));
+    configOverride(ReportType.class)
+        .setInclude(JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL));
+    configOverride(DeliveryStatus.class)
+        .setInclude(JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL));
+    configOverride(UpdateValue.class)
+        .setInclude(JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL));
+    configOverride(GroupId.class)
+        .setInclude(JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL));
   }
 }
