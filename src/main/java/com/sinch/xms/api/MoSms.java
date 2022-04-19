@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.time.OffsetDateTime;
 import javax.annotation.Nullable;
-import org.threeten.bp.OffsetDateTime;
 
 /**
  * Base class for mobile originated messages. A mobile originated message can have either a {@link

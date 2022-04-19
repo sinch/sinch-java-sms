@@ -25,11 +25,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sinch.xms.UpdateValue;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.immutables.value.Value;
-import org.threeten.bp.OffsetDateTime;
 
 /** Objects of this type can be used to update previously submitted MT batches. */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

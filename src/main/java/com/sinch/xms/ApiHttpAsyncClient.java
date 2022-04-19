@@ -21,6 +21,7 @@ package com.sinch.xms;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.Future;
 import javax.annotation.Nonnull;
 import org.apache.http.HeaderElement;
@@ -41,7 +42,6 @@ import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
-import org.threeten.bp.Duration;
 
 /**
  * An asynchronous HTTP client used in API connections. It is configured in a way suitable for

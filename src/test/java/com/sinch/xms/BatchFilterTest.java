@@ -28,6 +28,7 @@ import static org.junit.Assume.assumeThat;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.apache.http.NameValuePair;
@@ -35,7 +36,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.threeten.bp.LocalDate;
 
 @RunWith(JUnitQuickcheck.class)
 public class BatchFilterTest {

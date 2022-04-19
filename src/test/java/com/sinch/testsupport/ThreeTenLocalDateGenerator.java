@@ -24,7 +24,7 @@ import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.generator.java.time.LocalDateGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
 /** Generator of ThreeTen LocalDate. Acts as a thin wrapper of the Java 8 LocalDate generator. */
 public class ThreeTenLocalDateGenerator extends Generator<LocalDate> {

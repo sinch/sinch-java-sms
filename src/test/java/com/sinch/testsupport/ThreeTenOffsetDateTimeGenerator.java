@@ -24,7 +24,7 @@ import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.generator.java.time.OffsetDateTimeGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-import org.threeten.bp.OffsetDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Generator of ThreeTen OffsetDateTime. Acts as a thin wrapper of the Java 8 OffsetDateTime

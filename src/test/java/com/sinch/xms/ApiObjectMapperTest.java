@@ -25,9 +25,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.sinch.testsupport.TestUtils;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import org.junit.Test;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneOffset;
 
 public class ApiObjectMapperTest {
 
