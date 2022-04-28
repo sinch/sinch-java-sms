@@ -19,7 +19,7 @@
  */
 package com.sinch.xms;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -67,7 +67,7 @@ public abstract class BatchFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDate startDate();
+  public abstract OffsetDateTime startDate();
 
   /**
    * Limits results to batches send before this date.
@@ -75,7 +75,7 @@ public abstract class BatchFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDate endDate();
+  public abstract OffsetDateTime endDate();
 
   /**
    * Limits results to batches sent from the given addresses. If empty then all origins are
