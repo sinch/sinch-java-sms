@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
-import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 /** Describes a filter for limiting results when fetching delivery reports. */
 @Value.Immutable
@@ -70,7 +70,7 @@ public abstract class DeliveryReportFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDateTime startDate();
+  public abstract OffsetDateTime startDate();
 
   /**
    * Limits results to batches send before this date.
@@ -78,7 +78,7 @@ public abstract class DeliveryReportFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDateTime endDate();
+  public abstract OffsetDateTime endDate();
 
   /**
    * Limits results to batches sent from the given addresses. If empty then all origins are
