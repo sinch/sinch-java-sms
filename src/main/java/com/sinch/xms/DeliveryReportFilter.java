@@ -20,6 +20,7 @@
 package com.sinch.xms;
 
 import com.sinch.xms.api.DeliveryStatus;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +31,6 @@ import javax.annotation.Nullable;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
-import org.threeten.bp.OffsetDateTime;
 
 /** Describes a filter for limiting results when fetching delivery reports. */
 @Value.Immutable

@@ -25,6 +25,9 @@ import static org.junit.Assert.assertThat;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.sinch.xms.api.DeliveryStatus;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import org.apache.http.NameValuePair;
@@ -32,9 +35,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneOffset;
 
 @RunWith(JUnitQuickcheck.class)
 public class DeliveryReportFilterTest {

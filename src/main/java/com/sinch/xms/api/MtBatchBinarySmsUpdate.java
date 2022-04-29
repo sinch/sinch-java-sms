@@ -24,10 +24,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sinch.xms.UpdateValue;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.threeten.bp.OffsetDateTime;
 
 /** A description of updates that can be applied to a binary SMS batch message. */
 @Value.Immutable

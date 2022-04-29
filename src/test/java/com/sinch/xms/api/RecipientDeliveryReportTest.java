@@ -25,9 +25,9 @@ import static org.junit.Assert.assertThat;
 import com.sinch.testsupport.TestUtils;
 import com.sinch.xms.ApiObjectMapper;
 import com.sinch.xms.Utils;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import org.junit.Test;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneOffset;
 
 public class RecipientDeliveryReportTest {
 

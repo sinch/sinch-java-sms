@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.threeten.bp.OffsetDateTime;
 
 /**
  * Base class for batch description classes. This contains the fields common for both {@link

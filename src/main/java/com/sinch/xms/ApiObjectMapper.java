@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sinch.xms.api.BatchId;
 import com.sinch.xms.api.DeliveryStatus;
 import com.sinch.xms.api.GroupId;
@@ -49,7 +49,7 @@ public class ApiObjectMapper extends ObjectMapper {
    * @param prettyPrint whether serialized JSON should be pretty printed
    */
   public ApiObjectMapper(boolean prettyPrint) {
-    registerModule(new ThreeTenModule());
+    registerModule(new JavaTimeModule());
     setSerializationInclusion(Include.NON_NULL);
     disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
