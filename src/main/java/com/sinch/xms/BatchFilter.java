@@ -19,6 +19,7 @@
  */
 package com.sinch.xms;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,6 @@ import javax.annotation.Nullable;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.immutables.value.Value;
-import org.threeten.bp.LocalDate;
 
 /** Describes a filter for limiting results when fetching batches. */
 @Value.Immutable
@@ -67,7 +67,7 @@ public abstract class BatchFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDate startDate();
+  public abstract OffsetDateTime startDate();
 
   /**
    * Limits results to batches send before this date.
@@ -75,7 +75,7 @@ public abstract class BatchFilter {
    * @return a date
    */
   @Nullable
-  public abstract LocalDate endDate();
+  public abstract OffsetDateTime endDate();
 
   /**
    * Limits results to batches sent from the given addresses. If empty then all origins are

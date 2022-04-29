@@ -28,6 +28,9 @@ import static org.junit.Assume.assumeThat;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import org.apache.http.NameValuePair;
@@ -35,7 +38,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.threeten.bp.LocalDate;
 
 @RunWith(JUnitQuickcheck.class)
 public class BatchFilterTest {
@@ -56,8 +58,8 @@ public class BatchFilterTest {
             .pageSize(20)
             .addSender("12345", "6789")
             .addTag("tag1", "таг2")
-            .startDate(LocalDate.of(2010, 10, 11))
-            .endDate(LocalDate.of(2011, 10, 11))
+            .startDate(LocalDate.of(2010, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
+            .endDate(LocalDate.of(2011, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
             .build();
 
     List<NameValuePair> actual = filter.toQueryParams(4);
@@ -67,8 +69,8 @@ public class BatchFilterTest {
         containsInAnyOrder(
             (NameValuePair) new BasicNameValuePair("page", "4"),
             new BasicNameValuePair("page_size", "20"),
-            new BasicNameValuePair("start_date", "2010-10-11"),
-            new BasicNameValuePair("end_date", "2011-10-11"),
+            new BasicNameValuePair("start_date", "2010-10-11T00:00Z"),
+            new BasicNameValuePair("end_date", "2011-10-11T00:00Z"),
             new BasicNameValuePair("from", "12345,6789"),
             new BasicNameValuePair("tags", "tag1,таг2")));
   }
@@ -89,8 +91,8 @@ public class BatchFilterTest {
       int pageSize,
       Set<String> senders,
       Set<String> tags,
-      LocalDate startDate,
-      LocalDate endDate)
+      OffsetDateTime startDate,
+      OffsetDateTime endDate)
       throws Exception {
     // Constrain `senders` and `tags` to strings not containing ','
     assumeThat(senders, not(hasItem(containsString(","))));

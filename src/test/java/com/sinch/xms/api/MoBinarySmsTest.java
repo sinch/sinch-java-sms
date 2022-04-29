@@ -26,9 +26,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sinch.testsupport.TestUtils;
 import com.sinch.xms.ApiObjectMapper;
 import com.sinch.xms.Utils;
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import org.junit.Test;
-import org.threeten.bp.Clock;
-import org.threeten.bp.OffsetDateTime;
 
 public class MoBinarySmsTest {
 

@@ -76,6 +76,9 @@ import com.sinch.xms.api.Tags;
 import com.sinch.xms.api.TagsUpdate;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Clock;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -95,9 +98,6 @@ import org.apache.http.entity.ContentType;
 import org.eclipse.jetty.util.ConcurrentArrayQueue;
 import org.junit.Rule;
 import org.junit.Test;
-import org.threeten.bp.Clock;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneOffset;
 
 public class ApiConnectionIT {
 
