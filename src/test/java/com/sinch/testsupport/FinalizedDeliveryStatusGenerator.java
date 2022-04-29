@@ -24,19 +24,21 @@ import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.EnumGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import com.sinch.xms.api.DeliveryStatus;
+import com.sinch.xms.api.FinalizedDeliveryStatus;
 
-/** Generator of delivery statuses. */
-public class DeliveryStatusGenerator extends Generator<DeliveryStatus> {
+/** Generator of final delivery statuses. */
+public class FinalizedDeliveryStatusGenerator extends Generator<FinalizedDeliveryStatus> {
 
-  public DeliveryStatusGenerator() {
-    super(DeliveryStatus.class);
+  public FinalizedDeliveryStatusGenerator() {
+    super(FinalizedDeliveryStatus.class);
   }
 
   @Override
-  public DeliveryStatus generate(
+  public FinalizedDeliveryStatus generate(
       SourceOfRandomness sourceOfRandomness, GenerationStatus generationStatus) {
-    return DeliveryStatus.of(
-        new EnumGenerator(Status.class).generate(sourceOfRandomness, generationStatus).name());
+    return FinalizedDeliveryStatus.of(
+        DeliveryStatus.of(
+            new EnumGenerator(Status.class).generate(sourceOfRandomness, generationStatus).name()));
   }
 
   enum Status {

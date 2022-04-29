@@ -1,2 +1,2 @@
 com.sinch.testsupport.BatchIdGenerator
-com.sinch.testsupport.DeliveryStatusGenerator
+com.sinch.testsupport.FinalizedDeliveryStatusGenerator

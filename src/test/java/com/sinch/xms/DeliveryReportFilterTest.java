@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import com.sinch.xms.api.DeliveryStatus;
+import com.sinch.xms.api.FinalizedDeliveryStatus;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -72,7 +72,7 @@ public class DeliveryReportFilterTest {
   public void generatesValidQueryParameters(
       int page,
       int pageSize,
-      Set<DeliveryStatus> statuses,
+      Set<FinalizedDeliveryStatus> statuses,
       Set<Integer> codes,
       OffsetDateTime startDate,
       OffsetDateTime endDate)

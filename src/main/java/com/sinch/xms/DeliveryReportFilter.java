@@ -19,7 +19,7 @@
  */
 package com.sinch.xms;
 
-import com.sinch.xms.api.DeliveryStatus;
+import com.sinch.xms.api.FinalizedDeliveryStatus;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public abstract class DeliveryReportFilter {
   }
 
   /**
-   * Limits results to batches sent at or after this date.
+   * Limits results to delivery reports finalized at or after this date.
    *
    * @return a date
    */
@@ -73,7 +73,7 @@ public abstract class DeliveryReportFilter {
   public abstract OffsetDateTime startDate();
 
   /**
-   * Limits results to batches send before this date.
+   * Limits results to delivery reports finalized before this date.
    *
    * @return a date
    */
@@ -81,17 +81,16 @@ public abstract class DeliveryReportFilter {
   public abstract OffsetDateTime endDate();
 
   /**
-   * Limits results to batches sent from the given addresses. If empty then all origins are
-   * included.
+   * Limits results to delivery reports having any final status from given set.
    *
-   * @return a non-null set of origins
+   * @return a non-null set of statuses
    */
-  public abstract Set<DeliveryStatus> statuses();
+  public abstract Set<FinalizedDeliveryStatus> statuses();
 
   /**
-   * Limits results to batches having <em>any</em> the given tags.
+   * Limits results to delivery reports having any code from given set.
    *
-   * @return a non-null set of tags
+   * @return a non-null set of codes
    */
   public abstract Set<Integer> codes();
 
@@ -140,7 +139,7 @@ public abstract class DeliveryReportFilter {
   private List<String> mapStatuses() {
     return statuses().stream()
         .filter(Objects::nonNull)
-        .map(DeliveryStatus::status)
+        .map(FinalizedDeliveryStatus::status)
         .collect(Collectors.toList());
   }
 }
