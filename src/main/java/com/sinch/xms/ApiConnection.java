@@ -40,6 +40,7 @@ import com.sinch.xms.api.MtBatchTextSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsUpdate;
 import com.sinch.xms.api.Page;
 import com.sinch.xms.api.PagedBatchResult;
+import com.sinch.xms.api.PagedDeliveryReportResult;
 import com.sinch.xms.api.PagedGroupResult;
 import com.sinch.xms.api.PagedInboundsResult;
 import com.sinch.xms.api.RecipientDeliveryReport;
@@ -351,6 +352,11 @@ public abstract class ApiConnection implements Closeable {
   @Nonnull
   private URI batchDeliveryReportEndpoint(BatchId batchId, List<NameValuePair> params) {
     return endpoint("/batches/" + batchId + "/delivery_report", params);
+  }
+
+  @Nonnull
+  private URI deliveryReportListEndpoint(List<NameValuePair> params) {
+    return endpoint("/delivery_reports", params);
   }
 
   @Nonnull
@@ -1028,6 +1034,47 @@ public abstract class ApiConnection implements Closeable {
 
     HttpAsyncResponseConsumer<RecipientDeliveryReport> consumer =
         jsonAsyncConsumer(RecipientDeliveryReport.class);
+
+    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
+  }
+
+  /**
+   * Creates a page fetcher to retrieve a paged delivery report list for given criteria.
+   *
+   * @param filter the delivery report filter
+   * @return the desired delivery report page
+   */
+  public PagedFetcher<RecipientDeliveryReport> fetchDeliveryReports(
+      final DeliveryReportFilter filter) {
+    return new PagedFetcher<RecipientDeliveryReport>() {
+
+      @Override
+      Future<Page<RecipientDeliveryReport>> fetchAsync(
+          int page, FutureCallback<Page<RecipientDeliveryReport>> callback) {
+        return fetchDeliveryReports(page, filter, callbackWrapper().wrap(callback));
+      }
+    };
+  }
+
+  /**
+   * Fetches the given page in a paged delivery report list for given criteria.
+   *
+   * @param page the page to fetch
+   * @param filter the delivery report filter
+   * @param callback a callback that is activated at call completion
+   * @return a future page
+   */
+  private Future<Page<RecipientDeliveryReport>> fetchDeliveryReports(
+      int page,
+      final DeliveryReportFilter filter,
+      FutureCallback<Page<RecipientDeliveryReport>> callback) {
+    List<NameValuePair> params = filter.toQueryParams(page);
+    HttpGet req = get(deliveryReportListEndpoint(params));
+
+    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
+
+    HttpAsyncResponseConsumer<Page<RecipientDeliveryReport>> consumer =
+        jsonAsyncConsumer(PagedDeliveryReportResult.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }

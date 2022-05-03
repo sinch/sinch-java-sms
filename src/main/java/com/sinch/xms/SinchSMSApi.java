@@ -176,4 +176,14 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
   public static BatchDeliveryReportParams.Builder batchDeliveryReportParams() {
     return BatchDeliveryReportParams.builder();
   }
+
+  /**
+   * Returns a freshly created builder of delivery report filters.
+   *
+   * @return a builder of delivery report filters
+   */
+  @Nonnull
+  public static DeliveryReportFilter.Builder deliveryReportFilter() {
+    return DeliveryReportFilter.builder();
+  }
 }

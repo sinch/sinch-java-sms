@@ -68,6 +68,7 @@ import com.sinch.xms.api.MtBatchTextSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsUpdate;
 import com.sinch.xms.api.Page;
 import com.sinch.xms.api.PagedBatchResult;
+import com.sinch.xms.api.PagedDeliveryReportResult;
 import com.sinch.xms.api.PagedGroupResult;
 import com.sinch.xms.api.PagedInboundsResult;
 import com.sinch.xms.api.RecipientDeliveryReport;
@@ -1597,6 +1598,55 @@ public class ApiConnectionIT {
 
     try {
       RecipientDeliveryReport actual = conn.fetchDeliveryReport(batchId, recipient);
+      assertThat(actual, is(expected));
+    } finally {
+      conn.close();
+    }
+
+    verifyGetRequest(path);
+  }
+
+  @Test
+  public void canFetchDeliveryReports() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+    String recipient = "987654321";
+    DeliveryReportFilter filter = SinchSMSApi.deliveryReportFilter().build();
+
+    String path = "/v1/" + spid + "/delivery_reports?page=0";
+
+    final RecipientDeliveryReport expected1 =
+        RecipientDeliveryReport.builder()
+            .batchId(batchId)
+            .recipient(recipient)
+            .code(200)
+            .status(DeliveryStatus.ABORTED)
+            .statusMessage("this is the status")
+            .operator("10101")
+            .at(OffsetDateTime.now())
+            .operatorStatusAt(OffsetDateTime.now(Clock.systemUTC()))
+            .build();
+
+    final Page<RecipientDeliveryReport> expected =
+        PagedDeliveryReportResult.builder()
+            .page(0)
+            .size(1)
+            .totalSize(1)
+            .addContent(expected1)
+            .build();
+
+    stubGetResponse(expected, path);
+
+    ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start();
+
+    try {
+      PagedFetcher<RecipientDeliveryReport> fetcher = conn.fetchDeliveryReports(filter);
+      Page<RecipientDeliveryReport> actual = fetcher.fetch(0);
       assertThat(actual, is(expected));
     } finally {
       conn.close();
