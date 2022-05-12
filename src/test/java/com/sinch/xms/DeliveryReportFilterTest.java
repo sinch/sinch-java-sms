@@ -55,6 +55,7 @@ public class DeliveryReportFilterTest {
             .pageSize(20)
             .startDate(LocalDate.of(2010, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
             .endDate(LocalDate.of(2011, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
+            .clientReference("myReference")
             .build();
 
     List<NameValuePair> actual = filter.toQueryParams(4);
@@ -65,7 +66,8 @@ public class DeliveryReportFilterTest {
             new BasicNameValuePair("page", "4"),
             new BasicNameValuePair("page_size", "20"),
             new BasicNameValuePair("start_date", "2010-10-11T00:00Z"),
-            new BasicNameValuePair("end_date", "2011-10-11T00:00Z")));
+            new BasicNameValuePair("end_date", "2011-10-11T00:00Z"),
+            new BasicNameValuePair("client_reference", "myReference")));
   }
 
   @Property
@@ -75,7 +77,8 @@ public class DeliveryReportFilterTest {
       Set<FinalizedDeliveryStatus> statuses,
       Set<Integer> codes,
       OffsetDateTime startDate,
-      OffsetDateTime endDate)
+      OffsetDateTime endDate,
+      String clientReference)
       throws Exception {
 
     DeliveryReportFilter filter =
@@ -85,6 +88,7 @@ public class DeliveryReportFilterTest {
             .codes(codes)
             .startDate(startDate)
             .endDate(endDate)
+            .clientReference(clientReference)
             .build();
 
     List<NameValuePair> params = filter.toQueryParams(page);

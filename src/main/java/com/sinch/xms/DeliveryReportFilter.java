@@ -95,6 +95,15 @@ public abstract class DeliveryReportFilter {
   public abstract Set<Integer> codes();
 
   /**
+   * Limits results to delivery reports with the specified client reference. If empty then all
+   * client references are eligible.
+   *
+   * @return a client reference
+   */
+  @Nullable
+  public abstract String clientReference();
+
+  /**
    * Formats this filter as an URL encoded list of query parameters.
    *
    * @param page the page to request
@@ -124,6 +133,10 @@ public abstract class DeliveryReportFilter {
 
     if (endDate() != null) {
       params.add(new BasicNameValuePair("end_date", endDate().toString()));
+    }
+
+    if (clientReference() != null) {
+      params.add(new BasicNameValuePair("client_reference", clientReference()));
     }
 
     return params;
