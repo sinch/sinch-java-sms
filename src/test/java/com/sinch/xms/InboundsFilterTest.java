@@ -57,7 +57,6 @@ public class InboundsFilterTest {
             .addRecipient("12345", "9876")
             .startDate(LocalDate.of(2010, 11, 12))
             .endDate(LocalDate.of(2011, 11, 12))
-            .clientReference("myReference")
             .build();
 
     List<NameValuePair> actual = filter.toQueryParams(4);
@@ -69,8 +68,7 @@ public class InboundsFilterTest {
             new BasicNameValuePair("to", "12345,9876"),
             new BasicNameValuePair("page_size", "20"),
             new BasicNameValuePair("start_date", "2010-11-12"),
-            new BasicNameValuePair("end_date", "2011-11-12"),
-            new BasicNameValuePair("client_reference", "myReference")));
+            new BasicNameValuePair("end_date", "2011-11-12")));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -80,12 +78,7 @@ public class InboundsFilterTest {
 
   @Property
   public void generatesValidQueryParameters(
-      int page,
-      int pageSize,
-      Set<String> to,
-      LocalDate startDate,
-      LocalDate endDate,
-      String clientReference)
+      int page, int pageSize, Set<String> to, LocalDate startDate, LocalDate endDate)
       throws Exception {
     // Constrain `to` to strings not containing ','
     assumeThat(to, not(hasItem(containsString(","))));
@@ -96,7 +89,6 @@ public class InboundsFilterTest {
             .recipients(to)
             .startDate(startDate)
             .endDate(endDate)
-            .clientReference(clientReference)
             .build();
 
     List<NameValuePair> params = filter.toQueryParams(page);

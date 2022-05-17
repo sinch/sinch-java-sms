@@ -85,15 +85,6 @@ public abstract class InboundsFilter {
    */
   public abstract Set<String> recipients();
 
-  /**
-   * Limits results to inbound messages sent with the specified client reference. If empty then all
-   * client references are eligible.
-   *
-   * @return a client reference
-   */
-  @Nullable
-  public abstract String clientReference();
-
   /** Verifies that this filter is in a reasonable state. */
   @Value.Check
   protected void check() {
@@ -130,10 +121,6 @@ public abstract class InboundsFilter {
 
     if (!recipients().isEmpty()) {
       params.add(new BasicNameValuePair("to", Utils.join(",", recipients())));
-    }
-
-    if (clientReference() != null) {
-      params.add(new BasicNameValuePair("client_reference", clientReference()));
     }
 
     return params;
