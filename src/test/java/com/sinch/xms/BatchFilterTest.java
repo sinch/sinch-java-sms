@@ -60,6 +60,7 @@ public class BatchFilterTest {
             .addTag("tag1", "таг2")
             .startDate(LocalDate.of(2010, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
             .endDate(LocalDate.of(2011, 10, 11).atStartOfDay().atOffset(ZoneOffset.UTC))
+            .clientReference("myReference")
             .build();
 
     List<NameValuePair> actual = filter.toQueryParams(4);
@@ -72,7 +73,8 @@ public class BatchFilterTest {
             new BasicNameValuePair("start_date", "2010-10-11T00:00Z"),
             new BasicNameValuePair("end_date", "2011-10-11T00:00Z"),
             new BasicNameValuePair("from", "12345,6789"),
-            new BasicNameValuePair("tags", "tag1,таг2")));
+            new BasicNameValuePair("tags", "tag1,таг2"),
+            new BasicNameValuePair("client_reference", "myReference")));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -92,7 +94,8 @@ public class BatchFilterTest {
       Set<String> senders,
       Set<String> tags,
       OffsetDateTime startDate,
-      OffsetDateTime endDate)
+      OffsetDateTime endDate,
+      String clientReference)
       throws Exception {
     // Constrain `senders` and `tags` to strings not containing ','
     assumeThat(senders, not(hasItem(containsString(","))));
@@ -105,6 +108,7 @@ public class BatchFilterTest {
             .tags(tags)
             .startDate(startDate)
             .endDate(endDate)
+            .clientReference(clientReference)
             .build();
 
     List<NameValuePair> params = filter.toQueryParams(page);

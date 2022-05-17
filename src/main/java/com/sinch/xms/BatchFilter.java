@@ -92,6 +92,15 @@ public abstract class BatchFilter {
    */
   public abstract Set<String> tags();
 
+  /**
+   * Limits results to batches sent with the specified client reference. If empty then all client
+   * references are eligible.
+   *
+   * @return a client reference
+   */
+  @Nullable
+  public abstract String clientReference();
+
   /** Verifies that the object is in a reasonable state. */
   @Value.Check
   protected void check() {
@@ -138,6 +147,10 @@ public abstract class BatchFilter {
 
     if (!tags().isEmpty()) {
       params.add(new BasicNameValuePair("tags", Utils.join(",", tags())));
+    }
+
+    if (clientReference() != null) {
+      params.add(new BasicNameValuePair("client_reference", clientReference()));
     }
 
     return params;
