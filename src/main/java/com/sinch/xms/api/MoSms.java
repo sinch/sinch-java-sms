@@ -85,13 +85,4 @@ public abstract class MoSms {
    */
   @JsonProperty("received_at")
   public abstract OffsetDateTime receivedAt();
-
-  /**
-   * Client reference of the message, if available.
-   *
-   * @return the client reference
-   */
-  @JsonProperty("client_reference")
-  @Nullable
-  public abstract String clientReference();
 }
