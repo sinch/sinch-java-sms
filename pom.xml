@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sinch</groupId>
   <artifactId>sdk-sms</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>SDK for Sinch SMS</name>
   <description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
@@ -29,8 +29,8 @@
 
   <scm>
     <url>https://github.com/sinch/sinch-java-sms</url>
-    <connection>scm:git:git://github.com/sinch/sinch-java-sms.git</connection>
-    <developerConnection>scm:git:git@github.com:sinch/sinch-java-sms.git</developerConnection>
+    <connection>scm:git:https://github.com/sinch/sinch-java-sms.git</connection>
+    <developerConnection>scm:git:https://github.com/sinch/sinch-java-sms.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -69,19 +69,6 @@
     <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
     <owasp.suppression.file>${basedir}/suppression.xml</owasp.suppression.file>
   </properties>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <name>Maven Central Snapshot Repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <name>Maven Central Staging Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
   <build>
     <plugins>
@@ -220,9 +207,8 @@
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <tagNameFormat>v@{project.version}</tagNameFormat>
-          <useReleaseProfile>false</useReleaseProfile>
-          <releaseProfiles>release</releaseProfiles>
-          <goals>deploy</goals>
+          <useReleaseProfile>true</useReleaseProfile>
+          <releaseProfiles>internal-release</releaseProfiles>
         </configuration>
       </plugin>
 
