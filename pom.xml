@@ -20,6 +20,13 @@
     </license>
   </licenses>
 
+  <parent>
+    <groupId>com.sinch</groupId>
+    <artifactId>sdk-parent</artifactId>
+    <version>1.0</version>
+    <relativePath>parent-pom.xml</relativePath>
+  </parent>
+
   <scm>
     <url>https://github.com/sinch/sinch-java-sms</url>
     <connection>scm:git:git://github.com/sinch/sinch-java-sms.git</connection>
