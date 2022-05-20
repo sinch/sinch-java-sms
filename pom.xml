@@ -25,7 +25,7 @@
       <id>internal-release</id>
       <activation>
         <property>
-          <name>useTestRepo</name>
+          <name>useInternalRepo</name>
           <value>true</value>
         </property>
       </activation>
@@ -62,7 +62,7 @@
       <id>prod-repository</id>
       <activation>
         <property>
-          <name>!useTestRepo</name>
+          <name>!useInternalRepo</name>
         </property>
       </activation>
       <properties>
