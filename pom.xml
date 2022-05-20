@@ -34,11 +34,11 @@
       <distributionManagement>
         <repository>
           <id>clx-releases</id>
-          <url>${internal.url}/repository/clx-releases-hosted/</url>
+          <url>${env.REPO_URL}/repository/clx-releases-hosted/</url>
         </repository>
         <snapshotRepository>
           <id>clx-snapshots</id>
-          <url>${internal.url}/repository/clx-snapshots-hosted/</url>
+          <url>${env.REPO_URL}/repository/clx-snapshots-hosted/</url>
         </snapshotRepository>
       </distributionManagement>
       <build>
@@ -50,7 +50,7 @@
             <extensions>true</extensions>
             <configuration>
               <serverId>clx-snapshots</serverId>
-              <nexusUrl>${internal.url}</nexusUrl>
+              <nexusUrl>${env.REPO_URL}</nexusUrl>
               <skipStaging>true</skipStaging>
             </configuration>
           </plugin>
