@@ -59,7 +59,7 @@
     </profile>
 
     <profile>
-      <id>prod-repository</id>
+      <id>public-release</id>
       <activation>
         <property>
           <name>!useInternalRepo</name>
