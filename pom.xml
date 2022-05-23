@@ -49,7 +49,7 @@
             <version>1.6.13</version>
             <extensions>true</extensions>
             <configuration>
-              <serverId>clx-snapshots</serverId>
+              <serverId>clx-releases</serverId>
               <nexusUrl>${env.REPO_URL}</nexusUrl>
               <skipStaging>true</skipStaging>
             </configuration>
