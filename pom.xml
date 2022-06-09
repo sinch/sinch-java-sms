@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sinch</groupId>
   <artifactId>sdk-sms</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>SDK for Sinch SMS</name>
   <description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
@@ -489,7 +489,8 @@
           <links>
             <link>https://docs.oracle.com/javase/8/docs/api</link>
             <link>https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs</link>
-            <link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
+            <link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs
+            </link>
             <link>http://www.threeten.org/threetenbp/apidocs</link>
           </links>
         </configuration>
