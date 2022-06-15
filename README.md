@@ -52,15 +52,7 @@ mvn package -Dmaven.test.skip=true
 
 in your terminal. The project will then be compiled and tested before finally being installed in your local repository.
 
-## Developing in Eclipse
-
-To import the project into Eclipse it is necessary to install the m2e plugin and the m2e-apt connector. Both are
-available at the Eclipse Marketplace. Before importing the project ensure that automatic configuration of JDT APT is
-enabled. The Immutables website has
-[good instructions](https://immutables.github.io/apt.html#eclipse)
-with screenshots.
-
-After this initial setup development in Eclipse should be reasonably straight forward.
+We recommend enabling annotation processing in your IDE https://immutables.github.io/apt.html.
 
 ## Quick Start
 
