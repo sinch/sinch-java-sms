@@ -32,21 +32,23 @@ implementation 'com.sinch:sdk-sms:1.1.0'
 This project uses the Maven build tool, and the typical Maven goals are supported. To install the package to your local
 Maven repository it therefore is sufficient to execute.
 
-```javascript
+```bash
 git clone https://github.com/sinch/sinch-java-sms.git
 cd sinch-java-sms    
 mvn clean install
 ```
 
 Build .jar file
-
-    $ mvn package
+```bash
+mvn package
+```
 
 It will give you `sdk-sms-1.0.7-jar-with-dependencies.jar`
 
 To skip local test
-
-    $ mvn package -Dmaven.test.skip=true
+```bash
+mvn package -Dmaven.test.skip=true
+```
 
 in your terminal. The project will then be compiled and tested before finally being installed in your local repository.
 
