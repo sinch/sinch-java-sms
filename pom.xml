@@ -30,6 +30,7 @@
         </property>
       </activation>
       <properties>
+        <release.profile>internal-release</release.profile>
       </properties>
       <distributionManagement>
         <repository>
@@ -66,6 +67,7 @@
         </property>
       </activation>
       <properties>
+        <release.profile>public-release</release.profile>
       </properties>
       <distributionManagement>
         <repository>
@@ -270,7 +272,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <useReleaseProfile>true</useReleaseProfile>
-          <releaseProfiles>internal-release</releaseProfiles>
+          <releaseProfiles>${release.profile}</releaseProfiles>
         </configuration>
       </plugin>
 
