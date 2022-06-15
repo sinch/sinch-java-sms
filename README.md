@@ -66,48 +66,46 @@ After this initial setup development in Eclipse should be reasonably straight fo
 
 ### Set up Api Client
 
-```javascript
-String SERVICE_PLAN_ID = "SERVICE_PLAN_ID";
-String TOKEN = "SERVICE_TOKEN";
+```java
 ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(SERVICE_PLAN_ID)
-            .token(TOKEN)
-            .start()
+    ApiConnection.builder()
+        .servicePlanId("SERVICE_PLAN_ID")
+        .token("SERVICE_TOKEN")
+        .start();
 ```
 
 #### Sending Text Message
 
-```javascript
-String SENDER = "SENDER"; // Optional
-String [] RECIPIENTS = {"1232323131", "3213123"}  ;
+```java
+String sender = "SENDER"; // Optional, must be valid phone number, short code or alphanumeric.
+String [] recipients = {"1232323131", "3213123"};
 MtBatchTextSmsResult batch =
-          conn.createBatch(
-              SinchSMSApi.batchTextSms()
-                  .sender(SENDER)
-                  .addRecipient(RECIPIENTS)
-                  .body("Something good")
-                  .build()
+conn.createBatch(
+    SinchSMSApi.batchTextSms()
+        .sender(sender)
+        .addRecipient(recipients)
+        .body("Something good")
+        .build());
 ```
 
 #### Sending Group Message
 
-```javascript
-      // Creating simple Group
-      GroupResult group = conn.createGroup(SinchSMSApi.groupCreate().name("Subscriber").build());
+```java
+// Creating simple Group
+GroupResult group = conn.createGroup(SinchSMSApi.groupCreate().name("Subscriber").build());
 
-      // Adding members (numbers) into the group
-      conn.updateGroup(
-          group.id(), SinchSMSApi.groupUpdate().addMemberInsertion("15418888", "323232").build());
+// Adding members (numbers) into the group
+conn.updateGroup(
+  group.id(), SinchSMSApi.groupUpdate().addMemberInsertion("15418888", "323232").build());
 
-      // Sending a message to the group
-      MtBatchTextSmsResult batch = conn.createBatch(
-          SinchSMSApi.batchTextSms()
-              .addRecipient(group.id().toString())
-              .body("Something good")
-              .build());
+// Sending a message to the group
+MtBatchTextSmsResult batch = conn.createBatch(
+  SinchSMSApi.batchTextSms()
+      .addRecipient(group.id().toString())
+      .body("Something good")
+      .build());
 
-      System.out.println("Successfully sent batch " + batch.id());
+System.out.println("Successfully sent batch " + batch.id());
 ```
 
 ## License
