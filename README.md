@@ -9,9 +9,9 @@ API.
 
 ## Using
 
-To use this SDK, you can install them as follow
+To use this SDK, add it as a dependency
 
-With Maven
+Maven
 
 ```xml
 
@@ -22,10 +22,9 @@ With Maven
 </dependency>
 ```
 
-With Gradle
-
-```xml
-implementation 'com.sinch:sdk-sms:1.0.7'
+Gradle
+```groovy
+implementation 'com.sinch:sdk-sms:1.1.0'
 ```
 
 ## Building and installing
