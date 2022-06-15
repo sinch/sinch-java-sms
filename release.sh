@@ -27,11 +27,13 @@ shift "$((OPTIND -1))"
 
 if [ "$INTERNAL_RELEASE" = true ] ; then
   echo "Making internal release"
+  TAG="@{project.artifactId}-internal"
 else
   echo "Making public release"
+  TAG="@{project.artifactId}"
 fi
 
 # Make release
 mvn release:clean
-mvn release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
+mvn -DtagNameFormat="$TAG" release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
 mvn release:perform "-Darguments=-DskipTests -DuseInternalRepo=${INTERNAL_RELEASE}"
