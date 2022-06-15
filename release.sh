@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -exu
 
 INTERNAL_RELEASE=true
 
@@ -27,13 +27,13 @@ shift "$((OPTIND -1))"
 
 if [ "$INTERNAL_RELEASE" = true ] ; then
   echo "Making internal release"
-  TAG="@{project.artifactId}-internal"
+  PROFILE="internal-release"
 else
   echo "Making public release"
-  TAG="@{project.artifactId}"
+  PROFILE="public-release"
 fi
 
 # Make release
 mvn release:clean
-mvn -DtagNameFormat="$TAG" release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
-mvn release:perform "-Darguments=-DskipTests -DuseInternalRepo=${INTERNAL_RELEASE}"
+mvn -DdryRun=true -P $PROFILE release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
+mvn -DdryRun=true -P $PROFILE release:perform "-Darguments=-DskipTests"
