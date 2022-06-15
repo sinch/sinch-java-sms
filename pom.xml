@@ -50,7 +50,7 @@
             <artifactId>maven-release-plugin</artifactId>
             <version>3.0.0-M6</version>
             <configuration>
-              <tagNameFormat>@{project.version}-internal</tagNameFormat>
+              <tagNameFormat>v@{project.version}-internal</tagNameFormat>
               <releaseProfiles>internal-release</releaseProfiles>
             </configuration>
           </plugin>
@@ -78,7 +78,7 @@
             <artifactId>maven-release-plugin</artifactId>
             <version>3.0.0-M6</version>
             <configuration>
-              <tagNameFormat>@{project.version}</tagNameFormat>
+              <tagNameFormat>v@{project.version}</tagNameFormat>
               <releaseProfiles>public-release</releaseProfiles>
             </configuration>
           </plugin>
