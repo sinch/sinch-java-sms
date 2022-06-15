@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -exu
+set -eu
 
 INTERNAL_RELEASE=true
 
@@ -35,5 +35,5 @@ fi
 
 # Make release
 mvn release:clean
-mvn -DdryRun=true -P $PROFILE release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
-mvn -DdryRun=true -P $PROFILE release:perform "-Darguments=-DskipTests"
+mvn -P $PROFILE release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
+mvn -P $PROFILE release:perform "-Darguments=-DskipTests"
