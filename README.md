@@ -27,33 +27,6 @@ Gradle
 implementation 'com.sinch:sdk-sms:1.1.0'
 ```
 
-## Building and installing
-
-This project uses the Maven build tool, and the typical Maven goals are supported. To install the package to your local
-Maven repository it therefore is sufficient to execute.
-
-```bash
-git clone https://github.com/sinch/sinch-java-sms.git
-cd sinch-java-sms    
-mvn clean install
-```
-
-Build .jar file
-```bash
-mvn package
-```
-
-It will give you `sdk-sms-1.0.7-jar-with-dependencies.jar`
-
-To skip local test
-```bash
-mvn package -Dmaven.test.skip=true
-```
-
-in your terminal. The project will then be compiled and tested before finally being installed in your local repository.
-
-We recommend enabling annotation processing in your IDE https://immutables.github.io/apt.html.
-
 ## Quick Start
 
 ### Set up Api Client
@@ -101,6 +74,33 @@ MtBatchTextSmsResult batch = conn.createBatch(
 
 System.out.println("Successfully sent batch " + batch.id());
 ```
+
+## Building and installing
+
+This project uses the Maven build tool, and the typical Maven goals are supported. To install the package to your local
+Maven repository it therefore is sufficient to execute.
+
+```bash
+git clone https://github.com/sinch/sinch-java-sms.git
+cd sinch-java-sms    
+mvn clean install
+```
+
+Build .jar file
+```bash
+mvn package
+```
+
+It will give you `sdk-sms-1.0.7-jar-with-dependencies.jar`
+
+To skip local test
+```bash
+mvn package -Dmaven.test.skip=true
+```
+
+in your terminal. The project will then be compiled and tested before finally being installed in your local repository.
+
+We recommend enabling annotation processing in your IDE https://immutables.github.io/apt.html.
 
 ## License
 
