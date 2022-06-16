@@ -59,10 +59,12 @@ We recommend enabling annotation processing in your IDE https://immutables.githu
 ### Set up Api Client
 
 ```java
+String servicePlanId = "SERVICE_PLAN_ID";
+String token = "SERVICE_TOKEN";
 ApiConnection conn =
     ApiConnection.builder()
-        .servicePlanId("SERVICE_PLAN_ID")
-        .token("SERVICE_TOKEN")
+        .servicePlanId(servicePlanId)
+        .token(token)
         .start();
 ```
 
