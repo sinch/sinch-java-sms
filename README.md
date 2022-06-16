@@ -5,6 +5,8 @@ scheduled sends, organizing your frequent recipients into groups, and customizin
 parameterization. It offers an asynchronous Java API that provides convenient access to all the features of the SMS REST
 API.
 
+API reference: https://developers.sinch.com/docs/sms/api-reference
+
 ### The library is compatible with Java 8 and later.
 
 ## Using
@@ -74,6 +76,8 @@ MtBatchTextSmsResult batch = conn.createBatch(
 
 System.out.println("Successfully sent batch " + batch.id());
 ```
+
+Please visit https://developers.sinch.com/docs/sms/getting-started/java/send-sms-with-java/ for more detailed instructions.
 
 ## Building and installing
 
