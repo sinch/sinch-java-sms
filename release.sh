@@ -27,11 +27,13 @@ shift "$((OPTIND -1))"
 
 if [ "$INTERNAL_RELEASE" = true ] ; then
   echo "Making internal release"
+  PROFILE="internal-release"
 else
   echo "Making public release"
+  PROFILE="public-release"
 fi
 
 # Make release
 mvn release:clean
-mvn release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
-mvn release:perform "-Darguments=-DskipTests -DuseInternalRepo=${INTERNAL_RELEASE}"
+mvn -P $PROFILE release:prepare --batch-mode "-Darguments=-DskipTests -Ddependency-check.skip=true"
+mvn -P $PROFILE release:perform "-Darguments=-DskipTests"
