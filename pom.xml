@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sinch</groupId>
   <artifactId>sdk-sms</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.1</version>
   <packaging>jar</packaging>
   <name>SDK for Sinch SMS</name>
   <description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
@@ -91,7 +91,7 @@
     <url>https://github.com/sinch/sinch-java-sms</url>
     <connection>scm:git:git://github.com/sinch/sinch-java-sms.git</connection>
     <developerConnection>scm:git:git@github.com:sinch/sinch-java-sms.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.1.1</tag>
   </scm>
 
   <issueManagement>
@@ -174,7 +174,7 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <version>3.0.1</version>
         <configuration>
-          <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+          <passphrase>thongtete1</passphrase>
           <gpgArguments>
             <arg>--batch</arg>
             <arg>--pinentry-mode</arg>
@@ -484,7 +484,8 @@
           <links>
             <link>https://docs.oracle.com/javase/8/docs/api</link>
             <link>https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs</link>
-            <link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs</link>
+            <link>https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs
+            </link>
             <link>http://www.threeten.org/threetenbp/apidocs</link>
           </links>
         </configuration>
