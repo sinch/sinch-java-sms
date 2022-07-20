@@ -45,6 +45,7 @@ public class FinalizedDeliveryStatusGenerator extends Generator<FinalizedDeliver
     Queued,
     Dispatched,
     Aborted,
+    Cancelled,
     Rejected,
     Delivered,
     Failed,

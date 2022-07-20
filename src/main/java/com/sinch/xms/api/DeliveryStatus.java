@@ -43,6 +43,9 @@ public abstract class DeliveryStatus {
   /** Message has been dispatched and accepted for delivery by the SMSC. */
   public static final DeliveryStatus DISPATCHED = DeliveryStatusImpl.of("Dispatched");
 
+  /** Message was cancelled before reaching SMSC. */
+  public static final DeliveryStatus CANCELLED = DeliveryStatusImpl.of("Cancelled");
+
   /** Message was aborted before reaching SMSC. */
   public static final DeliveryStatus ABORTED = DeliveryStatusImpl.of("Aborted");
 
