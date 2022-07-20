@@ -38,6 +38,10 @@ public abstract class FinalizedDeliveryStatus {
   public static final FinalizedDeliveryStatus ABORTED =
       FinalizedDeliveryStatusImpl.of(DeliveryStatus.ABORTED);
 
+  /** Message was aborted before reaching SMSC. */
+  public static final FinalizedDeliveryStatus CANCELLED =
+      FinalizedDeliveryStatusImpl.of(DeliveryStatus.CANCELLED);
+
   /** Message was rejected by SMSC. */
   public static final FinalizedDeliveryStatus REJECTED =
       FinalizedDeliveryStatusImpl.of(DeliveryStatus.REJECTED);
