@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sinch</groupId>
   <artifactId>sdk-sms</artifactId>
-  <version>1.1.3-SNAPSHOT</version>
+  <version>1.1.3</version>
   <packaging>jar</packaging>
   <name>SDK for Sinch SMS</name>
   <description>Library providing a Java API for the Sinch HTTP REST Messaging API.</description>
@@ -91,6 +91,7 @@
     <url>https://github.com/sinch/sinch-java-sms</url>
     <connection>scm:git:git://github.com/sinch/sinch-java-sms.git</connection>
     <developerConnection>scm:git:git@github.com:sinch/sinch-java-sms.git</developerConnection>
+    <tag>v1.1.3</tag>
   </scm>
 
   <issueManagement>
