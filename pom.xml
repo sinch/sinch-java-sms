@@ -91,7 +91,7 @@
     <url>https://github.com/sinch/sinch-java-sms</url>
     <connection>scm:git:git://github.com/sinch/sinch-java-sms.git</connection>
     <developerConnection>scm:git:git@github.com:sinch/sinch-java-sms.git</developerConnection>
-    <tag>v1.1.2</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
