@@ -67,6 +67,7 @@ public abstract class MoSms {
    * @return an MCCMNC or <code>null</code> if none is available
    */
   @Nullable
+  @JsonProperty("operator_id")
   public abstract String operator();
 
   /**
