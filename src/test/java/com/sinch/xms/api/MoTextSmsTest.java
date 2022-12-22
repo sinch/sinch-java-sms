@@ -48,6 +48,7 @@ public class MoTextSmsTest {
             .id(smsId)
             .keyword("KWD")
             .receivedAt(receivedAt)
+            .operator("operatorId")
             .build();
 
     String expected =
@@ -60,7 +61,8 @@ public class MoTextSmsTest {
             "  \"id\": \"" + smsId + "\",",
             "  \"received_at\": " + receivedAtString + ",",
             "  \"body\": \"Здравей, свят!\",",
-            "  \"keyword\": \"KWD\"",
+            "  \"keyword\": \"KWD\",",
+            "  \"operator_id\": \"operatorId\"",
             "}");
 
     String actual = json.writeValueAsString(input);
@@ -80,6 +82,7 @@ public class MoTextSmsTest {
             .body("Hello, world!")
             .id(smsId)
             .receivedAt(receivedAt)
+            .operator("operatorId")
             .build();
 
     String input = json.writeValueAsString(expected);
