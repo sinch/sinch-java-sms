@@ -40,6 +40,9 @@ public abstract class ReportType {
   /** A per recipient delivery report is desired or available. */
   public static final ReportType PER_RECIPIENT = ReportTypeImpl.of("per_recipient");
 
+  /** A per recipient delivery report is desired or available. */
+  public static final ReportType PER_RECIPIENT_FINAL = ReportTypeImpl.of("per_recipient_final");
+
   /**
    * The literal string representation of this report type.
    *
