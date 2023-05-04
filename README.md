@@ -20,13 +20,13 @@ Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 
 Gradle
 ```groovy
-implementation 'com.sinch:sdk-sms:1.1.0'
+implementation 'com.sinch:sdk-sms:1.1.6'
 ```
 
 ## Quick Start
@@ -95,7 +95,7 @@ Build .jar file
 mvn package
 ```
 
-It will give you `sdk-sms-1.0.7-jar-with-dependencies.jar`
+It will give you `sdk-sms-1.1.6-jar-with-dependencies.jar`
 
 To skip local test
 ```bash
@@ -108,4 +108,4 @@ We recommend enabling annotation processing in your IDE https://immutables.githu
 
 ## License
 
-This project is licensed under the Apache License Version 2.0. See the LICENSE.txt file for the license text.
+This project is licensed under the MIT License. See the LICENSE file for the license text.
