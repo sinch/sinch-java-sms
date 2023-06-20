@@ -23,92 +23,70 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.sinch.xms.UpdateValue;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.List;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import org.immutables.value.Value;
 
-/** Objects of this type can be used to update previously submitted MT batches. */
+/** Objects of this type can be used to update previously submitted MT SMS batches. */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({@Type(MtBatchTextSmsUpdate.class), @Type(MtBatchBinarySmsUpdate.class)})
-public abstract class MtBatchSmsUpdate {
+public abstract class MtBatchSmsUpdate extends MtBatchUpdate {
 
   /**
-   * The message destinations to add to the batch.
+   * Shows message on screen without user interaction while not saving the message to the inbox.
+   * Defaults to false.
    *
-   * @return a list of MSISDNs or group IDs
+   * @return boolean indicating if it's a flash message
    */
   @Nullable
-  @JsonProperty("to_add")
-  public abstract List<String> recipientInsertions();
+  @JsonProperty("flash_message")
+  public abstract Boolean flashMessage();
 
   /**
-   * The message destinations to remove from the batch.
+   * Message will be dispatched only if it is not split to more parts than Max Number of Message
+   * Parts. Defaults to false.
    *
-   * @return a list of MSISDNs or group IDs
+   * @return the maximum allowed number of message parts
    */
   @Nullable
-  @JsonProperty("to_remove")
-  public abstract List<String> recipientRemovals();
+  @JsonProperty("max_number_of_message_parts")
+  public abstract Integer maxNumberOfMessageParts();
 
   /**
-   * The message originator.
+   * The DLT principal entity identifier to attach to this message.
    *
-   * @return an MSISDN or short code
+   * @return a principal entity id
    */
   @Nullable
-  @JsonProperty("from")
-  public abstract String sender();
+  @JsonProperty("dlt_principal_entity_id")
+  public abstract String dltPrincipalEntity();
 
   /**
-   * Description of how to update the batch delivery report value.
+   * The DLT template identifier to attach to this message.
    *
-   * @return an update description
-   * @see MtBatchSmsCreate#deliveryReport()
+   * @return a template id
    */
   @Nullable
-  @JsonProperty("delivery_report")
-  public abstract UpdateValue<ReportType> deliveryReport();
+  @JsonProperty("dlt_template_id")
+  public abstract String dltTemplateId();
 
   /**
-   * Description of how to update the batch send at value.
+   * The type of number of the message originator. Valid values are 0 to 6. This is optional and
+   * used for overriding the automatic detection of type of number. If provided then from_npi must
+   * also be set.
    *
-   * @return an update description
-   * @see MtBatchSmsCreate#sendAt()
+   * @return the type of number for the originator address
    */
+  @JsonProperty("from_ton")
   @Nullable
-  @JsonProperty("send_at")
-  public abstract UpdateValue<OffsetDateTime> sendAt();
+  public abstract Integer senderTon();
 
   /**
-   * Description of how to update the batch expire at value.
+   * The numbering plan identification of the message originator. Valid values are 0 to 18. This is
+   * optional and used for overriding the automatic detection. If provided then from_ton must also
+   * be set.
    *
-   * @return an update description
-   * @see MtBatchSmsCreate#expireAt()
+   * @return the numbering plan identification for the originator address
    */
+  @JsonProperty("from_npi")
   @Nullable
-  @JsonProperty("expire_at")
-  public abstract UpdateValue<OffsetDateTime> expireAt();
-
-  /**
-   * Description of how to update the batch callback URL.
-   *
-   * @return an update description
-   * @see MtBatchSmsCreate#callbackUrl()
-   */
-  @Nullable
-  @JsonProperty("callback_url")
-  public abstract UpdateValue<URI> callbackUrl();
-
-  /** Validates that this object is in a correct state. */
-  @OverridingMethodsMustInvokeSuper
-  @Value.Check
-  protected void check() {
-    if (sender() != null && sender().isEmpty()) {
-      throw new IllegalStateException("empty from address");
-    }
-  }
+  public abstract Integer senderNpi();
 }

@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import org.immutables.value.Value;
 
 /**
- * Container of all necessary parameters to create a text SMS batch message.
+ * Container of all necessary parameters to create a media SMS batch message.
  *
  * <p>A minimal definition has defined values for
  *
@@ -40,23 +40,23 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = MtBatchTextSmsCreate.Builder.class)
-@JsonTypeName("mt_text")
-public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
+@JsonDeserialize(builder = MtBatchMmsCreate.Builder.class)
+@JsonTypeName("mt_media")
+public abstract class MtBatchMmsCreate extends MtBatchCreate {
 
   /** A builder of textual batch messages. */
-  public static class Builder extends MtBatchTextSmsCreateImpl.Builder {
+  public static class Builder extends MtBatchMmsCreateImpl.Builder {
 
     Builder() {}
   }
 
   /**
-   * Creates a builder of {@link MtBatchTextSmsCreate} instances.
+   * Creates a builder of {@link MtBatchMmsCreate} instances.
    *
    * @return a builder
    */
   @Nonnull
-  public static final MtBatchTextSmsCreate.Builder builder() {
+  public static final MtBatchMmsCreate.Builder builder() {
     return new Builder();
   }
 
@@ -73,11 +73,15 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
    * <p>The typical way to use templates is
    *
    * <pre>
-   * SinchSMSApi.batchTextSms()
+   * SinchSMSApi.batchMms()
    *     .sender("12345")
    *     .addRecipient("987654321")
    *     // Other initialization
-   *     .body("Hello, ${name}")
+   *     .body(
+   *         SinchSMSApi.mediaBody()
+   *             .message("Hello, ${name}")
+   *             .url("http://media.url.com/image.jpg"))
+   *             .build()
    *     .putParameter("name",
    *         SinchSMSApi.parameterValues()
    *             .putSubstitution("987654321", "Jane")
@@ -91,7 +95,7 @@ public abstract class MtBatchTextSmsCreate extends MtBatchSmsCreate {
    *
    * @return the message to send
    */
-  public abstract String body();
+  public abstract MediaBody body();
 
   /**
    * The message template parameter substitutions. If {@link #body()} describes a template then this

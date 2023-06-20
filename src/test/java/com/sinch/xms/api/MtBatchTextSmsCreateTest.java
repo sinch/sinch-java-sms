@@ -175,12 +175,11 @@ public class MtBatchTextSmsCreateTest {
   }
 
   @Test
-  public void canSerializeWithDatesAndTags() throws Exception {
+  public void canSerializeWithDates() throws Exception {
     MtBatchSmsCreate input =
         minimalBatchBuilder()
             .sendAt(OffsetDateTime.of(2016, 12, 1, 10, 20, 30, 0, ZoneOffset.UTC))
             .expireAt(OffsetDateTime.of(2016, 12, 20, 10, 0, 0, 0, ZoneOffset.UTC))
-            .addTag("tag1", "tag2")
             .build();
 
     String expected =
@@ -192,8 +191,7 @@ public class MtBatchTextSmsCreateTest {
                 "  'to': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
                 "  'send_at': '2016-12-01T10:20:30Z',",
-                "  'expire_at': '2016-12-20T10:00:00Z',",
-                "  'tags': ['tag1', 'tag2']",
+                "  'expire_at': '2016-12-20T10:00:00Z'",
                 "}")
             .replace('\'', '"');
 

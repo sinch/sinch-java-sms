@@ -19,113 +19,22 @@
  */
 package com.sinch.xms.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.immutables.value.Value;
 
 /**
- * Base class for mobile terminated batch messages. A mobile terminated message can have either a
- * {@link MtBatchTextSmsCreate textual} or a {@link MtBatchBinarySmsCreate binary} message payload.
+ * Base class for mobile terminated SMS batch messages. A mobile terminated message can have either
+ * a {@link MtBatchTextSmsCreate textual} or a {@link MtBatchBinarySmsCreate binary} message
+ * payload.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({@Type(MtBatchTextSmsCreate.class), @Type(MtBatchBinarySmsCreate.class)})
-public abstract class MtBatchSmsCreate {
-
-  /**
-   * The list of message recipients. May not be empty.
-   *
-   * @return a non-empty list of recipients
-   */
-  @JsonProperty("to")
-  public abstract List<String> recipients();
-
-  /**
-   * The message originator. May be an MSISDN or short code.
-   *
-   * @return an originator address
-   */
-  @Nullable
-  @JsonProperty("from")
-  public abstract String sender();
-
-  /**
-   * The type of delivery report to request for this batch.
-   *
-   * @return a type of report or <code>null</code> to use the default type
-   */
-  @Nullable
-  @JsonProperty("delivery_report")
-  public abstract ReportType deliveryReport();
-
-  /**
-   * The time this batch should be sent. If <code>null</code> or set to a past time then the batch
-   * will be sent immediately.
-   *
-   * @return the time when this batch should be sent
-   */
-  @Nullable
-  @JsonProperty("send_at")
-  public abstract OffsetDateTime sendAt();
-
-  /**
-   * The time at which this batch will expire. Any message not delivered by this time will be placed
-   * into an expired state and no further delivery will be attempted.
-   *
-   * @return the time when this batch expires
-   */
-  @Nullable
-  @JsonProperty("expire_at")
-  public abstract OffsetDateTime expireAt();
-
-  /**
-   * The URL to which batch callbacks should be sent. If <code>null</code> then callbacks will be
-   * sent to the default URL.
-   *
-   * @return an URL having a callback listener or <code>null</code> to use the default callback URL
-   */
-  @Nullable
-  @JsonProperty("callback_url")
-  public abstract URI callbackUrl();
-
-  /**
-   * Send feedback if your system can confirm successful message delivery. Feedback can only be
-   * provided if feedback_enabled was set when batch was submitted.
-   *
-   * @return boolean value
-   */
-  @Nullable
-  @JsonProperty("feedback_enabled")
-  public abstract Boolean feedbackEnabled();
-
-  /**
-   * The tags that should be attached to this message.
-   *
-   * @return a non-null set of tags
-   * @deprecated client reference should be used instead
-   */
-  @Deprecated
-  @JsonInclude(Include.NON_EMPTY)
-  public abstract Set<String> tags();
-
-  /**
-   * The client identifier to attach to this message. If set, it will be added in the delivery
-   * report/callback of this batch.
-   *
-   * @return a client reference id
-   */
-  @Nullable
-  @JsonProperty("client_reference")
-  public abstract String clientReference();
+public abstract class MtBatchSmsCreate extends MtBatchCreate {
 
   /**
    * Shows message on screen without user interaction while not saving the message to the inbox.

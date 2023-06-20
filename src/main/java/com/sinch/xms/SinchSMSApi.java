@@ -23,8 +23,11 @@ import com.sinch.xms.api.AutoUpdate;
 import com.sinch.xms.api.FeedbackDeliveryCreate;
 import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupUpdate;
+import com.sinch.xms.api.MediaBody;
 import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
+import com.sinch.xms.api.MtBatchMmsCreate;
+import com.sinch.xms.api.MtBatchMmsUpdate;
 import com.sinch.xms.api.MtBatchTextSmsCreate;
 import com.sinch.xms.api.MtBatchTextSmsUpdate;
 import com.sinch.xms.api.ParameterValues;
@@ -75,6 +78,26 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
   @Nonnull
   public static MtBatchBinarySmsUpdate.Builder batchBinarySmsUpdate() {
     return MtBatchBinarySmsUpdate.builder();
+  }
+
+  /**
+   * Returns a freshly created batch MMS message builder.
+   *
+   * @return a builder of MMS batch messages
+   */
+  @Nonnull
+  public static MtBatchMmsCreate.Builder batchMms() {
+    return MtBatchMmsCreate.builder();
+  }
+
+  /**
+   * Returns a freshly created builder for MMS message updates.
+   *
+   * @return a builder of MMS message updates
+   */
+  @Nonnull
+  public static MtBatchMmsUpdate.Builder batchMmsUpdate() {
+    return MtBatchMmsUpdate.builder();
   }
 
   /**
@@ -185,5 +208,15 @@ public final class SinchSMSApi { // TODO Maybe rename this to, e.g., "ApiBuilder
   @Nonnull
   public static DeliveryReportFilter.Builder deliveryReportFilter() {
     return DeliveryReportFilter.builder();
+  }
+
+  /**
+   * Returns a freshly created builder of delivery report filters.
+   *
+   * @return a builder of delivery report filters
+   */
+  @Nonnull
+  public static MediaBody.Builder mediaBody() {
+    return MediaBody.builder();
   }
 }
