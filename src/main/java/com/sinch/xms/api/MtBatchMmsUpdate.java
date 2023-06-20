@@ -19,6 +19,7 @@
  */
 package com.sinch.xms.api;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sinch.xms.UpdateValue;
@@ -33,6 +34,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @ValueStylePackage
 @JsonSerialize(as = MtBatchMmsUpdateImpl.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mt_media")
 public abstract class MtBatchMmsUpdate extends MtBatchUpdate {
 

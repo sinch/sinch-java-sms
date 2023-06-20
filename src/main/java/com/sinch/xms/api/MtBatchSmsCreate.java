@@ -22,7 +22,6 @@ package com.sinch.xms.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.immutables.value.Value;
@@ -32,7 +31,6 @@ import org.immutables.value.Value;
  * a {@link MtBatchTextSmsCreate textual} or a {@link MtBatchBinarySmsCreate binary} message
  * payload.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({@Type(MtBatchTextSmsCreate.class), @Type(MtBatchBinarySmsCreate.class)})
 public abstract class MtBatchSmsCreate extends MtBatchCreate {
 

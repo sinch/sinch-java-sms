@@ -20,6 +20,7 @@
 package com.sinch.xms.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.immutables.value.Value;
  * Base class for mobile terminated batch messages. A mobile terminated message can have either a
  * {@link MtBatchSmsCreate SMS} or a {@link MtBatchMmsCreate MMS} message payload.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public abstract class MtBatchCreate {
 
   /**
