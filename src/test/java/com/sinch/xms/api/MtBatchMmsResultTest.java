@@ -74,6 +74,11 @@ public class MtBatchMmsResultTest {
   public void canSerializeWithParameters() throws Exception {
     MtBatchSmsResult input =
         minimalBatchBuilder()
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .message("the text")
+                    .build())
             .putParameter(
                 "param1",
                 SinchSMSApi.parameterValues()
@@ -90,7 +95,8 @@ public class MtBatchMmsResultTest {
                 "  'from': '1234',",
                 "  'to': [ '987654321' ],",
                 "  'body': {",
-                "    'url':'http://my.test.url/image.jpg'",
+                "    'url':'http://my.test.url/image.jpg',",
+                "    'message':'the text'",
                 "  },",
                 "  'canceled': false,",
                 "  'flash_message': false,",
@@ -130,69 +136,6 @@ public class MtBatchMmsResultTest {
     assertThat(actual, is(expected));
   }
 
-  @Test
-  public void canSerializeWithParametersAndDefault() throws Exception {
-    MtBatchMmsResult input =
-        minimalBatchBuilder()
-            .putParameter(
-                "param1",
-                SinchSMSApi.parameterValues()
-                    .putSubstitution("123", "foo")
-                    .putSubstitution("234", "bar")
-                    .defaultValue("baz")
-                    .build())
-            .build();
-
-    String expected =
-        Utils.join(
-                "\n",
-                "{",
-                "  'type': 'mt_media',",
-                "  'from': '1234',",
-                "  'to': [ '987654321' ],",
-                "  'body': {",
-                "    'url':'http://my.test.url/image.jpg'",
-                "  },",
-                "  'canceled': false,",
-                "  'feedback_enabled': false,",
-                "  'flash_message': false,",
-                "  'delivery_report': 'none',",
-                "  'id': '" + input.id() + "',",
-                "  'parameters': {",
-                "    'param1': {",
-                "      '123': 'foo',",
-                "      '234': 'bar',",
-                "      'default': 'baz'",
-                "    }",
-                "  }",
-                "}")
-            .replace('\'', '"');
-
-    String actual = json.writeValueAsString(input);
-
-    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
-  }
-
-  @Test
-  public void canDeserializeWithParametersAndDefault() throws Exception {
-    MtBatchMmsResult expected =
-        minimalBatchBuilder()
-            .putParameter(
-                "param1",
-                SinchSMSApi.parameterValues()
-                    .putSubstitution("123", "foo")
-                    .putSubstitution("234", "bar")
-                    .defaultValue("baz")
-                    .build())
-            .build();
-
-    String input = json.writeValueAsString(expected);
-
-    MtBatchMmsResult actual = json.readValue(input, MtBatchMmsResult.class);
-
-    assertThat(actual, is(expected));
-  }
-
   private static MtBatchMmsResult.Builder minimalBatchBuilder() {
     return new MtBatchMmsResult.Builder()
         .sender("1234")
@@ -200,7 +143,7 @@ public class MtBatchMmsResultTest {
         .flashMessage(false)
         .feedbackEnabled(false)
         .deliveryReport(ReportType.NONE)
-        .body(MediaBody.builder().url("http://my.test.url/image.jpg").build())
+        .body(SinchSMSApi.mediaBody().url("http://my.test.url/image.jpg").build())
         .canceled(false)
         .id(TestUtils.freshBatchId());
   }

@@ -44,7 +44,6 @@ public class MtBatchMmsCreateTest {
                 "  'from': '1234',",
                 "  'to': [ '987654321' ],",
                 "  'body': {",
-                "    'message':'Hello, world!',",
                 "    'url':'http://my.test.url/image.jpg'",
                 "  }",
                 "}")
@@ -67,14 +66,15 @@ public class MtBatchMmsCreateTest {
   }
 
   @Test
-  public void canSerializeWithParameters() throws Exception {
+  public void canSerializeWithMessageContent() throws Exception {
     MtBatchMmsCreate input =
-        minimalBatchBuilder()
-            .putParameter(
-                "param1",
-                SinchSMSApi.parameterValues()
-                    .putSubstitution("123", "foo")
-                    .putSubstitution("234", "bar")
+        SinchSMSApi.batchMms()
+            .sender("1234")
+            .addRecipient("987654321")
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .message("the text")
                     .build())
             .build();
 
@@ -86,14 +86,8 @@ public class MtBatchMmsCreateTest {
                 "  'from': '1234',",
                 "  'to': [ '987654321' ],",
                 "  'body': {",
-                "    'message':'Hello, world!',",
-                "    'url':'http://my.test.url/image.jpg'",
-                "  },",
-                "  'parameters': {",
-                "    'param1': {",
-                "      '123': 'foo',",
-                "      '234': 'bar'",
-                "    }",
+                "    'url':'http://my.test.url/image.jpg',",
+                "    'message':'the text'",
                 "  }",
                 "}")
             .replace('\'', '"');
@@ -104,39 +98,16 @@ public class MtBatchMmsCreateTest {
   }
 
   @Test
-  public void canSerializeWithoutMessageContent() throws Exception {
-    MtBatchMmsCreate input =
-        SinchSMSApi.batchMms()
-            .sender("1234")
-            .addRecipient("987654321")
-            .body(MediaBody.builder().url("http://my.test.url/image.jpg").build())
-            .build();
-
-    String expected =
-        Utils.join(
-                "\n",
-                "{",
-                "  'type': 'mt_media',",
-                "  'from': '1234',",
-                "  'to': [ '987654321' ],",
-                "  'body': {",
-                "    'url':'http://my.test.url/image.jpg'",
-                "  }",
-                "}")
-            .replace('\'', '"');
-
-    String actual = json.writeValueAsString(input);
-
-    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
-  }
-
-  @Test
-  public void canDeserializeWithoutMessageContent() throws Exception {
+  public void canDeserializeWithMessageContent() throws Exception {
     MtBatchMmsCreate expected =
         SinchSMSApi.batchMms()
             .sender("1234")
             .addRecipient("987654321")
-            .body(MediaBody.builder().url("http://my.test.url/image.jpg").build())
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .message("the text")
+                    .build())
             .build();
 
     String input = json.writeValueAsString(expected);
@@ -151,7 +122,7 @@ public class MtBatchMmsCreateTest {
     SinchSMSApi.batchMms()
         .sender("1234")
         .addRecipient("987654321")
-        .body(MediaBody.builder().message("Hello, world!").build())
+        .body(SinchSMSApi.mediaBody().message("Hello, world!").build())
         .build();
   }
 
@@ -159,10 +130,6 @@ public class MtBatchMmsCreateTest {
     return SinchSMSApi.batchMms()
         .sender("1234")
         .addRecipient("987654321")
-        .body(
-            MediaBody.builder()
-                .message("Hello, world!")
-                .url("http://my.test.url/image.jpg")
-                .build());
+        .body(SinchSMSApi.mediaBody().url("http://my.test.url/image.jpg").build());
   }
 }

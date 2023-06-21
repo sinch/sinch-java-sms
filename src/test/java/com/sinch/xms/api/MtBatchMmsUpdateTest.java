@@ -56,7 +56,11 @@ public class MtBatchMmsUpdateTest {
         SinchSMSApi.batchMmsUpdate()
             .sender("1234")
             .addRecipientInsertion("987654321")
-            .body(MediaBody.builder().url("http://my.test.url/image.jpg").build())
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .message("the text")
+                    .build())
             .parameters(UpdateValue.set(params))
             .build();
 
@@ -68,7 +72,8 @@ public class MtBatchMmsUpdateTest {
                 "  'from': '1234',",
                 "  'to_add': [ '987654321' ],",
                 "  'body': {",
-                "    'url':'http://my.test.url/image.jpg'",
+                "    'url':'http://my.test.url/image.jpg',",
+                "    'message':'the text'",
                 "  },",
                 "  'parameters': { 'newparam': { 'key1': 'value1' } }",
                 "}")
@@ -85,7 +90,7 @@ public class MtBatchMmsUpdateTest {
         SinchSMSApi.batchMmsUpdate()
             .sender("1234")
             .addRecipientInsertion("987654321")
-            .body(MediaBody.builder().url("http://my.test.url/image.jpg").build())
+            .body(SinchSMSApi.mediaBody().url("http://my.test.url/image.jpg").build())
             .unsetParameters()
             .build();
 
