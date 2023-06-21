@@ -47,6 +47,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.sinch.testsupport.TestUtils;
 import com.sinch.xms.api.ApiError;
 import com.sinch.xms.api.BatchDeliveryReport;
+import com.sinch.xms.api.BatchDeliveryReportSms;
 import com.sinch.xms.api.BatchId;
 import com.sinch.xms.api.DeliveryStatus;
 import com.sinch.xms.api.FeedbackDeliveryCreate;
@@ -74,6 +75,7 @@ import com.sinch.xms.api.PagedInboundsResult;
 import com.sinch.xms.api.RecipientDeliveryReport;
 import com.sinch.xms.api.RecipientDeliveryReportSms;
 import com.sinch.xms.api.ReportType;
+import com.sinch.xms.api.Status;
 import com.sinch.xms.api.Tags;
 import com.sinch.xms.api.TagsUpdate;
 import java.io.IOException;
@@ -1464,19 +1466,19 @@ public class ApiConnectionIT {
             + "/delivery_report"
             + "?type=summary&status=Aborted%2CDelivered&code=200%2C300";
 
-    final BatchDeliveryReport expected =
-        BatchDeliveryReport.builder()
+    final BatchDeliveryReportSms expected =
+        BatchDeliveryReportSms.builder()
             .batchId(batchId)
             .totalMessageCount(1010)
             .addStatus(
-                BatchDeliveryReport.Status.builder()
+                Status.builder()
                     .code(200)
                     .status(DeliveryStatus.ABORTED)
                     .count(10)
                     .addRecipient("rec1", "rec2")
                     .build())
             .addStatus(
-                BatchDeliveryReport.Status.builder()
+                Status.builder()
                     .code(300)
                     .status(DeliveryStatus.DELIVERED)
                     .count(20)
@@ -1517,19 +1519,19 @@ public class ApiConnectionIT {
 
     String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_report?type=full";
 
-    final BatchDeliveryReport expected =
-        BatchDeliveryReport.builder()
+    final BatchDeliveryReportSms expected =
+        BatchDeliveryReportSms.builder()
             .batchId(batchId)
             .totalMessageCount(1010)
             .addStatus(
-                BatchDeliveryReport.Status.builder()
+                Status.builder()
                     .code(200)
                     .status(DeliveryStatus.ABORTED)
                     .count(10)
                     .addRecipient("rec1", "rec2")
                     .build())
             .addStatus(
-                BatchDeliveryReport.Status.builder()
+                Status.builder()
                     .code(300)
                     .status(DeliveryStatus.DELIVERED)
                     .count(20)

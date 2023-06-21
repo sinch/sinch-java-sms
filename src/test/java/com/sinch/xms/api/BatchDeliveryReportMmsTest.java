@@ -31,28 +31,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitQuickcheck.class)
-public class BatchDeliveryReportTest {
+public class BatchDeliveryReportMmsTest {
 
   private final ApiObjectMapper json = new ApiObjectMapper();
 
   @Test
   public void canSerializeSummary() throws Exception {
-    BatchDeliveryReport input =
-        new BatchDeliveryReport.Builder()
+    BatchDeliveryReportMms input =
+        new BatchDeliveryReportMms.Builder()
             .batchId(BatchId.of("batchid"))
             .totalMessageCount(50)
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
-                    .code(10)
-                    .status(DeliveryStatus.DELIVERED)
-                    .count(20)
-                    .build())
+                new Status.Builder().code(10).status(DeliveryStatus.DELIVERED).count(20).build())
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
-                    .code(20)
-                    .status(DeliveryStatus.FAILED)
-                    .count(30)
-                    .build())
+                new Status.Builder().code(20).status(DeliveryStatus.FAILED).count(30).build())
             .build();
 
     String expected =
@@ -61,7 +53,7 @@ public class BatchDeliveryReportTest {
                 "{",
                 "  'batch_id': 'batchid',",
                 "  'total_message_count': 50,",
-                "  'type': 'delivery_report_sms',",
+                "  'type': 'delivery_report_mms',",
                 "  'statuses': [",
                 "    {",
                 "      'code': 10,",
@@ -84,19 +76,19 @@ public class BatchDeliveryReportTest {
 
   @Test
   public void canSerializeFull() throws Exception {
-    BatchDeliveryReport input =
-        new BatchDeliveryReport.Builder()
+    BatchDeliveryReportMms input =
+        new BatchDeliveryReportMms.Builder()
             .batchId(BatchId.of("batchid"))
             .totalMessageCount(50)
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
+                new Status.Builder()
                     .code(10)
                     .status(DeliveryStatus.DELIVERED)
                     .count(20)
                     .addRecipient("to1", "to2")
                     .build())
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
+                new Status.Builder()
                     .code(20)
                     .status(DeliveryStatus.FAILED)
                     .count(30)
@@ -110,7 +102,7 @@ public class BatchDeliveryReportTest {
                 "{",
                 "  'batch_id': 'batchid',",
                 "  'total_message_count': 50,",
-                "  'type': 'delivery_report_sms',",
+                "  'type': 'delivery_report_mms',",
                 "  'statuses': [",
                 "    {",
                 "      'code': 10,",
@@ -135,27 +127,19 @@ public class BatchDeliveryReportTest {
 
   @Property
   public void canDeserialize(BatchId batchId) throws Exception {
-    BatchDeliveryReport expected =
-        new BatchDeliveryReport.Builder()
+    BatchDeliveryReportMms expected =
+        new BatchDeliveryReportMms.Builder()
             .batchId(batchId)
             .totalMessageCount(50)
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
-                    .code(10)
-                    .status(DeliveryStatus.DELIVERED)
-                    .count(20)
-                    .build())
+                new Status.Builder().code(10).status(DeliveryStatus.DELIVERED).count(20).build())
             .addStatus(
-                new BatchDeliveryReport.Status.Builder()
-                    .code(20)
-                    .status(DeliveryStatus.FAILED)
-                    .count(30)
-                    .build())
+                new Status.Builder().code(20).status(DeliveryStatus.FAILED).count(30).build())
             .build();
 
     String input = json.writeValueAsString(expected);
 
-    BatchDeliveryReport actual = json.readValue(input, BatchDeliveryReport.class);
+    BatchDeliveryReportMms actual = json.readValue(input, BatchDeliveryReportMms.class);
 
     assertThat(actual, is(expected));
   }
