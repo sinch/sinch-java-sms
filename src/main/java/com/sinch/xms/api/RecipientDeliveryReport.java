@@ -20,38 +20,17 @@
 package com.sinch.xms.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.OffsetDateTime;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.immutables.value.Value;
 
 /** Representation of a delivery report for a specific recipient. */
-@Value.Immutable
-@ValueStylePackage
-@JsonDeserialize(builder = RecipientDeliveryReport.Builder.class)
 @JsonTypeInfo(use = Id.NAME, property = "type")
-@JsonTypeName("recipient_delivery_report_sms")
+@JsonSubTypes({@Type(RecipientDeliveryReportSms.class), @Type(RecipientDeliveryReportMms.class)})
 public abstract class RecipientDeliveryReport {
-
-  /** A builder of recipient delivery reports. */
-  public static final class Builder extends RecipientDeliveryReportImpl.Builder {
-
-    Builder() {}
-  }
-
-  /**
-   * Creates a builder of {@link RecipientDeliveryReport} instances.
-   *
-   * @return a builder
-   */
-  @Nonnull
-  public static final RecipientDeliveryReport.Builder builder() {
-    return new Builder();
-  }
 
   /**
    * The batch to which this delivery report belongs

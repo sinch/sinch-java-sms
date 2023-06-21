@@ -72,6 +72,7 @@ import com.sinch.xms.api.PagedDeliveryReportResult;
 import com.sinch.xms.api.PagedGroupResult;
 import com.sinch.xms.api.PagedInboundsResult;
 import com.sinch.xms.api.RecipientDeliveryReport;
+import com.sinch.xms.api.RecipientDeliveryReportSms;
 import com.sinch.xms.api.ReportType;
 import com.sinch.xms.api.Tags;
 import com.sinch.xms.api.TagsUpdate;
@@ -1575,8 +1576,8 @@ public class ApiConnectionIT {
 
     String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_report/" + recipient;
 
-    final RecipientDeliveryReport expected =
-        RecipientDeliveryReport.builder()
+    final RecipientDeliveryReportSms expected =
+        RecipientDeliveryReportSms.builder()
             .batchId(batchId)
             .recipient(recipient)
             .code(200)
@@ -1615,8 +1616,8 @@ public class ApiConnectionIT {
 
     String path = "/v1/" + spid + "/delivery_reports?page=0";
 
-    final RecipientDeliveryReport expected1 =
-        RecipientDeliveryReport.builder()
+    final RecipientDeliveryReportSms expected1 =
+        RecipientDeliveryReportSms.builder()
             .batchId(batchId)
             .recipient(recipient)
             .code(200)
@@ -1664,7 +1665,7 @@ public class ApiConnectionIT {
     String path = "/v1/" + spid + "/batches/" + batchId + "/delivery_report/" + recipient;
 
     final RecipientDeliveryReport expected =
-        RecipientDeliveryReport.builder()
+        RecipientDeliveryReportSms.builder()
             .batchId(batchId)
             .recipient(recipient)
             .code(200)
