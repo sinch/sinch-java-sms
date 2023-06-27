@@ -48,7 +48,6 @@ public class MtBatchMmsResultTest {
                 "  },",
                 "  'canceled': false,",
                 "  'feedback_enabled': false,",
-                "  'flash_message': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "'",
                 "}")
@@ -72,7 +71,7 @@ public class MtBatchMmsResultTest {
 
   @Test
   public void canSerializeWithParameters() throws Exception {
-    MtBatchSmsResult input =
+    MtBatchMmsResult input =
         minimalBatchBuilder()
             .body(
                 SinchSMSApi.mediaBody()
@@ -99,7 +98,6 @@ public class MtBatchMmsResultTest {
                 "    'message':'the text'",
                 "  },",
                 "  'canceled': false,",
-                "  'flash_message': false,",
                 "  'feedback_enabled': false,",
                 "  'delivery_report': 'none',",
                 "  'id': '" + input.id() + "',",
@@ -140,7 +138,6 @@ public class MtBatchMmsResultTest {
     return new MtBatchMmsResult.Builder()
         .sender("1234")
         .addRecipient("987654321")
-        .flashMessage(false)
         .feedbackEnabled(false)
         .deliveryReport(ReportType.NONE)
         .body(SinchSMSApi.mediaBody().url("http://my.test.url/image.jpg").build())

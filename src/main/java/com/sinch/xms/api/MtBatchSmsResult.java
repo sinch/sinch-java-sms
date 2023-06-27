@@ -20,17 +20,12 @@
 package com.sinch.xms.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.annotation.Nullable;
 
 /**
  * Base class for batch description classes. This contains the fields common for both {@link
  * MtBatchTextSmsResult textual} and {@link MtBatchBinarySmsResult binary} batches.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({@Type(MtBatchTextSmsResult.class), @Type(MtBatchBinarySmsResult.class)})
 public abstract class MtBatchSmsResult extends MtBatchResult {
 
   MtBatchSmsResult() {

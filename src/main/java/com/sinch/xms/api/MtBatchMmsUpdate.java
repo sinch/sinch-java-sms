@@ -19,6 +19,7 @@
  */
 package com.sinch.xms.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -184,6 +185,15 @@ public abstract class MtBatchMmsUpdate extends MtBatchUpdate {
    */
   @Nullable
   public abstract MediaBody body();
+
+  /**
+   * Updates the strict validation flag.
+   *
+   * @return boolean indicating if strict validation is meant to be performed
+   */
+  @Nullable
+  @JsonProperty("strict_validation")
+  public abstract Boolean strictValidation();
 
   /**
    * Description of how to update the batch parameters.

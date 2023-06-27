@@ -60,7 +60,7 @@ public abstract class MediaBody {
    * @return a message
    */
   @Nullable
-  protected abstract String message();
+  public abstract String message();
 
   /**
    * The url to the media content.
@@ -68,5 +68,5 @@ public abstract class MediaBody {
    * @return a non-null url to the media content
    */
   @Nonnull
-  protected abstract String url();
+  public abstract String url();
 }

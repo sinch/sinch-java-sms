@@ -21,11 +21,12 @@ package com.sinch.xms.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
@@ -35,9 +36,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = MtBatchMmsResult.Builder.class)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("mt_media")
-public abstract class MtBatchMmsResult extends MtBatchSmsResult {
+public abstract class MtBatchMmsResult extends MtBatchResult {
 
   /** Builder of MMS batch results. */
   public static class Builder extends MtBatchMmsResultImpl.Builder {
@@ -64,6 +64,17 @@ public abstract class MtBatchMmsResult extends MtBatchSmsResult {
    * @return the message to send
    */
   public abstract MediaBody body();
+
+  /**
+   * Whether the media included in the message to be checked against Sinch MMS channel best
+   * practices. If set to true, the message will be rejected if it doesn't conform to the listed
+   * recommendations, otherwise no validation will be performed. Defaults to false.
+   *
+   * @return boolean indicating if strict validation is meant to be performed
+   */
+  @Nullable
+  @JsonProperty("strict_validation")
+  public abstract Boolean strictValidation();
 
   /**
    * The message template parameter substitutions. If {@link #body()} describes a template then this

@@ -62,6 +62,7 @@ import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsResult;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
 import com.sinch.xms.api.MtBatchDryRunResult;
+import com.sinch.xms.api.MtBatchResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsCreate;
@@ -760,7 +761,7 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      MtBatchSmsResult actual = conn.fetchBatch(batchId);
+      MtBatchResult actual = conn.fetchBatch(batchId);
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -801,16 +802,16 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      FutureCallback<MtBatchSmsResult> testCallback =
-          new TestCallback<MtBatchSmsResult>() {
+      FutureCallback<MtBatchResult> testCallback =
+          new TestCallback<MtBatchResult>() {
 
             @Override
-            public void completed(MtBatchSmsResult result) {
+            public void completed(MtBatchResult result) {
               assertThat(result, is(expected));
             }
           };
 
-      MtBatchSmsResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
+      MtBatchResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -852,16 +853,16 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      FutureCallback<MtBatchSmsResult> testCallback =
-          new TestCallback<MtBatchSmsResult>() {
+      FutureCallback<MtBatchResult> testCallback =
+          new TestCallback<MtBatchResult>() {
 
             @Override
-            public void completed(MtBatchSmsResult result) {
+            public void completed(MtBatchResult result) {
               assertThat(result, is(expected));
             }
           };
 
-      MtBatchSmsResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
+      MtBatchResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -924,8 +925,8 @@ public class ApiConnectionIT {
             .endpoint("http://localhost:" + wm.port())
             .start();
 
-    FutureCallback<MtBatchSmsResult> callback =
-        new TestCallback<MtBatchSmsResult>() {
+    FutureCallback<MtBatchResult> callback =
+        new TestCallback<MtBatchResult>() {
 
           @Override
           public void failed(Exception e) {
@@ -980,8 +981,8 @@ public class ApiConnectionIT {
        */
       final CountDownLatch latch = new CountDownLatch(1);
 
-      FutureCallback<MtBatchSmsResult> testCallback =
-          new TestCallback<MtBatchSmsResult>() {
+      FutureCallback<MtBatchResult> testCallback =
+          new TestCallback<MtBatchResult>() {
 
             @Override
             public void failed(Exception exception) {
@@ -993,7 +994,7 @@ public class ApiConnectionIT {
             }
           };
 
-      Future<MtBatchSmsResult> future = conn.fetchBatchAsync(batchId, testCallback);
+      Future<MtBatchResult> future = conn.fetchBatchAsync(batchId, testCallback);
 
       // Give plenty of time for the callback to be called.
       latch.await();
@@ -1075,7 +1076,7 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      MtBatchSmsResult result = conn.cancelBatch(batchId);
+      MtBatchResult result = conn.cancelBatch(batchId);
       assertThat(result, is(expected));
     } finally {
       conn.close();
@@ -1186,7 +1187,7 @@ public class ApiConnectionIT {
     String path = "/v1/" + spid + "/batches?page=0";
     BatchFilter filter = SinchSMSApi.batchFilter().build();
 
-    final Page<MtBatchSmsResult> expected =
+    final Page<MtBatchResult> expected =
         PagedBatchResult.builder().page(0).size(0).totalSize(0).build();
 
     stubGetResponse(expected, path);
@@ -1199,18 +1200,18 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      FutureCallback<Page<MtBatchSmsResult>> testCallback =
-          new TestCallback<Page<MtBatchSmsResult>>() {
+      FutureCallback<Page<MtBatchResult>> testCallback =
+          new TestCallback<Page<MtBatchResult>>() {
 
             @Override
-            public void completed(Page<MtBatchSmsResult> result) {
+            public void completed(Page<MtBatchResult> result) {
               assertThat(result, is(expected));
             }
           };
 
-      PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
+      PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
-      Page<MtBatchSmsResult> actual = fetcher.fetchAsync(0, testCallback).get();
+      Page<MtBatchResult> actual = fetcher.fetchAsync(0, testCallback).get();
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -1227,7 +1228,7 @@ public class ApiConnectionIT {
     // Prepare first page.
     String path1 = "/v1/" + spid + "/batches?page=0";
 
-    final Page<MtBatchSmsResult> expected1 =
+    final Page<MtBatchResult> expected1 =
         PagedBatchResult.builder().page(0).size(0).totalSize(2).build();
 
     stubGetResponse(expected1, path1);
@@ -1235,7 +1236,7 @@ public class ApiConnectionIT {
     // Prepare second page.
     String path2 = "/v1/" + spid + "/batches?page=1";
 
-    final Page<MtBatchSmsResult> expected2 =
+    final Page<MtBatchResult> expected2 =
         PagedBatchResult.builder().page(1).size(0).totalSize(2).build();
 
     stubGetResponse(expected2, path2);
@@ -1248,11 +1249,11 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      FutureCallback<Page<MtBatchSmsResult>> testCallback =
-          new TestCallback<Page<MtBatchSmsResult>>() {
+      FutureCallback<Page<MtBatchResult>> testCallback =
+          new TestCallback<Page<MtBatchResult>>() {
 
             @Override
-            public void completed(Page<MtBatchSmsResult> result) {
+            public void completed(Page<MtBatchResult> result) {
               switch (result.page()) {
                 case 0:
                   assertThat(result, is(expected1));
@@ -1266,12 +1267,12 @@ public class ApiConnectionIT {
             }
           };
 
-      PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
+      PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
-      Page<MtBatchSmsResult> actual1 = fetcher.fetchAsync(0, testCallback).get();
+      Page<MtBatchResult> actual1 = fetcher.fetchAsync(0, testCallback).get();
       assertThat(actual1, is(expected1));
 
-      Page<MtBatchSmsResult> actual2 = fetcher.fetchAsync(1, testCallback).get();
+      Page<MtBatchResult> actual2 = fetcher.fetchAsync(1, testCallback).get();
       assertThat(actual2, is(expected2));
     } finally {
       conn.close();
@@ -1289,7 +1290,7 @@ public class ApiConnectionIT {
     // Prepare first page.
     String path1 = "/v1/" + spid + "/batches?page=0";
 
-    final Page<MtBatchSmsResult> expected1 =
+    final Page<MtBatchResult> expected1 =
         PagedBatchResult.builder()
             .page(0)
             .size(1)
@@ -1310,7 +1311,7 @@ public class ApiConnectionIT {
     // Prepare second page.
     String path2 = "/v1/" + spid + "/batches?page=1";
 
-    final Page<MtBatchSmsResult> expected2 =
+    final Page<MtBatchResult> expected2 =
         PagedBatchResult.builder()
             .page(1)
             .size(2)
@@ -1346,15 +1347,15 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
+      PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
-      List<Page<MtBatchSmsResult>> actuals = new ArrayList<Page<MtBatchSmsResult>>();
+      List<Page<MtBatchResult>> actuals = new ArrayList<>();
 
-      for (Page<MtBatchSmsResult> result : fetcher.pages()) {
+      for (Page<MtBatchResult> result : fetcher.pages()) {
         actuals.add(result);
       }
 
-      List<Page<MtBatchSmsResult>> expecteds = new ArrayList<Page<MtBatchSmsResult>>();
+      List<Page<MtBatchResult>> expecteds = new ArrayList<>();
       expecteds.add(expected1);
       expecteds.add(expected2);
 
@@ -1375,7 +1376,7 @@ public class ApiConnectionIT {
     // Prepare first page.
     String path1 = "/v1/" + spid + "/batches?page=0";
 
-    final Page<MtBatchSmsResult> expected1 =
+    final Page<MtBatchResult> expected1 =
         PagedBatchResult.builder()
             .page(0)
             .size(1)
@@ -1396,7 +1397,7 @@ public class ApiConnectionIT {
     // Prepare second page.
     String path2 = "/v1/" + spid + "/batches?page=1";
 
-    final Page<MtBatchSmsResult> expected2 =
+    final Page<MtBatchResult> expected2 =
         PagedBatchResult.builder()
             .page(1)
             .size(2)
@@ -1432,15 +1433,15 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      PagedFetcher<MtBatchSmsResult> fetcher = conn.fetchBatches(filter);
+      PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
-      List<MtBatchSmsResult> actuals = new ArrayList<MtBatchSmsResult>();
+      List<MtBatchResult> actuals = new ArrayList<>();
 
-      for (MtBatchSmsResult result : fetcher.elements()) {
+      for (MtBatchResult result : fetcher.elements()) {
         actuals.add(result);
       }
 
-      List<MtBatchSmsResult> expecteds = new ArrayList<MtBatchSmsResult>();
+      List<MtBatchResult> expecteds = new ArrayList<>();
       expecteds.addAll(expected1.content());
       expecteds.addAll(expected2.content());
 
@@ -3453,7 +3454,6 @@ public class ApiConnectionIT {
    *
    * @param response the response to give, serialized to JSON
    * @param path the path on which to listen
-   * @param status the response HTTP status
    * @throws JsonProcessingException if the given response object could not be serialized
    */
   private void stubGetResponse(Object response, String path) throws JsonProcessingException {

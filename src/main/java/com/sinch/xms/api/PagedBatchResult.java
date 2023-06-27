@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @ValueStylePackage
 @JsonDeserialize(builder = PagedBatchResult.Builder.class)
-public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
+public abstract class PagedBatchResult extends Page<MtBatchResult> {
 
   /** A builder of batch result pages. */
   public static class Builder extends PagedBatchResultImpl.Builder {
@@ -49,5 +49,5 @@ public abstract class PagedBatchResult extends Page<MtBatchSmsResult> {
 
   @JsonProperty("batches")
   @Override
-  public abstract List<MtBatchSmsResult> content();
+  public abstract List<MtBatchResult> content();
 }

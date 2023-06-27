@@ -33,6 +33,9 @@ import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsResult;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
 import com.sinch.xms.api.MtBatchDryRunResult;
+import com.sinch.xms.api.MtBatchMmsCreate;
+import com.sinch.xms.api.MtBatchMmsResult;
+import com.sinch.xms.api.MtBatchResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsCreate;
@@ -327,7 +330,7 @@ public abstract class ApiConnection implements Closeable {
   }
 
   /**
-   * Like {@link #endpoint(String, String)} but with no query parameters.
+   * Like {@link #endpoint(String, List<NameValuePair>)} but with no query parameters.
    *
    * @param subPath path fragment to place after the base path
    * @return a non-null endpoint URL
@@ -605,6 +608,49 @@ public abstract class ApiConnection implements Closeable {
   }
 
   /**
+   * Creates the given batch and schedules it for submission. If {@link MtBatchMmsCreate#sendAt()}
+   * returns <code>null</code> then the batch submission will begin immediately.
+   *
+   * <p>This method blocks until the request completes and its use is discouraged. Please consider
+   * using the asynchronous method {@link #createBatchAsync(MtBatchMmsCreate, FutureCallback)}
+   * instead.
+   *
+   * @param mms the batch to create
+   * @return a batch creation result
+   * @throws InterruptedException if the current thread was interrupted while waiting
+   * @throws ApiException if an error occurred while communicating with XMS
+   */
+  public MtBatchMmsResult createBatch(MtBatchMmsCreate mms)
+      throws InterruptedException, ApiException {
+    try {
+      return createBatchAsync(mms, null).get();
+    } catch (ExecutionException e) {
+      throw Utils.unwrapExecutionException(e);
+    }
+  }
+
+  /**
+   * Asynchronously creates the given mms batch and schedules it for submission. If {@link
+   * MtBatchMmsCreate#sendAt()} returns <code>null</code> then the batch submission will begin
+   * immediately.
+   *
+   * @param mms the batch to create
+   * @param callback a callback that is invoked when batch is created
+   * @return a future whose result is the creation response
+   */
+  public Future<MtBatchMmsResult> createBatchAsync(
+      MtBatchMmsCreate mms, FutureCallback<MtBatchMmsResult> callback) {
+    HttpPost req = post(batchesEndpoint(), mms);
+
+    HttpAsyncRequestProducer requestProducer = new BasicAsyncRequestProducer(endpointHost(), req);
+    HttpAsyncResponseConsumer<MtBatchMmsResult> responseConsumer =
+        jsonAsyncConsumer(MtBatchMmsResult.class);
+
+    return httpClient()
+        .execute(requestProducer, responseConsumer, callbackWrapper().wrap(callback));
+  }
+
+  /**
    * Replaces the batch with the given identifier. After this method completes the batch will match
    * the provided batch description.
    *
@@ -789,7 +835,7 @@ public abstract class ApiConnection implements Closeable {
    * @throws InterruptedException if the current thread was interrupted while waiting
    * @throws ApiException if an error occurred while communicating with XMS
    */
-  public MtBatchSmsResult fetchBatch(BatchId id) throws InterruptedException, ApiException {
+  public MtBatchResult fetchBatch(BatchId id) throws InterruptedException, ApiException {
     try {
       return fetchBatchAsync(id, null).get();
     } catch (ExecutionException e) {
@@ -804,14 +850,13 @@ public abstract class ApiConnection implements Closeable {
    * @param callback a callback that is activated at call completion
    * @return a future yielding the desired batch
    */
-  public Future<MtBatchSmsResult> fetchBatchAsync(
-      BatchId batchId, FutureCallback<MtBatchSmsResult> callback) {
+  public Future<MtBatchResult> fetchBatchAsync(
+      BatchId batchId, FutureCallback<MtBatchResult> callback) {
     HttpGet req = get(batchEndpoint(batchId));
 
     HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
 
-    HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
-        jsonAsyncConsumer(MtBatchSmsResult.class);
+    HttpAsyncResponseConsumer<MtBatchResult> consumer = jsonAsyncConsumer(MtBatchResult.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }
@@ -823,12 +868,12 @@ public abstract class ApiConnection implements Closeable {
    * @param filter the batch filter
    * @return a future page
    */
-  public PagedFetcher<MtBatchSmsResult> fetchBatches(final BatchFilter filter) {
-    return new PagedFetcher<MtBatchSmsResult>() {
+  public PagedFetcher<MtBatchResult> fetchBatches(final BatchFilter filter) {
+    return new PagedFetcher<MtBatchResult>() {
 
       @Override
-      Future<Page<MtBatchSmsResult>> fetchAsync(
-          int page, FutureCallback<Page<MtBatchSmsResult>> callback) {
+      Future<Page<MtBatchResult>> fetchAsync(
+          int page, FutureCallback<Page<MtBatchResult>> callback) {
         return fetchBatches(page, filter, callbackWrapper().wrap(callback));
       }
     };
@@ -842,8 +887,8 @@ public abstract class ApiConnection implements Closeable {
    * @param callback the callback to invoke when call is finished
    * @return a future page
    */
-  private Future<Page<MtBatchSmsResult>> fetchBatches(
-      int page, BatchFilter filter, FutureCallback<Page<MtBatchSmsResult>> callback) {
+  private Future<Page<MtBatchResult>> fetchBatches(
+      int page, BatchFilter filter, FutureCallback<Page<MtBatchResult>> callback) {
     List<NameValuePair> params = filter.toQueryParams(page);
     URI url = endpoint("/batches", params);
 
@@ -851,7 +896,7 @@ public abstract class ApiConnection implements Closeable {
 
     HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
 
-    HttpAsyncResponseConsumer<Page<MtBatchSmsResult>> consumer =
+    HttpAsyncResponseConsumer<Page<MtBatchResult>> consumer =
         jsonAsyncConsumer(PagedBatchResult.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
@@ -868,7 +913,7 @@ public abstract class ApiConnection implements Closeable {
    * @throws InterruptedException if the current thread was interrupted while waiting
    * @throws ApiException if an error occurred while communicating with XMS
    */
-  public MtBatchSmsResult cancelBatch(BatchId batchId) throws InterruptedException, ApiException {
+  public MtBatchResult cancelBatch(BatchId batchId) throws InterruptedException, ApiException {
     try {
       return cancelBatchAsync(batchId, null).get();
     } catch (ExecutionException e) {
