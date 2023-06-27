@@ -50,7 +50,6 @@ public class RecipientDeliveryReportMmsTest {
             .operator("818181")
             .encoding("GSM")
             .clientReference("client_ref")
-            .numberOfMessageParts(1)
             .build();
 
     String expected =
@@ -67,8 +66,7 @@ public class RecipientDeliveryReportMmsTest {
                 "  'at': '2016-10-02T09:34:28.542Z',",
                 "  'operator_status_at': '2016-11-02T09:34:28.542Z',",
                 "  'client_reference': 'client_ref',",
-                "  'encoding': 'GSM',",
-                "  'number_of_message_parts': 1",
+                "  'encoding': 'GSM'",
                 "}")
             .replace('\'', '"');
 
@@ -123,7 +121,6 @@ public class RecipientDeliveryReportMmsTest {
             .at(time1)
             .operatorStatusAt(time2)
             .encoding("GSM")
-            .numberOfMessageParts(1)
             .clientReference("client_ref")
             .build();
 

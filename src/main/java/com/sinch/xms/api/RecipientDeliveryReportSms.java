@@ -19,11 +19,13 @@
  */
 package com.sinch.xms.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /** Representation of an SMS delivery report for a specific recipient. */
@@ -49,4 +51,8 @@ public abstract class RecipientDeliveryReportSms extends RecipientDeliveryReport
   public static final RecipientDeliveryReportSms.Builder builder() {
     return new Builder();
   }
+
+  @Nullable
+  @JsonProperty("number_of_message_parts")
+  public abstract Integer numberOfMessageParts();
 }
