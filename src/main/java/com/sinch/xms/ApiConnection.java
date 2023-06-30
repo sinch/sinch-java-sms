@@ -35,6 +35,7 @@ import com.sinch.xms.api.MtBatchBinarySmsUpdate;
 import com.sinch.xms.api.MtBatchDryRunResult;
 import com.sinch.xms.api.MtBatchMmsCreate;
 import com.sinch.xms.api.MtBatchMmsResult;
+import com.sinch.xms.api.MtBatchMmsUpdate;
 import com.sinch.xms.api.MtBatchResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
@@ -820,6 +821,48 @@ public abstract class ApiConnection implements Closeable {
     HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
     HttpAsyncResponseConsumer<MtBatchBinarySmsResult> consumer =
         jsonAsyncConsumer(MtBatchBinarySmsResult.class);
+
+    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
+  }
+
+  /**
+   * Updates the given mms batch.
+   *
+   * <p>This method blocks until the request completes and its use is discouraged. Please consider
+   * using the asynchronous method {@link #updateBatchAsync(BatchId, MtBatchMmsUpdate,
+   * FutureCallback)} instead.
+   *
+   * @param id identifier of the batch to update
+   * @param mms a description of the desired updated
+   * @return the batch with the updates applied
+   * @throws InterruptedException if the current thread was interrupted while waiting
+   * @throws ApiException if an error occurred while communicating with XMS
+   */
+  public MtBatchMmsResult updateBatch(BatchId id, MtBatchMmsUpdate mms)
+      throws InterruptedException, ApiException {
+    try {
+      return updateBatchAsync(id, mms, null).get();
+    } catch (ExecutionException e) {
+      throw Utils.unwrapExecutionException(e);
+    }
+  }
+
+  /**
+   * Asynchronously updates the mms batch with the given batch ID. The batch is updated to match the
+   * given update object.
+   *
+   * @param batchId the batch that should be updated
+   * @param mms description of the desired update
+   * @param callback called at call success, failure, or cancellation
+   * @return a future containing the updated batch
+   */
+  public Future<MtBatchMmsResult> updateBatchAsync(
+      BatchId batchId, MtBatchMmsUpdate mms, FutureCallback<MtBatchMmsResult> callback) {
+    HttpPost req = post(batchEndpoint(batchId), mms);
+
+    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
+    HttpAsyncResponseConsumer<MtBatchMmsResult> consumer =
+        jsonAsyncConsumer(MtBatchMmsResult.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }
