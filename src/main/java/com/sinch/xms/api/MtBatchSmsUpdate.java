@@ -42,7 +42,7 @@ public abstract class MtBatchSmsUpdate extends MtBatchUpdate {
 
   /**
    * Message will be dispatched only if it is not split to more parts than Max Number of Message
-   * Parts. Defaults to false.
+   * Parts.
    *
    * @return the maximum allowed number of message parts
    */

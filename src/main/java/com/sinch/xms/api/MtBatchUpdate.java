@@ -98,6 +98,27 @@ public abstract class MtBatchUpdate {
   @JsonProperty("callback_url")
   public abstract UpdateValue<URI> callbackUrl();
 
+  /**
+   * If set to true, then feedback is expected after successful delivery.
+   *
+   * <p>Defaults to false.
+   *
+   * @return boolean value
+   */
+  @Nullable
+  @JsonProperty("feedback_enabled")
+  public abstract Boolean feedbackEnabled();
+
+  /**
+   * The client identifier to attach to this message. If set, it will be added in the delivery
+   * report/callback of this batch.
+   *
+   * @return a client reference id
+   */
+  @Nullable
+  @JsonProperty("client_reference")
+  public abstract String clientReference();
+
   /** Validates that this object is in a correct state. */
   @OverridingMethodsMustInvokeSuper
   @Value.Check

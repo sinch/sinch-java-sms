@@ -27,7 +27,8 @@ public abstract class FeedbackDeliveryCreate {
   }
 
   /**
-   * The list of recipients.
+   * The list of recipients. Can be set as an empty list to indicate that all recipients received
+   * the message. If the feedback was enabled for a group, at least one phone number is required.
    *
    * @return a list of strings containing recipients
    */

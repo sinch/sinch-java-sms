@@ -1168,7 +1168,8 @@ public abstract class ApiConnection implements Closeable {
   }
 
   /**
-   * Create a delivery feedback for the batch with the given batch ID.
+   * Create a delivery feedback for the batch with the given batch ID. Feedback can only be provided
+   * if feedback_enabled was set when batch was submitted.
    *
    * <p>This method blocks until the request completes and its use is discouraged. Please consider
    * using the asynchronous method {@link #createDeliveryFeedbackAsync(BatchId,
@@ -1189,7 +1190,8 @@ public abstract class ApiConnection implements Closeable {
   }
 
   /**
-   * Create a delivery feedback for the batch with the given batch ID and recipients
+   * Create a delivery feedback for the batch with the given batch ID. Feedback can only be provided
+   * if feedback_enabled was set when batch was submitted.
    *
    * @param id identifier of the batch
    * @param feedbackDeliveryCreate create delivery feedback input with recipients
