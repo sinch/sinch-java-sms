@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.immutables.value.Value;
 
-/** Objects of this type can be used to update previously submitted MT batches. */
+/** Base class for updating previously submitted MT batches. */
 public abstract class MtBatchUpdate {
 
   /**
