@@ -1149,14 +1149,14 @@ public class ApiConnectionIT {
             .start();
 
     try {
-      final Queue<MtBatchSmsResult> results = new ConcurrentArrayQueue<MtBatchSmsResult>();
+      final Queue<MtBatchResult> results = new ConcurrentArrayQueue<MtBatchResult>();
       final CountDownLatch latch = new CountDownLatch(2);
 
-      FutureCallback<MtBatchSmsResult> callback =
-          new TestCallback<MtBatchSmsResult>() {
+      FutureCallback<MtBatchResult> callback =
+          new TestCallback<MtBatchResult>() {
 
             @Override
-            public void completed(MtBatchSmsResult result) {
+            public void completed(MtBatchResult result) {
               results.add(result);
               latch.countDown();
             }

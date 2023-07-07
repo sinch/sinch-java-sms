@@ -38,7 +38,6 @@ import com.sinch.xms.api.MtBatchMmsResult;
 import com.sinch.xms.api.MtBatchMmsUpdate;
 import com.sinch.xms.api.MtBatchResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
-import com.sinch.xms.api.MtBatchSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsCreate;
 import com.sinch.xms.api.MtBatchTextSmsResult;
 import com.sinch.xms.api.MtBatchTextSmsUpdate;
@@ -971,14 +970,13 @@ public abstract class ApiConnection implements Closeable {
    * @param callback the callback invoked when request completes
    * @return a future containing the batch that was cancelled
    */
-  public Future<MtBatchSmsResult> cancelBatchAsync(
-      BatchId batchId, FutureCallback<MtBatchSmsResult> callback) {
+  public Future<MtBatchResult> cancelBatchAsync(
+      BatchId batchId, FutureCallback<MtBatchResult> callback) {
     HttpDelete req = delete(batchEndpoint(batchId));
 
     HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
 
-    HttpAsyncResponseConsumer<MtBatchSmsResult> consumer =
-        jsonAsyncConsumer(MtBatchSmsResult.class);
+    HttpAsyncResponseConsumer<MtBatchResult> consumer = jsonAsyncConsumer(MtBatchResult.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }
