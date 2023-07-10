@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
-/** A description of updates that can be applied to a text SMS batch message. */
+/** A description of updates that can be applied to a media batch message. */
 @Value.Immutable
 @ValueStylePackage
 @JsonSerialize(as = MtBatchMmsUpdateImpl.class)

@@ -28,9 +28,16 @@ import org.immutables.value.Value;
 
 /**
  * Representation of a media body. The text part is optional but the media url is mandatory.
- * Supported media types are: image: .jpg, .png (please observe that .jpg files have wider support
- * on mobile devices than .png files) video: .mp4, .gif, .mov vCard (Virtual Contact File): .vcf PDF
- * files: .pdf
+ *
+ * <p>Supported media types are:
+ *
+ * <ul>
+ *   <li>image: .jpg, .png (please observe that .jpg files have wider support on mobile devices than
+ *       .png files)
+ *   <li>video: .mp4, .gif, .mov
+ *   <li>vCard (Virtual Contact File): .vcf
+ *   <li>PDF files: .pdf
+ * </ul>
  */
 @Value.Immutable
 @ValueStylePackage

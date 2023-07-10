@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
- * Container of all necessary parameters to create a media SMS batch message.
+ * Container of all necessary parameters to create a media batch message.
  *
  * <p>A minimal definition has defined values for
  *
