@@ -20,34 +20,39 @@
 package com.sinch.xms.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
-/** A page within a paged batch listing. */
+/** Representation of an SMS delivery report for a specific recipient. */
 @Value.Immutable
 @ValueStylePackage
-@JsonDeserialize(builder = PagedBatchResult.Builder.class)
-public abstract class PagedBatchResult extends Page<MtBatchResult> {
+@JsonDeserialize(builder = RecipientDeliveryReportSms.Builder.class)
+@JsonTypeInfo(use = Id.NAME, property = "type")
+@JsonTypeName("recipient_delivery_report_sms")
+public abstract class RecipientDeliveryReportSms extends RecipientDeliveryReport {
 
-  /** A builder of batch result pages. */
-  public static class Builder extends PagedBatchResultImpl.Builder {
+  /** A builder of recipient delivery reports. */
+  public static final class Builder extends RecipientDeliveryReportSmsImpl.Builder {
 
     Builder() {}
   }
 
   /**
-   * Creates a builder of {@link PagedBatchResult} instances.
+   * Creates a builder of {@link RecipientDeliveryReportSms} instances.
    *
    * @return a builder
    */
   @Nonnull
-  public static final PagedBatchResult.Builder builder() {
+  public static final RecipientDeliveryReportSms.Builder builder() {
     return new Builder();
   }
 
-  @JsonProperty("batches")
-  @Override
-  public abstract List<MtBatchResult> content();
+  @Nullable
+  @JsonProperty("number_of_message_parts")
+  public abstract Integer numberOfMessageParts();
 }

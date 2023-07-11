@@ -29,7 +29,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import org.junit.Test;
 
-public class RecipientDeliveryReportTest {
+public class RecipientDeliveryReportSmsTest {
 
   private final ApiObjectMapper json = new ApiObjectMapper();
 
@@ -38,8 +38,8 @@ public class RecipientDeliveryReportTest {
     OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
     OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
-    RecipientDeliveryReport input =
-        new RecipientDeliveryReport.Builder()
+    RecipientDeliveryReportSms input =
+        new RecipientDeliveryReportSms.Builder()
             .batchId(BatchId.of("batchid"))
             .recipient("12345")
             .code(10)
@@ -82,7 +82,7 @@ public class RecipientDeliveryReportTest {
     OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
     RecipientDeliveryReport input =
-        new RecipientDeliveryReport.Builder()
+        new RecipientDeliveryReportSms.Builder()
             .batchId(BatchId.of("batchid"))
             .recipient("12345")
             .code(10)
@@ -114,7 +114,7 @@ public class RecipientDeliveryReportTest {
     OffsetDateTime time2 = OffsetDateTime.of(2016, 11, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
     RecipientDeliveryReport expected =
-        new RecipientDeliveryReport.Builder()
+        new RecipientDeliveryReportSms.Builder()
             .batchId(BatchId.of("batchid"))
             .recipient("1235")
             .code(10)
@@ -129,7 +129,7 @@ public class RecipientDeliveryReportTest {
 
     String input = json.writeValueAsString(expected);
 
-    RecipientDeliveryReport actual = json.readValue(input, RecipientDeliveryReport.class);
+    RecipientDeliveryReportSms actual = json.readValue(input, RecipientDeliveryReportSms.class);
 
     assertThat(actual, is(expected));
   }
@@ -139,7 +139,7 @@ public class RecipientDeliveryReportTest {
     OffsetDateTime time1 = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
 
     RecipientDeliveryReport expected =
-        new RecipientDeliveryReport.Builder()
+        new RecipientDeliveryReportSms.Builder()
             .batchId(BatchId.of("batchid"))
             .recipient("1235")
             .code(10)
@@ -149,7 +149,7 @@ public class RecipientDeliveryReportTest {
 
     String input = json.writeValueAsString(expected);
 
-    RecipientDeliveryReport actual = json.readValue(input, RecipientDeliveryReport.class);
+    RecipientDeliveryReportSms actual = json.readValue(input, RecipientDeliveryReportSms.class);
 
     assertThat(actual, is(expected));
   }

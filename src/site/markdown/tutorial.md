@@ -4,7 +4,7 @@ The purpose of this document is to present the basic concepts of the Sinch HTTP 
 
 ## HTTP REST Messaging API basics
 
-HTTP REST Messaging API is a REST API that is provided by Sinch for sending and receiving SMS messages. It also provides various other services supporting this task such as managing groups of recipients, tagging, and so forth.
+HTTP REST Messaging API is a REST API that is provided by Sinch for sending and receiving SMS and MMS messages. It also provides various other services supporting this task such as managing groups of recipients, tagging, and so forth.
 
 Note, for brevity we will in this document refer to HTTP REST Messaging API as _XMS API_ and the HTTP REST Messaging API service or HTTP endpoint as _XMS_.
 
@@ -91,7 +91,7 @@ MtBatchTextSmsResult result =
 
 You will notice a few things with this code. We are using a `conn` variable that corresponds to an API connection that we assume has been previously created. We are calling the `createBatch` method on the connection with a single argument that describes the batch we wish to create.
 
-Describing the batch is done using an object satisfying the `MtBatchTextSmsCreate` interface. Such objects can most easily be created using the builder returned by `ClxApi.batchTextSms()`. For a batch with a binary body you would similarly describe it using a object satisfying the `MtBatchBinarySmsCreate` interface and typically use `ClxApi.batchBinarySms()` to build such objects.
+Describing the batch is done using an object satisfying the `MtBatchTextSmsCreate` interface. Such objects can most easily be created using the builder returned by `SinchSMSApi.batchTextSms()`. For a batch with a binary body you would similarly describe it using a object satisfying the `MtBatchBinarySmsCreate` interface and typically use `SinchSMSApi.batchBinarySms()` to build such objects.
 
 The return value in this case is a `MtBatchTextSmsResult` object that contains not only the submitted batch information but also information included by XMS, such that the unique batch identifier, the creation time, etc. For example, to simply print the batch identifier we could add the code
 
@@ -140,7 +140,7 @@ MtBatchTextSmsResult result =
         .addRecipient("987654321", "123456789", "555555555")
         .body("Hello, ${name}!")
         .putParameter("name",
-            ClxApi.parameterValues()
+            SinchSMSApi.parameterValues()
                 .putSubstitution("987654321", "Mary")
                 .putSubstitution("123456789", "Joe")
                 .defaultValue("valued customer")
@@ -265,7 +265,7 @@ try {
 
 For most typical use cases the users of the XMS SDK do not have to worry about its internals. However, for some specialized cases the SDK does allow deep access. In particular, if you have special needs concerning the way the SDK does HTTP traffic you can tell the SDK in the API connection to use a Apache HTTP Async Client of your choice. Do note, however, that in such cases the SDK assumes the client is started up and torn down externally to the API connection.
 
-For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiHttpAsyncClient`](apidocs/index.html?com/clxcommunications/xms/ApiHttpAsyncClient.html).
+For example, consider a use case where you have two XMS service plans and you wish them to simultaneously interact with XMS from the same application. It may in this case be beneficial to maintain a single connection pool towards XMS for both plans. This requires creating a suitable instance of the [`HttpAsyncClient`](https://hc.apache.org/httpcomponents-asyncclient-dev/httpasyncclient/apidocs/org/apache/http/nio/client/HttpAsyncClient.html) class and using it when initializing the API connection. Note, the XMS SDK provides a concrete client class with a suitable configuration for XMS called [`ApiHttpAsyncClient`](apidocs/index.html?com/sinch/xms/ApiHttpAsyncClient.html).
 
 Thus, sharing the default HTTP client between two connections may in practice be accomplished with code such at the following.
 

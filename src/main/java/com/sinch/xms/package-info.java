@@ -20,7 +20,7 @@
 
 /**
  * This package contains a Java interface for the Sinch XMS API. This API is intended for managing
- * and sending batches of SMS messages as well as receiving mobile originated messages.
+ * and sending batches of SMS and MMS messages as well as receiving mobile originated messages.
  *
  * <p>The typical use case of this library is to create a long lived {@link
  * com.sinch.xms.ApiConnection} object which is then used to submit batches and perform other
@@ -30,9 +30,9 @@
  * exits.
  *
  * <pre>
- * import com.clxcommunications.xms.ApiConnection;
- * import com.clxcommunications.xms.ClxApi;
- * import com.clxcommunications.xms.api.MtBatchTextSmsResult;
+ * import com.sinch.xms.ApiConnection;
+ * import com.sinch.xms.SinchSMSApi;
+ * import com.sinch.xms.api.MtBatchTextSmsResult;
  *
  * public class Example {
  *
@@ -44,7 +44,7 @@
  *
  *         try {
  *             MtBatchTextSmsResult result =
- *                     conn.createBatch(ClxApi.batchTextSms()
+ *                     conn.createBatch(SinchSMSApi.batchTextSms()
  *                             .sender("my short code")
  *                             .addRecipient("my destination")
  *                             .body("my message")

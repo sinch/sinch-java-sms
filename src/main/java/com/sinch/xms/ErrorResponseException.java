@@ -26,8 +26,7 @@ import com.sinch.xms.api.ApiError;
  * the XMS API has been broken, the error code and text indicates the specifics.
  *
  * <p>For information about specific errors please refer to the <a href=
- * "https://www.clxcommunications.com/docs/sms/http-rest.html#http-errors">XMS API
- * documentation</a>.
+ * "https://developers.sinch.com/docs/sms/api-reference/status-codes/">XMS API documentation</a>.
  */
 public class ErrorResponseException extends ApiException {
 
