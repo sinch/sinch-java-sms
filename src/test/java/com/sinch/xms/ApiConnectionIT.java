@@ -55,6 +55,7 @@ import com.sinch.xms.api.GroupCreate;
 import com.sinch.xms.api.GroupId;
 import com.sinch.xms.api.GroupResult;
 import com.sinch.xms.api.GroupUpdate;
+import com.sinch.xms.api.MediaBody;
 import com.sinch.xms.api.MoBinarySms;
 import com.sinch.xms.api.MoSms;
 import com.sinch.xms.api.MoTextSms;
@@ -62,6 +63,9 @@ import com.sinch.xms.api.MtBatchBinarySmsCreate;
 import com.sinch.xms.api.MtBatchBinarySmsResult;
 import com.sinch.xms.api.MtBatchBinarySmsUpdate;
 import com.sinch.xms.api.MtBatchDryRunResult;
+import com.sinch.xms.api.MtBatchMmsCreate;
+import com.sinch.xms.api.MtBatchMmsResult;
+import com.sinch.xms.api.MtBatchMmsUpdate;
 import com.sinch.xms.api.MtBatchResult;
 import com.sinch.xms.api.MtBatchSmsCreate;
 import com.sinch.xms.api.MtBatchSmsResult;
@@ -284,6 +288,54 @@ public class ApiConnectionIT {
 
     try {
       MtBatchTextSmsResult actual = conn.createBatch(request);
+      assertThat(actual, is(expected));
+    } finally {
+      conn.close();
+    }
+
+    verifyPostRequest(path, request);
+  }
+
+  @Test
+  public void canCreateMmsBatch() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+    OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+
+    MtBatchMmsCreate request =
+        SinchSMSApi.batchMms()
+            .sender("12345")
+            .addRecipient("123456789")
+            .addRecipient("987654321")
+            .body(MediaBody.builder().url("http://my.url.com").message("my body").build())
+            .build();
+
+    MtBatchMmsResult expected =
+        MtBatchMmsResult.builder()
+            .feedbackEnabled(false)
+            .deliveryReport(ReportType.NONE)
+            .sender(request.sender())
+            .recipients(request.recipients())
+            .body(request.body())
+            .canceled(false)
+            .id(batchId)
+            .createdAt(time)
+            .modifiedAt(time)
+            .build();
+
+    String path = "/v1/" + spid + "/batches";
+
+    stubPostResponse(expected, path, 201);
+
+    ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start();
+
+    try {
+      MtBatchMmsResult actual = conn.createBatch(request);
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -628,6 +680,54 @@ public class ApiConnectionIT {
   }
 
   @Test
+  public void canReplaceMmsBatch() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+    OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+
+    MtBatchMmsCreate request =
+        SinchSMSApi.batchMms()
+            .sender("12345")
+            .addRecipient("123456789")
+            .addRecipient("987654321")
+            .body(MediaBody.builder().url("http://my.url.com").build())
+            .build();
+
+    MtBatchMmsResult expected =
+        MtBatchMmsResult.builder()
+            .feedbackEnabled(false)
+            .deliveryReport(ReportType.NONE)
+            .sender(request.sender())
+            .recipients(request.recipients())
+            .body(request.body())
+            .canceled(false)
+            .id(batchId)
+            .createdAt(time)
+            .modifiedAt(time)
+            .build();
+
+    String path = "/v1/" + spid + "/batches/" + batchId;
+
+    stubPutResponse(expected, path, 201);
+
+    ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start();
+
+    try {
+      MtBatchMmsResult actual = conn.replaceBatch(batchId, request);
+      assertThat(actual, is(expected));
+    } finally {
+      conn.close();
+    }
+
+    verifyPutRequest(path, request);
+  }
+
+  @Test
   public void canUpdateSimpleTextBatch() throws Exception {
     String spid = TestUtils.freshServicePlanId();
     BatchId batchId = TestUtils.freshBatchId();
@@ -721,6 +821,54 @@ public class ApiConnectionIT {
 
     try {
       MtBatchBinarySmsResult actual = conn.updateBatch(batchId, request);
+      assertThat(actual, is(expected));
+    } finally {
+      conn.close();
+    }
+
+    verifyPostRequest(path, request);
+  }
+
+  @Test
+  public void canUpdateSimpleMmsBatch() throws Exception {
+    String spid = TestUtils.freshServicePlanId();
+    BatchId batchId = TestUtils.freshBatchId();
+    OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
+
+    MtBatchMmsUpdate request =
+        SinchSMSApi.batchMmsUpdate()
+            .sender("12345")
+            .body(MediaBody.builder().url("http://my.url.com").build())
+            .unsetDeliveryReport()
+            .unsetExpireAt()
+            .build();
+
+    MtBatchMmsResult expected =
+        MtBatchMmsResult.builder()
+            .feedbackEnabled(false)
+            .deliveryReport(ReportType.NONE)
+            .sender(request.sender())
+            .addRecipient("123")
+            .body(request.body())
+            .canceled(false)
+            .id(batchId)
+            .createdAt(time)
+            .modifiedAt(time)
+            .build();
+
+    String path = "/v1/" + spid + "/batches/" + batchId;
+
+    stubPostResponse(expected, path, 201);
+
+    ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start();
+
+    try {
+      MtBatchMmsResult actual = conn.updateBatch(batchId, request);
       assertThat(actual, is(expected));
     } finally {
       conn.close();
@@ -1764,217 +1912,6 @@ public class ApiConnectionIT {
       assertThat(callbackCompleted.get(), is(true));
     }
     verifyPostRequest(path, request);
-  }
-
-  @Test
-  public void canUpdateBatchTagsSync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    TagsUpdate request =
-        SinchSMSApi.tagsUpdate()
-            .addTagInsertion("aTag1", "аТаг2")
-            .addTagRemoval("rTag1", "rТаг2")
-            .build();
-
-    Tags expected = Tags.of("tag1", "таг2");
-
-    stubPostResponse(expected, path, 200);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      Tags actual = conn.updateTags(batchId, request);
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyPostRequest(path, request);
-  }
-
-  @Test
-  public void canUpdateBatchTagsAsync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    TagsUpdate request =
-        SinchSMSApi.tagsUpdate()
-            .addTagInsertion("aTag1", "аТаг2")
-            .addTagRemoval("rTag1", "rТаг2")
-            .build();
-
-    final Tags expected = Tags.of("tag1", "таг2");
-
-    stubPostResponse(expected, path, 200);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      FutureCallback<Tags> testCallback =
-          new TestCallback<Tags>() {
-
-            @Override
-            public void completed(Tags result) {
-              assertThat(result, is(expected));
-            }
-          };
-
-      Tags actual = conn.updateTagsAsync(batchId, request, testCallback).get();
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyPostRequest(path, request);
-  }
-
-  @Test
-  public void canReplaceBatchTagsSync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    Tags request = Tags.of("rTag1", "rTag2");
-
-    Tags expected = Tags.of("tag1", "таг2");
-
-    stubPutResponse(expected, path, 200);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      Tags actual = conn.replaceTags(batchId, request);
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyPutRequest(path, request);
-  }
-
-  @Test
-  public void canReplaceBatchTagsAsync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    Tags request = Tags.of("rTag1", "rTag2");
-
-    final Tags expected = Tags.of("tag1", "таг2");
-
-    stubPutResponse(expected, path, 200);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      FutureCallback<Tags> testCallback =
-          new TestCallback<Tags>() {
-
-            @Override
-            public void completed(Tags result) {
-              assertThat(result, is(expected));
-            }
-          };
-
-      Tags actual = conn.replaceTagsAsync(batchId, request, testCallback).get();
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyPutRequest(path, request);
-  }
-
-  @Test
-  public void canFetchBatchTagsSync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    Tags expected = Tags.of("tag1", "таг2");
-
-    stubGetResponse(expected, path);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      Tags actual = conn.fetchTags(batchId);
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyGetRequest(path);
-  }
-
-  @Test
-  public void canFetchBatchTagsAsync() throws Exception {
-    String spid = TestUtils.freshServicePlanId();
-    BatchId batchId = TestUtils.freshBatchId();
-
-    String path = "/v1/" + spid + "/batches/" + batchId + "/tags";
-
-    final Tags expected = Tags.of("tag1", "таг2");
-
-    stubGetResponse(expected, path);
-
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
-      FutureCallback<Tags> testCallback =
-          new TestCallback<Tags>() {
-
-            @Override
-            public void completed(Tags result) {
-              assertThat(result, is(expected));
-            }
-          };
-
-      Tags actual = conn.fetchTagsAsync(batchId, testCallback).get();
-      assertThat(actual, is(expected));
-    } finally {
-      conn.close();
-    }
-
-    verifyGetRequest(path);
   }
 
   @Test
