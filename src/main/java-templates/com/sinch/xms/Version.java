@@ -21,7 +21,7 @@ package com.sinch.xms;
 
 
 /**
- * A container of some static information concerning this CLX SDK.
+ * A container of some static information concerning this Sinch SDK.
  */
 public final class Version {
 
