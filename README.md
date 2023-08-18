@@ -1,6 +1,6 @@
 # REST API SDK for SMS
 
-This is the Java SDK for the Sinch REST SMS API for sending and receiving single or batch SMS messages. It also supports
+This is the Java SDK for the Sinch REST SMS API for sending and receiving single or batch SMS/MMS messages. It also supports
 scheduled sends, organizing your frequent recipients into groups, and customizing your message for each recipient using
 parameterization. It offers an asynchronous Java API that provides convenient access to all the features of the SMS REST
 API.
@@ -20,7 +20,7 @@ Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
 </dependency>
 ```
 
@@ -77,6 +77,20 @@ MtBatchTextSmsResult batch = conn.createBatch(
 System.out.println("Successfully sent batch " + batch.id());
 ```
 
+#### Sending MMS Message
+
+```java
+String sender = "SENDER"; // Optional, must be valid phone number, short code or alphanumeric.
+String [] recipients = {"1232323131", "3213123"};
+MtBatchMmsResult batch =
+conn.createBatch(
+    SinchSMSApi.batchMms()
+        .sender(sender)
+        .addRecipient(recipients)
+        .body(SinchSMSApi.mediaBody().url("http://test.url.com").build())
+        .build());
+```
+
 Please visit https://developers.sinch.com/docs/sms/getting-started/java/send-sms-with-java/ for more detailed instructions.
 
 ## Building and installing
@@ -105,6 +119,18 @@ mvn package -Dmaven.test.skip=true
 in your terminal. The project will then be compiled and tested before finally being installed in your local repository.
 
 We recommend enabling annotation processing in your IDE https://immutables.github.io/apt.html.
+
+## Sinch REST SMS API 1.1.6 to 1.1.7 Migration guide
+
+In version 1.1.7 MMS messages support was added  into the library, which will require code changes if you want to upgrade.
+
+1. Methods of ApiConnection for fetching or cancelling batches are returning MtBatchResult now, which you could cast to 
+either MtBatchMmsResult or MtBatchSmsResult depending on message type;
+
+2. RecipientDeliveryReport which is returned by ApiConnection.fetchDeliveryReport, you could cast to
+RecipientDeliveryReportSms or RecipientDeliveryReportMms depending on message type;
+
+3. BatchDeliveryReport.Status is not inner class anymore and could be used as Status;
 
 ## License
 
