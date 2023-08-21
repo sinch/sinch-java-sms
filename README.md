@@ -87,7 +87,7 @@ conn.createBatch(
     SinchSMSApi.batchMms()
         .sender(sender)
         .addRecipient(recipients)
-        .body(SinchSMSApi.mediaBody().url("http://test.url.com").message("Hello, world!").build())
+        .body(SinchSMSApi.mediaBody().url("https://en.wikipedia.org/wiki/Sinch_(company)#/media/File:Sinch_LockUp_RGB.png").message("Hello, world!").build())
         .build());
 ```
 
