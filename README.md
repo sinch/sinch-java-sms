@@ -20,7 +20,7 @@ Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 
@@ -87,7 +87,7 @@ conn.createBatch(
     SinchSMSApi.batchMms()
         .sender(sender)
         .addRecipient(recipients)
-        .body(SinchSMSApi.mediaBody().url("http://test.url.com").build())
+        .body(SinchSMSApi.mediaBody().url("http://test.url.com").message("Hello, world!").build())
         .build());
 ```
 
@@ -120,9 +120,9 @@ in your terminal. The project will then be compiled and tested before finally be
 
 We recommend enabling annotation processing in your IDE https://immutables.github.io/apt.html.
 
-## Sinch REST SMS API 1.1.6 to 1.1.7 Migration guide
+## Sinch REST SMS API 1.x to 2.x Migration guide
 
-In version 1.1.7 MMS messages support was added  into the library, which will require code changes if you want to upgrade.
+In version 2.x MMS messages support was added into the library, which will require code changes if you want to upgrade.
 
 1. Methods of ApiConnection for fetching or cancelling batches are returning MtBatchResult now, which you could cast to 
 either MtBatchMmsResult or MtBatchSmsResult depending on message type;
