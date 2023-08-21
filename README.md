@@ -77,7 +77,7 @@ MtBatchTextSmsResult batch = conn.createBatch(
 System.out.println("Successfully sent batch " + batch.id());
 ```
 
-#### Sending MMS Message
+#### Sending MMS Message, requires version 2.x
 
 ```java
 String sender = "SENDER"; // Optional, must be valid phone number, short code or alphanumeric.
