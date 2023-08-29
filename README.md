@@ -20,13 +20,13 @@ Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>1.1.6</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 Gradle
 ```groovy
-implementation 'com.sinch:sdk-sms:1.1.6'
+implementation 'com.sinch:sdk-sms:2.0.0'
 ```
 
 ## Quick Start
@@ -109,7 +109,7 @@ Build .jar file
 mvn package
 ```
 
-It will give you `sdk-sms-1.1.6-jar-with-dependencies.jar`
+It will give you `sdk-sms-2.0.0-jar-with-dependencies.jar`
 
 To skip local test
 ```bash
