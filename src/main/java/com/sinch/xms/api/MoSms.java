@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  * MoTextSms textual} or a {@link MoBinarySms binary} message payload.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({@Type(MoTextSms.class), @Type(MoBinarySms.class)})
+@JsonSubTypes({@Type(MoTextSms.class), @Type(MoBinarySms.class), @Type(MoMms.class)})
 public abstract class MoSms {
 
   MoSms() {
