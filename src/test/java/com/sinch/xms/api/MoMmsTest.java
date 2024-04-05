@@ -22,7 +22,6 @@ package com.sinch.xms.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sinch.testsupport.TestUtils;
 import com.sinch.xms.ApiObjectMapper;
 import com.sinch.xms.Utils;
@@ -47,16 +46,19 @@ public class MoMmsTest {
             .sender("987654321")
             .id(smsId)
             .receivedAt(receivedAt)
-            .body(new MoMmsBody.Builder()
-                .subject("Test subject")
-                .message("Test message")
-                .media(Arrays.asList(MoMmsMedia.builder()
-                        .url("Test url")
-                        .contentType("text/txt")
-                        .status(MoMmsMedia.MediaStatus.UPLOADED)
-                        .code(200)
-                    .build()))
-                .build())
+            .body(
+                new MoMmsBody.Builder()
+                    .subject("Test subject")
+                    .message("Test message")
+                    .media(
+                        Arrays.asList(
+                            MoMmsMedia.builder()
+                                .url("Test url")
+                                .contentType("text/txt")
+                                .status(MoMmsMedia.MediaStatus.UPLOADED)
+                                .code(200)
+                                .build()))
+                    .build())
             .build();
 
     String expected =
@@ -87,16 +89,19 @@ public class MoMmsTest {
             .sender("987654321")
             .id(smsId)
             .receivedAt(receivedAt)
-            .body(new MoMmsBody.Builder()
-                .subject("Test subject")
-                .message("Test message")
-                .media(Arrays.asList(MoMmsMedia.builder()
-                    .url("Test url")
-                    .contentType("text/txt")
-                    .status(MoMmsMedia.MediaStatus.UPLOADED)
-                    .code(200)
-                    .build()))
-                .build())
+            .body(
+                new MoMmsBody.Builder()
+                    .subject("Test subject")
+                    .message("Test message")
+                    .media(
+                        Arrays.asList(
+                            MoMmsMedia.builder()
+                                .url("Test url")
+                                .contentType("text/txt")
+                                .status(MoMmsMedia.MediaStatus.UPLOADED)
+                                .code(200)
+                                .build()))
+                    .build())
             .build();
 
     String input = json.writeValueAsString(expected);
