@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 /**
  * Base class for mobile originated messages. A mobile originated message can have either a {@link
- * MoTextSms textual} or a {@link MoBinarySms binary} message payload.
+ * MoTextSms textual} or a {@link MoBinarySms binary} or a {@link MoMms} message payload.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({@Type(MoTextSms.class), @Type(MoBinarySms.class), @Type(MoMms.class)})

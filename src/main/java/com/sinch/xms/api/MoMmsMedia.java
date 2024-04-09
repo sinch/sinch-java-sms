@@ -54,9 +54,9 @@ public abstract class MoMmsMedia {
    */
   public abstract String url();
   /**
-   * The url of provided media.
+   * The content type of provided media.
    *
-   * @return the media url
+   * @return the content type
    */
   public abstract String contentType();
   /**
@@ -68,9 +68,9 @@ public abstract class MoMmsMedia {
   /**
    * The code received while media upload to storage.
    *
-   * @return the media url
+   * @return the status code
    */
-  public abstract Integer code();
+  public abstract int code();
 
   public enum MediaStatus {
     UPLOADED("Uploaded"),
