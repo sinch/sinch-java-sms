@@ -66,7 +66,7 @@ public abstract class MoMmsMedia {
    */
   public abstract MediaStatus status();
   /**
-   * The code received while media upload to storage.
+   * Error code in case of failure or 0 for success.
    *
    * @return the status code
    */
