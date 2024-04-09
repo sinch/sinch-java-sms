@@ -59,7 +59,9 @@ public abstract class MoMmsMedia {
    * The content type of provided media. For example, 'image/jpeg'
    *
    * @return the content type
-   * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">Content types</a>
+   * @see <a
+   *     href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">Content
+   *     types</a>
    */
   @Nonnull
   public abstract String contentType();
