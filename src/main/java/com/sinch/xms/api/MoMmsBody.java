@@ -49,7 +49,7 @@ public abstract class MoMmsBody {
   }
 
   /**
-   * The message subject.
+   * The message subject, if available.
    *
    * @return the message subject
    */
@@ -57,7 +57,7 @@ public abstract class MoMmsBody {
   /**
    * The textual message body.
    *
-   * @return the message body
+   * @return the message body or `null` if not available.
    */
   public abstract String message();
   /**
