@@ -73,8 +73,8 @@ public abstract class MoMmsMedia {
   public abstract int code();
 
   public enum MediaStatus {
-    UPLOADED("Uploaded"),
-    FAILED("Failed");
+    Uploaded("Uploaded"),
+    Failed("Failed");
 
     private final String publicName;
 

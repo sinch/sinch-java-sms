@@ -55,7 +55,7 @@ public class MoMmsTest {
                             MoMmsMedia.builder()
                                 .url("Test url")
                                 .contentType("text/txt")
-                                .status(MoMmsMedia.MediaStatus.UPLOADED)
+                                .status(MoMmsMedia.MediaStatus.Uploaded)
                                 .code(0)
                                 .build()))
                     .build())
@@ -66,11 +66,11 @@ public class MoMmsTest {
             "\n",
             "{",
             "  \"type\": \"mo_media\",",
+            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"contentType\":\"text/txt\",\"status\":\"Uploaded\",\"code\":0}]},",
             "  \"to\": \"12345\",",
             "  \"from\": \"987654321\",",
             "  \"id\": \"" + smsId + "\",",
-            "  \"received_at\": " + receivedAtString + ",",
-            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"contentType\":\"text/txt\",\"status\":\"Uploaded\",\"code\":0}]}",
+            "  \"received_at\": " + receivedAtString,
             "}");
 
     String actual = json.writeValueAsString(input);
@@ -98,7 +98,7 @@ public class MoMmsTest {
                             MoMmsMedia.builder()
                                 .url("Test url")
                                 .contentType("text/txt")
-                                .status(MoMmsMedia.MediaStatus.UPLOADED)
+                                .status(MoMmsMedia.MediaStatus.Uploaded)
                                 .code(200)
                                 .build()))
                     .build())
