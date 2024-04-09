@@ -70,7 +70,7 @@ public class MoMmsTest {
             "  \"from\": \"987654321\",",
             "  \"id\": \"" + smsId + "\",",
             "  \"received_at\": " + receivedAtString + ",",
-            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"contentType\":\"text/txt\",\"status\":\"UPLOADED\",\"code\":200}]}",
+            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"contentType\":\"text/txt\",\"status\":\"Uploaded\",\"code\":0}]}",
             "}");
 
     String actual = json.writeValueAsString(input);
