@@ -49,7 +49,7 @@ public abstract class MoMmsBody {
   }
 
   /**
-   * The message subject.
+   * The message subject, if available.
    *
    * @return the message subject
    */
