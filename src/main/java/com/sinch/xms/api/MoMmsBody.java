@@ -55,7 +55,7 @@ public abstract class MoMmsBody {
    */
   public abstract String subject();
   /**
-   * The textual message body.
+   * The textual message body, if available.
    *
    * @return the message body or `null` if not available.
    */
