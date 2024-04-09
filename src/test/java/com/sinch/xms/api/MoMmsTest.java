@@ -56,7 +56,7 @@ public class MoMmsTest {
                                 .url("Test url")
                                 .contentType("text/txt")
                                 .status(MoMmsMedia.MediaStatus.UPLOADED)
-                                .code(200)
+                                .code(0)
                                 .build()))
                     .build())
             .build();
