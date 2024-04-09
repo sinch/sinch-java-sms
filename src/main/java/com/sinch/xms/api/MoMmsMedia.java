@@ -22,6 +22,7 @@ package com.sinch.xms.api;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /** A mobile originated MMS message. */
@@ -52,24 +53,28 @@ public abstract class MoMmsMedia {
    *
    * @return the media url
    */
+  @Nullable
   public abstract String url();
   /**
    * The content type of provided media.
    *
    * @return the content type
    */
+  @Nonnull
   public abstract String contentType();
   /**
    * The status received while media upload to storage.
    *
    * @return the media status
    */
+  @Nonnull
   public abstract MediaStatus status();
   /**
    * Error code in case of failure or 0 for success.
    *
    * @return the status code
    */
+  @Nonnull
   public abstract int code();
 
   public enum MediaStatus {
