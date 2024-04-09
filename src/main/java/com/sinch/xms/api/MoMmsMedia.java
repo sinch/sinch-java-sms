@@ -49,21 +49,22 @@ public abstract class MoMmsMedia {
   }
 
   /**
-   * The url of provided media.
+   * URL to be used to download attachment.
    *
    * @return the media url
    */
   @Nullable
   public abstract String url();
   /**
-   * The content type of provided media.
+   * The content type of provided media. For example, 'image/jpeg'
    *
    * @return the content type
+   * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">Content types</a>
    */
   @Nonnull
   public abstract String contentType();
   /**
-   * The status received while media upload to storage.
+   * The status received while media upload to storage. Possible values are: Uploaded or Failed.
    *
    * @return the media status
    */
