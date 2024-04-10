@@ -19,6 +19,7 @@
  */
 package com.sinch.xms.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import javax.annotation.Nonnull;
@@ -64,6 +65,7 @@ public abstract class MoMmsMedia {
    *     types</a>
    */
   @Nonnull
+  @JsonProperty("content_type")
   public abstract String contentType();
   /**
    * The status received while media upload to storage. Possible values are: Uploaded or Failed.
