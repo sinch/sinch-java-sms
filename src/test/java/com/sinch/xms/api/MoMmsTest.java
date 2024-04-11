@@ -66,7 +66,7 @@ public class MoMmsTest {
             "\n",
             "{",
             "  \"type\": \"mo_media\",",
-            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"contentType\":\"text/txt\",\"status\":\"Uploaded\",\"code\":0}]},",
+            " \"body\":{\"subject\":\"Test subject\",\"message\":\"Test message\",\"media\":[{\"url\":\"Test url\",\"content_type\":\"text/txt\",\"status\":\"Uploaded\",\"code\":0}]},",
             "  \"to\": \"12345\",",
             "  \"from\": \"987654321\",",
             "  \"id\": \"" + smsId + "\",",
