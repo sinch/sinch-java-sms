@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /** A mobile originated MMS message. */
@@ -53,17 +54,20 @@ public abstract class MoMmsBody {
    *
    * @return the message subject
    */
+  @Nullable
   public abstract String subject();
   /**
    * The textual message body, if available.
    *
    * @return the message body or `null` if not available.
    */
+  @Nullable
   public abstract String message();
   /**
    * The list of attached media.
    *
    * @return the list of media objects
    */
+  @Nonnull
   public abstract List<MoMmsMedia> media();
 }

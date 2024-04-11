@@ -52,5 +52,6 @@ public abstract class MoMms extends MoSms {
    *
    * @return an object containing the body
    */
+  @Nonnull
   public abstract MoMmsBody body();
 }
