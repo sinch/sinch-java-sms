@@ -1,4 +1,4 @@
-# REST API SDK for SMS
+# REST API SDK for SMS and MMS
 
 This is the Java SDK for the Sinch REST SMS API for sending and receiving single or batch SMS/MMS messages. It also supports
 scheduled sends, organizing your frequent recipients into groups, and customizing your message for each recipient using
@@ -20,13 +20,13 @@ Maven
 <dependency>
     <groupId>com.sinch</groupId>
     <artifactId>sdk-sms</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 
 Gradle
 ```groovy
-implementation 'com.sinch:sdk-sms:2.0.0'
+implementation 'com.sinch:sdk-sms:2.1.1'
 ```
 
 ## Quick Start
