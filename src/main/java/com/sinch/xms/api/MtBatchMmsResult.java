@@ -56,8 +56,9 @@ public abstract class MtBatchMmsResult extends MtBatchResult {
   }
 
   /**
-   * The message body including message text or template (optional) and the media content url. If
-   * this describes a template then {@link #parameters()} describes the parameter substitutions.
+   * The message body including message text or template and/or subject (optional) and the media
+   * content url. If this describes a template then {@link #parameters()} describes the parameter
+   * substitutions.
    *
    * <p>See {@link MtBatchMmsCreate#body()} for a more thorough description of this field.
    *
