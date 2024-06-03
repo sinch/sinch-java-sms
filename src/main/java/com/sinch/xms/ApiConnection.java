@@ -378,11 +378,6 @@ public abstract class ApiConnection implements Closeable {
   }
 
   @Nonnull
-  private URI batchTagsEndpoint(BatchId batchId) {
-    return endpoint("/batches/" + batchId + "/tags");
-  }
-
-  @Nonnull
   private URI groupsEndpoint() {
     return endpoint("/groups");
   }
@@ -733,6 +728,50 @@ public abstract class ApiConnection implements Closeable {
     HttpAsyncRequestProducer requestProducer = new BasicAsyncRequestProducer(endpointHost(), req);
     HttpAsyncResponseConsumer<MtBatchBinarySmsResult> responseConsumer =
         jsonAsyncConsumer(MtBatchBinarySmsResult.class);
+
+    return httpClient()
+        .execute(requestProducer, responseConsumer, callbackWrapper().wrap(callback));
+  }
+
+  /**
+   * Replaces the batch with the given identifier. After this method completes the batch will match
+   * the provided batch description.
+   *
+   * <p>This method blocks until the request completes and its use is discouraged. Please consider
+   * using the asynchronous method {@link #replaceBatchAsync(BatchId, MtBatchMmsCreate,
+   * FutureCallback)} instead.
+   *
+   * @param id identifier of the batch to replace
+   * @param mms the batch description
+   * @return a batch submission result
+   * @throws InterruptedException if the current thread was interrupted while waiting
+   * @throws ApiException if an error occurred while communicating with XMS
+   */
+  public MtBatchMmsResult replaceBatch(BatchId id, MtBatchMmsCreate mms)
+      throws InterruptedException, ApiException {
+    try {
+      return replaceBatchAsync(id, mms, null).get();
+    } catch (ExecutionException e) {
+      throw Utils.unwrapExecutionException(e);
+    }
+  }
+
+  /**
+   * Asynchronously replaces the batch with the given identifier. On completion, the batch will
+   * match the provided batch description.
+   *
+   * @param id identifier of the batch to replace
+   * @param mms the new batch description
+   * @param callback a callback that is invoked when replace is completed
+   * @return a future whose result is the creation response
+   */
+  public Future<MtBatchMmsResult> replaceBatchAsync(
+      BatchId id, MtBatchMmsCreate mms, FutureCallback<MtBatchMmsResult> callback) {
+    HttpPut req = put(batchEndpoint(id), mms);
+
+    HttpAsyncRequestProducer requestProducer = new BasicAsyncRequestProducer(endpointHost(), req);
+    HttpAsyncResponseConsumer<MtBatchMmsResult> responseConsumer =
+        jsonAsyncConsumer(MtBatchMmsResult.class);
 
     return httpClient()
         .execute(requestProducer, responseConsumer, callbackWrapper().wrap(callback));
@@ -1204,119 +1243,6 @@ public abstract class ApiConnection implements Closeable {
     HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
 
     HttpAsyncResponseConsumer<Void> consumer = jsonAsyncConsumer(Void.class);
-
-    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
-  }
-
-  /**
-   * Updates the tags of the batch with the given batch ID.
-   *
-   * <p>This method blocks until the request completes and its use is discouraged. Please consider
-   * using the asynchronous method {@link #updateTagsAsync(BatchId, TagsUpdate, FutureCallback)}
-   * instead.
-   *
-   * @param id identifier of the batch
-   * @param tags the tag update object
-   * @return the updated set of tags
-   * @throws InterruptedException if the current thread was interrupted while waiting
-   * @throws ApiException if an error occurred while communicating with XMS
-   */
-  public Tags updateTags(BatchId id, TagsUpdate tags) throws InterruptedException, ApiException {
-    try {
-      return updateTagsAsync(id, tags, null).get();
-    } catch (ExecutionException e) {
-      throw Utils.unwrapExecutionException(e);
-    }
-  }
-
-  /**
-   * Updates the tags of the batch with the given batch ID.
-   *
-   * @param id identifier of the batch
-   * @param tags the tag update object
-   * @param callback a callback that is activated at call completion
-   * @return a future yielding the updated set of tags
-   */
-  public Future<Tags> updateTagsAsync(BatchId id, TagsUpdate tags, FutureCallback<Tags> callback) {
-    HttpPost req = post(batchTagsEndpoint(id), tags);
-
-    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
-
-    HttpAsyncResponseConsumer<Tags> consumer = jsonAsyncConsumer(Tags.class);
-
-    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
-  }
-
-  /**
-   * Replaces the tags of the batch with the given batch ID.
-   *
-   * <p>This method blocks until the request completes and its use is discouraged. Please consider
-   * using the asynchronous method {@link #replaceTagsAsync(BatchId, Tags, FutureCallback)} instead.
-   *
-   * @param id identifier of the batch
-   * @param tags the replacements tags
-   * @return the new set of tags
-   * @throws InterruptedException if the current thread was interrupted while waiting
-   * @throws ApiException if an error occurred while communicating with XMS
-   */
-  public Tags replaceTags(BatchId id, Tags tags) throws InterruptedException, ApiException {
-    try {
-      return replaceTagsAsync(id, tags, null).get();
-    } catch (ExecutionException e) {
-      throw Utils.unwrapExecutionException(e);
-    }
-  }
-
-  /**
-   * Replaces the tags of the batch with the given batch ID.
-   *
-   * @param id identifier of the batch
-   * @param tags the replacement tags
-   * @param callback a callback that is activated at call completion
-   * @return a future yielding the new set of tags
-   */
-  public Future<Tags> replaceTagsAsync(BatchId id, Tags tags, FutureCallback<Tags> callback) {
-    HttpPut req = put(batchTagsEndpoint(id), tags);
-
-    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
-
-    HttpAsyncResponseConsumer<Tags> consumer = jsonAsyncConsumer(Tags.class);
-
-    return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
-  }
-
-  /**
-   * Fetches the tags of the batch with the given batch ID.
-   *
-   * <p>This method blocks until the request completes and its use is discouraged. Please consider
-   * using the asynchronous method {@link #fetchTagsAsync(BatchId, FutureCallback)} instead.
-   *
-   * @param id identifier of the batch
-   * @return the batch tags
-   * @throws InterruptedException if the current thread was interrupted while waiting
-   * @throws ApiException if an error occurred while communicating with XMS
-   */
-  public Tags fetchTags(BatchId id) throws InterruptedException, ApiException {
-    try {
-      return fetchTagsAsync(id, null).get();
-    } catch (ExecutionException e) {
-      throw Utils.unwrapExecutionException(e);
-    }
-  }
-
-  /**
-   * Fetches the tags of the batch with the given batch ID.
-   *
-   * @param id identifier of the batch
-   * @param callback a callback that is activated at call completion
-   * @return a future yielding the new set of tags
-   */
-  public Future<Tags> fetchTagsAsync(BatchId id, FutureCallback<Tags> callback) {
-    HttpGet req = get(batchTagsEndpoint(id));
-
-    HttpAsyncRequestProducer producer = new BasicAsyncRequestProducer(endpointHost(), req);
-
-    HttpAsyncResponseConsumer<Tags> consumer = jsonAsyncConsumer(Tags.class);
 
     return httpClient().execute(producer, consumer, callbackWrapper().wrap(callback));
   }
