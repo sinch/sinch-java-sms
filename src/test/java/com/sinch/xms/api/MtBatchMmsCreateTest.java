@@ -117,6 +117,58 @@ public class MtBatchMmsCreateTest {
     assertThat(actual, is(expected));
   }
 
+  @Test
+  public void canSerializeWithSubject() throws Exception {
+    MtBatchMmsCreate input =
+        SinchSMSApi.batchMms()
+            .sender("1234")
+            .addRecipient("987654321")
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .subject("the text")
+                    .build())
+            .build();
+
+    String expected =
+        Utils.join(
+                "\n",
+                "{",
+                "  'type': 'mt_media',",
+                "  'from': '1234',",
+                "  'to': [ '987654321' ],",
+                "  'body': {",
+                "    'url':'http://my.test.url/image.jpg',",
+                "    'subject':'the text'",
+                "  }",
+                "}")
+            .replace('\'', '"');
+
+    String actual = json.writeValueAsString(input);
+
+    assertThat(actual, is(TestUtils.jsonEqualTo(expected)));
+  }
+
+  @Test
+  public void canDeserializeWithSubject() throws Exception {
+    MtBatchMmsCreate expected =
+        SinchSMSApi.batchMms()
+            .sender("1234")
+            .addRecipient("987654321")
+            .body(
+                SinchSMSApi.mediaBody()
+                    .url("http://my.test.url/image.jpg")
+                    .subject("the text")
+                    .build())
+            .build();
+
+    String input = json.writeValueAsString(expected);
+
+    MtBatchMmsCreate actual = json.readValue(input, MtBatchMmsCreate.class);
+
+    assertThat(actual, is(expected));
+  }
+
   @Test(expected = IllegalStateException.class)
   public void requiresUrl() {
     SinchSMSApi.batchMms()

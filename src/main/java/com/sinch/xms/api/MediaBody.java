@@ -62,6 +62,14 @@ public abstract class MediaBody {
   }
 
   /**
+   * The subject of the message.
+   *
+   * @return a subject
+   */
+  @Nullable
+  public abstract String subject();
+
+  /**
    * The text message.
    *
    * @return a message

@@ -77,6 +77,7 @@ public class MtBatchMmsResultTest {
                 SinchSMSApi.mediaBody()
                     .url("http://my.test.url/image.jpg")
                     .message("the text")
+                    .subject("subject text")
                     .build())
             .putParameter(
                 "param1",
@@ -95,6 +96,7 @@ public class MtBatchMmsResultTest {
                 "  'to': [ '987654321' ],",
                 "  'body': {",
                 "    'url':'http://my.test.url/image.jpg',",
+                "    'subject':'subject text',",
                 "    'message':'the text'",
                 "  },",
                 "  'canceled': false,",

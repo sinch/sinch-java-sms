@@ -60,6 +60,7 @@ public class MtBatchMmsUpdateTest {
                 SinchSMSApi.mediaBody()
                     .url("http://my.test.url/image.jpg")
                     .message("the text")
+                    .subject("subject text")
                     .build())
             .parameters(UpdateValue.set(params))
             .build();
@@ -73,7 +74,8 @@ public class MtBatchMmsUpdateTest {
                 "  'to_add': [ '987654321' ],",
                 "  'body': {",
                 "    'url':'http://my.test.url/image.jpg',",
-                "    'message':'the text'",
+                "    'message':'the text',",
+                "    'subject':'subject text'",
                 "  },",
                 "  'parameters': { 'newparam': { 'key1': 'value1' } }",
                 "}")
