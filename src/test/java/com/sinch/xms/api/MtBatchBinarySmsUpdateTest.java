@@ -53,6 +53,9 @@ public class MtBatchBinarySmsUpdateTest {
             .body("Hello, world!".getBytes(TestUtils.US_ASCII))
             .udh(new byte[] {1, 2, 3, 4})
             .deliveryReport(UpdateValue.<ReportType>unset())
+            .senderTon(UpdateValue.unset())
+            .senderNpi(UpdateValue.unset())
+            .maxNumberOfMessageParts(UpdateValue.unset())
             .build();
 
     String expected =
@@ -64,7 +67,10 @@ public class MtBatchBinarySmsUpdateTest {
                 "  'to_add': [ '987654321' ],",
                 "  'body': 'SGVsbG8sIHdvcmxkIQ==',",
                 "  'udh': '01020304',",
-                "  'delivery_report': null",
+                "  'delivery_report': null,",
+                "  'from_ton': null,",
+                "  'from_npi': null,",
+                "  'max_number_of_message_parts': null",
                 "}")
             .replace('\'', '"');
 
