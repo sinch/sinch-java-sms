@@ -137,6 +137,78 @@ public abstract class MtBatchBinarySmsUpdate extends MtBatchSmsUpdate {
         return this.callbackUrl(UpdateValue.set(url));
       }
     }
+
+    /**
+     * Unsets the sender TON property.
+     *
+     * @return this builder for use in a chained invocation
+     */
+    public Builder unsetSenderTon() {
+      return this.senderTon(UpdateValue.unset());
+    }
+
+    /**
+     * Updates the sender TON parameter. If given a <code>null</code> reference then this is
+     * equivalent to calling {@link #unsetSenderTon()}.
+     *
+     * @param senderTon the new sender TON property
+     * @return this builder for use in a chained invocation
+     */
+    public Builder senderTon(Integer senderTon) {
+      if (senderTon == null) {
+        return this.unsetSenderTon();
+      } else {
+        return this.senderTon(UpdateValue.set(senderTon));
+      }
+    }
+
+    /**
+     * Unsets the sender NPI property.
+     *
+     * @return this builder for use in a chained invocation
+     */
+    public Builder unsetSenderNpi() {
+      return this.senderNpi(UpdateValue.unset());
+    }
+
+    /**
+     * Updates the sender NPI parameter. If given a <code>null</code> reference then this is
+     * equivalent to calling {@link #unsetSenderNpi()}.
+     *
+     * @param senderNpi the new sender NPI property
+     * @return this builder for use in a chained invocation
+     */
+    public Builder senderNpi(Integer senderNpi) {
+      if (senderNpi == null) {
+        return this.unsetSenderNpi();
+      } else {
+        return this.senderNpi(UpdateValue.set(senderNpi));
+      }
+    }
+
+    /**
+     * Unsets the maxNumberOfMessageParts property.
+     *
+     * @return this builder for use in a chained invocation
+     */
+    public Builder unsetMaxNumberOfMessageParts() {
+      return this.maxNumberOfMessageParts(UpdateValue.unset());
+    }
+
+    /**
+     * Updates the maxNumberOfMessageParts parameter. If given a <code>null</code> reference then
+     * this is equivalent to calling {@link #unsetSenderTon()}.
+     *
+     * @param maxNumberOfMessageParts the new sender ton property
+     * @return this builder for use in a chained invocation
+     */
+    public Builder maxNumberOfMessageParts(Integer maxNumberOfMessageParts) {
+      if (maxNumberOfMessageParts == null) {
+        return this.unsetMaxNumberOfMessageParts();
+      } else {
+        return this.maxNumberOfMessageParts(UpdateValue.set(maxNumberOfMessageParts));
+      }
+    }
   }
 
   /**

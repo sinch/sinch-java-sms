@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.sinch.xms.UpdateValue;
 import javax.annotation.Nullable;
 
 /** Objects of this type can be used to update previously submitted MT SMS batches. */
@@ -48,7 +49,7 @@ public abstract class MtBatchSmsUpdate extends MtBatchUpdate {
    */
   @Nullable
   @JsonProperty("max_number_of_message_parts")
-  public abstract Integer maxNumberOfMessageParts();
+  public abstract UpdateValue<Integer> maxNumberOfMessageParts();
 
   /**
    * The DLT principal entity identifier to attach to this message.
@@ -77,7 +78,7 @@ public abstract class MtBatchSmsUpdate extends MtBatchUpdate {
    */
   @JsonProperty("from_ton")
   @Nullable
-  public abstract Integer senderTon();
+  public abstract UpdateValue<Integer> senderTon();
 
   /**
    * The numbering plan identification of the message originator. Valid values are 0 to 18. This is
@@ -88,5 +89,5 @@ public abstract class MtBatchSmsUpdate extends MtBatchUpdate {
    */
   @JsonProperty("from_npi")
   @Nullable
-  public abstract Integer senderNpi();
+  public abstract UpdateValue<Integer> senderNpi();
 }
