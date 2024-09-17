@@ -106,11 +106,8 @@ public final class Utils {
    * @throws NotFoundException if the desired resource was not found
    */
   static ConcurrentException unwrapExecutionException(ExecutionException e)
-      throws ErrorResponseException,
-          UnexpectedResponseException,
-          UnauthorizedException,
-          NotFoundException,
-          BadRequestResponseException {
+      throws ErrorResponseException, UnexpectedResponseException, UnauthorizedException,
+          NotFoundException, BadRequestResponseException {
     if (e.getCause() instanceof RuntimeException) {
       throw (RuntimeException) e.getCause();
     } else if (e.getCause() instanceof Error) {
