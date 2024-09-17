@@ -22,8 +22,8 @@ package com.sinch.xms;
 import com.sinch.xms.api.BadRequestError;
 
 /**
- * Exception representing a non api error response from XMS. This exception is thrown when some fundamental
- * contract of the XMS API has been broken.
+ * Exception representing a non api error response from XMS. This exception is thrown when some
+ * fundamental contract of the XMS API has been broken.
  *
  * <p>For information about specific errors please refer to the <a href=
  * "https://developers.sinch.com/docs/sms/api-reference/status-codes/">XMS API documentation</a>.
