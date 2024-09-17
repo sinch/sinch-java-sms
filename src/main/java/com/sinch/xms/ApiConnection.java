@@ -51,10 +51,8 @@ import com.sinch.xms.api.Tags;
 import com.sinch.xms.api.TagsUpdate;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -313,19 +311,15 @@ public abstract class ApiConnection implements Closeable {
   @Nonnull
   private URI endpoint(@Nonnull String subPath, @Nonnull List<NameValuePair> params) {
     try {
-      String spid = URLEncoder.encode(servicePlanId(), "UTF-8");
-      String path = endpoint().getPath() + "/v1/" + spid + subPath;
+      String path = endpoint().getPath() + "/v1/" + servicePlanId() + subPath;
       URIBuilder uriBuilder = new URIBuilder(endpoint()).setPath(path);
 
       if (!params.isEmpty()) {
         uriBuilder.setParameters(params);
       }
-
       return uriBuilder.build();
     } catch (URISyntaxException e) {
       throw new IllegalArgumentException(e);
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException(e);
     }
   }
 

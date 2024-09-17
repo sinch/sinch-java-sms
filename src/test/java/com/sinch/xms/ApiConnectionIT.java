@@ -94,7 +94,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -174,18 +173,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchBinarySmsResult actual = conn.createBatch(request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -223,18 +218,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchTextSmsResult actual = conn.createBatch(request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -279,18 +270,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchTextSmsResult actual = conn.createBatch(request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -327,18 +314,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchMmsResult actual = conn.createBatch(request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -363,21 +346,17 @@ public class ApiConnectionIT {
 
     stubPostResponse(apiError, path, 400);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.createBatch(request);
       fail("Expected exception, got none");
     } catch (ErrorResponseException e) {
       assertThat(e.getCode(), is(apiError.code()));
       assertThat(e.getText(), is(apiError.text()));
-    } finally {
-      conn.close();
     }
   }
 
@@ -422,20 +401,63 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(response)));
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.createBatch(request);
       fail("Expected exception, got none");
     } catch (ConcurrentException e) {
       assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));
-    } finally {
-      conn.close();
+    }
+  }
+
+  @Test
+  public void canHandleBatchCreateWithInvalidServicePlanId() throws Exception {
+    String spid = "%&! #$";
+
+    MtBatchTextSmsCreate request =
+        SinchSMSApi.batchTextSms()
+            .sender("12345")
+            .addRecipient("123456789")
+            .addRecipient("987654321")
+            .body("Hello, world!")
+            .build();
+
+    String response =
+        String.join(
+                "\n",
+                "{",
+                "  'timestamp': '2024-09-13T09:10:58Z',",
+                "  'status': 400,",
+                "  'error': 'Bad Request',",
+                "  'path': '/xms/v1/%25%26%21%20%23%24'",
+                "}")
+            .replace('\'', '"');
+
+    String path = "/v1/%25&!%20%23$/batches";
+
+    wm.stubFor(
+        post(urlEqualTo(path))
+            .willReturn(
+                aResponse()
+                    .withStatus(400)
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
+                    .withBody(response)));
+
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
+      conn.createBatch(request);
+      fail("Expected exception, got none");
+    } catch (BadRequestResponseException e) {
+      assertThat(e.getPath(), is("/xms/v1/%25%26%21%20%23%24"));
+      assertThat(e.getStatus(), is(400));
     }
   }
 
@@ -480,13 +502,6 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(response)));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     FutureCallback<MtBatchTextSmsResult> callback =
         new TestCallback<MtBatchTextSmsResult>() {
 
@@ -496,13 +511,16 @@ public class ApiConnectionIT {
           }
         };
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       conn.createBatchAsync(request, callback).get();
       fail("Expected exception, got none");
     } catch (ExecutionException e) {
       assertThat(e.getCause(), is(instanceOf(JsonParseException.class)));
-    } finally {
-      conn.close();
     }
   }
 
@@ -522,18 +540,14 @@ public class ApiConnectionIT {
 
     stubPostResponse("", path, HttpStatus.SC_UNAUTHORIZED);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.createBatch(request);
       fail("Expected exception, got none");
-    } finally {
-      conn.close();
     }
   }
 
@@ -553,13 +567,6 @@ public class ApiConnectionIT {
 
     stubPostResponse("", path, HttpStatus.SC_UNAUTHORIZED);
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     FutureCallback<MtBatchTextSmsResult> callback =
         new TestCallback<MtBatchTextSmsResult>() {
 
@@ -569,13 +576,16 @@ public class ApiConnectionIT {
           }
         };
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       conn.createBatchAsync(request, callback).get();
       fail("Expected exception, got none");
     } catch (ExecutionException e) {
       assertThat(e.getCause(), is(instanceOf(UnauthorizedException.class)));
-    } finally {
-      conn.close();
     }
   }
 
@@ -613,18 +623,14 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchBinarySmsResult actual = conn.replaceBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -662,18 +668,14 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchTextSmsResult actual = conn.replaceBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -710,18 +712,14 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchMmsResult actual = conn.replaceBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -759,18 +757,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchTextSmsResult actual = conn.updateBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -781,10 +775,6 @@ public class ApiConnectionIT {
     String spid = TestUtils.freshServicePlanId();
     BatchId batchId = TestUtils.freshBatchId();
     OffsetDateTime time = OffsetDateTime.of(2016, 10, 2, 9, 34, 28, 542000000, ZoneOffset.UTC);
-
-    Set<String> tags = new TreeSet<String>();
-    tags.add("tag1");
-    tags.add("tag2");
 
     MtBatchBinarySmsUpdate request =
         SinchSMSApi.batchBinarySmsUpdate()
@@ -812,18 +802,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchBinarySmsResult actual = conn.updateBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -860,18 +846,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 201);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchMmsResult actual = conn.updateBatch(batchId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -901,18 +883,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchResult actual = conn.fetchBatch(batchId);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -942,14 +920,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<MtBatchResult> testCallback =
           new TestCallback<MtBatchResult>() {
 
@@ -961,8 +937,6 @@ public class ApiConnectionIT {
 
       MtBatchResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -993,14 +967,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<MtBatchResult> testCallback =
           new TestCallback<MtBatchResult>() {
 
@@ -1012,8 +984,6 @@ public class ApiConnectionIT {
 
       MtBatchResult actual = conn.fetchBatchAsync(batchId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1034,20 +1004,16 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())
                     .withBody("BAD")));
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.fetchBatch(batchId);
       fail("Expected exception, got none");
     } catch (NotFoundException e) {
       assertThat(e.getPath(), is(path));
-    } finally {
-      conn.close();
     }
   }
 
@@ -1066,13 +1032,6 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())
                     .withBody("BAD")));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("toktok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     FutureCallback<MtBatchResult> callback =
         new TestCallback<MtBatchResult>() {
 
@@ -1084,13 +1043,16 @@ public class ApiConnectionIT {
           }
         };
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("toktok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       conn.fetchBatchAsync(batchId, callback).get();
       fail("Expected exception, got none");
     } catch (ExecutionException e) {
       assertThat(e.getCause(), is(instanceOf(NotFoundException.class)));
-    } finally {
-      conn.close();
     }
   }
 
@@ -1109,20 +1071,18 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())
                     .withBody("BAD")));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     /*
      * The exception we'll receive in the callback. Need to store it to
      * verify that it is the same exception as received from #get().
      */
     final AtomicReference<Exception> failException = new AtomicReference<Exception>();
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       /*
        * Used to make sure callback and test thread are agreeing about the
        * failException variable.
@@ -1186,8 +1146,6 @@ public class ApiConnectionIT {
 
       assertThat(read, is(3));
       assertThat(Arrays.copyOf(buf, 3), is(new byte[] {'B', 'A', 'D'}));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1216,18 +1174,14 @@ public class ApiConnectionIT {
 
     stubDeleteResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchResult result = conn.cancelBatch(batchId);
       assertThat(result, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -1289,14 +1243,12 @@ public class ApiConnectionIT {
 
     stubDeleteResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       final Queue<MtBatchResult> results = new ConcurrentArrayQueue<MtBatchResult>();
       final CountDownLatch latch = new CountDownLatch(2);
 
@@ -1321,8 +1273,6 @@ public class ApiConnectionIT {
       assertThat(results.size(), is(2));
       assertThat(results.poll(), is(expected2));
       assertThat(results.poll(), is(expected1));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path1);
@@ -1340,14 +1290,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<MtBatchResult>> testCallback =
           new TestCallback<Page<MtBatchResult>>() {
 
@@ -1361,8 +1309,6 @@ public class ApiConnectionIT {
 
       Page<MtBatchResult> actual = fetcher.fetchAsync(0, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1389,14 +1335,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<MtBatchResult>> testCallback =
           new TestCallback<Page<MtBatchResult>>() {
 
@@ -1422,8 +1366,6 @@ public class ApiConnectionIT {
 
       Page<MtBatchResult> actual2 = fetcher.fetchAsync(1, testCallback).get();
       assertThat(actual2, is(expected2));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path1);
@@ -1487,14 +1429,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
       List<Page<MtBatchResult>> actuals = new ArrayList<>();
@@ -1508,8 +1448,6 @@ public class ApiConnectionIT {
       expecteds.add(expected2);
 
       assertThat(actuals, is(expecteds));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path1);
@@ -1573,14 +1511,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       PagedFetcher<MtBatchResult> fetcher = conn.fetchBatches(filter);
 
       List<MtBatchResult> actuals = new ArrayList<>();
@@ -1594,8 +1530,6 @@ public class ApiConnectionIT {
       expecteds.addAll(expected2.content());
 
       assertThat(actuals, is(expecteds));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path1);
@@ -1637,13 +1571,6 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     BatchDeliveryReportParams filter =
         SinchSMSApi.batchDeliveryReportParams()
             .summaryReport()
@@ -1651,11 +1578,14 @@ public class ApiConnectionIT {
             .addCode(200, 300)
             .build();
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       BatchDeliveryReport actual = conn.fetchDeliveryReport(batchId, filter);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1690,16 +1620,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    BatchDeliveryReportParams filter = SinchSMSApi.batchDeliveryReportParams().fullReport().build();
+
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    BatchDeliveryReportParams filter = SinchSMSApi.batchDeliveryReportParams().fullReport().build();
-
-    try {
+            .start(); ) {
       FutureCallback<BatchDeliveryReport> testCallback =
           new TestCallback<BatchDeliveryReport>() {
 
@@ -1712,8 +1640,6 @@ public class ApiConnectionIT {
       BatchDeliveryReport actual =
           conn.fetchDeliveryReportAsync(batchId, filter, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1741,18 +1667,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       RecipientDeliveryReport actual = conn.fetchDeliveryReport(batchId, recipient);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1763,9 +1685,10 @@ public class ApiConnectionIT {
     String spid = TestUtils.freshServicePlanId();
     BatchId batchId = TestUtils.freshBatchId();
     String recipient = "987654321";
-    DeliveryReportFilter filter = SinchSMSApi.deliveryReportFilter().build();
+    DeliveryReportFilter filter =
+        SinchSMSApi.deliveryReportFilter().clientReference("%&! #$").build();
 
-    String path = "/v1/" + spid + "/delivery_reports?page=0";
+    String path = "/v1/" + spid + "/delivery_reports?page=0&client_reference=%25%26%21+%23%24";
 
     final RecipientDeliveryReportSms expected1 =
         RecipientDeliveryReportSms.builder()
@@ -1789,19 +1712,15 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       PagedFetcher<RecipientDeliveryReport> fetcher = conn.fetchDeliveryReports(filter);
       Page<RecipientDeliveryReport> actual = fetcher.fetch(0);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1829,14 +1748,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<RecipientDeliveryReport> testCallback =
           new TestCallback<RecipientDeliveryReport>() {
 
@@ -1849,8 +1766,6 @@ public class ApiConnectionIT {
       RecipientDeliveryReport actual =
           conn.fetchDeliveryReportAsync(batchId, recipient, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -1932,18 +1847,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MtBatchDryRunResult actual = conn.createBatchDryRun(request, null, null);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -1967,14 +1878,12 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<MtBatchDryRunResult> testCallback =
           new TestCallback<MtBatchDryRunResult>() {
 
@@ -1987,8 +1896,6 @@ public class ApiConnectionIT {
       MtBatchDryRunResult actual =
           conn.createBatchDryRunAsync(request, true, 5, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -2032,18 +1939,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       GroupResult actual = conn.createGroup(request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -2087,14 +1990,12 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<GroupResult> testCallback =
           new TestCallback<GroupResult>() {
 
@@ -2106,8 +2007,6 @@ public class ApiConnectionIT {
 
       GroupResult actual = conn.createGroupAsync(request, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -2137,18 +2036,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       GroupResult actual = conn.fetchGroup(groupId);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -2178,14 +2073,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<GroupResult> testCallback =
           new TestCallback<GroupResult>() {
 
@@ -2197,8 +2090,6 @@ public class ApiConnectionIT {
 
       GroupResult actual = conn.fetchGroupAsync(groupId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -2215,18 +2106,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       Set<String> actual = conn.fetchGroupMembers(groupId);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -2243,14 +2130,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Set<String>> testCallback =
           new TestCallback<Set<String>>() {
 
@@ -2262,8 +2147,6 @@ public class ApiConnectionIT {
 
       Set<String> actual = conn.fetchGroupMembersAsync(groupId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -2280,14 +2163,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<GroupResult>> testCallback =
           new TestCallback<Page<GroupResult>>() {
 
@@ -2301,8 +2182,6 @@ public class ApiConnectionIT {
 
       Page<GroupResult> actual = fetcher.fetchAsync(0, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -2329,14 +2208,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<GroupResult>> testCallback =
           new TestCallback<Page<GroupResult>>() {
 
@@ -2362,8 +2239,6 @@ public class ApiConnectionIT {
 
       Page<GroupResult> actual2 = fetcher.fetchAsync(1, testCallback).get();
       assertThat(actual2, is(expected2));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path1);
@@ -2394,18 +2269,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       GroupResult actual = conn.updateGroup(groupId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -2435,14 +2306,12 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<GroupResult> testCallback =
           new TestCallback<GroupResult>() {
 
@@ -2454,8 +2323,6 @@ public class ApiConnectionIT {
 
       GroupResult actual = conn.updateGroupAsync(groupId, request, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -2499,18 +2366,14 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       GroupResult actual = conn.replaceGroup(groupId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -2554,14 +2417,12 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<GroupResult> testCallback =
           new TestCallback<GroupResult>() {
 
@@ -2573,8 +2434,6 @@ public class ApiConnectionIT {
 
       GroupResult actual = conn.replaceGroupAsync(groupId, request, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -2604,17 +2463,13 @@ public class ApiConnectionIT {
 
     stubDeleteResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.deleteGroup(groupId);
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2644,14 +2499,12 @@ public class ApiConnectionIT {
 
     stubDeleteResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Void> testCallback =
           new TestCallback<Void>() {
 
@@ -2662,8 +2515,6 @@ public class ApiConnectionIT {
           };
 
       conn.deleteGroupAsync(groupId, testCallback).get();
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2686,21 +2537,17 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", "application/json")
                     .withBody(json.writeValueAsBytes(apiError))));
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.deleteGroup(groupId);
       fail("Expected exception, got none");
     } catch (ErrorResponseException e) {
       assertThat(e.getCode(), is(apiError.code()));
       assertThat(e.getText(), is(apiError.text()));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2719,20 +2566,16 @@ public class ApiConnectionIT {
                     .withStatus(401)
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())));
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.deleteGroup(groupId);
       fail("Expected exception, got none");
     } catch (UnauthorizedException e) {
       // This exception is expected.
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2752,13 +2595,6 @@ public class ApiConnectionIT {
                     .withStatus(401)
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     FutureCallback<Void> callback =
         new TestCallback<Void>() {
 
@@ -2768,13 +2604,16 @@ public class ApiConnectionIT {
           }
         };
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       conn.deleteGroupAsync(groupId, callback).get();
       fail("Expected exception, got none");
     } catch (ExecutionException e) {
       assertThat(e.getCause(), is(instanceOf(UnauthorizedException.class)));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2793,20 +2632,16 @@ public class ApiConnectionIT {
                     .withStatus(404)
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())));
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       conn.deleteGroup(groupId);
       fail("Expected exception, got none");
     } catch (NotFoundException e) {
       assertThat(e.getPath(), is(path));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2826,13 +2661,6 @@ public class ApiConnectionIT {
                     .withStatus(404)
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     FutureCallback<Void> callback =
         new TestCallback<Void>() {
 
@@ -2844,13 +2672,16 @@ public class ApiConnectionIT {
           }
         };
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       conn.deleteGroupAsync(groupId, callback).get();
       fail("Expected exception, got none");
     } catch (ExecutionException e) {
       assertThat(e.getCause(), is(instanceOf(NotFoundException.class)));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2871,20 +2702,18 @@ public class ApiConnectionIT {
                     .withHeader("Content-Type", ContentType.TEXT_PLAIN.toString())
                     .withBody("BAD")));
 
-    ApiConnection conn =
-        ApiConnection.builder()
-            .servicePlanId(spid)
-            .token("tok")
-            .endpoint("http://localhost:" + wm.port())
-            .start();
-
     /*
      * The exception we'll receive in the callback. Need to store it to
      * verify that it is the same exception as received from #get().
      */
     final AtomicReference<Exception> failException = new AtomicReference<Exception>();
 
-    try {
+    try (ApiConnection conn =
+        ApiConnection.builder()
+            .servicePlanId(spid)
+            .token("tok")
+            .endpoint("http://localhost:" + wm.port())
+            .start(); ) {
       /*
        * Used to make sure callback and test thread are agreeing about the
        * failException variable.
@@ -2948,8 +2777,6 @@ public class ApiConnectionIT {
 
       assertThat(read, is(3));
       assertThat(Arrays.copyOf(buf, 3), is(new byte[] {'B', 'A', 'D'}));
-    } finally {
-      conn.close();
     }
 
     verifyDeleteRequest(path);
@@ -2972,18 +2799,14 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       Tags actual = conn.updateTags(groupId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -3006,14 +2829,12 @@ public class ApiConnectionIT {
 
     stubPostResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Tags> testCallback =
           new TestCallback<Tags>() {
 
@@ -3025,8 +2846,6 @@ public class ApiConnectionIT {
 
       Tags actual = conn.updateTagsAsync(groupId, request, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPostRequest(path, request);
@@ -3045,18 +2864,14 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       Tags actual = conn.replaceTags(groupId, request);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -3075,14 +2890,12 @@ public class ApiConnectionIT {
 
     stubPutResponse(expected, path, 200);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("toktok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Tags> testCallback =
           new TestCallback<Tags>() {
 
@@ -3094,8 +2907,6 @@ public class ApiConnectionIT {
 
       Tags actual = conn.replaceTagsAsync(groupId, request, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyPutRequest(path, request);
@@ -3112,18 +2923,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       Tags actual = conn.fetchTags(groupId);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -3140,14 +2947,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Tags> testCallback =
           new TestCallback<Tags>() {
 
@@ -3159,8 +2964,6 @@ public class ApiConnectionIT {
 
       Tags actual = conn.fetchTagsAsync(groupId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -3176,14 +2979,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<MoSms>> testCallback =
           new TestCallback<Page<MoSms>>() {
 
@@ -3197,8 +2998,6 @@ public class ApiConnectionIT {
 
       Page<MoSms> actual = fetcher.fetchAsync(0, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -3256,14 +3055,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected2, path2);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<Page<MoSms>> testCallback =
           new TestCallback<Page<MoSms>>() {
 
@@ -3289,8 +3086,6 @@ public class ApiConnectionIT {
 
       Page<MoSms> actual2 = fetcher.fetchAsync(1, testCallback).get();
       assertThat(actual2, is(expected2));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path1);
@@ -3320,18 +3115,14 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       MoSms actual = conn.fetchInbound(smsId);
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
@@ -3360,14 +3151,12 @@ public class ApiConnectionIT {
 
     stubGetResponse(expected, path);
 
-    ApiConnection conn =
+    try (ApiConnection conn =
         ApiConnection.builder()
             .servicePlanId(spid)
             .token("tok")
             .endpoint("http://localhost:" + wm.port())
-            .start();
-
-    try {
+            .start(); ) {
       FutureCallback<MoSms> testCallback =
           new TestCallback<MoSms>() {
 
@@ -3379,8 +3168,6 @@ public class ApiConnectionIT {
 
       MoSms actual = conn.fetchInboundAsync(smsId, testCallback).get();
       assertThat(actual, is(expected));
-    } finally {
-      conn.close();
     }
 
     verifyGetRequest(path);
