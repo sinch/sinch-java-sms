@@ -56,6 +56,7 @@ public abstract class MoMmsBody {
    */
   @Nullable
   public abstract String subject();
+
   /**
    * The textual message body, if available.
    *
@@ -63,6 +64,7 @@ public abstract class MoMmsBody {
    */
   @Nullable
   public abstract String message();
+
   /**
    * The list of attached media.
    *

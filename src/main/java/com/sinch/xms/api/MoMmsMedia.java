@@ -56,6 +56,7 @@ public abstract class MoMmsMedia {
    */
   @Nullable
   public abstract String url();
+
   /**
    * The content type of provided media. For example, 'image/jpeg'
    *
@@ -67,6 +68,7 @@ public abstract class MoMmsMedia {
   @Nonnull
   @JsonProperty("content_type")
   public abstract String contentType();
+
   /**
    * The status received while media upload to storage. Possible values are: Uploaded or Failed.
    *
@@ -74,6 +76,7 @@ public abstract class MoMmsMedia {
    */
   @Nonnull
   public abstract MediaStatus status();
+
   /**
    * Error code in case of failure or 0 for success.
    *

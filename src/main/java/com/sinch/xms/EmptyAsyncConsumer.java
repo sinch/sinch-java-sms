@@ -20,7 +20,9 @@
 package com.sinch.xms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.sinch.xms.api.ApiError;
+import com.sinch.xms.api.BadRequestError;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import org.apache.http.HttpException;
@@ -82,8 +84,13 @@ class EmptyAsyncConsumer extends AsyncCharConsumer<Void> {
         return null;
       case HttpStatus.SC_BAD_REQUEST:
       case HttpStatus.SC_FORBIDDEN:
-        ApiError error = json.readValue(content, ApiError.class);
-        throw new ErrorResponseException(error);
+        try {
+          ApiError error = json.readValue(content, ApiError.class);
+          throw new ErrorResponseException(error);
+        } catch (ValueInstantiationException e) {
+          BadRequestError error = json.readValue(content, BadRequestError.class);
+          throw new BadRequestResponseException(error);
+        }
       case HttpStatus.SC_NOT_FOUND:
         HttpCoreContext coreContext = HttpCoreContext.adapt(context);
         RequestLine rl = coreContext.getRequest().getRequestLine();
