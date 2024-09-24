@@ -58,6 +58,9 @@ public class MtBatchTextSmsUpdateTest {
             .addRecipientInsertion("987654321")
             .body("Hello, world!")
             .parameters(UpdateValue.set(params))
+            .senderTon(UpdateValue.unset())
+            .senderNpi(UpdateValue.unset())
+            .maxNumberOfMessageParts(UpdateValue.unset())
             .build();
 
     String expected =
@@ -68,7 +71,10 @@ public class MtBatchTextSmsUpdateTest {
                 "  'from': '1234',",
                 "  'to_add': [ '987654321' ],",
                 "  'body': 'Hello, world!',",
-                "  'parameters': { 'newparam': { 'key1': 'value1' } }",
+                "  'parameters': { 'newparam': { 'key1': 'value1' } },",
+                "  'from_ton': null,",
+                "  'from_npi': null,",
+                "  'max_number_of_message_parts': null",
                 "}")
             .replace('\'', '"');
 
