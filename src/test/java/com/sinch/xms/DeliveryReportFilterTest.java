@@ -81,15 +81,15 @@ public class DeliveryReportFilterTest {
       String clientReference)
       throws Exception {
 
-    DeliveryReportFilter filter =
+    DeliveryReportFilter.Builder builder =
         SinchSMSApi.deliveryReportFilter()
-            .pageSize(pageSize)
             .statuses(statuses)
             .codes(codes)
             .startDate(startDate)
             .endDate(endDate)
-            .clientReference(clientReference)
-            .build();
+            .clientReference(clientReference);
+
+    DeliveryReportFilter filter = (codes.isEmpty()) ? builder.build() : builder.pageSize(pageSize).build();
 
     List<NameValuePair> params = filter.toQueryParams(page);
 
