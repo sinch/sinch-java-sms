@@ -27,6 +27,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
 import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.generator.InRange;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -101,15 +102,15 @@ public class BatchFilterTest {
     assumeThat(senders, not(hasItem(containsString(","))));
     assumeThat(tags, not(hasItem(containsString(","))));
 
-    BatchFilter filter =
+    BatchFilter.Builder builder =
         SinchSMSApi.batchFilter()
-            .pageSize(pageSize)
             .senders(senders)
             .tags(tags)
             .startDate(startDate)
             .endDate(endDate)
-            .clientReference(clientReference)
-            .build();
+            .clientReference(clientReference);
+
+    BatchFilter filter = (senders.isEmpty()) ? builder.build() : builder.pageSize(pageSize).build();
 
     List<NameValuePair> params = filter.toQueryParams(page);
 

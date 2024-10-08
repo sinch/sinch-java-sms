@@ -73,7 +73,9 @@ public class GroupFilterTest {
     // Constrain `tags` to strings not containing ','
     assumeThat(tags, not(hasItem(containsString(","))));
 
-    GroupFilter filter = SinchSMSApi.groupFilter().pageSize(pageSize).tags(tags).build();
+    GroupFilter.Builder builder = SinchSMSApi.groupFilter().tags(tags);
+
+    GroupFilter filter = (tags.isEmpty()) ? builder.build() : builder.pageSize(pageSize).build();
 
     List<NameValuePair> params = filter.toQueryParams(page);
 

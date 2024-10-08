@@ -90,14 +90,14 @@ public class InboundsFilterTest {
     // Constrain `to` to strings not containing ','
     assumeThat(to, not(hasItem(containsString(","))));
 
-    InboundsFilter filter =
+    InboundsFilter.Builder builder =
         SinchSMSApi.inboundsFilter()
-            .pageSize(pageSize)
             .recipients(to)
             .startDate(startDate)
             .endDate(endDate)
-            .clientReference(clientReference)
-            .build();
+            .clientReference(clientReference);
+
+    InboundsFilter filter = (to.isEmpty()) ? builder.build() : builder.pageSize(pageSize).build();
 
     List<NameValuePair> params = filter.toQueryParams(page);
 
